@@ -6,8 +6,9 @@ public static class CryptoRandom
 {
     public static double NextDouble()
     {
-        ulong value = (ulong)RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue);
-        value = (value << 32) | (uint)RandomNumberGenerator.GetInt32(int.MinValue, int.MaxValue);
+        Span<byte> bytes = stackalloc byte[8];
+        RandomNumberGenerator.Fill(bytes);
+        ulong value = BitConverter.ToUInt64(bytes);
 
         // Keep the top 53 bits (double precision mantissa)
         return (value >> 11) * (1.0 / (1UL << 53));
