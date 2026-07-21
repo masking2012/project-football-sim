@@ -1,0 +1,21 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="nuget.config" />
+  </Folder>
+  <Folder Name="/src/" />
+  <Folder Name="/src/modules/" />
+  <Folder Name="/src/modules/Common/">
+    <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
+  </Folder>
+  <Folder Name="/src/modules/Match/">
+    <Project Path="src/modules/Match/Match.Domain/Match.Domain.csproj" Id="9da939d0-7984-45dc-91c1-9769e3a1264f" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/modules/" />
+  <Folder Name="/tests/modules/Common/">
+    <Project Path="tests/modules/Common/Common.Features.Tests/Common.Features.Tests.csproj" Id="674923c4-8be2-4f2e-9f23-e4c5bcaaddb5" />
+  </Folder>
+</Solution>
