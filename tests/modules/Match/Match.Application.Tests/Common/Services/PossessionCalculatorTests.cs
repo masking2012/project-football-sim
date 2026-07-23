@@ -13,7 +13,7 @@ internal sealed class PossessionCalculatorTests
     [Arguments(0, 100)]
     [Arguments(100, 100)]
     [Arguments(0, 0)]
-    public async Task ShouldCalculatePosessionAsync(int homeMidfield, int awayMidfield)
+    public async Task ShouldCalculatePossessionAsync(int homeMidfield, int awayMidfield)
     {
         Possession possession = _sut.Calculate(homeMidfield, awayMidfield);
         await Assert.That(possession.Value).IsBetween(IPossessionCalculator.MinPossession, IPossessionCalculator.MaxPossession);
