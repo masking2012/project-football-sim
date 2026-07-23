@@ -17,7 +17,7 @@ public sealed class MatchEntity
         ArgumentNullException.ThrowIfNull(away);
         ArgumentNullException.ThrowIfNull(settings);
 
-        Id = Guid.NewGuid();
+        Id = Guid.CreateVersion7();
         Home = home;
         Away = away;
         Settings = settings;
