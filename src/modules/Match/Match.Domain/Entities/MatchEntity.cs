@@ -13,6 +13,11 @@ public sealed class MatchEntity
 
     public MatchEntity(Team home, Team away, MatchSettings settings)
     {
+        ArgumentNullException.ThrowIfNull(home);
+        ArgumentNullException.ThrowIfNull(away);
+        ArgumentNullException.ThrowIfNull(settings);
+
+        Id = Guid.NewGuid();
         Home = home;
         Away = away;
         Settings = settings;
