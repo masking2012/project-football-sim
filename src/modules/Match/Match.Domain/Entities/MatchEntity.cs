@@ -1,5 +1,4 @@
 using ProjectFootballSim.Match.Domain.ValueObjects;
-using ProjectFootballSim.ValueObjects;
 
 namespace ProjectFootballSim.Match.Domain.Entities;
 
@@ -9,7 +8,7 @@ public sealed class MatchEntity
     public Team Home { get; init; }
     public Team Away { get; init; }
     public MatchSettings Settings { get; init; }
-    public MatchResult? Result { get; private set; }
+    public ScoreResult? Result { get; private set; }
     public bool IsFinished => Result != null;
 
     public MatchEntity(Team home, Team away, MatchSettings settings)
@@ -19,7 +18,7 @@ public sealed class MatchEntity
         Settings = settings;
     }
 
-    public void SetResult(MatchResult result)
+    public void SetResult(ScoreResult result)
     {
         if (IsFinished)
             throw new InvalidOperationException("Match is already finished.");

@@ -8,6 +8,7 @@
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
         <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <RootNamespace>ProjectFootballSim</RootNamespace>
+        <RootNamespace>ProjectFootballSim.$(MSBuildProjectName)</RootNamespace>
+        <NoWarn>CS8765</NoWarn>
     </PropertyGroup>
 </Project>

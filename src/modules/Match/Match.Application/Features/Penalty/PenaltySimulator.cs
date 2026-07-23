@@ -1,12 +1,15 @@
-using Common.Features;
+using ProjectFootballSim.Common.Features;
 using ProjectFootballSim.Match.Domain.ValueObjects;
 
-namespace ProjectFootballSim.Services;
+namespace ProjectFootballSim.Match.Application.Features.Penalty;
 
-internal static class PenaltySimulationService
+public sealed class PenaltySimulator
 {
-    public static (int, int) SimulatePenalties(Team home, Team away)
+    public static ScoreResult Play(Team home, Team away)
     {
+        ArgumentNullException.ThrowIfNull(home);
+        ArgumentNullException.ThrowIfNull(away);
+
         int homeScore = 0;
         int awayScore = 0;
 
@@ -47,7 +50,7 @@ internal static class PenaltySimulationService
                 break;
         }
 
-        return (homeScore, awayScore);
+        return new ScoreResult(homeScore, awayScore);
     }
 
     private static double CalculatePenaltyConversionRate(double attack, double opponentDefense)
