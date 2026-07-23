@@ -17,6 +17,6 @@ internal sealed class PossessionCalculatorTests
     {
         Possession possession = _sut.Calculate(homeMidfield, awayMidfield);
         await Assert.That(possession.Value).IsBetween(IPossessionCalculator.MinPossession, IPossessionCalculator.MaxPossession);
-        await Assert.That(possession.OpponentPossession.Value).IsBetween(IPossessionCalculator.MinPossession, IPossessionCalculator.MaxPossession);
+        await Assert.That(possession.OpponentPossession.Value).IsEqualTo(1 - possession.Value);
     }
 }
