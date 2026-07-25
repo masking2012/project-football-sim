@@ -4,7 +4,7 @@ using ProjectFootballSim.Match.Domain.ValueObjects;
 namespace ProjectFootballSim.Match.Application.Features.ExtraTime;
 
 public sealed class ExtraTimeSimulator
-(IPossessionCalculator possessionCalculator,
+    (IPossessionCalculator possessionCalculator,
     IChancesCalculator chancesCalculator,
     IGoalsCalculator goalsCalculator)
 {
@@ -29,4 +29,3 @@ public sealed class ExtraTimeSimulator
         return new ScoreResult(homeGoals, awayGoals);
     }
 }
-

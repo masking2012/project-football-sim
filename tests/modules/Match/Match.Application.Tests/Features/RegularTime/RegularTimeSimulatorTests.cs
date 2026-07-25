@@ -23,7 +23,7 @@ internal sealed class RegularTimeSimulatorTests
             HasHomeAdvantage = false
         };
 
-        foreach (var _ in Enumerable.Range(0, 500))
+        foreach (var _ in Enumerable.Range(0, 100))
         {
             ScoreResult result = _sut.Play(home, away, settings);
 

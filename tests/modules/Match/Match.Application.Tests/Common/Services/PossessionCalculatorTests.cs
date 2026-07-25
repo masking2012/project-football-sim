@@ -9,10 +9,10 @@ internal sealed class PossessionCalculatorTests
 
     [Test]
     [Arguments(50, 50)]
-    [Arguments(100, 0)]
-    [Arguments(0, 100)]
+    [Arguments(100, 1)]
+    [Arguments(1, 100)]
     [Arguments(100, 100)]
-    [Arguments(0, 0)]
+    [Arguments(1, 1)]
     public async Task ShouldCalculatePossessionAsync(int homeMidfield, int awayMidfield)
     {
         Possession possession = _sut.Calculate(homeMidfield, awayMidfield);

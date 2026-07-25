@@ -7,20 +7,20 @@ public sealed record Team
     public int Defence { get; }
     public int Midfield { get; }
 
-    public Team(Guid id, int attack, int defense, int midfield)
+    public Team(Guid id, int attack, int defence, int midfield)
     {
-        if (attack < 0 || attack > 100)
-            throw new ArgumentOutOfRangeException(nameof(attack), "Attack must be between 0 and 100.");
+        if (attack < 1 || attack > 100)
+            throw new ArgumentOutOfRangeException(nameof(attack), "Attack must be between 1 and 100.");
 
-        if (defense < 0 || defense > 100)
-            throw new ArgumentOutOfRangeException(nameof(defense), "Defense must be between 0 and 100.");
+        if (defence < 1 || defence > 100)
+            throw new ArgumentOutOfRangeException(nameof(defence), "Defence must be between 1 and 100.");
 
-        if (midfield < 0 || midfield > 100)
-            throw new ArgumentOutOfRangeException(nameof(midfield), "Midfield must be between 0 and 100.");
+        if (midfield < 1 || midfield > 100)
+            throw new ArgumentOutOfRangeException(nameof(midfield), "Midfield must be between 1 and 100.");
 
         Id = id;
         Attack = attack;
-        Defence = defense;
+        Defence = defence;
         Midfield = midfield;
     }
 }
