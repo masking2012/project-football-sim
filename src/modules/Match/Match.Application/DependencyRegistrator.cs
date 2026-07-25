@@ -7,7 +7,7 @@ namespace ProjectFootballSim.Match.Application;
 
 public static class DependencyRegistrator
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddMatchApplication(this IServiceCollection services)
     {
         services.AddScoped<IPossessionCalculator, PossessionCalculator>();
         services.AddScoped<IChancesCalculator, ChancesCalculator>();

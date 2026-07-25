@@ -20,6 +20,6 @@ internal sealed class ChancesCalculatorTests
         {
             int chances = _sut.Calculate(attacking, defending, possession, advantageRatio, goalChancesSettings);
             await Assert.That(chances).IsBetween(goalChancesSettings.Minimum, goalChancesSettings.Maximum);
-        }        
+        }
     }
 }

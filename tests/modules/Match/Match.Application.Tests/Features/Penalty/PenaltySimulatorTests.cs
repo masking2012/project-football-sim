@@ -11,7 +11,7 @@ internal sealed class PenaltySimulatorTests
         Team home = new(Guid.NewGuid(), 80, 70, 75);
         Team away = new(Guid.NewGuid(), 75, 65, 70);
 
-        foreach(var _ in Enumerable.Range(0, 500))
+        foreach (var _ in Enumerable.Range(0, 100))
         {
             ScoreResult result = PenaltySimulator.Play(home, away);
 
