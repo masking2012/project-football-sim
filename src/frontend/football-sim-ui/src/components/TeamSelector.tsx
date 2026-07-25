@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import type { TeamDto } from '../api/footballApi';
 
 interface Props {
@@ -9,10 +10,12 @@ interface Props {
 }
 
 export function TeamSelector({ label, teams, selectedId, disabledId, onChange }: Props) {
+  const selectId = useId();
   return (
     <div className="team-selector">
-      <label className="selector-label">{label}</label>
+      <label className="selector-label" htmlFor={selectId}>{label}</label>
       <select
+        id={selectId}
         className="selector-select"
         value={selectedId}
         onChange={(e) => onChange(e.target.value)}
