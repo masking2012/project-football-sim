@@ -50,8 +50,6 @@ internal static class MatchEndpoints
                 {
                     var pen = PenaltySimulator.Play(homePair.Value.Domain, awayPair.Value.Domain);
                     penScore = new ScoreDto(pen.HomeScore, pen.AwayScore);
-                    finalHome = pen.HomeScore;
-                    finalAway = pen.AwayScore;
                 }
             }
 
@@ -59,7 +57,11 @@ internal static class MatchEndpoints
                 ? homePair.Value.Dto.Name
                 : finalAway > finalHome
                     ? awayPair.Value.Dto.Name
-                    : "Draw";
+                    : penScore is not null && penScore.HomeScore != penScore.AwayScore
+                        ? penScore.HomeScore > penScore.AwayScore
+                            ? homePair.Value.Dto.Name
+                            : awayPair.Value.Dto.Name
+                        : "Draw";
 
             var result = new MatchResultResponse(
                 homePair.Value.Dto,
