@@ -26,7 +26,7 @@ function App() {
     setError(null);
     setResult(null);
     try {
-      const res = await simulateMatch({ homeTeamId: String(homeId), awayTeamId: String(awayId), hasHomeAdvantage: homeAdvantage });
+      const res = await simulateMatch({ homeTeamId: homeId, awayTeamId: awayId, hasHomeAdvantage: homeAdvantage });
       setResult(res);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Simulation failed.');
