@@ -1,0 +1,18 @@
+[
+    {
+        "id": 20001,
+        "name": "Arsenal",
+        "attack": 86,
+        "midfield": 85,
+        "defence": 84,
+        "countryId": 2
+    },
+    {
+        "id": 20002,
+        "name": "Liverpool",
+        "attack": 87,
+        "midfield": 84,
+        "defence": 83,
+        "countryId": 2
+    }
+]

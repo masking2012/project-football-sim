@@ -1,4 +1,4 @@
-using ProjectFootballSim.Api.Teams;
+using ProjectFootballSim.FootballSim.Api.Endpoints.Team;
 using ProjectFootballSim.Match.Application.Common.Dtos;
 using ProjectFootballSim.Match.Application.Features.ExtraTime;
 using ProjectFootballSim.Match.Application.Features.Penalty;
@@ -6,17 +6,12 @@ using ProjectFootballSim.Match.Application.Features.RegularTime;
 using ProjectFootballSim.Match.Domain.ValueObjects;
 using System.Globalization;
 
-namespace ProjectFootballSim.Api.Match;
+namespace ProjectFootballSim.FootballSim.Api.Endpoints.Match;
 
 internal static class MatchEndpoints
 {
     public static void MapMatchEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/teams", async (TeamStore teamStore, CancellationToken cancellationToken) => {
-            var teams = await teamStore.GetAllAsync(cancellationToken).ConfigureAwait(false);
-            return Results.Ok(teams);
-        });
-
         app.MapPost("/api/matches/simulate", (
             SimulateMatchRequest req,
             RegularTimeSimulator regularTime,

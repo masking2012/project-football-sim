@@ -1,8 +1,8 @@
-using ProjectFootballSim.Api.Match;
+using ProjectFootballSim.FootballSim.Api.Endpoints.Match;
 using ProjectFootballSim.Team.Application.Features;
 using System.Globalization;
 
-namespace ProjectFootballSim.Api.Teams;
+namespace ProjectFootballSim.FootballSim.Api.Endpoints.Team;
 
 internal sealed class TeamStore(GetTeamsByCountryFeature getTeamsByCountryFeature)
 {

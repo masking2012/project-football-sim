@@ -1,0 +1,18 @@
+[
+    {
+        "id": 60001,
+        "name": "Inter Milan",
+        "attack": 86,
+        "midfield": 83,
+        "defence": 83,
+        "countryId": 6
+    },
+    {
+        "id": 60002,
+        "name": "AC Milan",
+        "attack": 82,
+        "midfield": 82,
+        "defence": 78,
+        "countryId": 6
+    }
+]

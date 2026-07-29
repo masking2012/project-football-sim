@@ -1,0 +1,18 @@
+[
+    {
+        "id": 70001,
+        "name": "Sporting CP",
+        "attack": 78,
+        "midfield": 80,
+        "defence": 78,
+        "countryId": 7
+    },
+    {
+        "id": 70002,
+        "name": "SL Benfica",
+        "attack": 80,
+        "midfield": 78,
+        "defence": 77,
+        "countryId": 7
+    }
+]
