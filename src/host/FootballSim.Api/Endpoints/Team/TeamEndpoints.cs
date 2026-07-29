@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.FootballSim.Api.Endpoints.Match;
-using ProjectFootballSim.Team.Application.Features;
+using ProjectFootballSim.Team.Application.Features.GetTeamsByCountry;
 using System.Globalization;
 
 namespace ProjectFootballSim.FootballSim.Api.Endpoints.Team;
@@ -9,18 +9,14 @@ internal static class TeamEndpoints
 {
     public static void MapTeamEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/teams", async ([FromQuery] string? countryId, TeamStore teamStore, GetTeamsByCountryFeature getTeamsByCountryFeature, CancellationToken cancellationToken) => {
-            if (countryId is null)
+        app.MapGet("/api/teams",
+            async ([FromQuery] string countryId, GetTeamsByCountryFeature getTeamsByCountryFeature, CancellationToken cancellationToken) =>
             {
-                var teams = await teamStore.GetAllAsync(cancellationToken).ConfigureAwait(false);
-                return Results.Ok(teams);
-            }
+                int parsedCountryId = Convert.ToInt32(countryId, CultureInfo.InvariantCulture);
 
-            int parsedCountryId = Convert.ToInt32(countryId, CultureInfo.InvariantCulture);
-
-            var teamsByCountry = await getTeamsByCountryFeature.HandleAsync(parsedCountryId, cancellationToken).ConfigureAwait(false);
-            var predefined = teamsByCountry.Select(t => new TeamDto(t.Id.ToString(CultureInfo.InvariantCulture), t.Name, t.Attack.Value, t.Defence.Value, t.Midfield.Value)).ToList();
-            return Results.Ok(predefined);
-        });
+                var teamsByCountry = await getTeamsByCountryFeature.HandleAsync(parsedCountryId, cancellationToken).ConfigureAwait(false);
+                var predefined = teamsByCountry.Select(t => new TeamDto(t.Id.ToString(CultureInfo.InvariantCulture), t.Name, t.Attack, t.Defence, t.Midfield)).ToList();
+                return Results.Ok(predefined);
+            });
     }
 }

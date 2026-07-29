@@ -1,4 +1,3 @@
-using ProjectFootballSim.FootballSim.Api.Endpoints.Team;
 using ProjectFootballSim.Location.Application;
 using ProjectFootballSim.Location.Infrastructure;
 using ProjectFootballSim.Match.Application;
@@ -18,6 +17,5 @@ internal static class DependendyAssembler
         builder.Services.AddTeamApplication();
 
         builder.Services.AddMatchApplication();
-        builder.Services.AddScoped<TeamStore>();
     }
 }

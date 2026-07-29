@@ -1,3 +1,8 @@
+export interface CountryDto {
+  id: string;
+  name: string;
+}
+
 export interface TeamDto {
   id: string;
   name: string;
@@ -37,8 +42,14 @@ async function handleResponse<T>(res: Response): Promise<T> {
   return res.json() as Promise<T>;
 }
 
-export async function fetchTeams(): Promise<TeamDto[]> {
-  const res = await fetch(`${BASE}/teams`);
+export async function fetchCountries(): Promise<CountryDto[]> {
+  const res = await fetch(`${BASE}/countries`);
+  return handleResponse<CountryDto[]>(res);
+}
+
+export async function fetchTeams(countryId?: string): Promise<TeamDto[]> {
+  const url = countryId ? `${BASE}/teams?countryId=${countryId}` : `${BASE}/teams`;
+  const res = await fetch(url);
   return handleResponse<TeamDto[]>(res);
 }
 

@@ -56,6 +56,12 @@
   align-items: start;
 }
 
+.team-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 .vs-badge {
   align-self: center;
   margin-top: 1.6rem;
@@ -73,7 +79,8 @@
 }
 
 /* ── Team selector ────────────────────────────────────────── */
-.team-selector {
+.team-selector,
+.country-selector {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;

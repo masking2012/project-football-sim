@@ -1,12 +1,17 @@
 import { useEffect, useState } from 'react';
 import './App.css';
-import { fetchTeams, simulateMatch } from './api/footballApi';
-import type { MatchResultResponse, TeamDto } from './api/footballApi';
+import { fetchCountries, fetchTeams, simulateMatch } from './api/footballApi';
+import type { CountryDto, MatchResultResponse, TeamDto } from './api/footballApi';
+import { CountrySelector } from './components/CountrySelector';
 import { TeamSelector } from './components/TeamSelector';
 import { MatchResult } from './components/MatchResult';
 
 function App() {
-  const [teams, setTeams] = useState<TeamDto[]>([]);
+  const [countries, setCountries] = useState<CountryDto[]>([]);
+  const [homeCountryId, setHomeCountryId] = useState<string>('');
+  const [awayCountryId, setAwayCountryId] = useState<string>('');
+  const [homeTeams, setHomeTeams] = useState<TeamDto[]>([]);
+  const [awayTeams, setAwayTeams] = useState<TeamDto[]>([]);
   const [homeId, setHomeId] = useState<string>('');
   const [awayId, setAwayId] = useState<string>('');
   const [homeAdvantage, setHomeAdvantage] = useState(true);
@@ -15,10 +20,32 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchTeams()
-      .then(setTeams)
-      .catch(() => setError('Could not load teams. Is the API running?'));
+    fetchCountries()
+      .then(setCountries)
+      .catch(() => setError('Could not load countries. Is the API running?'));
   }, []);
+
+  useEffect(() => {
+    if (!homeCountryId) {
+      setHomeTeams([]);
+      setHomeId('');
+      return;
+    }
+    fetchTeams(homeCountryId)
+      .then(setHomeTeams)
+      .catch(() => setError('Could not load home teams. Is the API running?'));
+  }, [homeCountryId]);
+
+  useEffect(() => {
+    if (!awayCountryId) {
+      setAwayTeams([]);
+      setAwayId('');
+      return;
+    }
+    fetchTeams(awayCountryId)
+      .then(setAwayTeams)
+      .catch(() => setError('Could not load away teams. Is the API running?'));
+  }, [awayCountryId]);
 
   async function handleSimulate() {
     if (homeId == null || awayId == null) return;
@@ -47,44 +74,68 @@ function App() {
 
       <main className="app-main">
         <div className="selectors">
-          <TeamSelector
-            label="🏠 Home Team"
-            teams={teams}
-            selectedId={homeId}
-            disabledId={awayId}
-            onChange={setHomeId}
-          />
+          <div className="team-section">
+            <CountrySelector
+              label="🌍 Home Country"
+              countries={countries}
+              selectedId={homeCountryId}
+              onChange={setHomeCountryId}
+            />
+            {homeCountryId && (
+              <TeamSelector
+                label="🏠 Home Team"
+                teams={homeTeams}
+                selectedId={homeId}
+                disabledId=""
+                onChange={setHomeId}
+              />
+            )}
+          </div>
 
           <div className="vs-badge">VS</div>
 
-          <TeamSelector
-            label="✈️ Away Team"
-            teams={teams}
-            selectedId={awayId}
-            disabledId={homeId}
-            onChange={setAwayId}
-          />
-        </div>
-
-        <div className="options">
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              checked={homeAdvantage}
-              onChange={(e) => setHomeAdvantage(e.target.checked)}
+          <div className="team-section">
+            <CountrySelector
+              label="🌍 Away Country"
+              countries={countries}
+              selectedId={awayCountryId}
+              onChange={setAwayCountryId}
             />
-            Home advantage (+10% attack boost)
-          </label>
+            {awayCountryId && (
+              <TeamSelector
+                label="✈️ Away Team"
+                teams={awayTeams}
+                selectedId={awayId}
+                disabledId=""
+                onChange={setAwayId}
+              />
+            )}
+          </div>
         </div>
 
-        <button
-          type="button"
-          className="simulate-btn"
-          disabled={!canSimulate}
-          onClick={handleSimulate}
-        >
-          {loading ? 'Simulating…' : '▶ Simulate Match'}
-        </button>
+        {homeId && awayId && (
+          <>
+            <div className="options">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={homeAdvantage}
+                  onChange={(e) => setHomeAdvantage(e.target.checked)}
+                />
+                Home advantage (+10% attack boost)
+              </label>
+            </div>
+
+            <button
+              type="button"
+              className="simulate-btn"
+              disabled={!canSimulate}
+              onClick={handleSimulate}
+            >
+              {loading ? 'Simulating…' : '▶ Simulate Match'}
+            </button>
+          </>
+        )}
 
         {error && <div className="error-banner">{error}</div>}
 
