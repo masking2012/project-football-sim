@@ -6,7 +6,7 @@ interface Props {
   teams: TeamDto[];
   selectedId: number | null;
   disabledId: number | null;
-  onChange: (id: number) => void;
+  onChange: (id: number | null) => void;
 }
 
 export function TeamSelector({ label, teams, selectedId, disabledId, onChange }: Props) {
