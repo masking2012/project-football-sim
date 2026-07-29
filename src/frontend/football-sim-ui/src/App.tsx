@@ -7,8 +7,8 @@ import { MatchResult } from './components/MatchResult';
 
 function App() {
   const [teams, setTeams] = useState<TeamDto[]>([]);
-  const [homeId, setHomeId] = useState<number | null>(null);
-  const [awayId, setAwayId] = useState<number | null>(null);
+  const [homeId, setHomeId] = useState<string>('');
+  const [awayId, setAwayId] = useState<string>('');
   const [homeAdvantage, setHomeAdvantage] = useState(true);
   const [result, setResult] = useState<MatchResultResponse | null>(null);
   const [loading, setLoading] = useState(false);

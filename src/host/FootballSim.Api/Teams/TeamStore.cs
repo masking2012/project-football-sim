@@ -1,5 +1,6 @@
 using ProjectFootballSim.Api.Match;
 using ProjectFootballSim.Team.Application.Features;
+using System.Globalization;
 
 namespace ProjectFootballSim.Api.Teams;
 
@@ -12,10 +13,10 @@ internal sealed class TeamStore(GetTeamsByCountryFeature getTeamsByCountryFeatur
             return _teams;
 
         var teamsByCountry = await getTeamsByCountryFeature.HandleAsync(1, cancellationToken).ConfigureAwait(false);
-        var predefined = teamsByCountry.Select(t => new TeamDto(t.Id, t.Name, t.Attack.Value, t.Defence.Value, t.Midfield.Value)).ToList();
+        var predefined = teamsByCountry.Select(t => new TeamDto(t.Id.ToString(CultureInfo.InvariantCulture), t.Name, t.Attack.Value, t.Defence.Value, t.Midfield.Value)).ToList();
         _teams = predefined;
         return _teams;
     }
 
-    public static TeamDto? FindById(int id) => _teams?.FirstOrDefault(t => t.Id == id);
+    public static TeamDto? FindById(string id) => _teams?.FirstOrDefault(t => t.Id == id);
 }

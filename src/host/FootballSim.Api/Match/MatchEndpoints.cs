@@ -4,6 +4,7 @@ using ProjectFootballSim.Match.Application.Features.ExtraTime;
 using ProjectFootballSim.Match.Application.Features.Penalty;
 using ProjectFootballSim.Match.Application.Features.RegularTime;
 using ProjectFootballSim.Match.Domain.ValueObjects;
+using System.Globalization;
 
 namespace ProjectFootballSim.Api.Match;
 
@@ -35,7 +36,7 @@ internal static class MatchEndpoints
 
             var homeTeam = new MatchTeamDto
             {
-                Id = homePair.Id,
+                Id = Convert.ToInt32(homePair.Id, CultureInfo.InvariantCulture),
                 Attack = homePair.Attack,
                 Defence = homePair.Defence,
                 Midfield = homePair.Midfield
@@ -43,7 +44,7 @@ internal static class MatchEndpoints
 
             var awayTeam = new MatchTeamDto
             {
-                Id = awayPair.Id,
+                Id = Convert.ToInt32(awayPair.Id, CultureInfo.InvariantCulture),
                 Attack = awayPair.Attack,
                 Defence = awayPair.Defence,
                 Midfield = awayPair.Midfield

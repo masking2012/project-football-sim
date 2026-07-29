@@ -4,9 +4,9 @@ import type { TeamDto } from '../api/footballApi';
 interface Props {
   label: string;
   teams: TeamDto[];
-  selectedId: number | null;
-  disabledId: number | null;
-  onChange: (id: number | null) => void;
+  selectedId: string;
+  disabledId: string;
+  onChange: (id: string) => void;
 }
 
 export function TeamSelector({ label, teams, selectedId, disabledId, onChange }: Props) {
@@ -18,7 +18,7 @@ export function TeamSelector({ label, teams, selectedId, disabledId, onChange }:
         id={selectId}
         className="selector-select"
         value={selectedId ?? ''}
-        onChange={(e) => onChange(Number(e.target.value))}
+        onChange={(e) => onChange(e.target.value)}
       >
         <option value="">— Pick a team —</option>
         {teams.map((t) => (
