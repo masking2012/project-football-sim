@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\modules\Country\Country.Infrastructure\Country.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\modules\Location\Location.Infrastructure\Location.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Match\Match.Application\Match.Application.csproj" />
     <ProjectReference Include="..\..\modules\Match\Match.Domain\Match.Domain.csproj" />
     <ProjectReference Include="..\..\modules\Team\Team.Application\Team.Application.csproj" />

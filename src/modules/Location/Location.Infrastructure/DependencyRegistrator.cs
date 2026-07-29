@@ -2,16 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Common.Data.Entities.Countries;
-using ProjectFootballSim.Country.Domain.Entities;
-using ProjectFootballSim.Country.Infrastructure.Database;
+using ProjectFootballSim.Location.Domain.Entities;
+using ProjectFootballSim.Location.Infrastructure.Database;
 
-namespace ProjectFootballSim.Country.Infrastructure;
+namespace ProjectFootballSim.Location.Infrastructure;
 
 public static class DependencyRegistrator
 {
-    public static IServiceCollection AddCountryInfrastructure(this IServiceCollection services, IConfiguration configuration, string connectionStringSectionName)
+    public static IServiceCollection AddLocationInfrastructure(this IServiceCollection services, IConfiguration configuration, string connectionStringSectionName)
     {
-        services.AddDbContext<CountryDbContext>(options =>
+        services.AddDbContext<LocationDbContext>(options =>
             options.UseSqlServer(
             configuration.GetConnectionString(connectionStringSectionName),
             sqlOptions => sqlOptions.EnableRetryOnFailure(

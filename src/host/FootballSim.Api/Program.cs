@@ -1,6 +1,6 @@
 using ProjectFootballSim.Api.Match;
 using ProjectFootballSim.Api.Teams;
-using ProjectFootballSim.Country.Infrastructure;
+using ProjectFootballSim.Location.Infrastructure;
 using ProjectFootballSim.Match.Application;
 using ProjectFootballSim.Team.Application;
 using ProjectFootballSim.Team.Infrastructure;
@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowAnyHeader()));
 
-builder.Services.AddCountryInfrastructure(builder.Configuration, "CountryAzureSql");
+builder.Services.AddLocationInfrastructure(builder.Configuration, "LocationAzureSql");
 builder.Services.AddTeamInfrastructure(builder.Configuration, "TeamAzureSql");
 builder.Services.AddTeamApplication();
 

@@ -21,9 +21,9 @@
     <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
     <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
-  <Folder Name="/src/modules/Country/">
-    <Project Path="src/modules/Country/Country.Domain/Country.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />
-    <Project Path="src/modules/Country/Country.Infrastructure/Country.Infrastructure.csproj" Id="23bc63f2-9c04-458c-9c82-731bc1f18bfd" />
+  <Folder Name="/src/modules/Location/">
+    <Project Path="src/modules/Location/Location.Domain/Location.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />
+    <Project Path="src/modules/Location/Location.Infrastructure/Location.Infrastructure.csproj" Id="23bc63f2-9c04-458c-9c82-731bc1f18bfd" />
   </Folder>
   <Folder Name="/src/modules/Match/">
     <Project Path="src/modules/Match/Match.Application/Match.Application.csproj" Id="c7f30f53-0ec4-43c3-9da6-84aa85c1dac9" />

@@ -1,3 +1,3 @@
-namespace ProjectFootballSim.Country.Domain.Entities;
+namespace ProjectFootballSim.Location.Domain.Entities;
 
 public sealed record CountryEntity(int Id, string Name);

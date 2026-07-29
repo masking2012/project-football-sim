@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Country.Domain.Entities;
+using ProjectFootballSim.Location.Domain.Entities;
 
-namespace ProjectFootballSim.Country.Infrastructure.Database;
+namespace ProjectFootballSim.Location.Infrastructure.Database;
 
-public class CountryDbContext(DbContextOptions<CountryDbContext> options) : DbContext(options)
+public class LocationDbContext(DbContextOptions<LocationDbContext> options) : DbContext(options)
 {
     public DbSet<CountryEntity> Countries => Set<CountryEntity>();
 
