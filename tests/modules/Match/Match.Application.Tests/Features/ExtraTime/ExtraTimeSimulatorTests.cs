@@ -1,3 +1,4 @@
+using ProjectFootballSim.Match.Application.Common.Dtos;
 using ProjectFootballSim.Match.Application.Common.Services;
 using ProjectFootballSim.Match.Application.Features.ExtraTime;
 using ProjectFootballSim.Match.Domain.ValueObjects;
@@ -16,9 +17,21 @@ internal sealed class ExtraTimeSimulatorTests
     [Test]
     public async Task ShouldPlayGameAsync()
     {
-        Team home = new(1, 80, 70, 75);
-        Team away = new(2, 75, 65, 70);
-        MatchSettings settings = new MatchSettings
+        var home = new MatchTeamDto
+        {
+            Id = 1,
+            Attack = 80,
+            Defence = 70,
+            Midfield = 75
+        };
+        var away = new MatchTeamDto
+        {
+            Id = 2,
+            Attack = 75,
+            Defence = 65,
+            Midfield = 70
+        };
+        var settings = new MatchSettings
         {
             HasHomeAdvantage = false
         };

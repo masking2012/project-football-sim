@@ -7,8 +7,8 @@ import { MatchResult } from './components/MatchResult';
 
 function App() {
   const [teams, setTeams] = useState<TeamDto[]>([]);
-  const [homeId, setHomeId] = useState('');
-  const [awayId, setAwayId] = useState('');
+  const [homeId, setHomeId] = useState<number | null>(null);
+  const [awayId, setAwayId] = useState<number | null>(null);
   const [homeAdvantage, setHomeAdvantage] = useState(true);
   const [result, setResult] = useState<MatchResultResponse | null>(null);
   const [loading, setLoading] = useState(false);
@@ -21,12 +21,12 @@ function App() {
   }, []);
 
   async function handleSimulate() {
-    if (!homeId || !awayId) return;
+    if (homeId == null || awayId == null) return;
     setLoading(true);
     setError(null);
     setResult(null);
     try {
-      const res = await simulateMatch({ homeTeamId: homeId, awayTeamId: awayId, hasHomeAdvantage: homeAdvantage });
+      const res = await simulateMatch({ homeTeamId: String(homeId), awayTeamId: String(awayId), hasHomeAdvantage: homeAdvantage });
       setResult(res);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Simulation failed.');
@@ -35,7 +35,7 @@ function App() {
     }
   }
 
-  const canSimulate = homeId && awayId && homeId !== awayId && !loading;
+  const canSimulate = homeId != null && awayId != null && homeId !== awayId && !loading;
 
   return (
     <div className="app">

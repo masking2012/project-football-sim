@@ -1,4 +1,5 @@
 using ProjectFootballSim.Api.Teams;
+using ProjectFootballSim.Match.Application.Common.Dtos;
 using ProjectFootballSim.Match.Application.Features.ExtraTime;
 using ProjectFootballSim.Match.Application.Features.Penalty;
 using ProjectFootballSim.Match.Application.Features.RegularTime;
@@ -32,8 +33,24 @@ internal static class MatchEndpoints
 
             var settings = new MatchSettings { HasHomeAdvantage = req.HasHomeAdvantage };
 
+            var homeTeam = new MatchTeamDto
+            {
+                Id = homePair.Id,
+                Attack = homePair.Attack,
+                Defence = homePair.Defence,
+                Midfield = homePair.Midfield
+            };
+
+            var awayTeam = new MatchTeamDto
+            {
+                Id = awayPair.Id,
+                Attack = awayPair.Attack,
+                Defence = awayPair.Defence,
+                Midfield = awayPair.Midfield
+            };
+
             // Regular time
-            var rtScore = regularTime.Play(homePair.Value.Domain, awayPair.Value.Domain, settings);
+            var rtScore = regularTime.Play(homeTeam, awayTeam, settings);
             ScoreDto? etScore = null;
             ScoreDto? penScore = null;
 
@@ -43,7 +60,7 @@ internal static class MatchEndpoints
             // Extra time if draw
             if (rtScore.HomeScore == rtScore.AwayScore)
             {
-                var et = extraTime.Play(homePair.Value.Domain, awayPair.Value.Domain, settings);
+                var et = extraTime.Play(homeTeam, awayTeam, settings);
                 etScore = new ScoreDto(et.HomeScore, et.AwayScore);
                 finalHome += et.HomeScore;
                 finalAway += et.AwayScore;
@@ -51,24 +68,24 @@ internal static class MatchEndpoints
                 // Penalties if still drawn
                 if (finalHome == finalAway)
                 {
-                    var pen = PenaltySimulator.Play(homePair.Value.Domain, awayPair.Value.Domain);
+                    var pen = PenaltySimulator.Play(homeTeam, awayTeam);
                     penScore = new ScoreDto(pen.HomeScore, pen.AwayScore);
                 }
             }
 
             string winner = finalHome > finalAway
-                ? homePair.Value.Dto.Name
+                ? homePair.Name
                 : finalAway > finalHome
-                    ? awayPair.Value.Dto.Name
+                    ? awayPair.Name
                     : penScore is not null && penScore.HomeScore != penScore.AwayScore
                         ? penScore.HomeScore > penScore.AwayScore
-                            ? homePair.Value.Dto.Name
-                            : awayPair.Value.Dto.Name
+                            ? homePair.Name
+                            : awayPair.Name
                         : "Draw";
 
             var result = new MatchResultResponse(
-                homePair.Value.Dto,
-                awayPair.Value.Dto,
+                homePair,
+                awayPair,
                 new ScoreDto(rtScore.HomeScore, rtScore.AwayScore),
                 etScore,
                 penScore,

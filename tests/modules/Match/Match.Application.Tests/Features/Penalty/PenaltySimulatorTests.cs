@@ -1,3 +1,4 @@
+using ProjectFootballSim.Match.Application.Common.Dtos;
 using ProjectFootballSim.Match.Application.Features.Penalty;
 using ProjectFootballSim.Match.Domain.ValueObjects;
 
@@ -8,8 +9,20 @@ internal sealed class PenaltySimulatorTests
     [Test]
     public async Task ShouldPlayPenaltyAsync()
     {
-        Team home = new(1, 80, 70, 75);
-        Team away = new(2, 75, 65, 70);
+        var home = new MatchTeamDto
+        {
+            Id = 1,
+            Attack = 80,
+            Defence = 70,
+            Midfield = 75
+        };
+        var away = new MatchTeamDto
+        {
+            Id = 2,
+            Attack = 75,
+            Defence = 65,
+            Midfield = 70
+        };
 
         foreach (var _ in Enumerable.Range(0, 100))
         {

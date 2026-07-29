@@ -17,7 +17,7 @@ public class TeamDbContext(DbContextOptions<TeamDbContext> options) : DbContext(
         modelBuilder.Entity<TeamEntity>(entity =>
         {
             entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).IsRequired();
+            entity.Property(x => x.Id).IsRequired().ValueGeneratedNever();
             entity.Property(x => x.Name).IsRequired();
             entity.Property(x => x.Attack)
                 .IsRequired()

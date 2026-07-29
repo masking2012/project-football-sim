@@ -28,9 +28,9 @@ public static class DependencyRegistrator
     {
         foreach (var countryData in CountryDataProvider.GetAll())
         {
-            var country = context.Set<CountryEntity>().SingleOrDefault(c => c.Name == countryData.Name);
+            var country = context.Set<CountryEntity>().SingleOrDefault(c => c.Id == countryData.Id);
             if (country is null)
-                context.Set<CountryEntity>().Add(new CountryEntity(default, countryData.Name));
+                context.Set<CountryEntity>().Add(new CountryEntity(countryData.Id, countryData.Name));
         }
         context.SaveChanges();
     }

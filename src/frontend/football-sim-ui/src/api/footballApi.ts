@@ -1,5 +1,5 @@
 export interface TeamDto {
-  id: string;
+  id: number;
   name: string;
   attack: number;
   defence: number;

@@ -1,14 +1,19 @@
 using ProjectFootballSim.Common.Features;
+using ProjectFootballSim.Match.Application.Common.Dtos;
+using ProjectFootballSim.Match.Application.Common.Services;
 using ProjectFootballSim.Match.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Match.Application.Features.Penalty;
 
 public sealed class PenaltySimulator
 {
-    public static ScoreResult Play(Team home, Team away)
+    public static ScoreResult Play(MatchTeamDto homeDto, MatchTeamDto awayDto)
     {
-        ArgumentNullException.ThrowIfNull(home);
-        ArgumentNullException.ThrowIfNull(away);
+        ArgumentNullException.ThrowIfNull(homeDto);
+        ArgumentNullException.ThrowIfNull(awayDto);
+
+        Team home = TeamMapper.Map(homeDto);
+        Team away = TeamMapper.Map(awayDto);
 
         int homeScore = 0;
         int awayScore = 0;

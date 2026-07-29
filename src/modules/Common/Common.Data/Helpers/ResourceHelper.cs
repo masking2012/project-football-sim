@@ -2,11 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 
 namespace ProjectFootballSim.Common.Data.Helpers;
 
 internal static class ResourceHelper
 {
+    public static JsonSerializerOptions DefaultJsonOptions => new(JsonSerializerDefaults.Web);
+
     public static Stream GetEmbeddedResource(string resourceName)
     {
         var assembly = Assembly.GetExecutingAssembly();
