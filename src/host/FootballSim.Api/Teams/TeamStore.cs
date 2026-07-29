@@ -8,11 +8,14 @@ internal sealed class TeamStore(GetTeamsByCountryFeature getTeamsByCountryFeatur
     private static IReadOnlyList<TeamDto>? _teams; 
 
     public async Task<IReadOnlyList<TeamDto>> GetAllAsync(CancellationToken cancellationToken) {
+        if (_teams is not null)
+            return _teams;
+
         var teamsByCountry = await getTeamsByCountryFeature.HandleAsync(1, cancellationToken).ConfigureAwait(false);
         var predefined = teamsByCountry.Select(t => new TeamDto(t.Id, t.Name, t.Attack.Value, t.Defence.Value, t.Midfield.Value)).ToList();
         _teams = predefined;
         return _teams;
-    } 
+    }
 
     public static TeamDto? FindById(int id) => _teams?.FirstOrDefault(t => t.Id == id);
 }
