@@ -14,7 +14,7 @@ internal sealed class GoalsCalculator : IGoalsCalculator
         double ratio = attack / (double)(attack + opponentDefense);
 
         double conversionRate =
-            Math.Clamp(0.08 + ratio * 0.20, 0.08, 0.28);
+            Math.Clamp(0.05 + ratio * 0.15, 0.05, 0.20);
 
         int goals = 0;
 

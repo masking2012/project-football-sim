@@ -1,4 +1,5 @@
 using ProjectFootballSim.Api.Match;
+using ProjectFootballSim.Country.Infrastructure;
 using ProjectFootballSim.Match.Application;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,8 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:5173", "http://localhost:28352")
               .AllowAnyMethod()
               .AllowAnyHeader()));
+
+builder.Services.AddCountryInfrastructure(builder.Configuration, "CountryAzureSql");
 
 builder.Services.AddMatchApplication();
 

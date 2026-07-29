@@ -18,11 +18,20 @@
   </Folder>
   <Folder Name="/src/modules/" />
   <Folder Name="/src/modules/Common/">
+    <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
     <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
+  </Folder>
+  <Folder Name="/src/modules/Country/">
+    <Project Path="src/modules/Country/Country.Domain/Country.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />
+    <Project Path="src/modules/Country/Country.Infrastructure/Country.Infrastructure.csproj" Id="23bc63f2-9c04-458c-9c82-731bc1f18bfd" />
   </Folder>
   <Folder Name="/src/modules/Match/">
     <Project Path="src/modules/Match/Match.Application/Match.Application.csproj" Id="c7f30f53-0ec4-43c3-9da6-84aa85c1dac9" />
     <Project Path="src/modules/Match/Match.Domain/Match.Domain.csproj" Id="9da939d0-7984-45dc-91c1-9769e3a1264f" />
+  </Folder>
+  <Folder Name="/src/modules/Team/">
+    <Project Path="src/modules/Team/Team.Domain/Team.Domain.csproj" Id="4a1b6941-24f5-4760-9b9c-2ff27b6ccdbf" />
+    <Project Path="src/modules/Team/Team.Infrastructure/Team.Infrastructure.csproj" Id="7a0845c7-48d8-4ddc-b1de-bc95d50cac09" />
   </Folder>
   <Folder Name="/tests/" />
   <Folder Name="/tests/modules/" />
