@@ -10,7 +10,10 @@ internal static class MatchEndpoints
 {
     public static void MapMatchEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/teams", () => Results.Ok(TeamStore.GetAll()));
+        app.MapGet("/api/teams", async (TeamStore teamStore, CancellationToken cancellationToken) => {
+            var teams = await teamStore.GetAllAsync(cancellationToken).ConfigureAwait(false);
+            return Results.Ok(teams);
+        });
 
         app.MapPost("/api/matches/simulate", (
             SimulateMatchRequest req,

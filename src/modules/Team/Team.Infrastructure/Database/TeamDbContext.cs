@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Team.Domain.Entities;
+using ProjectFootballSim.Team.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Team.Infrastructure.Database;
 
@@ -16,11 +17,23 @@ public class TeamDbContext(DbContextOptions<TeamDbContext> options) : DbContext(
         modelBuilder.Entity<TeamEntity>(entity =>
         {
             entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            entity.Property(x => x.Id).IsRequired();
             entity.Property(x => x.Name).IsRequired();
-            entity.Property(x => x.Attack.Value).IsRequired().HasColumnName("Attack");
-            entity.Property(x => x.Midfield.Value).IsRequired().HasColumnName("Midfield");
-            entity.Property(x => x.Defence.Value).IsRequired().HasColumnName("Defence");
+            entity.Property(x => x.Attack)
+                .IsRequired()
+                .HasColumnName("Attack")
+                .HasColumnType("INTEGER")
+                .HasConversion(v => (int)v.Value, v => new AttributeValue(v));
+            entity.Property(x => x.Midfield)
+                .IsRequired()
+                .HasColumnName("Midfield")
+                .HasColumnType("INTEGER")
+                .HasConversion(v => (int)v.Value, v => new AttributeValue(v));
+            entity.Property(x => x.Defence)
+                .IsRequired()
+                .HasColumnName("Defence")
+                .HasColumnType("INTEGER")
+                .HasConversion(v => (int)v.Value, v => new AttributeValue(v));
             entity.Property(x => x.CountryId).IsRequired();
         });
     }

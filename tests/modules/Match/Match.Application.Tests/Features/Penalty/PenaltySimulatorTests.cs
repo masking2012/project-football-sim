@@ -8,8 +8,8 @@ internal sealed class PenaltySimulatorTests
     [Test]
     public async Task ShouldPlayPenaltyAsync()
     {
-        Team home = new(Guid.NewGuid(), 80, 70, 75);
-        Team away = new(Guid.NewGuid(), 75, 65, 70);
+        Team home = new(1, 80, 70, 75);
+        Team away = new(2, 75, 65, 70);
 
         foreach (var _ in Enumerable.Range(0, 100))
         {

@@ -10,8 +10,8 @@ internal sealed class ChancesCalculatorTests
     [Test]
     public async Task ShouldCalculateChancesAsync()
     {
-        Team attacking = new Team(Guid.NewGuid(), 50, 50, 50);
-        Team defending = new Team(Guid.NewGuid(), 50, 50, 50);
+        Team attacking = new Team(1, 50, 50, 50);
+        Team defending = new Team(2, 50, 50, 50);
         Possession possession = new Possession(0.5);
         AdvantageRatio advantageRatio = new AdvantageRatio(1.0);
         GoalChancesSettings goalChancesSettings = GoalChancesSettings.RegularTime;

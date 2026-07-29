@@ -16,7 +16,7 @@ public class CountryDbContext(DbContextOptions<CountryDbContext> options) : DbCo
         modelBuilder.Entity<CountryEntity>(entity =>
         {
             entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            entity.Property(x => x.Id).IsRequired();
             entity.Property(x => x.Name).IsRequired();
         });
 

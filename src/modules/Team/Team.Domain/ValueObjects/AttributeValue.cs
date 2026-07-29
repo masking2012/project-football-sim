@@ -2,7 +2,7 @@ namespace ProjectFootballSim.Team.Domain.ValueObjects;
 
 public readonly struct AttributeValue : IEquatable<AttributeValue>
 {
-    public double Value { get; }
+    public int Value { get; }
 
     public AttributeValue(int value)
     {

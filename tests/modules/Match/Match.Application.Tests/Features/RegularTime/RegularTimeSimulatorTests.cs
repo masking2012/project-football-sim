@@ -16,8 +16,8 @@ internal sealed class RegularTimeSimulatorTests
     [Test]
     public async Task ShouldPlayGameAsync()
     {
-        Team home = new(Guid.NewGuid(), 80, 70, 75);
-        Team away = new(Guid.NewGuid(), 75, 65, 70);
+        Team home = new(1, 80, 70, 75);
+        Team away = new(2, 75, 65, 70);
         MatchSettings settings = new MatchSettings
         {
             HasHomeAdvantage = false
