@@ -2,12 +2,12 @@ namespace ProjectFootballSim.Match.Domain.ValueObjects;
 
 public sealed record Team
 {
-    public Guid Id { get; }
+    public int Id { get; }
     public int Attack { get; }
     public int Defence { get; }
     public int Midfield { get; }
 
-    public Team(Guid id, int attack, int defence, int midfield)
+    public Team(int id, int attack, int defence, int midfield)
     {
         if (attack < 1 || attack > 100)
             throw new ArgumentOutOfRangeException(nameof(attack), "Attack must be between 1 and 100.");

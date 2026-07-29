@@ -17,7 +17,7 @@ export function TeamSelector({ label, teams, selectedId, disabledId, onChange }:
       <select
         id={selectId}
         className="selector-select"
-        value={selectedId}
+        value={selectedId ?? ''}
         onChange={(e) => onChange(e.target.value)}
       >
         <option value="">— Pick a team —</option>

@@ -1,0 +1,18 @@
+[
+    {
+        "id": 10001,
+        "name": "Dynamo Kyiv",
+        "attack": 69,
+        "midfield": 73,
+        "defence": 71,
+        "countryId": 1
+    },
+    {
+        "id": 10002,
+        "name": "Shakhtar Donetsk",
+        "attack": 71,
+        "midfield": 73,
+        "defence": 73,
+        "countryId": 1
+    }
+]

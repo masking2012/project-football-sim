@@ -1,3 +1,4 @@
+using ProjectFootballSim.Match.Application.Common.Dtos;
 using ProjectFootballSim.Match.Application.Common.Services;
 using ProjectFootballSim.Match.Domain.ValueObjects;
 
@@ -8,11 +9,14 @@ public sealed class ExtraTimeSimulator
     IChancesCalculator chancesCalculator,
     IGoalsCalculator goalsCalculator)
 {
-    public ScoreResult Play(Team home, Team away, MatchSettings matchSettings)
+    public ScoreResult Play(MatchTeamDto homeDto, MatchTeamDto awayDto, MatchSettings matchSettings)
     {
-        ArgumentNullException.ThrowIfNull(home);
-        ArgumentNullException.ThrowIfNull(away);
+        ArgumentNullException.ThrowIfNull(homeDto);
+        ArgumentNullException.ThrowIfNull(awayDto);
         ArgumentNullException.ThrowIfNull(matchSettings);
+
+        Team home = TeamMapper.Map(homeDto);
+        Team away = TeamMapper.Map(awayDto);
 
         // Calculate possession based on midfield strength
         Possession homePossession = possessionCalculator.Calculate(home.Midfield, away.Midfield);

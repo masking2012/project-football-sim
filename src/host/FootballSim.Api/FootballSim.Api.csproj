@@ -2,11 +2,15 @@
 
   <PropertyGroup>
     <NoWarn>$(NoWarn);CA1812</NoWarn>
+    <UserSecretsId>0e9cae59-a45f-47da-8691-891a4ad8a62b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\Location\Location.Infrastructure\Location.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Match\Match.Application\Match.Application.csproj" />
     <ProjectReference Include="..\..\modules\Match\Match.Domain\Match.Domain.csproj" />
+    <ProjectReference Include="..\..\modules\Team\Team.Application\Team.Application.csproj" />
+    <ProjectReference Include="..\..\modules\Team\Team.Infrastructure\Team.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
