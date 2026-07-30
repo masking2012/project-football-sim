@@ -1,0 +1,18 @@
+[
+    {
+        "id": 50001,
+        "name": "Paris Saint-Germain",
+        "attack": 85,
+        "midfield": 86,
+        "defence": 86,
+        "countryId": 5
+    },
+    {
+        "id": 50002,
+        "name": "Olympique de Marseille",
+        "attack": 80,
+        "midfield": 79,
+        "defence": 79,
+        "countryId": 5
+    }
+]

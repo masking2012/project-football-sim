@@ -1,29 +1,28 @@
-using ProjectFootballSim.Api.Teams;
 using ProjectFootballSim.Match.Application.Common.Dtos;
 using ProjectFootballSim.Match.Application.Features.ExtraTime;
 using ProjectFootballSim.Match.Application.Features.Penalty;
 using ProjectFootballSim.Match.Application.Features.RegularTime;
 using ProjectFootballSim.Match.Domain.ValueObjects;
+using ProjectFootballSim.Team.Application.Features.GetTeamById;
 using System.Globalization;
 
-namespace ProjectFootballSim.Api.Match;
+namespace ProjectFootballSim.FootballSim.Api.Endpoints.Match;
 
 internal static class MatchEndpoints
 {
     public static void MapMatchEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/teams", async (TeamStore teamStore, CancellationToken cancellationToken) => {
-            var teams = await teamStore.GetAllAsync(cancellationToken).ConfigureAwait(false);
-            return Results.Ok(teams);
-        });
-
-        app.MapPost("/api/matches/simulate", (
+        app.MapPost("/api/matches/simulate", async (
             SimulateMatchRequest req,
             RegularTimeSimulator regularTime,
-            ExtraTimeSimulator extraTime) =>
+            ExtraTimeSimulator extraTime,
+            GetTeamByIdFeature getTeamByIdFeature) =>
         {
-            var homePair = TeamStore.FindById(req.HomeTeamId);
-            var awayPair = TeamStore.FindById(req.AwayTeamId);
+            int homeTeamId = Convert.ToInt32(req.HomeTeamId, CultureInfo.InvariantCulture);
+            int awayTeamId = Convert.ToInt32(req.AwayTeamId, CultureInfo.InvariantCulture);
+
+            var homePair = await getTeamByIdFeature.HandleAsync(homeTeamId, CancellationToken.None).ConfigureAwait(false);
+            var awayPair = await getTeamByIdFeature.HandleAsync(awayTeamId, CancellationToken.None).ConfigureAwait(false);
 
             if (homePair is null)
                 return Results.BadRequest($"Home team '{req.HomeTeamId}' not found.");
@@ -85,8 +84,8 @@ internal static class MatchEndpoints
                         : "Draw";
 
             var result = new MatchResultResponse(
-                homePair,
-                awayPair,
+                new TeamDto(Id: homePair.Id.ToString(CultureInfo.InvariantCulture), Name: homePair.Name, Attack: homePair.Attack, Defence: homePair.Defence, Midfield: homePair.Midfield),
+                new TeamDto(Id: awayPair.Id.ToString(CultureInfo.InvariantCulture), Name: awayPair.Name, Attack: awayPair.Attack, Defence: awayPair.Defence, Midfield: awayPair.Midfield),
                 new ScoreDto(rtScore.HomeScore, rtScore.AwayScore),
                 etScore,
                 penScore,

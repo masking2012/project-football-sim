@@ -1,5 +1,3 @@
-using ProjectFootballSim.Common.Features;
-
 namespace ProjectFootballSim.Common.Features.Tests;
 
 internal sealed class CryptoRandomTests

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProjectFootballSim.Common.Data.Entities.Countries;
 using ProjectFootballSim.Common.Data.Entities.Teams;
 using ProjectFootballSim.Team.Domain.Entities;
 using ProjectFootballSim.Team.Domain.ValueObjects;
@@ -30,19 +31,25 @@ public static class DependencyRegistrator
 
     private static void SeedWithPredefinedValues(DbContext context, bool storeManagementOpetationWasPerformed)
     {
-        foreach (var teamData in TeamDataProvider.GetAll())
+        var countries = CountryDataProvider.GetAll();
+
+        foreach (var countryData in countries)
         {
-            var team = context.Set<TeamEntity>().SingleOrDefault(c => c.Id == teamData.Id);
-            if (team is null)
-                context.Set<TeamEntity>().Add(
-                    new TeamEntity(
-                        id: teamData.Id,
-                        name: teamData.Name,
-                        attack: new AttributeValue(teamData.Attack),
-                        midfield: new AttributeValue(teamData.Midfield),
-                        defence: new AttributeValue(teamData.Defence),
-                        countryId: teamData.CountryId));
+            foreach (var teamData in TeamDataProvider.GetAll(countryData.Id))
+            {
+                var team = context.Set<TeamEntity>().SingleOrDefault(c => c.Id == teamData.Id);
+                if (team is null)
+                    context.Set<TeamEntity>().Add(
+                        new TeamEntity(
+                            id: teamData.Id,
+                            name: teamData.Name,
+                            attack: new AttributeValue(teamData.Attack),
+                            midfield: new AttributeValue(teamData.Midfield),
+                            defence: new AttributeValue(teamData.Defence),
+                            countryId: teamData.CountryId));
+            }
         }
+
         context.SaveChanges();
     }
 }

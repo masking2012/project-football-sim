@@ -22,6 +22,7 @@
     <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
   <Folder Name="/src/modules/Location/">
+    <Project Path="src/modules/Location/Location.Application/Location.Application.csproj" Id="9847d5f4-89df-4c14-8d0f-969251145f30" />
     <Project Path="src/modules/Location/Location.Domain/Location.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />
     <Project Path="src/modules/Location/Location.Infrastructure/Location.Infrastructure.csproj" Id="23bc63f2-9c04-458c-9c82-731bc1f18bfd" />
   </Folder>

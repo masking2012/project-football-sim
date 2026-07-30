@@ -1,0 +1,61 @@
+/* ── Loader Container ──────────────────────────────────────────── */
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+/* ── Loader Spinner ────────────────────────────────────────────── */
+.loader-spinner {
+  border-radius: 50%;
+  border-style: solid;
+  border-color: #1e3a60 #1e3a60 #4a9eff #4a9eff;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ── Sizes ─────────────────────────────────────────────────────── */
+.loader-small .loader-spinner {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-width: 2px;
+}
+
+.loader-medium .loader-spinner {
+  width: 2rem;
+  height: 2rem;
+  border-width: 3px;
+}
+
+.loader-large .loader-spinner {
+  width: 3rem;
+  height: 3rem;
+  border-width: 4px;
+}
+
+/* ── Loader Text ───────────────────────────────────────────────── */
+.loader-text {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #7a9cc8;
+  font-weight: 500;
+}
+
+/* ── Inline Loader ─────────────────────────────────────────────── */
+.loader-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.loader-inline .loader-spinner {
+  width: 1rem;
+  height: 1rem;
+  border-width: 2px;
+}

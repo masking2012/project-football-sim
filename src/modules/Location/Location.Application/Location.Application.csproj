@@ -1,0 +1,7 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Location.Infrastructure\Location.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
