@@ -3,14 +3,14 @@ using ProjectFootballSim.Matches.Application.Common.Services;
 using ProjectFootballSim.Matches.Domain.Services;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
 
-namespace ProjectFootballSim.Matches.Application.Features.ExtraTime;
+namespace ProjectFootballSim.Matches.Application.Features.RegularTime;
 
-public sealed class ExtraTimeSimulator
+public sealed class SimulateRegularTimeCommand
     (IPossessionCalculator possessionCalculator,
     IChancesCalculator chancesCalculator,
     IGoalsCalculator goalsCalculator)
 {
-    public ScoreResultDto Play(MatchTeamDto homeDto, MatchTeamDto awayDto, MatchSettingsDto matchSettings)
+    public ScoreResultDto Handle(MatchTeamDto homeDto, MatchTeamDto awayDto, MatchSettingsDto matchSettings)
     {
         ArgumentNullException.ThrowIfNull(homeDto);
         ArgumentNullException.ThrowIfNull(awayDto);
@@ -24,8 +24,8 @@ public sealed class ExtraTimeSimulator
         AdvantageRatio attackingAdvantageRatio = matchSettings.HasHomeAdvantage ? new AdvantageRatio(1.1) : AdvantageRatio.Neutral;
 
         // Calculate number of attacking chances based on possession and attack/defense matchup
-        int homeChances = chancesCalculator.Calculate(home, away, homePossession, attackingAdvantageRatio, GoalChancesSettings.ExtraTime);
-        int awayChances = chancesCalculator.Calculate(away, home, homePossession.OpponentPossession, AdvantageRatio.Neutral, GoalChancesSettings.ExtraTime);
+        int homeChances = chancesCalculator.Calculate(home, away, homePossession, attackingAdvantageRatio, GoalChancesSettings.RegularTime);
+        int awayChances = chancesCalculator.Calculate(away, home, homePossession.OpponentPossession, AdvantageRatio.Neutral, GoalChancesSettings.RegularTime);
 
         // Convert chances to goals
         int homeGoals = goalsCalculator.Calculate(home.Attack, away.Defence, homeChances);

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using ProjectFootballSim.Common.Features;
 using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Common.Services;
@@ -5,9 +6,9 @@ using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Matches.Application.Features.Penalty;
 
-public sealed class PenaltySimulator
+public sealed class SimulatePenaltyShootoutCommand(ILogger<SimulatePenaltyShootoutCommand> logger)
 {
-    public static ScoreResultDto Play(MatchTeamDto homeDto, MatchTeamDto awayDto)
+    public ScoreResultDto Handle(MatchTeamDto homeDto, MatchTeamDto awayDto)
     {
         ArgumentNullException.ThrowIfNull(homeDto);
         ArgumentNullException.ThrowIfNull(awayDto);
@@ -54,6 +55,8 @@ public sealed class PenaltySimulator
             if (homeScores != awayScores)
                 break;
         }
+
+        Log.PenaltyShootoutResult(logger, homeDto.Id, homeScore, awayDto.Id, awayScore);
 
         return new ScoreResultDto(homeScore, awayScore);
     }

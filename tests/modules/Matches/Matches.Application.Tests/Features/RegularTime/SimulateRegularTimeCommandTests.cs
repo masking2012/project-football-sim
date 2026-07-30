@@ -5,13 +5,13 @@ using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Matches.Application.Tests.Features.RegularTime;
 
-internal sealed class RegularTimeSimulatorTests
+internal sealed class SimulateRegularTimeCommandTests
 {
-    private readonly RegularTimeSimulator _sut;
+    private readonly SimulateRegularTimeCommand _sut;
 
-    public RegularTimeSimulatorTests()
+    public SimulateRegularTimeCommandTests()
     {
-        _sut = new RegularTimeSimulator(new PossessionCalculator(), new ChancesCalculator(), new GoalsCalculator());
+        _sut = new SimulateRegularTimeCommand(new PossessionCalculator(), new ChancesCalculator(), new GoalsCalculator());
     }
 
     [Test]
@@ -23,7 +23,7 @@ internal sealed class RegularTimeSimulatorTests
 
         foreach (var _ in Enumerable.Range(0, 100))
         {
-            ScoreResultDto result = _sut.Play(home, away, settings);
+            ScoreResultDto result = _sut.Handle(home, away, settings);
 
             await Assert.That(result.HomeScore).IsGreaterThanOrEqualTo(0).And.IsLessThanOrEqualTo(GoalChancesSettings.RegularTime.Maximum);
             await Assert.That(result.AwayScore).IsGreaterThanOrEqualTo(0).And.IsLessThanOrEqualTo(GoalChancesSettings.RegularTime.Maximum);
@@ -43,7 +43,7 @@ internal sealed class RegularTimeSimulatorTests
 
         foreach (var _ in Enumerable.Range(0, 1000))
         {
-            ScoreResultDto result = _sut.Play(bayernMunchen, dynamoKyiv, settings);
+            ScoreResultDto result = _sut.Handle(bayernMunchen, dynamoKyiv, settings);
 
             if (result.HomeScore > result.AwayScore)
                 homeWins++;

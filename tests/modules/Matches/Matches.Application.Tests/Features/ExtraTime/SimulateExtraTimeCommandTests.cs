@@ -5,13 +5,13 @@ using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Match.Application.Tests.Features.ExtraTime;
 
-internal sealed class ExtraTimeSimulatorTests
+internal sealed class SimulateExtraTimeCommandTests
 {
-    private readonly ExtraTimeSimulator _sut;
+    private readonly SimulateExtraTimeCommand _sut;
 
-    public ExtraTimeSimulatorTests()
+    public SimulateExtraTimeCommandTests()
     {
-        _sut = new ExtraTimeSimulator(new PossessionCalculator(), new ChancesCalculator(), new GoalsCalculator());
+        _sut = new SimulateExtraTimeCommand(new PossessionCalculator(), new ChancesCalculator(), new GoalsCalculator());
     }
 
     [Test]
@@ -23,7 +23,7 @@ internal sealed class ExtraTimeSimulatorTests
 
         foreach (var _ in Enumerable.Range(0, 100))
         {
-            ScoreResultDto result = _sut.Play(home, away, settings);
+            ScoreResultDto result = _sut.Handle(home, away, settings);
 
             await Assert.That(result.HomeScore).IsGreaterThanOrEqualTo(0).And.IsLessThanOrEqualTo(GoalChancesSettings.ExtraTime.Maximum);
             await Assert.That(result.AwayScore).IsGreaterThanOrEqualTo(0).And.IsLessThanOrEqualTo(GoalChancesSettings.ExtraTime.Maximum);

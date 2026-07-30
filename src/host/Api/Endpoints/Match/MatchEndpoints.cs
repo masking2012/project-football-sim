@@ -13,8 +13,9 @@ internal static class MatchEndpoints
     {
         app.MapPost("/api/matches/simulate", async (
             SimulateMatchRequest req,
-            RegularTimeSimulator regularTime,
-            ExtraTimeSimulator extraTime,
+            SimulateRegularTimeCommand regularTime,
+            SimulateExtraTimeCommand extraTime,
+            SimulatePenaltyShootoutCommand penaltyShootout,
             GetTeamByIdQuery getTeamByIdQuery) =>
         {
             int homeTeamId = Convert.ToInt32(req.HomeTeamId, CultureInfo.InvariantCulture);
@@ -49,7 +50,7 @@ internal static class MatchEndpoints
             );
 
             // Regular time
-            var rtScore = regularTime.Play(homeTeam, awayTeam, settings);
+            var rtScore = regularTime.Handle(homeTeam, awayTeam, settings);
             ScoreResponse? etScore = null;
             ScoreResponse? penScore = null;
 
@@ -59,7 +60,7 @@ internal static class MatchEndpoints
             // Extra time if draw
             if (rtScore.HomeScore == rtScore.AwayScore)
             {
-                var et = extraTime.Play(homeTeam, awayTeam, settings);
+                var et = extraTime.Handle(homeTeam, awayTeam, settings);
                 etScore = new ScoreResponse(et.HomeScore, et.AwayScore);
                 finalHome += et.HomeScore;
                 finalAway += et.AwayScore;
@@ -67,7 +68,7 @@ internal static class MatchEndpoints
                 // Penalties if still drawn
                 if (finalHome == finalAway)
                 {
-                    var pen = PenaltySimulator.Play(homeTeam, awayTeam);
+                    var pen = penaltyShootout.Handle(homeTeam, awayTeam);
                     penScore = new ScoreResponse(pen.HomeScore, pen.AwayScore);
                 }
             }
