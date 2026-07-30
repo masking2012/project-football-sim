@@ -21,14 +21,14 @@
     <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
     <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
-  <Folder Name="/src/modules/Location/">
-    <Project Path="src/modules/Location/Location.Application/Location.Application.csproj" Id="9847d5f4-89df-4c14-8d0f-969251145f30" />
-    <Project Path="src/modules/Location/Location.Domain/Location.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />
-    <Project Path="src/modules/Location/Location.Infrastructure/Location.Infrastructure.csproj" Id="23bc63f2-9c04-458c-9c82-731bc1f18bfd" />
+  <Folder Name="/src/modules/Locations/">
+    <Project Path="src/modules/Locations/Locations.Application/Locations.Application.csproj" Id="9847d5f4-89df-4c14-8d0f-969251145f30" />
+    <Project Path="src/modules/Locations/Locations.Domain/Locations.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />
+    <Project Path="src/modules/Locations/Locations.Infrastructure/Locations.Infrastructure.csproj" Id="23bc63f2-9c04-458c-9c82-731bc1f18bfd" />
   </Folder>
-  <Folder Name="/src/modules/Match/">
-    <Project Path="src/modules/Match/Match.Application/Match.Application.csproj" Id="c7f30f53-0ec4-43c3-9da6-84aa85c1dac9" />
-    <Project Path="src/modules/Match/Match.Domain/Match.Domain.csproj" Id="9da939d0-7984-45dc-91c1-9769e3a1264f" />
+  <Folder Name="/src/modules/Matches/">
+    <Project Path="src/modules/Matches/Matches.Application/Matches.Application.csproj" Id="c7f30f53-0ec4-43c3-9da6-84aa85c1dac9" />
+    <Project Path="src/modules/Matches/Matches.Domain/Matches.Domain.csproj" Id="9da939d0-7984-45dc-91c1-9769e3a1264f" />
   </Folder>
   <Folder Name="/src/modules/Team/">
     <Project Path="src/modules/Team/Team.Application/Team.Application.csproj" Id="fece5387-6766-4419-ae8f-a9595c345c4f" />

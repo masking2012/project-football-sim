@@ -1,7 +1,7 @@
 using ProjectFootballSim.Match.Application.Common.Dtos;
 using ProjectFootballSim.Match.Application.Common.Services;
-using ProjectFootballSim.Match.Application.Features.RegularTime;
-using ProjectFootballSim.Match.Domain.ValueObjects;
+using ProjectFootballSim.Matches.Application.Features.RegularTime;
+using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Match.Application.Tests.Features.RegularTime;
 

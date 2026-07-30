@@ -1,5 +1,5 @@
-using ProjectFootballSim.Match.Application.Common.Services;
-using ProjectFootballSim.Match.Domain.ValueObjects;
+using ProjectFootballSim.Matches.Application.Common.Services;
+using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Match.Application.Tests.Common.Services;
 

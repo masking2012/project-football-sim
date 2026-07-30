@@ -1,6 +1,6 @@
 using ProjectFootballSim.Match.Application.Common.Dtos;
-using ProjectFootballSim.Match.Application.Features.Penalty;
-using ProjectFootballSim.Match.Domain.ValueObjects;
+using ProjectFootballSim.Matches.Application.Features.Penalty;
+using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Match.Application.Tests.Features.Penalty;
 

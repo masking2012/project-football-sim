@@ -1,7 +1,8 @@
 using ProjectFootballSim.Match.Application.Common.Dtos;
 using ProjectFootballSim.Match.Application.Common.Services;
-using ProjectFootballSim.Match.Application.Features.ExtraTime;
 using ProjectFootballSim.Match.Domain.ValueObjects;
+using ProjectFootballSim.Matches.Application.Features.ExtraTime;
+using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Match.Application.Tests.Features.ExtraTime;
 

@@ -1,8 +1,8 @@
 using ProjectFootballSim.Match.Application.Common.Dtos;
-using ProjectFootballSim.Match.Application.Features.ExtraTime;
-using ProjectFootballSim.Match.Application.Features.Penalty;
-using ProjectFootballSim.Match.Application.Features.RegularTime;
 using ProjectFootballSim.Match.Domain.ValueObjects;
+using ProjectFootballSim.Matches.Application.Features.ExtraTime;
+using ProjectFootballSim.Matches.Application.Features.Penalty;
+using ProjectFootballSim.Matches.Application.Features.RegularTime;
 using ProjectFootballSim.Team.Application.Features.GetTeamById;
 using System.Globalization;
 

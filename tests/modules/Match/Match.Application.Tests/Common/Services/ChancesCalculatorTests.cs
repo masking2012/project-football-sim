@@ -1,5 +1,5 @@
 using ProjectFootballSim.Match.Application.Common.Services;
-using ProjectFootballSim.Match.Domain.ValueObjects;
+using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Match.Application.Tests.Common.Services;
 
@@ -10,8 +10,8 @@ internal sealed class ChancesCalculatorTests
     [Test]
     public async Task ShouldCalculateChancesAsync()
     {
-        Team attacking = new Team(1, 50, 50, 50);
-        Team defending = new Team(2, 50, 50, 50);
+        MatchTeam attacking = new MatchTeam(1, 50, 50, 50);
+        MatchTeam defending = new MatchTeam(2, 50, 50, 50);
         Possession possession = new Possession(0.5);
         AdvantageRatio advantageRatio = new AdvantageRatio(1.0);
         GoalChancesSettings goalChancesSettings = GoalChancesSettings.RegularTime;
