@@ -14,7 +14,7 @@ public static class DependencyRegistrator
         IConfiguration configuration,
         string connectionStringSectionName)
     {
-        services.AddDbContext<LocationDbContext>(options =>
+        services.AddDbContext<LocationsDbContext>(options =>
             options.UseSqlServer(
             configuration.GetConnectionString(connectionStringSectionName),
             sqlOptions => sqlOptions.EnableRetryOnFailure(

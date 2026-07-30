@@ -8,8 +8,8 @@ internal static class EndpointsRegistrator
 {
     public static void MapAllEndpoints(this WebApplication app)
     {
-        app.MapCountryEndpoints();
-        app.MapTeamEndpoints();
+        app.MapCountriesEndpoints();
+        app.MapTeamsEndpoints();
         app.MapMatchEndpoints();
     }
 }

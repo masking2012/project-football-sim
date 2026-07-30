@@ -1,9 +1,8 @@
-using ProjectFootballSim.Match.Application.Common.Dtos;
-using ProjectFootballSim.Match.Domain.ValueObjects;
+using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Features.ExtraTime;
 using ProjectFootballSim.Matches.Application.Features.Penalty;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
-using ProjectFootballSim.Team.Application.Features.GetTeamById;
+using ProjectFootballSim.Teams.Application.Features.GetTeamById;
 using System.Globalization;
 
 namespace ProjectFootballSim.Api.Endpoints.Match;
@@ -16,13 +15,13 @@ internal static class MatchEndpoints
             SimulateMatchRequest req,
             RegularTimeSimulator regularTime,
             ExtraTimeSimulator extraTime,
-            GetTeamByIdFeature getTeamByIdFeature) =>
+            GetTeamByIdQuery getTeamByIdQuery) =>
         {
             int homeTeamId = Convert.ToInt32(req.HomeTeamId, CultureInfo.InvariantCulture);
             int awayTeamId = Convert.ToInt32(req.AwayTeamId, CultureInfo.InvariantCulture);
 
-            var homePair = await getTeamByIdFeature.HandleAsync(homeTeamId, CancellationToken.None).ConfigureAwait(false);
-            var awayPair = await getTeamByIdFeature.HandleAsync(awayTeamId, CancellationToken.None).ConfigureAwait(false);
+            var homePair = await getTeamByIdQuery.HandleAsync(homeTeamId, CancellationToken.None).ConfigureAwait(false);
+            var awayPair = await getTeamByIdQuery.HandleAsync(awayTeamId, CancellationToken.None).ConfigureAwait(false);
 
             if (homePair is null)
                 return Results.BadRequest($"Home team '{req.HomeTeamId}' not found.");
@@ -31,23 +30,23 @@ internal static class MatchEndpoints
             if (req.HomeTeamId == req.AwayTeamId)
                 return Results.BadRequest("Home and away teams must be different.");
 
-            var settings = new MatchSettings { HasHomeAdvantage = req.HasHomeAdvantage };
+            var settings = new MatchSettingsDto(HasHomeAdvantage: req.HasHomeAdvantage);
 
             var homeTeam = new MatchTeamDto
-            {
-                Id = Convert.ToInt32(homePair.Id, CultureInfo.InvariantCulture),
-                Attack = homePair.Attack,
-                Defence = homePair.Defence,
-                Midfield = homePair.Midfield
-            };
+            (
+                Id: Convert.ToInt32(homePair.Id, CultureInfo.InvariantCulture),
+                Attack: homePair.Attack,
+                Defence: homePair.Defence,
+                Midfield: homePair.Midfield
+            );
 
             var awayTeam = new MatchTeamDto
-            {
-                Id = Convert.ToInt32(awayPair.Id, CultureInfo.InvariantCulture),
-                Attack = awayPair.Attack,
-                Defence = awayPair.Defence,
-                Midfield = awayPair.Midfield
-            };
+            (
+                Id: Convert.ToInt32(awayPair.Id, CultureInfo.InvariantCulture),
+                Attack: awayPair.Attack,
+                Defence: awayPair.Defence,
+                Midfield: awayPair.Midfield
+            );
 
             // Regular time
             var rtScore = regularTime.Play(homeTeam, awayTeam, settings);

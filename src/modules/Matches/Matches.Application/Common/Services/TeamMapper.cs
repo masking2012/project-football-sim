@@ -1,4 +1,4 @@
-using ProjectFootballSim.Matches.Application.Common.Dtos;
+using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Matches.Application.Common.Services;

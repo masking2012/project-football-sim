@@ -7,11 +7,9 @@ builder.Services.AddCors(options =>
         policy.WithOrigins("http://localhost:5173", "http://localhost:28352")
               .AllowAnyMethod()
               .AllowAnyHeader()));
-
 builder.AddAllDependencies();
 
 var app = builder.Build();
-
 app.UseCors("DevFrontend");
 app.MapAllEndpoints();
 

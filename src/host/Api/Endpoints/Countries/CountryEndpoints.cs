@@ -1,16 +1,15 @@
-using ProjectFootballSim.Api.Endpoints.Countries;
-using ProjectFootballSim.Locations.Application.Features;
+using ProjectFootballSim.Locations.Application.Features.GetCountries;
 using System.Globalization;
 
 namespace ProjectFootballSim.Api.Endpoints.Countries;
 
-internal static class CountryEndpoints
+internal static class CountriesEndpoints
 {
-    public static void MapCountryEndpoints(this WebApplication app)
+    public static void MapCountriesEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/countries", async (GetCountriesFeature getCountriesFeature, CancellationToken cancellationToken) =>
+        app.MapGet("/api/countries", async (GetCountriesQuery getCountriesQuery, CancellationToken cancellationToken) =>
         {
-            var countries = await getCountriesFeature.HandleAsync(cancellationToken).ConfigureAwait(false);
+            var countries = await getCountriesQuery.HandleAsync(cancellationToken).ConfigureAwait(false);
             var countryItems = countries.Select(c => new CountryItemResponse(c.Id.ToString(CultureInfo.InvariantCulture), c.Name)).ToList();
             return Results.Ok(countryItems);
         });

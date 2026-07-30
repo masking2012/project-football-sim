@@ -40,7 +40,7 @@
   <Folder Name="/tests/modules/Common/">
     <Project Path="tests/modules/Common/Common.Features.Tests/Common.Features.Tests.csproj" Id="674923c4-8be2-4f2e-9f23-e4c5bcaaddb5" />
   </Folder>
-  <Folder Name="/tests/modules/Match/">
-    <Project Path="tests/modules/Match/Match.Application.Tests/Match.Application.Tests.csproj" Id="b50f9229-c20b-4645-af88-baef81b2395a" />
+  <Folder Name="/tests/modules/Matches/">
+    <Project Path="tests/modules/Matches/Matches.Application.Tests/Matches.Application.Tests.csproj" Id="b50f9229-c20b-4645-af88-baef81b2395a" />
   </Folder>
 </Solution>
