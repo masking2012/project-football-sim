@@ -3,7 +3,7 @@ using ProjectFootballSim.Matches.Application.Common.Services;
 using ProjectFootballSim.Matches.Application.Features.ExtraTime;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
 
-namespace ProjectFootballSim.Match.Application.Tests.Features.ExtraTime;
+namespace ProjectFootballSim.Matches.Application.Tests.Features.ExtraTime;
 
 internal sealed class SimulateExtraTimeCommandTests
 {

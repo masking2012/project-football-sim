@@ -16,19 +16,20 @@ internal static class MatchEndpoints
             SimulateRegularTimeCommand regularTime,
             SimulateExtraTimeCommand extraTime,
             SimulatePenaltyShootoutCommand penaltyShootout,
-            GetTeamByIdQuery getTeamByIdQuery) =>
+            GetTeamByIdQuery getTeamByIdQuery,
+            CancellationToken cancellationToken) =>
         {
             int homeTeamId = Convert.ToInt32(req.HomeTeamId, CultureInfo.InvariantCulture);
             int awayTeamId = Convert.ToInt32(req.AwayTeamId, CultureInfo.InvariantCulture);
 
-            var homePair = await getTeamByIdQuery.HandleAsync(homeTeamId, CancellationToken.None).ConfigureAwait(false);
-            var awayPair = await getTeamByIdQuery.HandleAsync(awayTeamId, CancellationToken.None).ConfigureAwait(false);
+            var homePair = await getTeamByIdQuery.HandleAsync(homeTeamId, cancellationToken).ConfigureAwait(false);
+            var awayPair = await getTeamByIdQuery.HandleAsync(awayTeamId, cancellationToken).ConfigureAwait(false);
 
             if (homePair is null)
                 return Results.BadRequest($"Home team '{req.HomeTeamId}' not found.");
             if (awayPair is null)
                 return Results.BadRequest($"Away team '{req.AwayTeamId}' not found.");
-            if (req.HomeTeamId == req.AwayTeamId)
+            if (homeTeamId == awayTeamId)
                 return Results.BadRequest("Home and away teams must be different.");
 
             var settings = new MatchSettingsDto(HasHomeAdvantage: req.HasHomeAdvantage);
