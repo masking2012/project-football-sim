@@ -7,7 +7,7 @@ internal static class CountryEndpoints
 {
     public static void MapCountryEndpoints(this WebApplication app)
     {
-        app.MapGet("api/countries", async (GetCountriesFeature getCountriesFeature, CancellationToken cancellationToken) =>
+        app.MapGet("/api/countries", async (GetCountriesFeature getCountriesFeature, CancellationToken cancellationToken) =>
         {
             var countries = await getCountriesFeature.HandleAsync(cancellationToken).ConfigureAwait(false);
             var countryItems = countries.Select(c => new CountryItem(c.Id.ToString(CultureInfo.InvariantCulture), c.Name)).ToList();

@@ -6,7 +6,7 @@ using ProjectFootballSim.Team.Infrastructure;
 
 namespace ProjectFootballSim.FootballSim.Api.Configuration;
 
-internal static class DependendyAssembler
+internal static class DependencyAssembler
 {
     public static void AddAllDependencies(this WebApplicationBuilder builder)
     {
