@@ -50,8 +50,8 @@ internal static class MatchEndpoints
 
             // Regular time
             var rtScore = regularTime.Play(homeTeam, awayTeam, settings);
-            ScoreDto? etScore = null;
-            ScoreDto? penScore = null;
+            ScoreResponse? etScore = null;
+            ScoreResponse? penScore = null;
 
             int finalHome = rtScore.HomeScore;
             int finalAway = rtScore.AwayScore;
@@ -60,7 +60,7 @@ internal static class MatchEndpoints
             if (rtScore.HomeScore == rtScore.AwayScore)
             {
                 var et = extraTime.Play(homeTeam, awayTeam, settings);
-                etScore = new ScoreDto(et.HomeScore, et.AwayScore);
+                etScore = new ScoreResponse(et.HomeScore, et.AwayScore);
                 finalHome += et.HomeScore;
                 finalAway += et.AwayScore;
 
@@ -68,7 +68,7 @@ internal static class MatchEndpoints
                 if (finalHome == finalAway)
                 {
                     var pen = PenaltySimulator.Play(homeTeam, awayTeam);
-                    penScore = new ScoreDto(pen.HomeScore, pen.AwayScore);
+                    penScore = new ScoreResponse(pen.HomeScore, pen.AwayScore);
                 }
             }
 
@@ -83,12 +83,12 @@ internal static class MatchEndpoints
                         : "Draw";
 
             var result = new MatchResultResponse(
-                new TeamDto(Id: homePair.Id.ToString(CultureInfo.InvariantCulture), Name: homePair.Name, Attack: homePair.Attack, Defence: homePair.Defence, Midfield: homePair.Midfield),
-                new TeamDto(Id: awayPair.Id.ToString(CultureInfo.InvariantCulture), Name: awayPair.Name, Attack: awayPair.Attack, Defence: awayPair.Defence, Midfield: awayPair.Midfield),
-                new ScoreDto(rtScore.HomeScore, rtScore.AwayScore),
+                new TeamResponse(Id: homePair.Id.ToString(CultureInfo.InvariantCulture), Name: homePair.Name, Attack: homePair.Attack, Defence: homePair.Defence, Midfield: homePair.Midfield),
+                new TeamResponse(Id: awayPair.Id.ToString(CultureInfo.InvariantCulture), Name: awayPair.Name, Attack: awayPair.Attack, Defence: awayPair.Defence, Midfield: awayPair.Midfield),
+                new ScoreResponse(rtScore.HomeScore, rtScore.AwayScore),
                 etScore,
                 penScore,
-                new ScoreDto(finalHome, finalAway),
+                new ScoreResponse(finalHome, finalAway),
                 winner
             );
 
