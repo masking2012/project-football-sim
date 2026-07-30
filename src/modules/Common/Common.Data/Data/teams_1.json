@@ -10,9 +10,121 @@
     {
         "id": 10002,
         "name": "Shakhtar Donetsk",
-        "attack": 66,
-        "midfield": 68,
-        "defence": 68,
+        "attack": 67,
+        "midfield": 69,
+        "defence": 69,
+        "countryId": 1
+    },
+    {
+        "id": 10003,
+        "name": "LNZ Cherkasy",
+        "attack": 59,
+        "midfield": 63,
+        "defence": 65,
+        "countryId": 1
+    },
+    {
+        "id": 10004,
+        "name": "Polissya Zhytomyr",
+        "attack": 63,
+        "midfield": 64,
+        "defence": 63,
+        "countryId": 1
+    },
+    {
+        "id": 10005,
+        "name": "FC Kharkiv",
+        "attack": 62,
+        "midfield": 63,
+        "defence": 62,
+        "countryId": 1
+    },
+    {
+        "id": 10006,
+        "name": "Kolos Kovalivka",
+        "attack": 58,
+        "midfield": 58,
+        "defence": 60,
+        "countryId": 1
+    },
+    {
+        "id": 10007,
+        "name": "Kryvbas",
+        "attack": 60,
+        "midfield": 55,
+        "defence": 60,
+        "countryId": 1
+    },
+    {
+        "id": 10008,
+        "name": "Zorya Luhansk",
+        "attack": 57,
+        "midfield": 57,
+        "defence": 57,
+        "countryId": 1
+    },
+    {
+        "id": 10009,
+        "name": "Karpaty Lviv",
+        "attack": 57,
+        "midfield": 57,
+        "defence": 57,
+        "countryId": 1
+    },
+    {
+        "id": 10010,
+        "name": "Epitsentr",
+        "attack": 55,
+        "midfield": 55,
+        "defence": 55,
+        "countryId": 1
+    },
+    {
+        "id": 10011,
+        "name": "Veres Rivne",
+        "attack": 54,
+        "midfield": 54,
+        "defence": 54,
+        "countryId": 1
+    },
+    {
+        "id": 10012,
+        "name": "Obolon Kyiv",
+        "attack": 54,
+        "midfield": 54,
+        "defence": 54,
+        "countryId": 1
+    },
+    {
+        "id": 10013,
+        "name": "Kudrivka",
+        "attack": 50,
+        "midfield": 50,
+        "defence": 50,
+        "countryId": 1
+    },
+    {
+        "id": 10014,
+        "name": "Chornomorets Odesa",
+        "attack": 53,
+        "midfield": 53,
+        "defence": 53,
+        "countryId": 1
+    },
+    {
+        "id": 10015,
+        "name": "Bukovyna Chernivtsi",
+        "attack": 57,
+        "midfield": 57,
+        "defence": 57,
+        "countryId": 1
+    },
+    {
+        "id": 10016,
+        "name": "Livyi Bereh",
+        "attack": 50,
+        "midfield": 50,
+        "defence": 50,
         "countryId": 1
     }
 ]
