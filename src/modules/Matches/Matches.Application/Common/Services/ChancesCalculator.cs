@@ -13,7 +13,7 @@ internal sealed class ChancesCalculator : IChancesCalculator
         // Base chances on possession (more possession = more chances)
         double baseChances = attackingTeamPossession.Value * goalChancesSettings.BaseNumber;
 
-        // Increase this to 0.35–0.45 for stronger teams to create more chances even with similar possession.
+        // Increasing the coff from 0.35 to 0.45 impacts for stronger teams to create more chances even with similar possession.
         double attackPower =
             attacking.Attack * attackingAdvantageRatio.Value +
             attacking.Midfield * 0.35;
