@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Identities.Infrastructure\Identities.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

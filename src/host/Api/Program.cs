@@ -11,6 +11,8 @@ builder.AddAllDependencies();
 
 var app = builder.Build();
 app.UseCors("DevFrontend");
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapAllEndpoints();
 
 app.Run();
