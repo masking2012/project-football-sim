@@ -47,6 +47,13 @@ public static class DependencyRegistrator
                             midfield: new AttributeValue(teamData.Midfield),
                             defence: new AttributeValue(teamData.Defence),
                             countryId: teamData.CountryId));
+                else
+                    team.Update(
+                        name: teamData.Name,
+                        attack: new AttributeValue(teamData.Attack),
+                        midfield: new AttributeValue(teamData.Midfield),
+                        defence: new AttributeValue(teamData.Defence),
+                        countryId: teamData.CountryId);
             }
         }
 

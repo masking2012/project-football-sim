@@ -14,7 +14,7 @@
     </Project>
   </Folder>
   <Folder Name="/src/host/">
-    <Project Path="src/host/FootballSim.Api/FootballSim.Api.csproj" />
+    <Project Path="src/host/Api/Api.csproj" />
   </Folder>
   <Folder Name="/src/modules/" />
   <Folder Name="/src/modules/Common/">

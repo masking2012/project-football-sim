@@ -1,7 +1,7 @@
 using ProjectFootballSim.Location.Application.Features;
 using System.Globalization;
 
-namespace ProjectFootballSim.FootballSim.Api.Endpoints.Country;
+namespace ProjectFootballSim.Api.Endpoints.Country;
 
 internal static class CountryEndpoints
 {

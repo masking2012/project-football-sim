@@ -44,4 +44,45 @@ internal sealed class RegularTimeSimulatorTests
             await Assert.That(result.AwayScore).IsGreaterThanOrEqualTo(0).And.IsLessThanOrEqualTo(GoalChancesSettings.RegularTime.Maximum);
         }
     }
+
+    [Test]
+    public async Task WinLossRatioAsync()
+    {
+        var bayernMunchen = new MatchTeamDto
+        {
+            Id = 1,
+            Attack = 90,
+            Midfield = 85,
+            Defence = 83
+        };
+        var dynamoKyiv = new MatchTeamDto
+        {
+            Id = 2,
+            Attack = 59,
+            Midfield = 63,
+            Defence = 61
+        };
+        MatchSettings settings = new MatchSettings
+        {
+            HasHomeAdvantage = false
+        };
+
+        int homeWins = 0;
+        int draws = 0;
+        int awayWins = 0;
+
+        foreach (var _ in Enumerable.Range(0, 1000))
+        {
+            ScoreResult result = _sut.Play(bayernMunchen, dynamoKyiv, settings);
+
+            if (result.HomeScore > result.AwayScore)
+                homeWins++;
+            else if (result.HomeScore < result.AwayScore)
+                awayWins++;
+            else
+                draws++;
+        }
+
+        await Assert.That(homeWins).IsGreaterThan(awayWins);
+    }
 }

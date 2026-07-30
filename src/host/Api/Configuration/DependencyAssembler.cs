@@ -4,7 +4,7 @@ using ProjectFootballSim.Match.Application;
 using ProjectFootballSim.Team.Application;
 using ProjectFootballSim.Team.Infrastructure;
 
-namespace ProjectFootballSim.FootballSim.Api.Configuration;
+namespace ProjectFootballSim.Api.Configuration;
 
 internal static class DependencyAssembler
 {

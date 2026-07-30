@@ -6,7 +6,7 @@ using ProjectFootballSim.Match.Domain.ValueObjects;
 using ProjectFootballSim.Team.Application.Features.GetTeamById;
 using System.Globalization;
 
-namespace ProjectFootballSim.FootballSim.Api.Endpoints.Match;
+namespace ProjectFootballSim.Api.Endpoints.Match;
 
 internal static class MatchEndpoints
 {

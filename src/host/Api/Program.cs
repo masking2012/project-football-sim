@@ -1,4 +1,4 @@
-using ProjectFootballSim.FootballSim.Api.Configuration;
+using ProjectFootballSim.Api.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

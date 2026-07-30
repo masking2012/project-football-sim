@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.FootballSim.Api.Endpoints.Match;
+namespace ProjectFootballSim.Api.Endpoints.Match;
 
 internal sealed record SimulateMatchRequest(string HomeTeamId, string AwayTeamId, bool HasHomeAdvantage);
 

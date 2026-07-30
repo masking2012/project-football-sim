@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-using ProjectFootballSim.FootballSim.Api.Endpoints.Match;
+using ProjectFootballSim.Api.Endpoints.Match;
 using ProjectFootballSim.Team.Application.Features.GetTeamsByCountry;
 using System.Globalization;
 
-namespace ProjectFootballSim.FootballSim.Api.Endpoints.Team;
+namespace ProjectFootballSim.Api.Endpoints.Team;
 
 internal static class TeamEndpoints
 {
