@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Team.Application.Features.GetTeamsByCountry;
-using ProjectFootballSim.Team.Infrastructure.Database;
+using ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
+using ProjectFootballSim.Teams.Infrastructure.Database;
 
-namespace ProjectFootballSim.Team.Application.Features.GetTeamById;
+namespace ProjectFootballSim.Teams.Application.Features.GetTeamById;
 
-public sealed class GetTeamByIdFeature(TeamDbContext dbContext)
+public sealed class GetTeamByIdFeature(TeamsDbContext dbContext)
 {
     public async Task<TeamSummaryDto?> HandleAsync(int teamId, CancellationToken cancellationToken)
     {

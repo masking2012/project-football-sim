@@ -1,10 +1,10 @@
-namespace ProjectFootballSim.Team.Domain.ValueObjects;
+namespace ProjectFootballSim.Teams.Domain.ValueObjects;
 
-public readonly struct AttributeValue : IEquatable<AttributeValue>
+public readonly struct TeamAttributeValue : IEquatable<TeamAttributeValue>
 {
     public int Value { get; }
 
-    public AttributeValue(int value)
+    public TeamAttributeValue(int value)
     {
         if (value < 1 || value > 99)
             throw new ArgumentOutOfRangeException(nameof(value), "Attribute value must be between 1 and 99");
@@ -14,7 +14,7 @@ public readonly struct AttributeValue : IEquatable<AttributeValue>
 
     public override bool Equals(object obj)
     {
-        if (obj is AttributeValue other)
+        if (obj is TeamAttributeValue other)
         {
             return Equals(other);
         }
@@ -26,15 +26,15 @@ public readonly struct AttributeValue : IEquatable<AttributeValue>
         return Value.GetHashCode();
     }
 
-    public bool Equals(AttributeValue other)
+    public bool Equals(TeamAttributeValue other)
     {
         return Value.Equals(other.Value);
     }
-    public static bool operator ==(AttributeValue left, AttributeValue right)
+    public static bool operator ==(TeamAttributeValue left, TeamAttributeValue right)
     {
         return left.Equals(right);
     }
-    public static bool operator !=(AttributeValue left, AttributeValue right)
+    public static bool operator !=(TeamAttributeValue left, TeamAttributeValue right)
     {
         return !(left == right);
     }

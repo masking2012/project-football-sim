@@ -1,17 +1,17 @@
-using ProjectFootballSim.Team.Domain.ValueObjects;
+using ProjectFootballSim.Teams.Domain.ValueObjects;
 
-namespace ProjectFootballSim.Team.Domain.Entities;
+namespace ProjectFootballSim.Teams.Domain.Entities;
 
-public sealed class TeamEntity
+public sealed class Team
 {
     public int Id { get; private set; }
     public string Name { get; private set; }
-    public AttributeValue Attack { get; private set; }
-    public AttributeValue Midfield { get; private set; }
-    public AttributeValue Defence { get; private set; }
+    public TeamAttributeValue Attack { get; private set; }
+    public TeamAttributeValue Midfield { get; private set; }
+    public TeamAttributeValue Defence { get; private set; }
     public int CountryId { get; private set; }
 
-    public TeamEntity(int id, string name, AttributeValue attack, AttributeValue midfield, AttributeValue defence, int countryId)
+    public Team(int id, string name, TeamAttributeValue attack, TeamAttributeValue midfield, TeamAttributeValue defence, int countryId)
     {
         ValidateName(name);
 
@@ -23,7 +23,7 @@ public sealed class TeamEntity
         CountryId = countryId;
     }
 
-    public void Update(string name, AttributeValue attack, AttributeValue midfield, AttributeValue defence, int countryId)
+    public void Update(string name, TeamAttributeValue attack, TeamAttributeValue midfield, TeamAttributeValue defence, int countryId)
     {
         ValidateName(name);
 

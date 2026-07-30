@@ -3,20 +3,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Common.Data.Entities.Countries;
 using ProjectFootballSim.Common.Data.Entities.Teams;
-using ProjectFootballSim.Team.Domain.Entities;
-using ProjectFootballSim.Team.Domain.ValueObjects;
-using ProjectFootballSim.Team.Infrastructure.Database;
+using ProjectFootballSim.Teams.Domain.Entities;
+using ProjectFootballSim.Teams.Domain.ValueObjects;
+using ProjectFootballSim.Teams.Infrastructure.Database;
 
-namespace ProjectFootballSim.Team.Infrastructure;
+namespace ProjectFootballSim.Teams.Infrastructure;
 
 public static class DependencyRegistrator
 {
-    public static IServiceCollection AddTeamInfrastructure(
+    public static IServiceCollection AddTeamsInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration,
         string connectionStringSectionName)
     {
-        services.AddDbContext<TeamDbContext>(options =>
+        services.AddDbContext<TeamsDbContext>(options =>
             options.UseSqlServer(
             configuration.GetConnectionString(connectionStringSectionName),
             sqlOptions => sqlOptions.EnableRetryOnFailure(
@@ -37,10 +37,10 @@ public static class DependencyRegistrator
         {
             foreach (var teamData in TeamDataProvider.GetAll(countryData.Id))
             {
-                var team = context.Set<TeamEntity>().SingleOrDefault(c => c.Id == teamData.Id);
+                var team = context.Set<Team>().SingleOrDefault(c => c.Id == teamData.Id);
                 if (team is null)
-                    context.Set<TeamEntity>().Add(
-                        new TeamEntity(
+                    context.Set<Team>().Add(
+                        new Team(
                             id: teamData.Id,
                             name: teamData.Name,
                             attack: new AttributeValue(teamData.Attack),

@@ -9,7 +9,10 @@ namespace ProjectFootballSim.Locations.Infrastructure;
 
 public static class DependencyRegistrator
 {
-    public static IServiceCollection AddLocationsInfrastructure(this IServiceCollection services, IConfiguration configuration, string connectionStringSectionName)
+    public static IServiceCollection AddLocationsInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        string connectionStringSectionName)
     {
         services.AddDbContext<LocationDbContext>(options =>
             options.UseSqlServer(

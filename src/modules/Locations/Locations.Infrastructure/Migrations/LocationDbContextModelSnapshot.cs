@@ -21,7 +21,7 @@ namespace ProjectFootballSim.Locations.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ProjectFootballSim.Location.Domain.Entities.CountryEntity", b =>
+            modelBuilder.Entity("ProjectFootballSim.Locations.Domain.Entities.CountryEntity", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");

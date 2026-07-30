@@ -1,4 +1,4 @@
-using ProjectFootballSim.Api.Endpoints.Country;
+using ProjectFootballSim.Api.Endpoints.Countries;
 using ProjectFootballSim.Api.Endpoints.Match;
 using ProjectFootballSim.Api.Endpoints.Team;
 

@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Team.Application.Features.GetTeamsByCountry;
+namespace ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
 
 public sealed class TeamSummaryDto
 {
