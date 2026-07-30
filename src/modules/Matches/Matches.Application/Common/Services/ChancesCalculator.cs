@@ -13,19 +13,21 @@ internal sealed class ChancesCalculator : IChancesCalculator
         // Base chances on possession (more possession = more chances)
         double baseChances = attackingTeamPossession.Value * goalChancesSettings.BaseNumber;
 
+        // Increasing the coff from 0.35 to 0.45 impacts for stronger teams to create more chances even with similar possession.
         double attackPower =
             attacking.Attack * attackingAdvantageRatio.Value +
-            attacking.Midfield * 0.25;
+            attacking.Midfield * 0.35;
 
         double defencePower =
             defending.Defence +
             defending.Midfield * 0.25;
-        double strengthRatio = Math.Sqrt(attackPower / Math.Max(defencePower, 1));
 
-        double expectedChances = baseChances * strengthRatio;
+        double ratio = attackPower / (attackPower + defencePower);
+        double multiplier = 0.55 + ratio;
+        double expectedChances = baseChances * multiplier;
 
         // Add randomness
-        expectedChances *= CryptoRandom.NextDouble() * 0.4 + 0.8;
+        expectedChances *= CryptoRandom.NextDouble() * 0.2 + 0.9;
 
         expectedChances = Math.Clamp(expectedChances, goalChancesSettings.Minimum, goalChancesSettings.Maximum);
 

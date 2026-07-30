@@ -11,7 +11,7 @@
 /* ── Header ───────────────────────────────────────────────── */
 .app-header {
   text-align: center;
-  padding: 2.5rem 1rem 1.5rem;
+  padding: 2rem 1rem 0;
   background: linear-gradient(160deg, #0d2044 0%, #0a1628 100%);
   border-bottom: 1px solid #1e3a60;
 }
@@ -31,9 +31,41 @@
 }
 
 .app-subtitle {
-  margin: 0.4rem 0 0;
+  text-align: center;
+  margin: 1.25rem 0 0;
   font-size: 0.95rem;
   color: #7a9cc8;
+}
+
+/* ── Nav bar ──────────────────────────────────────────────────────────────── */
+.app-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 1.25rem;
+}
+
+.nav-link {
+  padding: 0.55rem 1.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #7a9cc8;
+  text-decoration: none;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-link:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-link--active {
+  color: #fff;
+  background: #0a1628;
+  border-color: #1e3a60;
 }
 
 /* ── Main ─────────────────────────────────────────────────── */

@@ -7,10 +7,13 @@ internal sealed class GoalsCalculator : IGoalsCalculator
 {
     public int Calculate(int attack, int opponentDefense, int chances)
     {
-        double ratio = attack / (double)(attack + opponentDefense);
+        double difference = attack - opponentDefense;
+        // Equal teams ~12%, stronger attacks convert noticeably better.
+        double conversionRate = 0.12 + difference * 0.0025;
+        conversionRate = Math.Clamp(conversionRate, 0.06, 0.28);
 
-        double conversionRate =
-            Math.Clamp(0.05 + ratio * 0.15, 0.05, 0.20);
+        // Many chances tend to be lower quality on average.
+        conversionRate *= 1.0 - Math.Min(chances * 0.003, 0.12);
 
         int goals = 0;
 

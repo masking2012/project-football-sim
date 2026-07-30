@@ -2,17 +2,161 @@
     {
         "id": 30001,
         "name": "Real Madrid",
-        "attack": 90,
-        "midfield": 84,
-        "defence": 82,
+        "attack": 95,
+        "midfield": 89,
+        "defence": 87,
         "countryId": 3
     },
     {
         "id": 30002,
         "name": "FC Barcelona",
+        "attack": 92,
+        "midfield": 90,
+        "defence": 88,
+        "countryId": 3
+    },
+    {
+        "id": 30003,
+        "name": "Atlético Madrid",
         "attack": 87,
         "midfield": 85,
-        "defence": 83,
+        "defence": 84,
+        "countryId": 3
+    },
+    {
+        "id": 30004,
+        "name": "Athletic Club",
+        "attack": 79,
+        "midfield": 81,
+        "defence": 79,
+        "countryId": 3
+    },
+    {
+        "id": 30005,
+        "name": "Real Betis Balompié",
+        "attack": 80,
+        "midfield": 80,
+        "defence": 77,
+        "countryId": 3
+    },
+    {
+        "id": 30006,
+        "name": "Villarreal CF",
+        "attack": 80,
+        "midfield": 80,
+        "defence": 77,
+        "countryId": 3
+    },
+    {
+        "id": 30007,
+        "name": "Real Sociedad",
+        "attack": 83,
+        "midfield": 78,
+        "defence": 76,
+        "countryId": 3
+    },
+    {
+        "id": 30008,
+        "name": "CA Osasuna",
+        "attack": 78,
+        "midfield": 77,
+        "defence": 77,
+        "countryId": 3
+    },
+    {
+        "id": 30009,
+        "name": "Rayo Vallecano",
+        "attack": 81,
+        "midfield": 77,
+        "defence": 77,
+        "countryId": 3
+    },
+    {
+        "id": 30010,
+        "name": "Girona FC",
+        "attack": 76,
+        "midfield": 77,
+        "defence": 76,
+        "countryId": 3
+    },
+    {
+        "id": 30011,
+        "name": "Getafe CF",
+        "attack": 75,
+        "midfield": 77,
+        "defence": 75,
+        "countryId": 3
+    },
+    {
+        "id": 30012,
+        "name": "RC Celta",
+        "attack": 79,
+        "midfield": 75,
+        "defence": 77,
+        "countryId": 3
+    },
+    {
+        "id": 30013,
+        "name": "RCD Mallorca",
+        "attack": 75,
+        "midfield": 76,
+        "defence": 77,
+        "countryId": 3
+    },
+    {
+        "id": 30014,
+        "name": "Valencia CF",
+        "attack": 76,
+        "midfield": 75,
+        "defence": 74,
+        "countryId": 3
+    },
+    {
+        "id": 30015,
+        "name": "RCD Espanyol",
+        "attack": 73,
+        "midfield": 74,
+        "defence": 76,
+        "countryId": 3
+    },
+    {
+        "id": 30016,
+        "name": "Sevilla FC",
+        "attack": 75,
+        "midfield": 75,
+        "defence": 75,
+        "countryId": 3
+    },
+    {
+        "id": 30017,
+        "name": "Levante UD",
+        "attack": 74,
+        "midfield": 73,
+        "defence": 74,
+        "countryId": 3
+    },
+    {
+        "id": 30018,
+        "name": "Deportivo Alavés",
+        "attack": 77,
+        "midfield": 73,
+        "defence": 74,
+        "countryId": 3
+    },
+    {
+        "id": 30019,
+        "name": "Elche CF",
+        "attack": 74,
+        "midfield": 73,
+        "defence": 74,
+        "countryId": 3
+    },
+    {
+        "id": 30020,
+        "name": "Real Oviedo",
+        "attack": 74,
+        "midfield": 72,
+        "defence": 73,
         "countryId": 3
     }
 ]
