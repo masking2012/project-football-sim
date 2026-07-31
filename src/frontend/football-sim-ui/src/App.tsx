@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
 import { NavBar } from './components/NavBar';
+import { HomeRedirect } from './components/HomeRedirect';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { SimulatorPage } from './pages/SimulatorPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
@@ -18,10 +20,15 @@ function App() {
           </header>
 
           <Routes>
-            <Route path="/" element={<SimulatorPage subtitle="Pick two teams and simulate a match" />} />
-            <Route path="/friendly" element={<SimulatorPage subtitle="Pick two teams and simulate a friendly match" />} />
+            <Route path="/" element={<HomeRedirect />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/friendly" element={<SimulatorPage subtitle="Pick two teams and simulate a friendly match" />} />
+            </Route>
+
+            <Route path="*" element={<HomeRedirect />} />
           </Routes>
         </div>
       </AuthProvider>

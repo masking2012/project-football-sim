@@ -30,5 +30,8 @@ export async function loginUser(username: string, password: string): Promise<Aut
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
   });
+  if (res.status === 401) {
+    throw new Error('Invalid username or password.');
+  }
   return handleResponse<AuthResponse>(res);
 }
