@@ -21,14 +21,17 @@ public sealed class RegisterCommand(IdentitiesDbContext dbContext, IPasswordHash
         user.UpdatePassword(hash);
 
         dbContext.Users.Add(user);
-        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is not null &&
+            ex.InnerException.Message.Contains("unique", StringComparison.OrdinalIgnoreCase))
+        {
+            return RegisterResult.UsernameTaken;
+        }
 
         return RegisterResult.Success;
     }
-}
-
-public enum RegisterResult
-{
-    Success,
-    UsernameTaken,
 }

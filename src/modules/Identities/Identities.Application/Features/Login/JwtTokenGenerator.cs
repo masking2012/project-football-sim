@@ -6,7 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace ProjectFootballSim.Identities.Infrastructure.Services;
+namespace ProjectFootballSim.Identities.Application.Features.Login;
 
 public sealed class JwtTokenGenerator(IOptions<JwtOptions> options)
 {

@@ -11,12 +11,12 @@ using ProjectFootballSim.Teams.Infrastructure;
 
 namespace ProjectFootballSim.Api.Configuration;
 
-internal static class DependencyAssembler
+internal static class ServicesRegistrator
 {
-    public static void AddAllDependencies(this WebApplicationBuilder builder)
+    public static void AddModules(this WebApplicationBuilder builder)
     {
         builder.Services.AddIdentitiesInfrastructure(builder.Configuration, "IdentitiesAzureSql");
-        builder.Services.AddIdentitiesApplication();
+        builder.Services.AddIdentitiesApplication(builder.Configuration);
 
         builder.Services.AddLocationsInfrastructure(builder.Configuration, "LocationsAzureSql");
         builder.Services.AddLocationsApplication();
@@ -25,7 +25,10 @@ internal static class DependencyAssembler
         builder.Services.AddTeamsApplication();
 
         builder.Services.AddMatchesApplication();
+    }
 
+    public static void AddApiServices(this WebApplicationBuilder builder)
+    {
         var jwtSecret = builder.Configuration["Jwt:Secret"]
             ?? throw new InvalidOperationException("JWT secret is not configured.");
 
@@ -46,5 +49,11 @@ internal static class DependencyAssembler
             });
 
         builder.Services.AddAuthorization();
+
+        builder.Services.AddCors(options =>
+            options.AddPolicy("DevFrontend", policy =>
+                policy.WithOrigins("http://localhost:5173", "http://localhost:28352")
+                      .AllowAnyMethod()
+                      .AllowAnyHeader()));
     }
 }

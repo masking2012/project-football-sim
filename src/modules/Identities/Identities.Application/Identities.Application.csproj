@@ -1,5 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
+    </ItemGroup>
+    
   <ItemGroup>
     <ProjectReference Include="..\Identities.Infrastructure\Identities.Infrastructure.csproj" />
   </ItemGroup>

@@ -15,7 +15,7 @@ internal static class IdentityEndpoints
 
                 return result switch
                 {
-                    RegisterResult.Success => Results.Created(),
+                    RegisterResult.Success => Results.StatusCode(201),
                     RegisterResult.UsernameTaken => Results.Conflict("Username is already taken."),
                     _ => Results.StatusCode(500),
                 };

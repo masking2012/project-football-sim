@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Identities.Domain.Entities;
 using ProjectFootballSim.Identities.Infrastructure.Database;
-using ProjectFootballSim.Identities.Infrastructure.Services;
 
 namespace ProjectFootballSim.Identities.Application.Features.Login;
 

@@ -4,7 +4,7 @@ public sealed class User
 {
     public Guid Id { get; }
     public string Username { get; }
-    public string PasswordHash { private set; get; }
+    public string PasswordHash { get; private set; }
 
     public User(Guid id, string username, string passwordHash)
     {
