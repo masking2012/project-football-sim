@@ -44,8 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [token, username, login, logout],
   );
 
-  return <AuthContext value={value}>{children}</AuthContext>;
-}
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
