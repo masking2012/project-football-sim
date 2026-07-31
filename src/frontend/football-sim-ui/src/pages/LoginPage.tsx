@@ -1,16 +1,24 @@
-import { type FormEvent, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { type FormEvent, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { loginUser } from '../api/authApi';
 import { useAuth } from '../context/AuthContext';
 
 export function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const justRegistered = (location.state as { registered?: boolean } | null)?.registered === true;
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (justRegistered) {
+      window.history.replaceState({}, '');
+    }
+  }, []);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -37,6 +45,11 @@ export function LoginPage() {
         </div>
 
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
+          {justRegistered && (
+            <div className="success-banner">
+              Account created! You can now sign in.
+            </div>
+          )}
           {error && <div className="error-banner">{error}</div>}
 
           <div className="auth-field">

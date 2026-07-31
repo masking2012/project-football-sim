@@ -259,6 +259,15 @@
   font-size: 0.9rem;
 }
 
+.success-banner {
+  background: #052e16;
+  border: 1px solid #166534;
+  color: #86efac;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
 /* ── Result card ──────────────────────────────────────────── */
 .result-card {
   background: #0d2044;
