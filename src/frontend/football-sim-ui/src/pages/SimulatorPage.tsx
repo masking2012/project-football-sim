@@ -1,16 +1,30 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { fetchCountries, fetchTeams, simulateMatch } from '../api/footballApi';
 import type { CountryDto, MatchResultResponse, TeamDto } from '../api/footballApi';
 import { CountrySelector } from '../components/CountrySelector';
 import { TeamSelector } from '../components/TeamSelector';
 import { MatchResult } from '../components/MatchResult';
 import { Loader } from '../components/Loader';
+import { useAuth } from '../context/AuthContext';
 
 interface SimulatorPageProps {
   subtitle?: string;
 }
 
 export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match' }: SimulatorPageProps) {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleApiError(err: unknown, fallback: string) {
+    if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
+      logout();
+      navigate('/login');
+      return;
+    }
+    setError(err instanceof Error ? err.message : fallback);
+  }
+
   const [countries, setCountries] = useState<CountryDto[]>([]);
   const [homeCountryId, setHomeCountryId] = useState<string>('');
   const [awayCountryId, setAwayCountryId] = useState<string>('');
@@ -30,7 +44,7 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
     setLoadingCountries(true);
     fetchCountries()
       .then(setCountries)
-      .catch(() => setError('Could not load countries. Is the API running?'))
+      .catch((err) => handleApiError(err, 'Could not load countries. Is the API running?'))
       .finally(() => setLoadingCountries(false));
   }, []);
 
@@ -43,7 +57,7 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
     setLoadingHomeTeams(true);
     fetchTeams(homeCountryId)
       .then(setHomeTeams)
-      .catch(() => setError('Could not load home teams. Is the API running?'))
+      .catch((err) => handleApiError(err, 'Could not load home teams. Is the API running?'))
       .finally(() => setLoadingHomeTeams(false));
   }, [homeCountryId]);
 
@@ -56,7 +70,7 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
     setLoadingAwayTeams(true);
     fetchTeams(awayCountryId)
       .then(setAwayTeams)
-      .catch(() => setError('Could not load away teams. Is the API running?'))
+      .catch((err) => handleApiError(err, 'Could not load away teams. Is the API running?'))
       .finally(() => setLoadingAwayTeams(false));
   }, [awayCountryId]);
 
@@ -69,7 +83,7 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
       const res = await simulateMatch({ homeTeamId: homeId, awayTeamId: awayId, hasHomeAdvantage: homeAdvantage });
       setResult(res);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Simulation failed.');
+      handleApiError(e, 'Simulation failed.');
     } finally {
       setLoadingSimulation(false);
     }

@@ -21,6 +21,11 @@
     <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
     <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
+  <Folder Name="/src/modules/Identities/" Id="047f9c03-9d6c-d89c-3643-f60836ce01ee">
+    <Project Path="src/modules/Identities/Identities.Application/Identities.Application.csproj" />
+    <Project Path="src/modules/Identities/Identities.Domain/Identities.Domain.csproj" />
+    <Project Path="src/modules/Identities/Identities.Infrastructure/Identities.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/modules/Locations/">
     <Project Path="src/modules/Locations/Locations.Application/Locations.Application.csproj" Id="9847d5f4-89df-4c14-8d0f-969251145f30" />
     <Project Path="src/modules/Locations/Locations.Domain/Locations.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />

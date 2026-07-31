@@ -15,6 +15,6 @@ internal static class TeamsEndpoints
                 var teamsByCountry = await getTeamsByCountryQuery.HandleAsync(countryId, cancellationToken).ConfigureAwait(false);
                 var predefined = teamsByCountry.Select(t => new TeamResponse(t.Id.ToString(CultureInfo.InvariantCulture), t.Name, t.Attack, t.Defence, t.Midfield)).ToList();
                 return Results.Ok(predefined);
-            });
+            }).RequireAuthorization();
     }
 }
