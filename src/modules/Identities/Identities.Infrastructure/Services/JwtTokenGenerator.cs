@@ -1,23 +1,18 @@
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using ProjectFootballSim.Identities.Domain.Entities;
+using ProjectFootballSim.Identities.Infrastructure.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using ProjectFootballSim.Identities.Domain.Entities;
 
 namespace ProjectFootballSim.Identities.Infrastructure.Services;
 
-public sealed class JwtTokenGenerator(IConfiguration configuration)
+public sealed class JwtTokenGenerator(IOptions<JwtOptions> options)
 {
-    public string Generate(AppUser user)
+    public string Generate(User user)
     {
-        var secret = configuration["Jwt:Secret"]
-            ?? throw new InvalidOperationException("JWT secret is not configured.");
-        var issuer = configuration["Jwt:Issuer"] ?? "ProjectFootballSim";
-        var audience = configuration["Jwt:Audience"] ?? "ProjectFootballSim";
-        var expiryMinutes = int.TryParse(configuration["Jwt:ExpiryMinutes"], out var mins) ? mins : 60;
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
@@ -28,10 +23,10 @@ public sealed class JwtTokenGenerator(IConfiguration configuration)
         };
 
         var token = new JwtSecurityToken(
-            issuer: issuer,
-            audience: audience,
+            issuer: options.Value.Issuer,
+            audience: options.Value.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(expiryMinutes),
+            expires: DateTime.UtcNow.AddMinutes(options.Value.ExpiryMinutes),
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

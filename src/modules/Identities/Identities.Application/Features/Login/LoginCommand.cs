@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Identities.Application.Common.Models;
 using ProjectFootballSim.Identities.Domain.Entities;
 using ProjectFootballSim.Identities.Infrastructure.Database;
 using ProjectFootballSim.Identities.Infrastructure.Services;
@@ -9,7 +8,7 @@ namespace ProjectFootballSim.Identities.Application.Features.Login;
 
 public sealed class LoginCommand(
     IdentitiesDbContext dbContext,
-    IPasswordHasher<AppUser> passwordHasher,
+    IPasswordHasher<User> passwordHasher,
     JwtTokenGenerator tokenGenerator)
 {
     public async Task<AuthResultDto?> HandleAsync(string username, string password, CancellationToken cancellationToken)

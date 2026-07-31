@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProjectFootballSim.Identities.Infrastructure.Configuration;
 using ProjectFootballSim.Identities.Infrastructure.Database;
 using ProjectFootballSim.Identities.Infrastructure.Services;
 
@@ -20,6 +21,10 @@ public static class DependencyRegistrator
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(10),
                     errorNumbersToAdd: null)));
+
+        services
+            .AddOptionsWithValidateOnStart<JwtOptions>()
+            .Bind(configuration.GetSection(JwtOptions.SectionName));
 
         services.AddScoped<JwtTokenGenerator>();
 

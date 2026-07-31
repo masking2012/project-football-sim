@@ -10,7 +10,7 @@ public static class DependencyRegistrator
 {
     public static IServiceCollection AddIdentitiesApplication(this IServiceCollection services)
     {
-        services.AddScoped<IPasswordHasher<AppUser>, PasswordHasher<AppUser>>();
+        services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         services.AddScoped<RegisterCommand>();
         services.AddScoped<LoginCommand>();
 

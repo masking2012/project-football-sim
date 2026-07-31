@@ -5,7 +5,7 @@ using ProjectFootballSim.Identities.Infrastructure.Database;
 
 namespace ProjectFootballSim.Identities.Application.Features.Register;
 
-public sealed class RegisterCommand(IdentitiesDbContext dbContext, IPasswordHasher<AppUser> passwordHasher)
+public sealed class RegisterCommand(IdentitiesDbContext dbContext, IPasswordHasher<User> passwordHasher)
 {
     public async Task<RegisterResult> HandleAsync(string username, string password, CancellationToken cancellationToken)
     {
@@ -16,9 +16,9 @@ public sealed class RegisterCommand(IdentitiesDbContext dbContext, IPasswordHash
         if (exists)
             return RegisterResult.UsernameTaken;
 
-        var placeholder = new AppUser(Guid.NewGuid(), username, string.Empty);
-        var hash = passwordHasher.HashPassword(placeholder, password);
-        var user = new AppUser(placeholder.Id, username, hash);
+        var user = new User(Guid.NewGuid(), username, password);
+        var hash = passwordHasher.HashPassword(user, password);
+        user.UpdatePassword(hash);
 
         dbContext.Users.Add(user);
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

@@ -5,7 +5,7 @@ namespace ProjectFootballSim.Identities.Infrastructure.Database;
 
 public class IdentitiesDbContext(DbContextOptions<IdentitiesDbContext> options) : DbContext(options)
 {
-    public DbSet<AppUser> Users => Set<AppUser>();
+    public DbSet<User> Users => Set<User>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -13,7 +13,7 @@ public class IdentitiesDbContext(DbContextOptions<IdentitiesDbContext> options) 
 
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<AppUser>(entity =>
+        modelBuilder.Entity<User>(entity =>
         {
             entity.HasKey(x => x.Id);
             entity.Property(x => x.Id).IsRequired().ValueGeneratedNever();
