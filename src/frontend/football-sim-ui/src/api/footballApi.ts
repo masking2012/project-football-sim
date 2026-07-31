@@ -1,3 +1,5 @@
+import { TOKEN_KEY } from './authApi';
+
 export interface CountryDto {
   id: string;
   name: string;
@@ -34,7 +36,15 @@ export interface SimulateMatchRequest {
 
 const BASE = '/api';
 
+function authHeaders(): Record<string, string> {
+  const token = localStorage.getItem(TOKEN_KEY);
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 async function handleResponse<T>(res: Response): Promise<T> {
+  if (res.status === 401) {
+    throw new Error('SESSION_EXPIRED');
+  }
   if (!res.ok) {
     const text = await res.text();
     throw new Error(text || `HTTP ${res.status}`);
@@ -43,20 +53,20 @@ async function handleResponse<T>(res: Response): Promise<T> {
 }
 
 export async function fetchCountries(): Promise<CountryDto[]> {
-  const res = await fetch(`${BASE}/countries`);
+  const res = await fetch(`${BASE}/countries`, { headers: authHeaders() });
   return handleResponse<CountryDto[]>(res);
 }
 
 export async function fetchTeams(countryId?: string): Promise<TeamDto[]> {
   const url = countryId ? `${BASE}/teams?countryId=${countryId}` : `${BASE}/teams`;
-  const res = await fetch(url);
+  const res = await fetch(url, { headers: authHeaders() });
   return handleResponse<TeamDto[]>(res);
 }
 
 export async function simulateMatch(req: SimulateMatchRequest): Promise<MatchResultResponse> {
   const res = await fetch(`${BASE}/matches/simulate`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify(req),
   });
   return handleResponse<MatchResultResponse>(res);

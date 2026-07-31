@@ -1,5 +1,7 @@
 const BASE = '/api/auth';
 
+export const TOKEN_KEY = 'auth_token';
+
 export interface AuthResponse {
   token: string;
 }

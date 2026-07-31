@@ -12,6 +12,6 @@ internal static class CountriesEndpoints
             var countries = await getCountriesQuery.HandleAsync(cancellationToken).ConfigureAwait(false);
             var countryItems = countries.Select(c => new CountryItemResponse(c.Id.ToString(CultureInfo.InvariantCulture), c.Name)).ToList();
             return Results.Ok(countryItems);
-        });
+        }).RequireAuthorization();
     }
 }

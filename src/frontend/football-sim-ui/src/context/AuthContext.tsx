@@ -1,6 +1,5 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
-
-const TOKEN_KEY = 'auth_token';
+import { TOKEN_KEY } from '../api/authApi';
 
 function decodeUsername(token: string): string {
   try {

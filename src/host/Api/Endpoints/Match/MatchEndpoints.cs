@@ -95,6 +95,6 @@ internal static class MatchEndpoints
             );
 
             return Results.Ok(result);
-        });
+        }).RequireAuthorization();
     }
 }
