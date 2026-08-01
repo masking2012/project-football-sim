@@ -34,6 +34,12 @@ export interface SimulateMatchRequest {
   hasHomeAdvantage: boolean;
 }
 
+export interface CurrentSeasonResponse {
+  id: string;
+  startDate: string;
+  endDate: string;
+}
+
 const BASE = '/api';
 
 function authHeaders(): Record<string, string> {
@@ -71,3 +77,33 @@ export async function simulateMatch(req: SimulateMatchRequest): Promise<MatchRes
   });
   return handleResponse<MatchResultResponse>(res);
 }
+
+export async function getCurrentSeason(): Promise<CurrentSeasonResponse | null> {
+  try {
+    const res = await fetch(`${BASE}/seasons/current`, { headers: authHeaders() });
+    if (res.status === 404) {
+      return null;
+    }
+    return handleResponse<CurrentSeasonResponse>(res);
+  } catch (error) {
+    if (error instanceof Error && error.message === 'SESSION_EXPIRED') {
+      throw error;
+    }
+    return null;
+  }
+}
+
+export async function createSeason(): Promise<void> {
+  const res = await fetch(`${BASE}/seasons`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+  });
+  if (res.status === 401) {
+    throw new Error('SESSION_EXPIRED');
+  }
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `HTTP ${res.status}`);
+  }
+}
+

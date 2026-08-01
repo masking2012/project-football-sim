@@ -2,6 +2,7 @@ using ProjectFootballSim.Seasons.Application.Features.GetCurrentSeason;
 using ProjectFootballSim.Seasons.Application.Features.GetSeasonDefinition;
 using ProjectFootballSim.Seasons.Domain.Entities;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Seasons;
 
@@ -14,7 +15,7 @@ internal static class SeasonsEndpoints
             HttpContext httpContext,
             CancellationToken cancellationToken) =>
         {
-            var userIdClaim = httpContext.User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim is null || !Guid.TryParse(userIdClaim, out Guid userId))
                 return Results.Unauthorized();
 
@@ -28,7 +29,7 @@ internal static class SeasonsEndpoints
             HttpContext httpContext,
             CancellationToken cancellationToken) =>
         {
-            var userIdClaim = httpContext.User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+            var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userIdClaim is null || !Guid.TryParse(userIdClaim, out Guid userId))
                 return Results.Unauthorized();
 
