@@ -21,7 +21,7 @@
     <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
     <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
-  <Folder Name="/src/modules/Identities/" Id="047f9c03-9d6c-d89c-3643-f60836ce01ee">
+  <Folder Name="/src/modules/Identities/">
     <Project Path="src/modules/Identities/Identities.Application/Identities.Application.csproj" />
     <Project Path="src/modules/Identities/Identities.Domain/Identities.Domain.csproj" />
     <Project Path="src/modules/Identities/Identities.Infrastructure/Identities.Infrastructure.csproj" />
@@ -34,6 +34,11 @@
   <Folder Name="/src/modules/Matches/">
     <Project Path="src/modules/Matches/Matches.Application/Matches.Application.csproj" Id="c7f30f53-0ec4-43c3-9da6-84aa85c1dac9" />
     <Project Path="src/modules/Matches/Matches.Domain/Matches.Domain.csproj" Id="9da939d0-7984-45dc-91c1-9769e3a1264f" />
+  </Folder>
+  <Folder Name="/src/modules/Seasons/">
+    <Project Path="src/modules/Seasons/Seasons.Application/Seasons.Application.csproj" Id="14c94feb-c5c2-49af-8097-7b7c0e13c0e8" />
+    <Project Path="src/modules/Seasons/Seasons.Domain/Seasons.Domain.csproj" Id="5b1948e5-4c08-43e7-88d6-5e6be64afaba" />
+    <Project Path="src/modules/Seasons/Seasons.Infrastructure/Seasons.Infrastructure.csproj" Id="d4d0c357-48c0-4a09-8a1d-41a7b94bd934" />
   </Folder>
   <Folder Name="/src/modules/Teams/">
     <Project Path="src/modules/Teams/Teams.Application/Teams.Application.csproj" Id="fece5387-6766-4419-ae8f-a9595c345c4f" />

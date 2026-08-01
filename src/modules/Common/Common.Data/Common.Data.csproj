@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <EmbeddedResource Include="Data\*.json" />
+    <EmbeddedResource Include="Files\*.json" />
   </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Common.Data.Entities.Countries;
+using ProjectFootballSim.Common.Data.Entities.Seasons;
 using ProjectFootballSim.Common.Data.Entities.Teams;
 using ProjectFootballSim.Teams.Domain.Entities;
 using ProjectFootballSim.Teams.Domain.ValueObjects;
@@ -35,7 +36,7 @@ public static class DependencyRegistrator
 
         foreach (var countryData in countries)
         {
-            foreach (var teamData in TeamDataProvider.GetAll(countryData.Id))
+            foreach (var teamData in SeasonsData.GetAll(countryData.Id))
             {
                 var team = context.Set<Team>().SingleOrDefault(c => c.Id == teamData.Id);
                 if (team is null)
