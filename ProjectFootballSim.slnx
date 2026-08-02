@@ -21,6 +21,11 @@
     <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
     <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
+  <Folder Name="/src/modules/GamePersistence/" Id="15e9499f-f1e1-379c-0e21-49fb6db9ad72">
+    <Project Path="src/modules/GamePersistence/GamePersistence.Application/GamePersistence.Application.csproj" />
+    <Project Path="src/modules/GamePersistence/GamePersistence.Domain/GamePersistence.Domain.csproj" />
+    <Project Path="src/modules/GamePersistence/GamePersistence.Infrastructure/GamePersistence.Infrastructure.csproj" />
+  </Folder>
   <Folder Name="/src/modules/Identities/">
     <Project Path="src/modules/Identities/Identities.Application/Identities.Application.csproj" />
     <Project Path="src/modules/Identities/Identities.Domain/Identities.Domain.csproj" />
