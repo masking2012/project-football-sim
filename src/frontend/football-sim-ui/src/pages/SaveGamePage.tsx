@@ -41,10 +41,10 @@ export function SaveGamePage() {
       return;
     }
 
-    void saveSelectedGame();
+    void saveSelectedGame(name);
   }
 
-  async function saveSelectedGame() {
+  async function saveSelectedGame(name: string) {
     setShowOverwriteConfirmation(false);
     setIsSaving(true);
     setSaveError(null);
@@ -122,7 +122,7 @@ export function SaveGamePage() {
           title="Overwrite save?"
           message="Are you sure you want to override this save?"
           confirmLabel="Override Save"
-          onConfirm={() => { void saveSelectedGame(); }}
+          onConfirm={() => { void saveSelectedGame(slotName.trim()); }}
           onCancel={() => setShowOverwriteConfirmation(false)}
         />
       )}
