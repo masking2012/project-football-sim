@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 import { useGame } from '../context/GameContext';
+import { ConfirmationModal } from '../components/ConfirmationModal';
 
 const SLOT_IDS = [1, 2, 3];
 
@@ -19,6 +20,7 @@ export function SaveGamePage() {
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saveSuccess, setSaveSuccess] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [showOverwriteConfirmation, setShowOverwriteConfirmation] = useState(false);
   const navigate = useNavigate();
 
   const savesBySlot = useMemo(() => {
@@ -30,14 +32,20 @@ export function SaveGamePage() {
     setSlotName(selectedSave?.name ?? '');
   }, [selectedSlotId, savesBySlot]);
 
-  async function handleSave() {
+  function handleSave() {
     const name = slotName.trim();
     if (!name || !gameId) return;
 
-    if (savesBySlot.has(selectedSlotId) && !window.confirm('Are you sure you want to override this save?')) {
+    if (savesBySlot.has(selectedSlotId)) {
+      setShowOverwriteConfirmation(true);
       return;
     }
 
+    void saveSelectedGame();
+  }
+
+  async function saveSelectedGame() {
+    setShowOverwriteConfirmation(false);
     setIsSaving(true);
     setSaveError(null);
     setSaveSuccess(null);
@@ -109,6 +117,15 @@ export function SaveGamePage() {
 
       {saveSuccess && <div className="success-banner" role="status">{saveSuccess}</div>}
       {(saveError || error) && <div className="error-banner">{saveError || error}</div>}
+      {showOverwriteConfirmation && (
+        <ConfirmationModal
+          title="Overwrite save?"
+          message="Are you sure you want to override this save?"
+          confirmLabel="Override Save"
+          onConfirm={() => { void saveSelectedGame(); }}
+          onCancel={() => setShowOverwriteConfirmation(false)}
+        />
+      )}
     </main>
   );
 }

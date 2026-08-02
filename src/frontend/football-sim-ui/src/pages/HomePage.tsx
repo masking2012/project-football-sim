@@ -1,17 +1,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../context/GameContext';
+import { ConfirmationModal } from '../components/ConfirmationModal';
 
 export function HomePage() {
   const { gameId, isLoading, error, startNewGame, loadGames } = useGame();
   const [actionError, setActionError] = useState<string | null>(null);
+  const [showNewGameConfirmation, setShowNewGameConfirmation] = useState(false);
   const navigate = useNavigate();
 
   async function handleStartNewGame() {
-    if (gameId && !window.confirm('Are you sure you want to start a new game? Your current progress will be lost.')) {
-      return;
-    }
-
+    setShowNewGameConfirmation(false);
     setActionError(null);
     try {
       await startNewGame();
@@ -47,7 +46,12 @@ export function HomePage() {
         <h2 className="home-title">Football Simulator</h2>
         <p className="home-message">Start a new game or load one of your saved games.</p>
         <div className="home-actions">
-          <button type="button" className="home-start-btn" onClick={handleStartNewGame} disabled={isLoading}>
+          <button
+            type="button"
+            className="home-start-btn"
+            onClick={() => gameId ? setShowNewGameConfirmation(true) : handleStartNewGame()}
+            disabled={isLoading}
+          >
             {isLoading ? '⏳ Starting...' : '🎮 New Game'}
                   </button>
           {gameId && (
@@ -62,6 +66,15 @@ export function HomePage() {
 
         {(actionError || error) && <div className="error-banner">{actionError || error}</div>}
       </div>
+      {showNewGameConfirmation && (
+        <ConfirmationModal
+          title="Start a new game?"
+          message="Are you sure you want to start a new game? Your current progress will be lost."
+          confirmLabel="Start New Game"
+          onConfirm={handleStartNewGame}
+          onCancel={() => setShowNewGameConfirmation(false)}
+        />
+      )}
     </main>
   );
 }

@@ -500,6 +500,59 @@
   font-size: 0.9rem;
 }
 
+.confirmation-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(3, 10, 24, 0.75);
+}
+
+.confirmation-modal {
+  width: min(100%, 420px);
+  padding: 1.5rem;
+  color: #e8eaf0;
+  background: linear-gradient(160deg, #0d2044 0%, #0a1628 100%);
+  border: 1px solid #4a9eff;
+  border-radius: 12px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.45);
+}
+
+.confirmation-modal h2 {
+  margin: 0 0 0.75rem;
+  color: #fff;
+  font-size: 1.25rem;
+}
+
+.confirmation-modal p {
+  margin: 0;
+  color: #b0c4de;
+  line-height: 1.5;
+}
+
+.confirmation-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.confirmation-modal-confirm-btn {
+  padding: 0.5rem 1rem;
+  color: #fff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.confirmation-modal-confirm-btn:hover {
+  opacity: 0.9;
+}
+
 .success-banner {
   background: #052e16;
   border: 1px solid #166534;

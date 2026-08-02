@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 import { useGame } from '../context/GameContext';
+import { ConfirmationModal } from '../components/ConfirmationModal';
 
 const SLOT_IDS = [1, 2, 3];
 
@@ -16,23 +17,32 @@ export function LoadGamePage() {
   const { gameId, saves, isLoading, error, loadGame } = useGame();
   const [selectedSlotId, setSelectedSlotId] = useState(1);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [showLoadConfirmation, setShowLoadConfirmation] = useState(false);
   const navigate = useNavigate();
 
   const savesBySlot = useMemo(() => {
     return new Map(saves.map((save) => [save.slotId, save]));
   }, [saves]);
 
-  function handleLoad() {
+  function requestLoad() {
     const selectedSave = savesBySlot.get(selectedSlotId);
     if (!selectedSave) {
       setLoadError(`Slot ${selectedSlotId} is empty.`);
       return;
     }
 
-    if (gameId && !window.confirm('Do you really want to load this game?')) {
+    if (gameId) {
+      setShowLoadConfirmation(true);
       return;
     }
 
+    loadSelectedGame();
+  }
+
+  function loadSelectedGame() {
+    const selectedSave = savesBySlot.get(selectedSlotId);
+    if (!selectedSave) return;
+    setShowLoadConfirmation(false);
     setLoadError(null);
     loadGame(selectedSave.gameId);
     navigate('/friendly');
@@ -85,12 +95,21 @@ export function LoadGamePage() {
           value={savesBySlot.get(selectedSlotId)?.name ?? 'Empty slot'}
           readOnly
         />
-        <button type="button" className="home-start-btn" onClick={handleLoad} disabled={isLoading || !savesBySlot.has(selectedSlotId)}>
+        <button type="button" className="home-start-btn" onClick={requestLoad} disabled={isLoading || !savesBySlot.has(selectedSlotId)}>
           📂 Load Game
         </button>
       </div>
 
       {(loadError || error) && <div className="error-banner">{loadError || error}</div>}
+      {showLoadConfirmation && (
+        <ConfirmationModal
+          title="Load this game?"
+          message="Do you really want to load this game? Your current game will be replaced."
+          confirmLabel="Load Game"
+          onConfirm={loadSelectedGame}
+          onCancel={() => setShowLoadConfirmation(false)}
+        />
+      )}
     </main>
   );
 }
