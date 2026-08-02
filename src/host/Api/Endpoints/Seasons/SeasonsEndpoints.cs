@@ -1,3 +1,4 @@
+using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Seasons.Application.Features.CreateNextPlayerSeason;
 using ProjectFootballSim.Seasons.Application.Features.GetCurrentSeason;
 using System.Security.Claims;
@@ -11,11 +12,10 @@ internal static class SeasonsEndpoints
         app.MapPost("/api/seasons", async (
             StartSeasonRequest request,
             CreateNextPlayerSeasonCommandHandler commandHandler,
-            HttpContext httpContext,
+            ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
-            var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim is null || !Guid.TryParse(userIdClaim, out Guid userId))
+            if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
             await commandHandler.HandleAsync(new CreatePlayerSeasonCommand(request.GameId, userId, DateTime.UtcNow), cancellationToken).ConfigureAwait(false);
@@ -25,11 +25,10 @@ internal static class SeasonsEndpoints
 
         app.MapGet("/api/seasons/current", async (
             GetCurrentPlayerSeasonQueryHandler queryHandler,
-            HttpContext httpContext,
+            ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
-            var userIdClaim = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (userIdClaim is null || !Guid.TryParse(userIdClaim, out Guid userId))
+            if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
             CurrentSeasonDto? currentSeason = await queryHandler.HandleAsync(userId, cancellationToken).ConfigureAwait(false);
