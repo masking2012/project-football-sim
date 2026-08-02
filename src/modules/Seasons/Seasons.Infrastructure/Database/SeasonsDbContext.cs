@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Seasons.Domain.Entities;
 
-namespace ProjectFootballSim.Identities.Infrastructure.Database;
+namespace ProjectFootballSim.Seasons.Infrastructure.Database;
 
 public class SeasonsDbContext(DbContextOptions<SeasonsDbContext> options) : DbContext(options)
 {

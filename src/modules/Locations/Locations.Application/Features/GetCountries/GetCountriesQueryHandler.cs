@@ -5,13 +5,13 @@ using ProjectFootballSim.Locations.Infrastructure.Database;
 
 namespace ProjectFootballSim.Locations.Application.Features.GetCountries;
 
-public sealed class GetCountriesQuery(HybridCache cache, LocationsDbContext dbContext)
+public sealed class GetCountriesQueryHandler(HybridCache cache, LocationsDbContext dbContext)
 {
     public ValueTask<IEnumerable<CountryDto>> HandleAsync(CancellationToken cancellationToken)
     {
         return cache.GetOrCreateAsync(
             "countries",
-            async cancel => await GetDataFromTheSourceAsync(cancellationToken).ConfigureAwait(false),
+            async lambdaCancellationToken => await GetDataFromTheSourceAsync(lambdaCancellationToken).ConfigureAwait(false),
             cancellationToken: cancellationToken
         );
     }

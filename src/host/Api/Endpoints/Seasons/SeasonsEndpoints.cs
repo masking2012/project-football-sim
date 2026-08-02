@@ -1,7 +1,5 @@
+using ProjectFootballSim.Seasons.Application.Features.CreateNextPlayerSeason;
 using ProjectFootballSim.Seasons.Application.Features.GetCurrentSeason;
-using ProjectFootballSim.Seasons.Application.Features.GetSeasonDefinition;
-using ProjectFootballSim.Seasons.Domain.Entities;
-using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Seasons;

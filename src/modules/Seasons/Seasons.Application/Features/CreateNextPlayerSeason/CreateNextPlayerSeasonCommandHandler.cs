@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Common.Data.Entities.Seasons;
-using ProjectFootballSim.Identities.Infrastructure.Database;
 using ProjectFootballSim.Seasons.Domain.Entities;
+using ProjectFootballSim.Seasons.Infrastructure.Database;
 
-namespace ProjectFootballSim.Seasons.Application.Features.GetSeasonDefinition;
+namespace ProjectFootballSim.Seasons.Application.Features.CreateNextPlayerSeason;
 
 public sealed class CreateNextPlayerSeasonCommandHandler(SeasonsDbContext dbContext)
 {

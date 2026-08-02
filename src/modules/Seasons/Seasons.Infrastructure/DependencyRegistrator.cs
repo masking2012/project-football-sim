@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Identities.Infrastructure.Database;
+using ProjectFootballSim.Seasons.Infrastructure.Database;
 
 namespace ProjectFootballSim.Seasons.Infrastructure;
 
