@@ -7,7 +7,7 @@ public static class DependencyRegistrator
 {
     public static IServiceCollection AddLocationsApplication(this IServiceCollection services)
     {
-        services.AddScoped<GetCountriesQuery>();
+        services.AddScoped<GetCountriesQueryHandler>();
         return services;
     }
 }

@@ -1,13 +1,16 @@
-using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.IdentityModel.Tokens;
 using ProjectFootballSim.Identities.Application;
 using ProjectFootballSim.Identities.Infrastructure;
 using ProjectFootballSim.Locations.Application;
 using ProjectFootballSim.Locations.Infrastructure;
 using ProjectFootballSim.Matches.Application;
+using ProjectFootballSim.Seasons.Application;
+using ProjectFootballSim.Seasons.Infrastructure;
 using ProjectFootballSim.Teams.Application;
 using ProjectFootballSim.Teams.Infrastructure;
+using System.Text;
 
 namespace ProjectFootballSim.Api.Configuration;
 
@@ -23,6 +26,9 @@ internal static class ServicesRegistrator
 
         builder.Services.AddTeamsInfrastructure(builder.Configuration, "TeamsAzureSql");
         builder.Services.AddTeamsApplication();
+
+        builder.Services.AddSeasonsInfrastructure(builder.Configuration, "SeasonsAzureSql");
+        builder.Services.AddSeasonsApplication();
 
         builder.Services.AddMatchesApplication();
     }
@@ -55,5 +61,14 @@ internal static class ServicesRegistrator
                 policy.WithOrigins("http://localhost:5173", "http://localhost:28352")
                       .AllowAnyMethod()
                       .AllowAnyHeader()));
+
+        builder.Services.AddHybridCache(options =>
+        {
+            options.DefaultEntryOptions = new HybridCacheEntryOptions
+            {
+                Expiration = TimeSpan.FromMinutes(10),
+                LocalCacheExpiration = TimeSpan.FromMinutes(10)
+            };
+        });
     }
 }

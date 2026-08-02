@@ -13,9 +13,14 @@ export function NavBar() {
   return (
     <nav className="app-nav">
       {isAuthenticated && (
-        <NavLink to="/friendly" className={({ isActive }) => 'nav-link' + (isActive ? ' nav-link--active' : '')}>
-          🤝 Friendly
-        </NavLink>
+        <>
+          <NavLink to="/home" className={({ isActive }) => 'nav-link' + (isActive ? ' nav-link--active' : '')}>
+            🏠 Home
+          </NavLink>
+          <NavLink to="/friendly" className={({ isActive }) => 'nav-link' + (isActive ? ' nav-link--active' : '')}>
+            🤝 Friendly
+          </NavLink>
+        </>
       )}
 
       <div className="nav-auth">

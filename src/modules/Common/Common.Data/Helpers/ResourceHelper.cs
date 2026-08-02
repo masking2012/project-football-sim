@@ -10,7 +10,7 @@ internal static class ResourceHelper
     public static Stream GetEmbeddedResource(string resourceName)
     {
         var assembly = Assembly.GetExecutingAssembly();
-        var fullResourceName = $"ProjectFootballSim.Common.Data.Data.{resourceName}.json";
+        var fullResourceName = $"ProjectFootballSim.Common.Data.Files.{resourceName}.json";
 
         var stream = assembly.GetManifestResourceStream(fullResourceName)
             ?? throw new InvalidOperationException($"Embedded resource '{fullResourceName}' was not found.");

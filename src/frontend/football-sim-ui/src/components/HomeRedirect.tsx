@@ -3,5 +3,5 @@ import { useAuth } from '../context/AuthContext';
 
 export function HomeRedirect() {
   const { isAuthenticated } = useAuth();
-  return <Navigate to={isAuthenticated ? '/friendly' : '/login'} replace />;
+  return <Navigate to={isAuthenticated ? '/home' : '/login'} replace />;
 }

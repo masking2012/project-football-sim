@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "name": "Ukraine",
+        "code": "UKR"
+    },
+    {
+        "id": 2,
+        "name": "England",
+        "code": "ENG"
+    },
+    {
+        "id": 3,
+        "name": "Spain",
+        "code": "ESP"
+    },
+    {
+        "id": 4,
+        "name": "Germany",
+        "code": "GER"
+    },
+    {
+        "id": 5,
+        "name": "France",
+        "code": "FRA"
+    },
+    {
+        "id": 6,
+        "name": "Italy",
+        "code": "ITA"
+    },
+    {
+        "id": 7,
+        "name": "Portugal",
+        "code": "POR"
+    }
+]
