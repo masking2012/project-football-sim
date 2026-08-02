@@ -10,7 +10,7 @@ public sealed class CreateNextPlayerSeasonCommandHandler(SeasonsDbContext dbCont
     public async Task HandleAsync(CreatePlayerSeasonCommand command, CancellationToken cancellationToken)
     {
         PlayerSeason? lastSeason = await dbContext.PlayerSeasons
-            .Where(s => s.UserId == command.UserId && s.IsCurrent)
+            .Where(s => s.UserId == command.UserId && s.GameId == command.GameId && s.IsCurrent)
             .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
 
         if (lastSeason is null)
@@ -20,7 +20,7 @@ public sealed class CreateNextPlayerSeasonCommandHandler(SeasonsDbContext dbCont
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             var newPlayerSeason = new PlayerSeason(
-                id: Guid.NewGuid(),
+                gameId: command.GameId,
                 userId: command.UserId,
                 startDate: startDate,
                 endDate: endDate,
@@ -38,7 +38,7 @@ public sealed class CreateNextPlayerSeasonCommandHandler(SeasonsDbContext dbCont
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             var newPlayerSeason = new PlayerSeason(
-                id: Guid.NewGuid(),
+                gameId: command.GameId,
                 userId: command.UserId,
                 startDate: startDate,
                 endDate: endDate,

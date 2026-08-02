@@ -16,7 +16,8 @@ public class SeasonsDbContext(DbContextOptions<SeasonsDbContext> options) : DbCo
         modelBuilder.Entity<PlayerSeason>(entity =>
         {
             entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).IsRequired().ValueGeneratedNever();
+            entity.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            entity.Property(x => x.GameId).IsRequired();
             entity.Property(x => x.UserId).IsRequired();
             entity.Property(x => x.StartDate).IsRequired();
             entity.Property(x => x.EndDate).IsRequired();

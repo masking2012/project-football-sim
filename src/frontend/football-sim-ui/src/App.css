@@ -1,11 +1,222 @@
 /* ── Layout ───────────────────────────────────────────────── */
 .app {
   min-height: 100dvh;
+  padding-bottom: 2.25rem;
   display: flex;
   flex-direction: column;
   background: #0a1628;
   color: #e8eaf0;
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+.app-game-id-footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  height: 2.25rem;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #fff;
+  background: #081221;
+  border-top: 1px solid #1e3a60;
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.home-actions > button {
+  width: min(100%, 260px);
+}
+
+.home-action-btn--secondary {
+  background: #1e3a60;
+  box-shadow: none;
+}
+
+.save-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.save-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background: #0d2044;
+  border: 1px solid #1e3a60;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.save-list-item:hover {
+  border-color: #4a9eff;
+}
+
+.save-list-item small {
+  color: #7a9cc8;
+}
+
+.game-menu {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(13, 32, 68, 0.8);
+  border-bottom: 1px solid #1e3a60;
+}
+
+.game-menu-btn {
+  padding: 0.5rem 1rem;
+  color: #e8eaf0;
+  background: #0d2044;
+  border: 1px solid #1e3a60;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.game-menu-btn:hover:not(:disabled) {
+  border-color: #4a9eff;
+}
+
+.game-menu-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.game-menu-message {
+  text-align: center;
+  color: #7a9cc8;
+  font-size: 0.85rem;
+}
+
+.game-id-footer {
+  margin: 1.5rem 0 0;
+  color: #fff;
+  font-size: 0.75rem;
+  text-align: center;
+  word-break: break-all;
+}
+
+.save-game-page {
+  max-width: 960px;
+}
+
+.save-game-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.save-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.save-slot {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1rem;
+  color: #e8eaf0;
+  text-align: left;
+  background: #0d2044;
+  border: 1px solid #1e3a60;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.save-slot:hover,
+.save-slot--selected {
+  border-color: #4a9eff;
+  box-shadow: 0 0 0 1px rgba(74, 158, 255, 0.2);
+}
+
+.save-slot-title {
+  color: #4a9eff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.save-slot strong {
+  color: #fff;
+  font-size: 1.05rem;
+}
+
+.save-slot small {
+  color: #7a9cc8;
+  overflow-wrap: anywhere;
+}
+
+.save-game-form {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #0d2044;
+  border: 1px solid #1e3a60;
+  border-radius: 10px;
+}
+
+.save-game-form label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.4rem;
+  color: #7a9cc8;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.save-game-form input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.8rem 0.75rem;
+  color: #e8eaf0;
+  background: #0a1628;
+  border: 1px solid #1e3a60;
+  border-radius: 8px;
+  font: inherit;
+}
+
+.save-game-form input:focus {
+  outline: none;
+  border-color: #4a9eff;
+}
+
+@media (max-width: 700px) {
+  .save-game-header,
+  .save-game-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .save-slots {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Header ───────────────────────────────────────────────── */
@@ -287,6 +498,59 @@
   padding: 0.75rem 1rem;
   border-radius: 8px;
   font-size: 0.9rem;
+}
+
+.confirmation-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(3, 10, 24, 0.75);
+}
+
+.confirmation-modal {
+  width: min(100%, 420px);
+  padding: 1.5rem;
+  color: #e8eaf0;
+  background: linear-gradient(160deg, #0d2044 0%, #0a1628 100%);
+  border: 1px solid #4a9eff;
+  border-radius: 12px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.45);
+}
+
+.confirmation-modal h2 {
+  margin: 0 0 0.75rem;
+  color: #fff;
+  font-size: 1.25rem;
+}
+
+.confirmation-modal p {
+  margin: 0;
+  color: #b0c4de;
+  line-height: 1.5;
+}
+
+.confirmation-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.confirmation-modal-confirm-btn {
+  padding: 0.5rem 1rem;
+  color: #fff;
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.confirmation-modal-confirm-btn:hover {
+  opacity: 0.9;
 }
 
 .success-banner {

@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.IdentityModel.Tokens;
+using ProjectFootballSim.GamePersistence.Application;
+using ProjectFootballSim.GamePersistence.Infrastructure;
 using ProjectFootballSim.Identities.Application;
 using ProjectFootballSim.Identities.Infrastructure;
 using ProjectFootballSim.Locations.Application;
@@ -20,6 +22,9 @@ internal static class ServicesRegistrator
     {
         builder.Services.AddIdentitiesInfrastructure(builder.Configuration, "IdentitiesAzureSql");
         builder.Services.AddIdentitiesApplication(builder.Configuration);
+
+        builder.Services.AddGamePersistenceInfrastructure(builder.Configuration, "GamePersistenceAzureSql");
+        builder.Services.AddGamePersistenceApplication();
 
         builder.Services.AddLocationsInfrastructure(builder.Configuration, "LocationsAzureSql");
         builder.Services.AddLocationsApplication();

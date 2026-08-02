@@ -61,12 +61,10 @@ export function SeasonProvider({ children }: { children: React.ReactNode }) {
   }, [refreshSeason, logout]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      refreshSeason();
-    } else {
+    if (!isAuthenticated) {
       setCurrentSeason(null);
     }
-  }, [isAuthenticated, refreshSeason]);
+  }, [isAuthenticated]);
 
   const value = useMemo<SeasonContextValue>(
     () => ({ currentSeason, isLoading, error, refreshSeason, startNewSeason }),

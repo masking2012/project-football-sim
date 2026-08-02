@@ -1,69 +1,80 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSeason } from '../context/SeasonContext';
-import { Loader } from '../components/Loader';
+import { useGame } from '../context/GameContext';
+import { ConfirmationModal } from '../components/ConfirmationModal';
 
 export function HomePage() {
-  const { currentSeason, isLoading, startNewSeason } = useSeason();
-  const [creating, setCreating] = useState(false);
+  const { gameId, isLoading, error, startNewGame, loadGames } = useGame();
+  const [actionError, setActionError] = useState<string | null>(null);
+  const [showNewGameConfirmation, setShowNewGameConfirmation] = useState(false);
   const navigate = useNavigate();
 
-  const handleStartNewGame = async () => {
-    setCreating(true);
+  async function handleStartNewGame() {
+    setShowNewGameConfirmation(false);
+    setActionError(null);
     try {
-      await startNewSeason();
+      await startNewGame();
       navigate('/friendly');
     } catch (err) {
-      console.error('Failed to start new season:', err);
-    } finally {
-      setCreating(false);
+      setActionError(err instanceof Error ? err.message : 'Could not start a new game.');
     }
-  };
-
-  if (isLoading) {
-    return (
-      <main className="app-main">
-        <Loader />
-      </main>
-    );
   }
 
-  if (currentSeason) {
-    return (
-      <main className="app-main">
-        <div className="home-welcome">
-          <h2 className="home-title">Welcome back!</h2>
-          <p className="home-message">
-            Your season is in progress. Continue with friendly matches or explore other features.
-          </p>
-          <button 
-            type="button" 
-            className="home-action-btn"
-            onClick={() => navigate('/friendly')}
-          >
-            ⚽ Play Friendly Match
-          </button>
-        </div>
-      </main>
-    );
+  async function handleOpenSaveGame() {
+    setActionError(null);
+    try {
+      await loadGames();
+      navigate('/save-game');
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Could not load saved games.');
+    }
+  }
+
+  async function handleOpenLoadGame() {
+    setActionError(null);
+    try {
+      await loadGames();
+      navigate('/load-game');
+    } catch (err) {
+      setActionError(err instanceof Error ? err.message : 'Could not load saved games.');
+    }
   }
 
   return (
     <main className="app-main">
       <div className="home-welcome">
-        <h2 className="home-title">Welcome to Football Simulator</h2>
-        <p className="home-message">
-          Start a new season to begin your football management journey!
-        </p>
-        <button 
-          type="button" 
-          className="home-start-btn"
-          onClick={handleStartNewGame}
-          disabled={creating}
-        >
-          {creating ? '⏳ Starting...' : '🎮 Start New Game'}
-        </button>
+        <h2 className="home-title">Football Simulator</h2>
+        <p className="home-message">Start a new game or load one of your saved games.</p>
+        <div className="home-actions">
+          <button
+            type="button"
+            className="home-start-btn"
+            onClick={() => gameId ? setShowNewGameConfirmation(true) : handleStartNewGame()}
+            disabled={isLoading}
+          >
+            {isLoading ? '⏳ Starting...' : '🎮 New Game'}
+                  </button>
+          {gameId && (
+              <button type="button" className="home-action-btn home-action-btn--secondary" onClick={handleOpenSaveGame} disabled={isLoading}>
+                  {isLoading ? '⏳ Loading slots...' : '💾 Save Game'}
+              </button>
+          )}
+          <button type="button" className="home-action-btn home-action-btn--secondary" onClick={handleOpenLoadGame} disabled={isLoading}>
+            {isLoading ? '⏳ Loading games...' : '📂 Load Games'}
+          </button>
+        </div>
+
+        {(actionError || error) && <div className="error-banner">{actionError || error}</div>}
       </div>
+      {showNewGameConfirmation && (
+        <ConfirmationModal
+          title="Start a new game?"
+          message="Are you sure you want to start a new game? Your current progress will be lost."
+          confirmLabel="Start New Game"
+          onConfirm={handleStartNewGame}
+          onCancel={() => setShowNewGameConfirmation(false)}
+        />
+      )}
     </main>
   );
 }
