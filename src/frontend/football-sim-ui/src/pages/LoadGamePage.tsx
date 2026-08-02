@@ -13,7 +13,7 @@ function formatCreatedDate(value: string): string {
 }
 
 export function LoadGamePage() {
-  const { saves, isLoading, error, loadGame } = useGame();
+  const { gameId, saves, isLoading, error, loadGame } = useGame();
   const [selectedSlotId, setSelectedSlotId] = useState(1);
   const [loadError, setLoadError] = useState<string | null>(null);
   const navigate = useNavigate();
@@ -26,6 +26,10 @@ export function LoadGamePage() {
     const selectedSave = savesBySlot.get(selectedSlotId);
     if (!selectedSave) {
       setLoadError(`Slot ${selectedSlotId} is empty.`);
+      return;
+    }
+
+    if (gameId && !window.confirm('Do you really want to load this game?')) {
       return;
     }
 

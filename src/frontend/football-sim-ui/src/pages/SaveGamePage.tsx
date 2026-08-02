@@ -34,6 +34,10 @@ export function SaveGamePage() {
     const name = slotName.trim();
     if (!name || !gameId) return;
 
+    if (savesBySlot.has(selectedSlotId) && !window.confirm('Are you sure you want to override this save?')) {
+      return;
+    }
+
     setIsSaving(true);
     setSaveError(null);
     setSaveSuccess(null);

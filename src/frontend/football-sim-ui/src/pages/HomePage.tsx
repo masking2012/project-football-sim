@@ -8,6 +8,10 @@ export function HomePage() {
   const navigate = useNavigate();
 
   async function handleStartNewGame() {
+    if (gameId && !window.confirm('Are you sure you want to start a new game? Your current progress will be lost.')) {
+      return;
+    }
+
     setActionError(null);
     try {
       await startNewGame();
