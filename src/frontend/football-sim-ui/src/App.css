@@ -8,6 +8,87 @@
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
 }
 
+.home-actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.home-action-btn--secondary {
+  background: #1e3a60;
+  box-shadow: none;
+}
+
+.save-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.save-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background: #0d2044;
+  border: 1px solid #1e3a60;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.save-list-item:hover {
+  border-color: #4a9eff;
+}
+
+.save-list-item small {
+  color: #7a9cc8;
+}
+
+.game-menu {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(13, 32, 68, 0.8);
+  border-bottom: 1px solid #1e3a60;
+}
+
+.game-menu-btn {
+  padding: 0.5rem 1rem;
+  color: #e8eaf0;
+  background: #0d2044;
+  border: 1px solid #1e3a60;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.game-menu-btn:hover:not(:disabled) {
+  border-color: #4a9eff;
+}
+
+.game-menu-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.game-menu-message {
+  text-align: center;
+  color: #7a9cc8;
+  font-size: 0.85rem;
+}
+
+.game-id-footer {
+  margin: 1.5rem 0 0;
+  color: #fff;
+  font-size: 0.75rem;
+  text-align: center;
+  word-break: break-all;
+}
+
 /* ── Header ───────────────────────────────────────────────── */
 .app-header {
   text-align: center;

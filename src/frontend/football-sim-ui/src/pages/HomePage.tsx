@@ -1,68 +1,62 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSeason } from '../context/SeasonContext';
 import { Loader } from '../components/Loader';
+import { useGame } from '../context/GameContext';
 
 export function HomePage() {
-  const { currentSeason, isLoading, startNewSeason } = useSeason();
-  const [creating, setCreating] = useState(false);
+  const { gameId, saves, isLoading, error, startNewGame, loadGames, loadGame } = useGame();
+  const [showSaves, setShowSaves] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const handleStartNewGame = async () => {
-    setCreating(true);
+  useEffect(() => {
+    if (showSaves) loadGames().catch(() => undefined);
+  }, [showSaves, loadGames]);
+
+  async function handleStartNewGame() {
+    setActionError(null);
     try {
-      await startNewSeason();
+      await startNewGame();
       navigate('/friendly');
     } catch (err) {
-      console.error('Failed to start new season:', err);
-    } finally {
-      setCreating(false);
+      setActionError(err instanceof Error ? err.message : 'Could not start a new game.');
     }
-  };
-
-  if (isLoading) {
-    return (
-      <main className="app-main">
-        <Loader />
-      </main>
-    );
   }
 
-  if (currentSeason) {
-    return (
-      <main className="app-main">
-        <div className="home-welcome">
-          <h2 className="home-title">Welcome back!</h2>
-          <p className="home-message">
-            Your season is in progress. Continue with friendly matches or explore other features.
-          </p>
-          <button 
-            type="button" 
-            className="home-action-btn"
-            onClick={() => navigate('/friendly')}
-          >
-            ⚽ Play Friendly Match
-          </button>
-        </div>
-      </main>
-    );
+  function handleLoadGame(id: string) {
+    loadGame(id);
+    navigate('/friendly');
   }
 
   return (
     <main className="app-main">
       <div className="home-welcome">
-        <h2 className="home-title">Welcome to Football Simulator</h2>
-        <p className="home-message">
-          Start a new season to begin your football management journey!
-        </p>
-        <button 
-          type="button" 
-          className="home-start-btn"
-          onClick={handleStartNewGame}
-          disabled={creating}
-        >
-          {creating ? '⏳ Starting...' : '🎮 Start New Game'}
-        </button>
+        <h2 className="home-title">Football Simulator</h2>
+        <p className="home-message">Start a new game or load one of your saved games.</p>
+        <div className="home-actions">
+          <button type="button" className="home-start-btn" onClick={handleStartNewGame} disabled={isLoading}>
+            {isLoading ? '⏳ Starting...' : '🎮 New Game'}
+          </button>
+          <button type="button" className="home-action-btn home-action-btn--secondary" onClick={() => setShowSaves((value) => !value)}>
+            📂 Load Games
+          </button>
+        </div>
+
+        {showSaves && (
+          <div className="save-list">
+            {isLoading && <Loader size="small" text="Loading saved games..." />}
+            {!isLoading && saves.length === 0 && <p className="home-message">No saved games found.</p>}
+            {saves.map((save) => (
+              <button key={`${save.gameId}-${save.slotId}`} type="button" className="save-list-item" onClick={() => handleLoadGame(save.gameId)}>
+                <span>{save.name}</span>
+                <small>{save.gameId}</small>
+              </button>
+            ))}
+          </div>
+        )}
+
+        {(actionError || error) && <div className="error-banner">{actionError || error}</div>}
+        {gameId && <p className="game-id-footer">Current game: {gameId}</p>}
       </div>
     </main>
   );

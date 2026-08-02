@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
 import { SeasonProvider } from './context/SeasonContext';
+import { GameProvider } from './context/GameContext';
 import { NavBar } from './components/NavBar';
 import { HomeRedirect } from './components/HomeRedirect';
 import { ProtectedRoute } from './components/ProtectedRoute';
@@ -16,7 +17,8 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <SeasonProvider>
-          <div className="app">
+          <GameProvider>
+            <div className="app">
             <header className="app-header">
               <span className="app-header-icon">⚽</span>
               <h1 className="app-title">Football Simulator</h1>
@@ -36,7 +38,8 @@ function App() {
 
               <Route path="*" element={<HomeRedirect />} />
             </Routes>
-          </div>
+            </div>
+          </GameProvider>
         </SeasonProvider>
       </AuthProvider>
     </BrowserRouter>

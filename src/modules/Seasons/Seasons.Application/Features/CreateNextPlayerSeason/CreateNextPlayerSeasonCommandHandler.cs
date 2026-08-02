@@ -20,7 +20,7 @@ public sealed class CreateNextPlayerSeasonCommandHandler(SeasonsDbContext dbCont
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             var newPlayerSeason = new PlayerSeason(
-                id: Guid.NewGuid(),
+                gameId: command.GameId,
                 userId: command.UserId,
                 startDate: startDate,
                 endDate: endDate,
@@ -38,7 +38,7 @@ public sealed class CreateNextPlayerSeasonCommandHandler(SeasonsDbContext dbCont
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             var newPlayerSeason = new PlayerSeason(
-                id: Guid.NewGuid(),
+                gameId: command.GameId,
                 userId: command.UserId,
                 startDate: startDate,
                 endDate: endDate,

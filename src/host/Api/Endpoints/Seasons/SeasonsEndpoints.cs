@@ -9,6 +9,7 @@ internal static class SeasonsEndpoints
     public static void MapSeasonsEndpoints(this WebApplication app)
     {
         app.MapPost("/api/seasons", async (
+            StartSeasonRequest request,
             CreateNextPlayerSeasonCommandHandler commandHandler,
             HttpContext httpContext,
             CancellationToken cancellationToken) =>
@@ -17,7 +18,7 @@ internal static class SeasonsEndpoints
             if (userIdClaim is null || !Guid.TryParse(userIdClaim, out Guid userId))
                 return Results.Unauthorized();
 
-            await commandHandler.HandleAsync(new CreatePlayerSeasonCommand(userId, DateTime.UtcNow), cancellationToken).ConfigureAwait(false);
+            await commandHandler.HandleAsync(new CreatePlayerSeasonCommand(request.GameId, userId, DateTime.UtcNow), cancellationToken).ConfigureAwait(false);
             return Results.StatusCode(201);
 
         }).RequireAuthorization();

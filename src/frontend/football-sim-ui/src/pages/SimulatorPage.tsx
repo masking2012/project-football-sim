@@ -7,6 +7,7 @@ import { TeamSelector } from '../components/TeamSelector';
 import { MatchResult } from '../components/MatchResult';
 import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
+import { GameMenu } from '../components/GameMenu';
 
 interface SimulatorPageProps {
   subtitle?: string;
@@ -94,6 +95,7 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
   return (
     <>
       <p className="app-subtitle">{subtitle}</p>
+      <GameMenu />
 
       <main className="app-main">
         {loadingCountries ? (
