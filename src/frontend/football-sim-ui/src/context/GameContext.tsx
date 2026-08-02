@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { createSeason, fetchGameSaves, saveGame, type GameSave } from '../api/footballApi';
 import { useAuth } from './AuthContext';
 import { useSeason } from './SeasonContext';
@@ -18,12 +18,21 @@ const GAME_ID_KEY = 'football-sim.game-id';
 const GameContext = createContext<GameContextValue | null>(null);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
-  const { logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const { refreshSeason } = useSeason();
   const [gameId, setGameId] = useState<string | null>(() => localStorage.getItem(GAME_ID_KEY));
   const [saves, setSaves] = useState<GameSave[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setGameId(null);
+      setSaves([]);
+      setError(null);
+      localStorage.removeItem(GAME_ID_KEY);
+    }
+  }, [isAuthenticated]);
 
   const handleError = useCallback((error: unknown) => {
     if (error instanceof Error && error.message === 'SESSION_EXPIRED') {

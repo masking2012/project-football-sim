@@ -9,9 +9,21 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { HomePage } from './pages/HomePage';
 import { SimulatorPage } from './pages/SimulatorPage';
 import { SaveGamePage } from './pages/SaveGamePage';
+import { LoadGamePage } from './pages/LoadGamePage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { SeasonInfo } from './components/SeasonInfo';
+import { useGame } from './context/GameContext';
+
+function GameIdFooter() {
+  const { gameId } = useGame();
+
+  if (!gameId) {
+    return null;
+  }
+
+  return <footer className="app-game-id-footer">Game ID: {gameId}</footer>;
+}
 
 function App() {
   return (
@@ -36,10 +48,12 @@ function App() {
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/friendly" element={<SimulatorPage subtitle="Pick two teams and simulate a friendly match" />} />
                 <Route path="/save-game" element={<SaveGamePage />} />
+                <Route path="/load-game" element={<LoadGamePage />} />
               </Route>
 
               <Route path="*" element={<HomeRedirect />} />
             </Routes>
+            <GameIdFooter />
             </div>
           </GameProvider>
         </SeasonProvider>

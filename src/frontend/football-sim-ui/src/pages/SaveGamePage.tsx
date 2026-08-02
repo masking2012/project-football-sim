@@ -105,7 +105,6 @@ export function SaveGamePage() {
 
       {saveSuccess && <div className="success-banner" role="status">{saveSuccess}</div>}
       {(saveError || error) && <div className="error-banner">{saveError || error}</div>}
-      {gameId && <p className="game-id-footer">Game ID: {gameId}</p>}
     </main>
   );
 }

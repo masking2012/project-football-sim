@@ -1,6 +1,7 @@
 /* ── Layout ───────────────────────────────────────────────── */
 .app {
   min-height: 100dvh;
+  padding-bottom: 2.25rem;
   display: flex;
   flex-direction: column;
   background: #0a1628;
@@ -8,11 +9,35 @@
   font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
 }
 
+.app-game-id-footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  height: 2.25rem;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: #fff;
+  background: #081221;
+  border-top: 1px solid #1e3a60;
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
 .home-actions {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  flex-wrap: wrap;
+}
+
+.home-actions > button {
+  width: min(100%, 260px);
 }
 
 .home-action-btn--secondary {
