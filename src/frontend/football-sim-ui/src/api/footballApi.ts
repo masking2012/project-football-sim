@@ -47,6 +47,13 @@ export interface CurrentSeasonResponse {
   endDate: string;
 }
 
+export interface GameSave {
+  gameId: string;
+  slotId: number;
+  name: string;
+  createdAtUtc: string;
+}
+
 const BASE = '/api';
 
 function authHeaders(): Record<string, string> {
@@ -126,6 +133,12 @@ export async function saveGame(gameId: string, slotId: number, name: string): Pr
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify({ gameId, slotId, name }),
   });
-  await handleResponse<unknown>(res);
+  if (res.status === 401) {
+    throw new Error('SESSION_EXPIRED');
+  }
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `HTTP ${res.status}`);
+  }
 }
 

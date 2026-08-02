@@ -8,6 +8,7 @@ import { HomeRedirect } from './components/HomeRedirect';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { HomePage } from './pages/HomePage';
 import { SimulatorPage } from './pages/SimulatorPage';
+import { SaveGamePage } from './pages/SaveGamePage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
 import { SeasonInfo } from './components/SeasonInfo';
@@ -34,6 +35,7 @@ function App() {
               <Route element={<ProtectedRoute />}>
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/friendly" element={<SimulatorPage subtitle="Pick two teams and simulate a friendly match" />} />
+                <Route path="/save-game" element={<SaveGamePage />} />
               </Route>
 
               <Route path="*" element={<HomeRedirect />} />

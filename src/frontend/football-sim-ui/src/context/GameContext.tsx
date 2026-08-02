@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { createSeason, fetchGameSaves, saveGame, type GameSave } from '../api/footballApi';
 import { useAuth } from './AuthContext';
+import { useSeason } from './SeasonContext';
 
 interface GameContextValue {
   gameId: string | null;
@@ -10,7 +11,7 @@ interface GameContextValue {
   startNewGame: () => Promise<string>;
   loadGames: () => Promise<void>;
   loadGame: (gameId: string) => void;
-  saveCurrentGame: () => Promise<void>;
+  saveCurrentGame: (slotId: number, name: string) => Promise<void>;
 }
 
 const GAME_ID_KEY = 'football-sim.game-id';
@@ -18,6 +19,7 @@ const GameContext = createContext<GameContextValue | null>(null);
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const { logout } = useAuth();
+  const { refreshSeason } = useSeason();
   const [gameId, setGameId] = useState<string | null>(() => localStorage.getItem(GAME_ID_KEY));
   const [saves, setSaves] = useState<GameSave[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,8 +45,8 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setError(null);
     try {
       await createSeason(newGameId);
-      await saveGame(newGameId, 1, 'New Game');
       selectGame(newGameId);
+      await refreshSeason();
       return newGameId;
     } catch (error) {
       handleError(error);
@@ -52,7 +54,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [handleError, selectGame]);
+  }, [handleError, refreshSeason, selectGame]);
 
   const loadGames = useCallback(async () => {
     setIsLoading(true);
@@ -68,12 +70,12 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const loadGame = useCallback((id: string) => selectGame(id), [selectGame]);
 
-  const saveCurrentGame = useCallback(async () => {
+  const saveCurrentGame = useCallback(async (slotId: number, name: string) => {
     if (!gameId) return;
     setIsLoading(true);
     setError(null);
     try {
-      await saveGame(gameId, 1, 'Saved Game');
+      await saveGame(gameId, slotId, name);
     } catch (error) {
       handleError(error);
     } finally {
