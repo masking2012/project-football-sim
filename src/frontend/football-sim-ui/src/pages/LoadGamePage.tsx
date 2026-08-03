@@ -39,12 +39,12 @@ export function LoadGamePage() {
     loadSelectedGame();
   }
 
-  function loadSelectedGame() {
+  async function loadSelectedGame() {
     const selectedSave = savesBySlot.get(selectedSlotId);
     if (!selectedSave) return;
     setShowLoadConfirmation(false);
     setLoadError(null);
-    loadGame(selectedSave.gameId);
+    await loadGame(selectedSave.gameId);
     navigate('/friendly');
   }
 
