@@ -11,7 +11,7 @@ using ProjectFootballSim.Locations.Infrastructure.Database;
 namespace ProjectFootballSim.Locations.Infrastructure.Migrations
 {
     [DbContext(typeof(LocationsDbContext))]
-    [Migration("20260730133010_LocationsInit")]
+    [Migration("20260803090558_LocationsInit")]
     partial class LocationsInit
     {
         /// <inheritdoc />
@@ -28,6 +28,10 @@ namespace ProjectFootballSim.Locations.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -18,6 +18,7 @@ public class LocationsDbContext(DbContextOptions<LocationsDbContext> options) : 
             entity.HasKey(x => x.Id);
             entity.Property(x => x.Id).IsRequired().ValueGeneratedNever();
             entity.Property(x => x.Name).IsRequired();
+            entity.Property(x => x.Code).IsRequired();
         });
 
         modelBuilder.Entity<Country>()

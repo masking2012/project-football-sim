@@ -19,6 +19,6 @@ public sealed class GetCountriesQueryHandler(HybridCache cache, LocationsDbConte
     private async Task<IEnumerable<CountryDto>> GetDataFromTheSourceAsync(CancellationToken cancellationToken)
     {
         List<Country> countries = await dbContext.Countries.ToListAsync(cancellationToken).ConfigureAwait(false);
-        return countries.Select(c => new CountryDto(c.Id, c.Name));
+        return countries.Select(c => new CountryDto(c.Id, c.Name, c.Code));
     }
 }
