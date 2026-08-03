@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace ProjectFootballSim.Common.Data.Entities.Leagues;
 
-public static class LeagueDataProvider
+public static class LeaguesDataProvider
 {
     public static IReadOnlyList<LeagueData> GetLeaguesByCountryId(int countryId)
     {

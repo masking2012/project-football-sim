@@ -21,7 +21,7 @@
     <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
     <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
-  <Folder Name="/src/modules/GamePersistence/" Id="15e9499f-f1e1-379c-0e21-49fb6db9ad72">
+  <Folder Name="/src/modules/GamePersistence/">
     <Project Path="src/modules/GamePersistence/GamePersistence.Application/GamePersistence.Application.csproj" />
     <Project Path="src/modules/GamePersistence/GamePersistence.Domain/GamePersistence.Domain.csproj" />
     <Project Path="src/modules/GamePersistence/GamePersistence.Infrastructure/GamePersistence.Infrastructure.csproj" />
@@ -30,6 +30,10 @@
     <Project Path="src/modules/Identities/Identities.Application/Identities.Application.csproj" />
     <Project Path="src/modules/Identities/Identities.Domain/Identities.Domain.csproj" />
     <Project Path="src/modules/Identities/Identities.Infrastructure/Identities.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/modules/Leagues/">
+    <Project Path="src/modules/Leagues/Leagues.Domain/Leagues.Domain.csproj" Id="9573d25b-70fb-4d1b-b9b6-b59c66f6792c" />
+    <Project Path="src/modules/Leagues/Leagues.Infrastructure/Leagues.Infrastructure.csproj"/>
   </Folder>
   <Folder Name="/src/modules/Locations/">
     <Project Path="src/modules/Locations/Locations.Application/Locations.Application.csproj" Id="9847d5f4-89df-4c14-8d0f-969251145f30" />

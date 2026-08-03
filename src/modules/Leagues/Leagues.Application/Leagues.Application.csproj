@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Leagues.Infrastructure\Leagues.Infrastructure.csproj" />
+    </ItemGroup>
+
+
+</Project>
