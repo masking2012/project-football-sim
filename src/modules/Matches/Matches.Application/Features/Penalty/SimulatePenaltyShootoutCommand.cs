@@ -19,7 +19,7 @@ public sealed class SimulatePenaltyShootoutCommand(ILogger<SimulatePenaltyShooto
         int homeScore = 0;
         int awayScore = 0;
 
-        // Calculate penalty conversion rates based on attack (composure) and defense (goalkeeper)
+        // Calculate penalty conversion rates based on attack (composure) and defence (goalkeeper)
         double homeConversionRate = CalculatePenaltyConversionRate(home.Attack, away.Defence);
         double awayConversionRate = CalculatePenaltyConversionRate(away.Attack, home.Defence);
 
@@ -61,7 +61,7 @@ public sealed class SimulatePenaltyShootoutCommand(ILogger<SimulatePenaltyShooto
         return new ScoreResultDto(homeScore, awayScore);
     }
 
-    private static double CalculatePenaltyConversionRate(double attack, double opponentDefense)
+    private static double CalculatePenaltyConversionRate(double attack, double opponentDefence)
     {
         // Base penalty conversion rate is around 75-80%
         double baseRate = 0.77;
@@ -69,10 +69,10 @@ public sealed class SimulatePenaltyShootoutCommand(ILogger<SimulatePenaltyShooto
         // Attack rating affects composure (max +8%)
         double attackBonus = (attack / 100.0) * 0.08;
 
-        // Opponent defense affects goalkeeper quality (max -8%)
-        double defenseReduction = (opponentDefense / 100.0) * 0.08;
+        // Opponent defence affects goalkeeper quality (max -8%)
+        double defenceReduction = (opponentDefence / 100.0) * 0.08;
 
-        double conversionRate = baseRate + attackBonus - defenseReduction;
+        double conversionRate = baseRate + attackBonus - defenceReduction;
 
         return Math.Clamp(conversionRate, 0.65, 0.90);
     }
