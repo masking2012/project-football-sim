@@ -21,8 +21,8 @@ public static class DependencyRegistrator
         services.AddScoped<JwtTokenGenerator>();
         services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
-        services.AddScoped<RegisterCommand>();
-        services.AddScoped<LoginCommand>();
+        services.AddScoped<RegisterCommandHandler>();
+        services.AddScoped<LoginCommandHandler>();
 
         return services;
     }

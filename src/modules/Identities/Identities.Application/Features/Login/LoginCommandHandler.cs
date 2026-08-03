@@ -5,7 +5,7 @@ using ProjectFootballSim.Identities.Infrastructure.Database;
 
 namespace ProjectFootballSim.Identities.Application.Features.Login;
 
-public sealed class LoginCommand(
+public sealed class LoginCommandHandler(
     IdentitiesDbContext dbContext,
     IPasswordHasher<User> passwordHasher,
     JwtTokenGenerator tokenGenerator)
