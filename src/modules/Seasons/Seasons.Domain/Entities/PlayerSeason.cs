@@ -1,6 +1,6 @@
 namespace ProjectFootballSim.Seasons.Domain.Entities;
 
-public sealed record PlayerSeason
+public sealed class PlayerSeason
 {
     public Guid Id { get; }
     public Guid GameId { get; }
