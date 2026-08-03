@@ -27,6 +27,12 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_PlayerSeasons", x => x.Id);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlayerSeasons_GameId_UserId_Order",
+                table: "PlayerSeasons",
+                columns: new[] { "GameId", "UserId", "Order" },
+                unique: true);
         }
 
         /// <inheritdoc />

@@ -8,23 +8,23 @@ internal static class IdentityEndpoints
     public static void MapIdentityEndpoints(this WebApplication app)
     {
         app.MapPost("/api/auth/register",
-            async (RegisterRequest request, RegisterCommand command, CancellationToken cancellationToken) =>
+            async (RegisterRequest request, RegisterCommandHandler handler, CancellationToken cancellationToken) =>
             {
-                var result = await command.HandleAsync(request.Username, request.Password, cancellationToken)
+                RegisterResult result = await handler.HandleAsync(request.Username, request.Password, cancellationToken)
                     .ConfigureAwait(false);
 
                 return result switch
                 {
-                    RegisterResult.Success => Results.StatusCode(201),
+                    RegisterResult.Success => Results.Ok(),
                     RegisterResult.UsernameTaken => Results.Conflict("Username is already taken."),
                     _ => Results.StatusCode(500),
                 };
             });
 
         app.MapPost("/api/auth/login",
-            async (LoginRequest request, LoginCommand command, CancellationToken cancellationToken) =>
+            async (LoginRequest request, LoginCommandHandler handler, CancellationToken cancellationToken) =>
             {
-                var authResult = await command.HandleAsync(request.Username, request.Password, cancellationToken)
+                var authResult = await handler.HandleAsync(request.Username, request.Password, cancellationToken)
                     .ConfigureAwait(false);
 
                 return authResult is null

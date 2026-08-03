@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
-using ProjectFootballSim.Seasons.Application.Features.CreateNextPlayerSeason;
-using ProjectFootballSim.Seasons.Application.Features.GetCurrentSeason;
+using ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
+using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Seasons;
@@ -10,34 +11,38 @@ internal static class SeasonsEndpoints
     public static void MapSeasonsEndpoints(this WebApplication app)
     {
         app.MapPost("/api/seasons", async (
-            StartSeasonRequest request,
-            CreateNextPlayerSeasonCommandHandler commandHandler,
+            [FromBody] CreateSeasonRequest request,
+            CreatePlayerSeasonCommandHandler commandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            await commandHandler.HandleAsync(new CreatePlayerSeasonCommand(request.GameId, userId, DateTime.UtcNow), cancellationToken).ConfigureAwait(false);
-            return Results.StatusCode(201);
+            var command = new CreatePlayerSeasonCommand(
+                GameId: request.GameId,
+                UserId: userId,
+                CurrentGameDate: request.CurrentGameDate);
+            var result = await commandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
+            return Results.Created($"/api/seasons/{result.Id}", new CreateSeasonResponse(result.Id));
 
         }).RequireAuthorization();
 
-        app.MapGet("/api/seasons/current", async (
-            GetCurrentPlayerSeasonQueryHandler queryHandler,
+        app.MapGet("/api/seasons", async (
+            [FromQuery] Guid gameId,
+            GetPlayerSeasonsQueryHandler queryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            CurrentSeasonDto? currentSeason = await queryHandler.HandleAsync(userId, cancellationToken).ConfigureAwait(false);
-            if (currentSeason is null)
-                return Results.NotFound();
+            var query = new GetPlayerSeasonsQuery(GameId: gameId, UserId: userId);
+            var playerSeasons = await queryHandler.HandleAsync(query, cancellationToken).ConfigureAwait(false);
 
             return Results.Ok(
-                new CurrentSeasonResponse(currentSeason.Id, currentSeason.StartDate, currentSeason.EndDate));
-
+                playerSeasons
+                    .Select(s => new PlayerSeasonItemResponse(Id: s.Id, StartDate: s.StartDate, EndDate: s.EndDate, IsCurrent: s.IsCurrent)));
         }).RequireAuthorization();
     }
 }

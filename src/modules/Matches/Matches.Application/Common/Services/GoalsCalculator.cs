@@ -5,9 +5,9 @@ namespace ProjectFootballSim.Matches.Application.Common.Services;
 
 internal sealed class GoalsCalculator : IGoalsCalculator
 {
-    public int Calculate(int attack, int opponentDefense, int chances)
+    public int Calculate(int attack, int opponentDefence, int chances)
     {
-        double difference = attack - opponentDefense;
+        double difference = attack - opponentDefence;
         // Equal teams ~12%, stronger attacks convert noticeably better.
         double conversionRate = 0.12 + difference * 0.0025;
         conversionRate = Math.Clamp(conversionRate, 0.06, 0.28);

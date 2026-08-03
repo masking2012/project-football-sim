@@ -1,13 +1,13 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { createSeason, getCurrentSeason, type CurrentSeasonResponse } from '../api/footballApi';
+import { createSeason, fetchSeasons, type CurrentSeasonResponse } from '../api/footballApi';
 import { useAuth } from './AuthContext';
 
 interface SeasonContextValue {
   currentSeason: CurrentSeasonResponse | null;
   isLoading: boolean;
   error: string | null;
-  refreshSeason: () => Promise<void>;
-  startNewSeason: () => Promise<void>;
+  refreshSeason: (gameId: string | null) => Promise<void>;
+  startNewSeason: (gameId: string) => Promise<void>;
 }
 
 const SeasonContext = createContext<SeasonContextValue | null>(null);
@@ -18,8 +18,8 @@ export function SeasonProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const refreshSeason = useCallback(async () => {
-    if (!isAuthenticated) {
+  const refreshSeason = useCallback(async (gameId: string | null) => {
+    if (!isAuthenticated || !gameId) {
       setCurrentSeason(null);
       return;
     }
@@ -28,7 +28,8 @@ export function SeasonProvider({ children }: { children: React.ReactNode }) {
     setError(null);
 
     try {
-      const season = await getCurrentSeason();
+      const seasons = await fetchSeasons(gameId);
+      const season = seasons.find((item) => item.isCurrent) ?? null;
       setCurrentSeason(season);
     } catch (err) {
       if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
@@ -41,13 +42,13 @@ export function SeasonProvider({ children }: { children: React.ReactNode }) {
     }
   }, [isAuthenticated, logout]);
 
-  const startNewSeason = useCallback(async () => {
+  const startNewSeason = useCallback(async (gameId: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      await createSeason();
-      await refreshSeason();
+      await createSeason(gameId);
+      await refreshSeason(gameId);
     } catch (err) {
       if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
         logout();

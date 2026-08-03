@@ -12,7 +12,7 @@ using ProjectFootballSim.Seasons.Infrastructure.Database;
 namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
 {
     [DbContext(typeof(SeasonsDbContext))]
-    [Migration("20260802181645_SeasonsInit")]
+    [Migration("20260803105728_SeasonsInit")]
     partial class SeasonsInit
     {
         /// <inheritdoc />
@@ -50,6 +50,9 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("GameId", "UserId", "Order")
+                        .IsUnique();
 
                     b.ToTable("PlayerSeasons");
                 });

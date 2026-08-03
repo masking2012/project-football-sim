@@ -23,6 +23,8 @@ public class SeasonsDbContext(DbContextOptions<SeasonsDbContext> options) : DbCo
             entity.Property(x => x.EndDate).IsRequired();
             entity.Property(x => x.Order).IsRequired();
             entity.Property(x => x.IsCurrent).IsRequired();
+
+            entity.HasIndex(x => new { x.GameId, x.UserId, x.Order }).IsUnique();
         });
     }
 }

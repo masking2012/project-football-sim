@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { createSeason, fetchGameSaves, saveGame, type GameSave } from '../api/footballApi';
+import { createSeason, fetchGameSaves, resetGameSessionCache, saveGame, type GameSave } from '../api/footballApi';
 import { useAuth } from './AuthContext';
 import { useSeason } from './SeasonContext';
 
@@ -10,7 +10,7 @@ interface GameContextValue {
   error: string | null;
   startNewGame: () => Promise<string>;
   loadGames: () => Promise<void>;
-  loadGame: (gameId: string) => void;
+  loadGame: (gameId: string) => Promise<void>;
   saveCurrentGame: (slotId: number, name: string) => Promise<void>;
 }
 
@@ -34,6 +34,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    void refreshSeason(gameId);
+  }, [gameId, refreshSeason]);
+
   const handleError = useCallback((error: unknown) => {
     if (error instanceof Error && error.message === 'SESSION_EXPIRED') {
       logout();
@@ -44,6 +48,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, [logout]);
 
   const selectGame = useCallback((id: string) => {
+    resetGameSessionCache();
     setGameId(id);
     localStorage.setItem(GAME_ID_KEY, id);
   }, []);
@@ -55,7 +60,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     try {
       await createSeason(newGameId);
       selectGame(newGameId);
-      await refreshSeason();
       return newGameId;
     } catch (error) {
       handleError(error);
@@ -63,7 +67,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [handleError, refreshSeason, selectGame]);
+  }, [handleError, selectGame]);
 
   const loadGames = useCallback(async () => {
     setIsLoading(true);
@@ -77,7 +81,10 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     }
   }, [handleError]);
 
-  const loadGame = useCallback((id: string) => selectGame(id), [selectGame]);
+  const loadGame = useCallback(async (id: string) => {
+    selectGame(id);
+    await refreshSeason(id);
+  }, [refreshSeason, selectGame]);
 
   const saveCurrentGame = useCallback(async (slotId: number, name: string) => {
     if (!gameId) return;

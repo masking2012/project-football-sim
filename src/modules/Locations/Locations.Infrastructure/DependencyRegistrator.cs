@@ -33,7 +33,7 @@ public static class DependencyRegistrator
         {
             var country = context.Set<Country>().SingleOrDefault(c => c.Id == countryData.Id);
             if (country is null)
-                context.Set<Country>().Add(new Country(countryData.Id, countryData.Name));
+                context.Set<Country>().Add(new Country(countryData.Id, countryData.Name, countryData.Code));
         }
         context.SaveChanges();
     }

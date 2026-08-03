@@ -9,8 +9,8 @@ public static class DependencyRegistrator
     public static IServiceCollection AddTeamsApplication(
         this IServiceCollection services)
     {
-        services.AddScoped<GetTeamsByCountryQuery>();
-        services.AddScoped<GetTeamByIdQuery>();
+        services.AddScoped<GetTeamsByCountryQueryHandler>();
+        services.AddScoped<GetTeamByIdQueryHandler>();
 
         return services;
     }

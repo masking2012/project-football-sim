@@ -4,12 +4,19 @@ using ProjectFootballSim.Teams.Infrastructure.Database;
 
 namespace ProjectFootballSim.Teams.Application.Features.GetTeamById;
 
-public sealed class GetTeamByIdQuery(TeamsDbContext dbContext)
+public sealed class GetTeamByIdQueryHandler(TeamsDbContext dbContext)
 {
     public async Task<TeamDto?> HandleAsync(int teamId, CancellationToken cancellationToken)
     {
         var team = await dbContext.Teams
             .FirstOrDefaultAsync(t => t.Id == teamId, cancellationToken).ConfigureAwait(false);
-        return team is null ? null : new TeamDto(team.Id, team.Name, team.Attack.Value, team.Midfield.Value, team.Defence.Value);
+        return team is null
+            ? null
+            : new TeamDto(
+                Id: team.Id,
+                Name: team.Name,
+                Attack: team.Attack.Value,
+                Midfield: team.Midfield.Value,
+                Defence: team.Defence.Value);
     }
 }

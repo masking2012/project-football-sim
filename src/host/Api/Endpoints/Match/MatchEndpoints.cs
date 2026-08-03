@@ -16,7 +16,7 @@ internal static class MatchEndpoints
             SimulateRegularTimeCommand regularTime,
             SimulateExtraTimeCommand extraTime,
             SimulatePenaltyShootoutCommand penaltyShootout,
-            GetTeamByIdQuery getTeamByIdQuery,
+            GetTeamByIdQueryHandler getTeamByIdQuery,
             CancellationToken cancellationToken) =>
         {
             int homeTeamId = Convert.ToInt32(req.HomeTeamId, CultureInfo.InvariantCulture);

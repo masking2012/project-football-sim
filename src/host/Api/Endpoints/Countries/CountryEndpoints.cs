@@ -10,7 +10,9 @@ internal static class CountriesEndpoints
         app.MapGet("/api/countries", async (GetCountriesQueryHandler queryHandler, CancellationToken cancellationToken) =>
         {
             var countries = await queryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
-            var countryItems = countries.Select(c => new CountryItemResponse(c.Id.ToString(CultureInfo.InvariantCulture), c.Name)).ToList();
+            var countryItems = countries
+                .Select(c => new CountryItemResponse(c.Id.ToString(CultureInfo.InvariantCulture), c.Name, c.Code))
+                .ToList();
             return Results.Ok(countryItems);
         }).RequireAuthorization();
     }

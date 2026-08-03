@@ -23,7 +23,7 @@ public sealed class SimulateRegularTimeCommand
         Possession homePossession = possessionCalculator.Calculate(home.Midfield, away.Midfield);
         AdvantageRatio attackingAdvantageRatio = matchSettings.HasHomeAdvantage ? new AdvantageRatio(1.1) : AdvantageRatio.Neutral;
 
-        // Calculate number of attacking chances based on possession and attack/defense matchup
+        // Calculate number of attacking chances based on possession and attack/defence matchup
         int homeChances = chancesCalculator.Calculate(home, away, homePossession, attackingAdvantageRatio, GoalChancesSettings.RegularTime);
         int awayChances = chancesCalculator.Calculate(away, home, homePossession.OpponentPossession, AdvantageRatio.Neutral, GoalChancesSettings.RegularTime);
 

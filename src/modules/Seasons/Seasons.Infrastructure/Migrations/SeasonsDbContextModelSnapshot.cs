@@ -48,6 +48,9 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("GameId", "UserId", "Order")
+                        .IsUnique();
+
                     b.ToTable("PlayerSeasons");
                 });
 #pragma warning restore 612, 618
