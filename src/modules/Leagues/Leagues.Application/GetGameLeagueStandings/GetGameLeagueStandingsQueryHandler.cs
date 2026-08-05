@@ -12,6 +12,7 @@ public sealed class GetGameLeagueStandingsQueryHandler(LeaguesDbContext dbContex
             .Where(league => league.UserId == query.UserId
                 && league.GameId == query.GameId
                 && league.LeagueId == query.LeagueId)
+            .Include(league => league.GameLeagueTeams)
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
 

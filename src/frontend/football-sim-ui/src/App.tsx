@@ -12,6 +12,7 @@ import { SaveGamePage } from './pages/SaveGamePage';
 import { LoadGamePage } from './pages/LoadGamePage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { LeagueStandingsPage } from './pages/LeagueStandingsPage';
 import { SeasonInfo } from './components/SeasonInfo';
 import { useGame } from './context/GameContext';
 
@@ -49,6 +50,7 @@ function App() {
                 <Route path="/friendly" element={<SimulatorPage subtitle="Pick two teams and simulate a friendly match" />} />
                 <Route path="/save-game" element={<SaveGamePage />} />
                 <Route path="/load-game" element={<LoadGamePage />} />
+                 <Route path="/leagues/:leagueId" element={<LeagueStandingsPage />} />
               </Route>
 
               <Route path="*" element={<HomeRedirect />} />

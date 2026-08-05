@@ -35,6 +35,7 @@ public sealed class CreateGameLeagueCommandHandler(LeaguesDbContext dbContext)
             ));
         }
 
+        dbContext.GameLeagues.Add(gameLeague);
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 }

@@ -12,7 +12,7 @@ internal static class GameLeaguesEndpoints
 {
     public static void MapGameLeaguesEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/game/{gameId}/leagues/{leagueId}/standings", async (
+        app.MapGet("/api/games/{gameId}/leagues/{leagueId}/standings", async (
             [FromRoute] int leagueId,
             [FromRoute] Guid gameId,
             GetGameLeagueStandingsQueryHandler getGameLeagueStandingsQueryHandler,
