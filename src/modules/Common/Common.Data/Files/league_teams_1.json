@@ -1,66 +1,66 @@
 [
   {
-    "leagueId": 101, // UPL
-    "teamId": 10001 // Dynamo Kyiv
+    "leagueId": 101,
+    "teamId": 10001
   },
   {
     "leagueId": 101,
-    "teamId": 10002 // Shakhtar Donetsk
+    "teamId": 10002
   },
   {
     "leagueId": 101,
-    "teamId": 10003 // LNZ Cherkasy
+    "teamId": 10003
   },
   {
     "leagueId": 101,
-    "teamId": 10004 // Polissya Zhytomyr
+    "teamId": 10004
   },
   {
     "leagueId": 101,
-    "teamId": 10005 // FC Kharkiv
+    "teamId": 10005
   },
   {
     "leagueId": 101,
-    "teamId": 10006 // Kolos Kovalivka
+    "teamId": 10006
   },
   {
     "leagueId": 101,
-    "teamId": 10007 // Kryvbas
+    "teamId": 10007
   },
   {
     "leagueId": 101,
-    "teamId": 10008 // Zorya Luhansk
+    "teamId": 10008
   },
   {
     "leagueId": 101,
-    "teamId": 10009 // Karpaty Lviv
+    "teamId": 10009
   },
   {
     "leagueId": 101,
-    "teamId": 10010 // Epicenter
+    "teamId": 10010
   },
   {
     "leagueId": 101,
-    "teamId": 10011 // Veres Rivne
+    "teamId": 10011
   },
   {
     "leagueId": 101,
-    "teamId": 10012 // Obolon Kyiv
+    "teamId": 10012
   },
   {
     "leagueId": 101,
-    "teamId": 10013 // Kudrivka
+    "teamId": 10013
   },
   {
     "leagueId": 101,
-    "teamId": 10014 // Chornomorets Odesa
+    "teamId": 10014
   },
   {
     "leagueId": 101,
-    "teamId": 10015 // Bukovyna Chernivtsi
+    "teamId": 10015
   },
   {
     "leagueId": 101,
-    "teamId": 10016 // Livyi Bereh
+    "teamId": 10016
   }
 ]

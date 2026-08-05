@@ -30,7 +30,8 @@ public static class DependencyRegistrator
 
     private static void SeedWithPredefinedValues(DbContext context, bool storeManagementOpetationWasPerformed)
     {
-        var countries = LocationsDataProvider.GetCountries();
+        var countries = LocationsDataProvider.GetCountries()
+            .Where(x => x.Id == 1); //TODO: temporary filter for testing purposes
 
         foreach (var countryData in countries)
         {

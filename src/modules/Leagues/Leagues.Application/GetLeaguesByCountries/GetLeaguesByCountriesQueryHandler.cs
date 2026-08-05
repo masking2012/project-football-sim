@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ProjectFootballSim.Leagues.Application.GetLeaguesByCountries;
 

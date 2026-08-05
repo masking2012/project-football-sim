@@ -5,7 +5,7 @@ namespace ProjectFootballSim.Leagues.Application;
 
 public static class DependencyRegistrator
 {
-    public static IServiceCollection AddSeasonsApplication(this IServiceCollection services)
+    public static IServiceCollection AddLeaguesApplication(this IServiceCollection services)
     {
         services.AddScoped<GetLeaguesByCountriesQueryHandler>();
 

@@ -32,8 +32,9 @@
     <Project Path="src/modules/Identities/Identities.Infrastructure/Identities.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/modules/Leagues/">
+    <Project Path="src/modules/Leagues/Leagues.Application/Leagues.Application.csproj" Id="94e411cc-201b-448a-a1d7-06cca5693a74" />
     <Project Path="src/modules/Leagues/Leagues.Domain/Leagues.Domain.csproj" Id="9573d25b-70fb-4d1b-b9b6-b59c66f6792c" />
-    <Project Path="src/modules/Leagues/Leagues.Infrastructure/Leagues.Infrastructure.csproj"/>
+    <Project Path="src/modules/Leagues/Leagues.Infrastructure/Leagues.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/modules/Locations/">
     <Project Path="src/modules/Locations/Locations.Application/Locations.Application.csproj" Id="9847d5f4-89df-4c14-8d0f-969251145f30" />
