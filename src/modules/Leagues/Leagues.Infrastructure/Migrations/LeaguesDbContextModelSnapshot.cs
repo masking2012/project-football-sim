@@ -34,6 +34,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Property<int>("LeagueId")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("SeasonId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 

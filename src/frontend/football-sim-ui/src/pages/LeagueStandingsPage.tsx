@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { fetchLeagueStandings, fetchLeagues, type TeamStandingDto } from '../api/footballApi';
+import { fetchLeagueStandings, fetchLeagues, fetchSeasons, type TeamStandingDto } from '../api/footballApi';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
 
@@ -10,7 +10,7 @@ export function LeagueStandingsPage() {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [standings, setStandings] = useState<TeamStandingDto[]>([]);
-  const [leagueName, setLeagueName] = useState('League standings');
+  const [leagueTitle, setLeagueTitle] = useState('League standings');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,13 +28,22 @@ export function LeagueStandingsPage() {
 
     async function loadStandings() {
       const activeGameId = gameId ?? await startNewGame();
-      const [name, loadedStandings] = await Promise.all([
-        fetchLeagues().then((leagues) => leagues.find((league) => league.id === parsedLeagueId)?.name),
-        fetchLeagueStandings(activeGameId, parsedLeagueId),
+      const [leagues, seasons] = await Promise.all([
+        fetchLeagues(),
+        fetchSeasons(activeGameId),
       ]);
+      const league = leagues.find((item) => item.id === parsedLeagueId);
+      const season = seasons.find((item) => item.isCurrent) ?? seasons[0];
+      if (!league || !season) {
+        throw new Error('League or season not found.');
+      }
+
+      const loadedStandings = await fetchLeagueStandings(activeGameId, season.id, parsedLeagueId);
 
       if (!isCurrent) return;
-      if (name) setLeagueName(name);
+      const seasonStartYear = new Date(season.startDate).getUTCFullYear();
+      const seasonEndYear = new Date(season.endDate).getUTCFullYear();
+      setLeagueTitle(`${league.name} ${seasonStartYear} ${seasonEndYear}`);
       setStandings(loadedStandings);
     }
 
@@ -62,7 +71,7 @@ export function LeagueStandingsPage() {
       <div className="standings-heading">
         <div>
           <p className="standings-eyebrow">Competition centre</p>
-          <h2>{leagueName}</h2>
+          <h2>{leagueTitle}</h2>
         </div>
         <Link className="standings-back-link" to="/home">← Back to dashboard</Link>
       </div>

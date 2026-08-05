@@ -24,7 +24,8 @@ public sealed class CreateGameLeagueCommandHandler(LeaguesDbContext dbContext)
         (
             gameId: command.GameId,
             leagueId: command.LeagueId,
-            userId: command.UserId
+            userId: command.UserId,
+            seasonId: command.SeasonId
         );
         foreach ( var teamId in teamIds)
         {

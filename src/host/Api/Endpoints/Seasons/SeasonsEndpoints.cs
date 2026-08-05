@@ -35,7 +35,8 @@ internal static class SeasonsEndpoints
                 var createGameLeagueCommand = new CreateGameLeagueCommand(
                     LeagueId: leagueDto.Id,
                     GameId: request.GameId,
-                    UserId: userId);
+                    UserId: userId,
+                    SeasonId: result.Id);
                 await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
             }
 

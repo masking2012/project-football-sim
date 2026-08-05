@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20260805130110_LeaguesInit")]
+    [Migration("20260805200448_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
@@ -36,6 +36,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.Property<int>("LeagueId")
                         .HasColumnType("int");
+
+                    b.Property<Guid>("SeasonId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");

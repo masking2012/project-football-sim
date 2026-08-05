@@ -42,9 +42,10 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LeagueId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LeagueId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

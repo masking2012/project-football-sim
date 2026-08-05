@@ -8,6 +8,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
 {
     public DbSet<League> Leagues => Set<League>();
     public DbSet<LeagueTeam> LeagueTeams => Set<LeagueTeam>();
+
     public DbSet<GameLeague> GameLeagues => Set<GameLeague>();
     public DbSet<GameLeagueTeam> GameLeagueTeams => Set<GameLeagueTeam>();
 
@@ -40,6 +41,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
             entity.Property(x => x.UserId).IsRequired();
             entity.Property(x => x.GameId).IsRequired();
+            entity.Property(x => x.SeasonId).IsRequired();
 
             entity.HasOne(x => x.League)
                 .WithMany()

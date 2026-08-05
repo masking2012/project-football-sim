@@ -5,18 +5,20 @@ public sealed class GameLeague
     private readonly List<GameLeagueTeam> _items = [];
 
     public Guid Id { get; }
-    public Guid GameId { get; }
-    public int LeagueId { get; }
     public Guid UserId { get; }
-    public League League { get; } = default!;
+    public Guid GameId { get; }
+    public Guid SeasonId { get; }
+    public int LeagueId { get; }
 
+    public League League { get; } = default!;
     public IReadOnlyCollection<GameLeagueTeam> GameLeagueTeams => _items;
 
-    public GameLeague(Guid gameId, int leagueId, Guid userId)
+    public GameLeague(Guid userId, Guid gameId, Guid seasonId, int leagueId)
     {
-        GameId = gameId;
-        LeagueId = leagueId;
         UserId = userId;
+        GameId = gameId;
+        SeasonId = seasonId;
+        LeagueId = leagueId;
     }
 
     public void AddGameLeagueTeam(GameLeagueTeam gameLeagueTeam)

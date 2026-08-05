@@ -11,6 +11,7 @@ public sealed class GameLeagueTeam
     public int GoalsFor { get; private set; }
     public int GoalsAgainst { get; private set; }
     public int Points { get; private set; }
+
     public GameLeague GameLeague { get; } = default!;
 
     public GameLeagueTeam(Guid gameLeagueId, int teamId)

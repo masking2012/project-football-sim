@@ -126,10 +126,13 @@ function clearLeaguesRequest(request: Promise<LeagueDto[]>) {
   }
 }
 
-export async function fetchLeagueStandings(gameId: string, leagueId: number): Promise<TeamStandingDto[]> {
-  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/leagues/${leagueId}/standings`, {
+export async function fetchLeagueStandings(gameId: string, seasonId: string, leagueId: number): Promise<TeamStandingDto[]> {
+  const res = await fetch(
+    `${BASE}/games/${encodeURIComponent(gameId)}/seasons/${encodeURIComponent(seasonId)}/leagues/${leagueId}/standings`,
+    {
     headers: authHeaders(),
-  });
+    },
+  );
   return handleResponse<TeamStandingDto[]>(res);
 }
 
