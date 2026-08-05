@@ -13,6 +13,8 @@
     <ProjectReference Include="..\..\modules\GamePersistence\GamePersistence.Infrastructure\GamePersistence.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Identities\Identities.Application\Identities.Application.csproj" />
     <ProjectReference Include="..\..\modules\Identities\Identities.Infrastructure\Identities.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\modules\Leagues\Leagues.Application\Leagues.Application.csproj" />
+    <ProjectReference Include="..\..\modules\Leagues\Leagues.Infrastructure\Leagues.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Locations\Locations.Application\Locations.Application.csproj" />
     <ProjectReference Include="..\..\modules\Locations\Locations.Infrastructure\Locations.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Matches\Matches.Application\Matches.Application.csproj" />

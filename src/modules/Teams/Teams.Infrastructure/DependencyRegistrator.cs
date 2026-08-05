@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Common.Data.Entities.Countries;
+using ProjectFootballSim.Common.Data.Entities.Locations;
 using ProjectFootballSim.Common.Data.Entities.Teams;
 using ProjectFootballSim.Teams.Domain.Entities;
 using ProjectFootballSim.Teams.Domain.ValueObjects;
@@ -31,7 +31,7 @@ public static class DependencyRegistrator
 
     private static void SeedWithPredefinedValues(DbContext context, bool storeManagementOpetationWasPerformed)
     {
-        var countries = CountryDataProvider.GetAll();
+        var countries = LocationsDataProvider.GetCountries();
 
         foreach (var countryData in countries)
         {

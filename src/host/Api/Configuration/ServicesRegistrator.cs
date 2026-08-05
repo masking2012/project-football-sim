@@ -5,6 +5,8 @@ using ProjectFootballSim.GamePersistence.Application;
 using ProjectFootballSim.GamePersistence.Infrastructure;
 using ProjectFootballSim.Identities.Application;
 using ProjectFootballSim.Identities.Infrastructure;
+using ProjectFootballSim.Leagues.Application;
+using ProjectFootballSim.Leagues.Infrastructure;
 using ProjectFootballSim.Locations.Application;
 using ProjectFootballSim.Locations.Infrastructure;
 using ProjectFootballSim.Matches.Application;
@@ -34,6 +36,9 @@ internal static class ServicesRegistrator
 
         builder.Services.AddSeasonsInfrastructure(builder.Configuration, "SeasonsAzureSql");
         builder.Services.AddSeasonsApplication();
+
+        builder.Services.AddLeaguesInfrastructure(builder.Configuration, "LeaguesAzureSql");
+        builder.Services.AddLeaguesApplication();
 
         builder.Services.AddMatchesApplication();
     }

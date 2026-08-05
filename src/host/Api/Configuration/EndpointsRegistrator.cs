@@ -1,6 +1,7 @@
 using ProjectFootballSim.Api.Endpoints.Countries;
 using ProjectFootballSim.Api.Endpoints.GamePersistence;
 using ProjectFootballSim.Api.Endpoints.Identities;
+using ProjectFootballSim.Api.Endpoints.Leagues;
 using ProjectFootballSim.Api.Endpoints.Match;
 using ProjectFootballSim.Api.Endpoints.Seasons;
 using ProjectFootballSim.Api.Endpoints.Team;
@@ -17,5 +18,8 @@ internal static class EndpointsRegistrator
         app.MapTeamsEndpoints();
         app.MapMatchEndpoints();
         app.MapSeasonsEndpoints();
+
+        app.MapLeaguesEndpoints();
+        app.MapGameLeaguesEndpoints();
     }
 }

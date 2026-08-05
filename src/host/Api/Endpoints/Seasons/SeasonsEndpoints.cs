@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
+using ProjectFootballSim.Leagues.Application.CreateGameLeague;
+using ProjectFootballSim.Leagues.Application.GetLeagues;
 using ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
 using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
 using System.Security.Claims;
@@ -12,7 +14,9 @@ internal static class SeasonsEndpoints
     {
         app.MapPost("/api/seasons", async (
             [FromBody] CreateSeasonRequest request,
-            CreatePlayerSeasonCommandHandler commandHandler,
+            CreatePlayerSeasonCommandHandler createPlayerSeasonCommandHandler,
+            GetLeaguesQueryHandler getLeaguesQueryHandler,
+            CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -23,9 +27,20 @@ internal static class SeasonsEndpoints
                 GameId: request.GameId,
                 UserId: userId,
                 CurrentGameDate: request.CurrentGameDate);
-            var result = await commandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
-            return Results.Created($"/api/seasons/{result.Id}", new CreateSeasonResponse(result.Id));
+            var result = await createPlayerSeasonCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
 
+            var leaguesDtos = await getLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
+            foreach (var leagueDto in leaguesDtos.Values)
+            {
+                var createGameLeagueCommand = new CreateGameLeagueCommand(
+                    LeagueId: leagueDto.Id,
+                    GameId: request.GameId,
+                    UserId: userId,
+                    SeasonId: result.Id);
+                await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
+            }
+
+            return Results.Created($"/api/seasons/{result.Id}", new CreateSeasonResponse(result.Id));
         }).RequireAuthorization();
 
         app.MapGet("/api/seasons", async (

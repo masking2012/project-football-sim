@@ -5,6 +5,25 @@ export interface CountryDto {
   name: string;
 }
 
+export interface LeagueDto {
+  id: number;
+  name: string;
+  order: number;
+  countryId: number;
+}
+
+export interface TeamStandingDto {
+  teamId: number;
+  name: string;
+  position: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  points: number;
+}
+
 export interface GameSave {
   gameId: string;
   slotId: number;
@@ -58,6 +77,8 @@ export interface GameSave {
 const BASE = '/api';
 let countriesRequest: Promise<CountryDto[]> | null = null;
 let countriesCache: CountryDto[] | null = null;
+let leaguesRequest: Promise<LeagueDto[]> | null = null;
+let leaguesCache: LeagueDto[] | null = null;
 const teamsRequests = new Map<string, Promise<TeamDto[]>>();
 const teamsCache = new Map<string, TeamDto[]>();
 const seasonsRequests = new Map<string, Promise<CurrentSeasonResponse[]>>();
@@ -68,10 +89,52 @@ export function resetGameSessionCache(): void {
   cacheGeneration += 1;
   countriesRequest = null;
   countriesCache = null;
+  leaguesRequest = null;
+  leaguesCache = null;
   teamsRequests.clear();
   teamsCache.clear();
   seasonsRequests.clear();
   seasonsCache.clear();
+}
+
+export async function fetchLeagues(): Promise<LeagueDto[]> {
+  if (leaguesCache) {
+    return leaguesCache;
+  }
+
+  if (leaguesRequest) {
+    return leaguesRequest;
+  }
+
+  const request = (async () => {
+    const res = await fetch(`${BASE}/leagues`, { headers: authHeaders() });
+    return handleResponse<LeagueDto[]>(res);
+  })();
+  leaguesRequest = request;
+  request.then(
+    (leagues) => {
+      leaguesCache = leagues;
+      clearLeaguesRequest(request);
+    },
+    () => clearLeaguesRequest(request),
+  );
+  return request;
+}
+
+function clearLeaguesRequest(request: Promise<LeagueDto[]>) {
+  if (leaguesRequest === request) {
+    leaguesRequest = null;
+  }
+}
+
+export async function fetchLeagueStandings(gameId: string, seasonId: string, leagueId: number): Promise<TeamStandingDto[]> {
+  const res = await fetch(
+    `${BASE}/games/${encodeURIComponent(gameId)}/seasons/${encodeURIComponent(seasonId)}/leagues/${leagueId}/standings`,
+    {
+    headers: authHeaders(),
+    },
+  );
+  return handleResponse<TeamStandingDto[]>(res);
 }
 
 function authHeaders(): Record<string, string> {
