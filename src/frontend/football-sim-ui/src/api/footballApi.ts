@@ -15,6 +15,7 @@ export interface LeagueDto {
 export interface TeamStandingDto {
   teamId: number;
   name: string;
+  position: number;
   wins: number;
   draws: number;
   losses: number;

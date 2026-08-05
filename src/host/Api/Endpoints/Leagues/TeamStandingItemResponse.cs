@@ -8,5 +8,6 @@ internal sealed record TeamStandingItemResponse(
     int Losses,
     int GoalsFor,
     int GoalsAgainst,
-    int Points
+    int Points,
+    int Position
 );

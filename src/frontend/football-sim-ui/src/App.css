@@ -227,12 +227,6 @@
   border-bottom: 1px solid #1e3a60;
 }
 
-.app-header-icon {
-  font-size: 3rem;
-  display: block;
-  margin-bottom: 0.25rem;
-}
-
 .app-title {
   margin: 0;
   font-size: 2rem;
@@ -251,7 +245,7 @@
 /* ── Season Info ──────────────────────────────────────────────── */
 .season-info {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   gap: 0.25rem;
   margin-top: 0.75rem;
@@ -1048,7 +1042,7 @@
 .standings-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 650px;
+  min-width: 760px;
 }
 
 .standings-table th,
@@ -1078,7 +1072,7 @@
 
 .standings-team-column,
 .standings-team-name {
-  width: 42%;
+  width: 35%;
   text-align: left !important;
 }
 

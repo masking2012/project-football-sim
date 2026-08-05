@@ -34,8 +34,7 @@ function App() {
           <GameProvider>
             <div className="app">
             <header className="app-header">
-              <span className="app-header-icon">⚽</span>
-              <h1 className="app-title">Football Simulator</h1>
+              <h1 className="app-title">Football Simulator ⚽</h1>
               <SeasonInfo />
               <NavBar />
             </header>

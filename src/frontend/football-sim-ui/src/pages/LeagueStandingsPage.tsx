@@ -66,6 +66,8 @@ export function LeagueStandingsPage() {
     };
   }, [gameId, leagueId, logout, navigate, startNewGame]);
 
+  const sortedStandings = [...standings].sort((left, right) => left.position - right.position);
+
   return (
     <main className="app-main standings-page">
       <div className="standings-heading">
@@ -104,7 +106,7 @@ export function LeagueStandingsPage() {
           <div className="standings-card-header">
             <div>
               <span className="standings-card-label">Current table</span>
-              <h3>{standings.length} teams</h3>
+              <h3>{sortedStandings.length} teams</h3>
             </div>
             <span className="standings-live-dot">Live game data</span>
           </div>
@@ -112,25 +114,29 @@ export function LeagueStandingsPage() {
             <table className="standings-table">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
+                  <th scope="col">Pos</th>
                   <th scope="col" className="standings-team-column">Team</th>
                   <th scope="col" title="Played">P</th>
                   <th scope="col" title="Wins">W</th>
                   <th scope="col" title="Draws">D</th>
                   <th scope="col" title="Losses">L</th>
+                  <th scope="col" title="Goals for">GF</th>
+                  <th scope="col" title="Goals against">GA</th>
                   <th scope="col" title="Goal difference">GD</th>
                   <th scope="col" className="standings-points-column" title="Points">Pts</th>
                 </tr>
               </thead>
               <tbody>
-                {standings.map((team, index) => (
-                  <tr key={team.teamId} className={index === 0 ? 'standings-row--leader' : undefined}>
-                    <td><span className="standings-rank">{index + 1}</span></td>
+                {sortedStandings.map((team) => (
+                  <tr key={team.teamId} className={team.position === 1 ? 'standings-row--leader' : undefined}>
+                    <td><span className="standings-rank">{team.position}</span></td>
                     <th scope="row" className="standings-team-name">{team.name}</th>
                     <td>{team.wins + team.draws + team.losses}</td>
                     <td>{team.wins}</td>
                     <td>{team.draws}</td>
                     <td>{team.losses}</td>
+                    <td>{team.goalsFor}</td>
+                    <td>{team.goalsAgainst}</td>
                     <td>{team.goalsFor - team.goalsAgainst > 0 ? '+' : ''}{team.goalsFor - team.goalsAgainst}</td>
                     <td className="standings-points">{team.points}</td>
                   </tr>
@@ -138,7 +144,7 @@ export function LeagueStandingsPage() {
               </tbody>
             </table>
           </div>
-          <p className="standings-legend">P Played · W Wins · D Draws · L Losses · GD Goal difference</p>
+          <p className="standings-legend">P Played · W Wins · D Draws · L Losses · GF Goals for · GA Goals against · GD Goal difference · PTS Points</p>
         </section>
       )}
     </main>

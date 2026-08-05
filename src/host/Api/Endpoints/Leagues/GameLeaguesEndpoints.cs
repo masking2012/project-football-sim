@@ -38,6 +38,7 @@ internal static class GameLeaguesEndpoints
             return Results.Ok(
                 gameLeagueStandings
                     .Select(s => new TeamStandingItemResponse(
+                        Position: s.Position,
                         TeamId: s.TeamId,
                         Name: teamDtos.Single(t => t.Id == s.TeamId).Name, //TODO: Optimize this by creating a dictionary of teamDtos by Id to avoid multiple enumerations
                         Wins: s.Wins,

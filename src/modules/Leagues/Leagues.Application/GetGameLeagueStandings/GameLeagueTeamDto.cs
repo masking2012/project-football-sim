@@ -7,4 +7,5 @@ public sealed record GameLeagueTeamDto(
     int Losses,
     int GoalsFor,
     int GoalsAgainst,
-    int Points);
+    int Points,
+    int Position);

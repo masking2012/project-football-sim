@@ -20,7 +20,12 @@ public sealed class GetGameLeagueStandingsQueryHandler(LeaguesDbContext dbContex
             throw new InvalidOperationException($"Game league not found for user {query.UserId}, game {query.GameId}, league {query.LeagueId}");
 
         return league.GameLeagueTeams
-            .Select(t => new GameLeagueTeamDto(
+            .OrderByDescending(t => t.Points)
+            .ThenByDescending(t => t.GoalsFor - t.GoalsAgainst)
+            .ThenByDescending(t => t.GoalsFor)
+            .ThenBy(t => t.TeamId)
+            .Select((t, index) => new GameLeagueTeamDto(
+                Position: index + 1,
                 TeamId: t.TeamId,
                 Wins: t.Wins,
                 Draws: t.Draws,
