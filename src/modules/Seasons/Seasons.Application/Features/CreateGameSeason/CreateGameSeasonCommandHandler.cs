@@ -5,10 +5,10 @@ using ProjectFootballSim.Seasons.Infrastructure.Database;
 
 namespace ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
 
-public sealed class CreatePlayerSeasonCommandHandler(SeasonsDbContext dbContext)
+public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
 {
-    public async Task<CreatePlayerSeasonCommandResult> HandleAsync(
-        CreatePlayerSeasonCommand command,
+    public async Task<CreateGameSeasonCommandResult> HandleAsync(
+        CreateGameSeasonCommand command,
         CancellationToken cancellationToken)
     {
         PlayerSeason? lastSeason = await dbContext.PlayerSeasons
@@ -50,6 +50,6 @@ public sealed class CreatePlayerSeasonCommandHandler(SeasonsDbContext dbContext)
         }
 
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        return new CreatePlayerSeasonCommandResult(newSeason.Id);
+        return new CreateGameSeasonCommandResult(newSeason.Id);
     }
 }

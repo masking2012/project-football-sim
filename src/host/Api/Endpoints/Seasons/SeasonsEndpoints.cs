@@ -14,7 +14,7 @@ internal static class SeasonsEndpoints
     {
         app.MapPost("/api/seasons", async (
             [FromBody] CreateSeasonRequest request,
-            CreatePlayerSeasonCommandHandler createPlayerSeasonCommandHandler,
+            CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
             GetLeaguesQueryHandler getLeaguesQueryHandler,
             CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
             ClaimsPrincipal user,
@@ -23,11 +23,11 @@ internal static class SeasonsEndpoints
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var command = new CreatePlayerSeasonCommand(
+            var command = new CreateGameSeasonCommand(
                 GameId: request.GameId,
                 UserId: userId,
                 CurrentGameDate: request.CurrentGameDate);
-            var result = await createPlayerSeasonCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
+            var result = await createGameSeasonCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
 
             var leaguesDtos = await getLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
             foreach (var leagueDto in leaguesDtos.Values)
@@ -45,14 +45,14 @@ internal static class SeasonsEndpoints
 
         app.MapGet("/api/seasons", async (
             [FromQuery] Guid gameId,
-            GetPlayerSeasonsQueryHandler queryHandler,
+            GetGameSeasonsQueryHandler queryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var query = new GetPlayerSeasonsQuery(GameId: gameId, UserId: userId);
+            var query = new GetGameSeasonsQuery(GameId: gameId, UserId: userId);
             var playerSeasons = await queryHandler.HandleAsync(query, cancellationToken).ConfigureAwait(false);
 
             return Results.Ok(

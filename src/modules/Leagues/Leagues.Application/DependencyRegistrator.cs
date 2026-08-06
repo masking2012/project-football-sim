@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using ProjectFootball.Core.Simulation.ChampionshipSimulation;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagueById;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
@@ -14,6 +15,7 @@ public static class DependencyRegistrator
         services.AddScoped<GetLeagueByIdQueryHandler>();
 
         services.AddScoped<GetGameLeagueStandingsQueryHandler>();
+        services.AddScoped<LeagueFixtureGenerator>();
         services.AddScoped<CreateGameLeagueCommandHandler>();
 
         return services;

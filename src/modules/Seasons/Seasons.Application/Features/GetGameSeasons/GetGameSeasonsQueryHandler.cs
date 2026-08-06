@@ -3,16 +3,16 @@ using ProjectFootballSim.Seasons.Infrastructure.Database;
 
 namespace ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
 
-public sealed class GetPlayerSeasonsQueryHandler(SeasonsDbContext dbContext)
+public sealed class GetGameSeasonsQueryHandler(SeasonsDbContext dbContext)
 {
-    public async Task<IReadOnlyList<PlayerSeasonDto>> HandleAsync(
-        GetPlayerSeasonsQuery query,
+    public async Task<IReadOnlyList<GameSeasonDto>> HandleAsync(
+        GetGameSeasonsQuery query,
         CancellationToken cancellationToken)
     {
         var seasons = await dbContext.PlayerSeasons
             .AsNoTracking()
             .Where(s => s.UserId == query.UserId && s.GameId ==  query.GameId)
-            .Select(s => new PlayerSeasonDto(
+            .Select(s => new GameSeasonDto(
                 Id: s.Id,
                 StartDate: s.StartDate,
                 EndDate: s.EndDate,

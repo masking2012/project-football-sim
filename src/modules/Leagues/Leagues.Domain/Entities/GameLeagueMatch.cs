@@ -13,7 +13,7 @@ public class GameLeagueMatch
 
     public GameLeague GameLeague { get; } = default!;
 
-    public GameLeagueMatch(Guid id, DateTime date, int homeTeamId, int awayTeamId, int round, Guid gameLeagueId)
+    public GameLeagueMatch(DateTime date, int homeTeamId, int awayTeamId, int round, Guid gameLeagueId)
     {
         if (homeTeamId <= 0)
             throw new ArgumentException("Home team ID must be positive value");

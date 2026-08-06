@@ -8,8 +8,8 @@ public static class DependencyRegistrator
 {
     public static IServiceCollection AddSeasonsApplication(this IServiceCollection services)
     {
-        services.AddScoped<CreatePlayerSeasonCommandHandler>();
-        services.AddScoped<GetPlayerSeasonsQueryHandler>();
+        services.AddScoped<CreateGameSeasonCommandHandler>();
+        services.AddScoped<GetGameSeasonsQueryHandler>();
 
         return services;
     }
