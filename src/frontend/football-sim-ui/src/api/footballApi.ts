@@ -24,6 +24,18 @@ export interface TeamStandingDto {
   points: number;
 }
 
+export interface LeagueFixtureDto {
+  id: string;
+  date: string;
+  homeTeamId: number;
+  awayTeamId: number;
+  homeTeamScore: number | null;
+  awayTeamScore: number | null;
+  round: number;
+  homeTeamName: string;
+  awayTeamName: string;
+}
+
 export interface GameSave {
   gameId: string;
   slotId: number;
@@ -135,6 +147,16 @@ export async function fetchLeagueStandings(gameId: string, seasonId: string, lea
     },
   );
   return handleResponse<TeamStandingDto[]>(res);
+}
+
+export async function fetchLeagueFixtures(gameId: string, seasonId: string, leagueId: number): Promise<LeagueFixtureDto[]> {
+  const res = await fetch(
+    `${BASE}/games/${encodeURIComponent(gameId)}/seasons/${encodeURIComponent(seasonId)}/leagues/${leagueId}/fixtures`,
+    {
+      headers: authHeaders(),
+    },
+  );
+  return handleResponse<LeagueFixtureDto[]>(res);
 }
 
 function authHeaders(): Record<string, string> {

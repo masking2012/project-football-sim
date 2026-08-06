@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { fetchLeagueStandings, fetchLeagues, fetchSeasons, type TeamStandingDto } from '../api/footballApi';
+import {
+  fetchLeagueFixtures,
+  fetchLeagueStandings,
+  fetchLeagues,
+  fetchSeasons,
+  type LeagueFixtureDto,
+  type TeamStandingDto,
+} from '../api/footballApi';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
 
@@ -10,6 +17,7 @@ export function LeagueStandingsPage() {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [standings, setStandings] = useState<TeamStandingDto[]>([]);
+  const [fixtures, setFixtures] = useState<LeagueFixtureDto[]>([]);
   const [leagueTitle, setLeagueTitle] = useState('League standings');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,13 +46,17 @@ export function LeagueStandingsPage() {
         throw new Error('League or season not found.');
       }
 
-      const loadedStandings = await fetchLeagueStandings(activeGameId, season.id, parsedLeagueId);
+      const [loadedStandings, loadedFixtures] = await Promise.all([
+        fetchLeagueStandings(activeGameId, season.id, parsedLeagueId),
+        fetchLeagueFixtures(activeGameId, season.id, parsedLeagueId),
+      ]);
 
       if (!isCurrent) return;
       const seasonStartYear = new Date(season.startDate).getUTCFullYear();
       const seasonEndYear = new Date(season.endDate).getUTCFullYear();
       setLeagueTitle(`${league.name} ${seasonStartYear} ${seasonEndYear}`);
       setStandings(loadedStandings);
+      setFixtures(loadedFixtures);
     }
 
     void loadStandings()
@@ -67,6 +79,14 @@ export function LeagueStandingsPage() {
   }, [gameId, leagueId, logout, navigate, startNewGame]);
 
   const sortedStandings = [...standings].sort((left, right) => left.position - right.position);
+  const fixturesByRound = [...fixtures]
+    .sort((left, right) => left.round - right.round || Date.parse(left.date) - Date.parse(right.date))
+    .reduce<Map<number, LeagueFixtureDto[]>>((rounds, fixture) => {
+      const roundFixtures = rounds.get(fixture.round) ?? [];
+      roundFixtures.push(fixture);
+      rounds.set(fixture.round, roundFixtures);
+      return rounds;
+    }, new Map());
 
   return (
     <main className="app-main standings-page">
@@ -145,8 +165,55 @@ export function LeagueStandingsPage() {
             </table>
           </div>
           <p className="standings-legend">P Played · W Wins · D Draws · L Losses · GF Goals for · GA Goals against · GD Goal difference · PTS Points</p>
+           <div className="fixtures-section">
+             <div className="fixtures-heading">
+               <div>
+                 <span className="standings-card-label">Season schedule</span>
+                 <h3>Fixtures</h3>
+               </div>
+               <span className="fixtures-count">{fixtures.length} matches</span>
+             </div>
+             {fixturesByRound.size === 0 ? (
+               <p className="fixtures-empty">No fixtures have been scheduled yet.</p>
+             ) : (
+               <div className="fixtures-rounds">
+                 {[...fixturesByRound].map(([round, roundFixtures]) => (
+                   <section className="fixtures-round" key={round}>
+                     <h4>Round {round}</h4>
+                     <div className="fixtures-list">
+                       {roundFixtures.map((fixture) => (
+                         <div className="fixture" key={fixture.id}>
+                           <time className="fixture-date" dateTime={fixture.date}>
+                             {formatFixtureDate(fixture.date)}
+                           </time>
+                           <div className="fixture-teams">
+                             <span>{fixture.homeTeamName}</span>
+                             <span>{fixture.awayTeamName}</span>
+                           </div>
+                           <div className="fixture-score" aria-label="Fixture score">
+                             {fixture.homeTeamScore === null || fixture.awayTeamScore === null
+                               ? 'Scheduled'
+                               : `${fixture.homeTeamScore} – ${fixture.awayTeamScore}`}
+                           </div>
+                         </div>
+                       ))}
+                     </div>
+                   </section>
+                 ))}
+               </div>
+             )}
+           </div>
         </section>
       )}
     </main>
   );
+}
+
+function formatFixtureDate(date: string): string {
+  return new Intl.DateTimeFormat(undefined, {
+    day: 'numeric',
+    month: 'short',
+    hour: 'numeric',
+    minute: '2-digit',
+  }).format(new Date(date));
 }
