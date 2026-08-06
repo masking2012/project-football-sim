@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ProjectFootballSim.Leagues.Application.GetLeagueById;
+namespace ProjectFootballSim.Leagues.Application.Features.GetLeagueById;
 
 public sealed class GetLeagueByIdQueryHandler(LeaguesDbContext dbContext)
 {

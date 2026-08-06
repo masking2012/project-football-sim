@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Leagues.Application.GetGameLeagueStandings;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 
-namespace ProjectFootballSim.Leagues.Application.GetLeaguesByCountries;
+namespace ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueStandings;
 
 public sealed class GetGameLeagueStandingsQueryHandler(LeaguesDbContext dbContext)
 {

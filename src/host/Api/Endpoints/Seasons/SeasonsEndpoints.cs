@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
-using ProjectFootballSim.Leagues.Application.CreateGameLeague;
-using ProjectFootballSim.Leagues.Application.GetLeagues;
+using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
+using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 using ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
 using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
 using System.Security.Claims;

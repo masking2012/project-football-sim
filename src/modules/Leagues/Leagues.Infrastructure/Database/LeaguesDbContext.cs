@@ -8,9 +8,11 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
 {
     public DbSet<League> Leagues => Set<League>();
     public DbSet<LeagueTeam> LeagueTeams => Set<LeagueTeam>();
+    public DbSet<LeagueRound> LeagueRounds => Set<LeagueRound>();
 
     public DbSet<GameLeague> GameLeagues => Set<GameLeague>();
     public DbSet<GameLeagueTeam> GameLeagueTeams => Set<GameLeagueTeam>();
+    public DbSet<GameLeagueMatch> GameLeagueMatches => Set<GameLeagueMatch>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,10 +31,24 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
 
         modelBuilder.Entity<LeagueTeam>(entity =>
         {
-            entity.Property(x => x.LeagueId).IsRequired();
-            entity.Property(x => x.TeamId).IsRequired();
-
             entity.HasKey(x => new { x.LeagueId, x.TeamId });
+            entity.Property(x => x.TeamId).IsRequired();
+            entity.HasOne<League>()
+                .WithMany()
+                .HasForeignKey(x => x.LeagueId)
+                .IsRequired();
+        });
+
+        modelBuilder.Entity<LeagueRound>(entity =>
+        {
+            entity.HasKey(x => new { x.LeagueId, x.Round });
+            entity.Property(x => x.Round).IsRequired();
+            entity.Property(x => x.Week).IsRequired();
+            entity.Property(x => x.IsMidweek).IsRequired();
+            entity.HasOne<League>()
+                .WithMany()
+                .HasForeignKey(x => x.LeagueId)
+                .IsRequired();
         });
 
         modelBuilder.Entity<GameLeague>(entity =>
@@ -50,7 +66,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
         });
 
         modelBuilder.Entity<GameLeague>()
-            .HasMany(e => e.GameLeagueTeams)
+            .HasMany(e => e.GameLeagueMatches)
             .WithOne(e => e.GameLeague)
             .HasForeignKey(e => e.GameLeagueId)
             .IsRequired();
@@ -69,11 +85,21 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.Points).IsRequired().HasDefaultValue(0);
         });
 
-        modelBuilder.Entity<GameLeague>()
-            .HasMany(x => x.GameLeagueTeams)
-            .WithOne(e => e.GameLeague)
-            .HasForeignKey(e => e.GameLeagueId)
-            .IsRequired();
+        modelBuilder.Entity<GameLeagueMatch>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            entity.Property(x => x.Date).IsRequired();
+            entity.Property(x => x.HomeTeamId).IsRequired();
+            entity.Property(x => x.AwayTeamId).IsRequired();
+            entity.Property(x => x.HomeTeamScore).IsRequired(false);
+            entity.Property(x => x.AwayTeamScore).IsRequired(false);
+            entity.Property(x => x.Round).IsRequired();
 
+            entity.HasOne(x => x.GameLeague)
+                .WithMany(x => x.GameLeagueMatches)
+                .HasForeignKey(x => x.GameLeagueId)
+                .IsRequired();
+        });
     }
 }

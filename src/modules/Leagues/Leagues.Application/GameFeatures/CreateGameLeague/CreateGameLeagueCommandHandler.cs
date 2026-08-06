@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Domain.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 
-namespace ProjectFootballSim.Leagues.Application.CreateGameLeague;
+namespace ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 
 public sealed class CreateGameLeagueCommandHandler(LeaguesDbContext dbContext)
 {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Caching.Hybrid;
 using ProjectFootballSim.Leagues.Application.Common.Models;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 
-namespace ProjectFootballSim.Leagues.Application.GetLeagues;
+namespace ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 
 public sealed class GetLeaguesQueryHandler(HybridCache cache, LeaguesDbContext dbContext)
 {

@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Leagues.Application.CreateGameLeague;
-using ProjectFootballSim.Leagues.Application.GetLeagueById;
-using ProjectFootballSim.Leagues.Application.GetLeagues;
-using ProjectFootballSim.Leagues.Application.GetLeaguesByCountries;
+using ProjectFootballSim.Leagues.Application.Features.GetLeagueById;
+using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
+using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
+using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueStandings;
 
 namespace ProjectFootballSim.Leagues.Application;
 
