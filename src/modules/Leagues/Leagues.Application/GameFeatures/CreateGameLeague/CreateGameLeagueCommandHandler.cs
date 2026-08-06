@@ -44,7 +44,7 @@ public sealed class CreateGameLeagueCommandHandler(
         DateTime seasonStartDate = await GetSeasonStartDateAsync(command, cancellationToken).ConfigureAwait(false);
 
         var leagueMatches = leagueFixtureGenerator.Generate(command.LeagueId, gameLeague.Id, teamIds, seasonStartDate);
-        foreach (var match in leagueMatches)
+        foreach (GameLeagueMatch match in leagueMatches)
         {
             gameLeague.AddGameLeagueMatch(match);
         }

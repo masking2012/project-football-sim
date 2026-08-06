@@ -3,6 +3,7 @@ using ProjectFootball.Core.Simulation.ChampionshipSimulation;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagueById;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
+using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueStandings;
 
 namespace ProjectFootballSim.Leagues.Application;
@@ -15,6 +16,8 @@ public static class DependencyRegistrator
         services.AddScoped<GetLeagueByIdQueryHandler>();
 
         services.AddScoped<GetGameLeagueStandingsQueryHandler>();
+        services.AddScoped<GetGameLeagueFixturesQueryHandler>();
+
         services.AddScoped<LeagueFixtureGenerator>();
         services.AddScoped<CreateGameLeagueCommandHandler>();
 
