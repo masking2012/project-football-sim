@@ -187,13 +187,13 @@ export function LeagueStandingsPage() {
                              {formatFixtureDate(fixture.date)}
                            </time>
                            <div className="fixture-teams">
-                             <span>{fixture.homeTeamName}</span>
-                             <span>{fixture.awayTeamName}</span>
-                           </div>
-                           <div className="fixture-score" aria-label="Fixture score">
-                             {fixture.homeTeamScore === null || fixture.awayTeamScore === null
-                               ? 'Scheduled'
-                               : `${fixture.homeTeamScore} – ${fixture.awayTeamScore}`}
+                             <div className="fixture-team-home">{fixture.homeTeamName}</div>
+                             <div className="fixture-score" aria-label="Fixture score">
+                                 {fixture.homeTeamScore === null || fixture.awayTeamScore === null
+                                     ? '- : -'
+                                     : `${fixture.homeTeamScore} : ${fixture.awayTeamScore}`}
+                             </div>
+                             <div className="fixture-team-away">{fixture.awayTeamName}</div>
                            </div>
                          </div>
                        ))}
@@ -210,10 +210,9 @@ export function LeagueStandingsPage() {
 }
 
 function formatFixtureDate(date: string): string {
-  return new Intl.DateTimeFormat(undefined, {
-    day: 'numeric',
-    month: 'short',
-    hour: 'numeric',
-    minute: '2-digit',
-  }).format(new Date(date));
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = String(d.getFullYear()).slice(-2);
+    return `${day}.${month}.${year}`;
 }
