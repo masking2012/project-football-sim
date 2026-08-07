@@ -10,11 +10,11 @@ namespace ProjectFootballSim.Api.Endpoints.Seasons;
 
 internal static class SeasonsEndpoints
 {
-    public static void MapSeasonsEndpoints(this WebApplication app)
+    public static void MapGameSeasonsEndpoints(this WebApplication app)
     {
         app.MapPost("/api/games/{gameId}/seasons", async (
             [FromRoute] Guid gameId,
-            [FromBody] CreateSeasonRequest request,
+            [FromBody] CreateGameSeasonRequest request,
             CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
             GetLeaguesQueryHandler getLeaguesQueryHandler,
             CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
@@ -41,7 +41,7 @@ internal static class SeasonsEndpoints
                 await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
             }
 
-            return Results.Created($"/api/games/{gameId}/seasons/{result.Id}", new CreateSeasonResponse(result.Id));
+            return Results.Created($"/api/games/{gameId}/seasons/{result.Id}", new CreateGameSeasonResponse(result.Id));
         }).RequireAuthorization();
 
         app.MapGet("/api/games/{gameId}/seasons", async (
@@ -58,7 +58,7 @@ internal static class SeasonsEndpoints
 
             return Results.Ok(
                 playerSeasons
-                    .Select(s => new PlayerSeasonItemResponse(Id: s.Id, StartDate: s.StartDate, EndDate: s.EndDate, IsCurrent: s.IsCurrent)));
+                    .Select(s => new GameSeasonItemResponse(Id: s.Id, StartDate: s.StartDate, EndDate: s.EndDate, IsCurrent: s.IsCurrent)));
         }).RequireAuthorization();
     }
 }
