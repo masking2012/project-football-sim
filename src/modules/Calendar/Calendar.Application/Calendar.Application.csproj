@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Calendar.Infrastructure\Calendar.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
