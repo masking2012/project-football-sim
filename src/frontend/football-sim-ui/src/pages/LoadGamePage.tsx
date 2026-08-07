@@ -95,7 +95,7 @@ export function LoadGamePage() {
           value={savesBySlot.get(selectedSlotId)?.name ?? 'Empty slot'}
           readOnly
         />
-        <button type="button" className="home-start-btn" onClick={requestLoad} disabled={isLoading || !savesBySlot.has(selectedSlotId)}>
+        <button type="button" className="start-btn" onClick={requestLoad} disabled={isLoading || !savesBySlot.has(selectedSlotId)}>
           📂 Load Game
         </button>
       </div>

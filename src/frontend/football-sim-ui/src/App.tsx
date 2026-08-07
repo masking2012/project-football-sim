@@ -7,6 +7,7 @@ import { NavBar } from './components/NavBar';
 import { HomeRedirect } from './components/HomeRedirect';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { HomePage } from './pages/HomePage';
+import { SystemPage } from './pages/SystemPage';
 import { SimulatorPage } from './pages/SimulatorPage';
 import { SaveGamePage } from './pages/SaveGamePage';
 import { LoadGamePage } from './pages/LoadGamePage';
@@ -79,6 +80,7 @@ function AppContent() {
                 <Route path="/save-game" element={<SaveGamePage />} />
                 <Route path="/load-game" element={<LoadGamePage />} />
                  <Route path="/leagues/:leagueId" element={<LeagueStandingsPage />} />
+                  <Route path="/system" element={<SystemPage />} />
               </Route>
 
               <Route path="*" element={<HomeRedirect />} />

@@ -133,6 +133,9 @@ export function NavBar() {
               </div>
             )}
           </div>
+          <NavLink to="/system" className={({ isActive }) => 'nav-link' + (isActive ? ' nav-link--active' : '')}>
+            ⚙️ System
+          </NavLink>
         </>
       )}
 
