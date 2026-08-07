@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootball.Core.Simulation.ChampionshipSimulation;
 using ProjectFootballSim.Leagues.Domain.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
