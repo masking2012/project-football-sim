@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Leagues\Leagues.Application\Leagues.Application.csproj" />
     <ProjectReference Include="..\Calendar.Infrastructure\Calendar.Infrastructure.csproj" />
   </ItemGroup>
 
