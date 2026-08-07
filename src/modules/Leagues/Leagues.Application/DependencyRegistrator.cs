@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using ProjectFootballSim.Leagues.Application.Common.Services;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagueById;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
@@ -11,6 +12,9 @@ public static class DependencyRegistrator
 {
     public static IServiceCollection AddLeaguesApplication(this IServiceCollection services)
     {
+        services.AddScoped<ILeaguesCatalog, LeaguesCatalog>();
+        services.AddScoped<ILeaguesRoundsCatalog, LeaguesRoundsCatalog>();
+
         services.AddScoped<GetLeaguesQueryHandler>();
         services.AddScoped<GetLeagueByIdQueryHandler>();
 

@@ -1,21 +1,22 @@
 using ProjectFootballSim.Common.Features;
+using ProjectFootballSim.Leagues.Application.Common.Services;
 using ProjectFootballSim.Leagues.Domain.Entities;
-using ProjectFootballSim.Leagues.Infrastructure.Database;
 
 namespace ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 
-public sealed class LeagueFixtureGenerator(LeaguesDbContext dbContext)
+public sealed class LeagueFixtureGenerator(ILeaguesRoundsCatalog leaguesRoundsCatalog)
 {
     private const int StubTeamId = -1;
     private const int MaxVenueStreak = 3;
 
-    public IReadOnlyList<GameLeagueMatch> Generate(
+    public async Task<IReadOnlyList<GameLeagueMatch>> GenerateAsync(
         int leagueId,
         Guid gameLeagueId,
         IEnumerable<int> teamIds,
-        DateTime seasonStartDate)
+        DateTime seasonStartDate,
+        CancellationToken cancellationToken)
     {
-        var roundDates = LoadRoundDates(leagueId, seasonStartDate);
+        var roundDates = await LoadRoundDatesAsync(leagueId, seasonStartDate, cancellationToken).ConfigureAwait(false);
         var teams = PrepareTeams(teamIds);
         var pairings = GenerateRoundRobinPairings(teams);
 
@@ -29,11 +30,12 @@ public sealed class LeagueFixtureGenerator(LeaguesDbContext dbContext)
     // ROUND DATES
     // ------------------------------------------------------------
 
-    private Dictionary<int, DateTime> LoadRoundDates(int leagueId, DateTime seasonStartDate)
+    private async Task<Dictionary<int, DateTime>> LoadRoundDatesAsync(int leagueId, DateTime seasonStartDate, CancellationToken cancellationToken)
     {
-        var leagueRounds = dbContext.LeagueRounds
-            .Where(x => x.LeagueId == leagueId)
-            .ToList();
+        var leaguesRounds = await leaguesRoundsCatalog.GetAllAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        var leagueRounds = leaguesRounds[leagueId];
 
         var firstSunday = DateTimeUtils.GetNextDayOfWeek(seasonStartDate, DayOfWeek.Sunday);
 
