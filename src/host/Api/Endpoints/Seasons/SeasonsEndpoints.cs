@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
+using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 using ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
@@ -18,6 +19,7 @@ internal static class SeasonsEndpoints
             CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
             GetLeaguesQueryHandler getLeaguesQueryHandler,
             CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
+            CreateGameCalendarCommandHandler createGameCalendarCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -40,6 +42,11 @@ internal static class SeasonsEndpoints
                     SeasonId: result.Id);
                 await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
             }
+
+            var createGameCalendarCommand = new CreateGameCalendarCommand(
+                GameId: gameId,
+                NewDate: request.CurrentGameDate);
+            await createGameCalendarCommandHandler.HandleAsync(createGameCalendarCommand, cancellationToken).ConfigureAwait(false);
 
             return Results.Created($"/api/games/{gameId}/seasons/{result.Id}", new CreateGameSeasonResponse(result.Id));
         }).RequireAuthorization();

@@ -17,14 +17,14 @@
     <Project Path="src/host/Api/Api.csproj" />
   </Folder>
   <Folder Name="/src/modules/" />
-  <Folder Name="/src/modules/Common/">
-    <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
-    <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
-  </Folder>
-  <Folder Name="/src/modules/Calendar/">
+  <Folder Name="/src/modules/Calendar/" Id="07fa420d-2907-57ef-713b-52cd3fbe2c68">
     <Project Path="src/modules/Calendar/Calendar.Application/Calendar.Application.csproj" />
     <Project Path="src/modules/Calendar/Calendar.Domain/Calendar.Domain.csproj" />
     <Project Path="src/modules/Calendar/Calendar.Infrastructure/Calendar.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/modules/Common/">
+    <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
+    <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
   <Folder Name="/src/modules/GamePersistence/">
     <Project Path="src/modules/GamePersistence/GamePersistence.Application/GamePersistence.Application.csproj" />

@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Calendar.Domain;
+namespace ProjectFootballSim.Calendar.Domain.Entities;
 
 public sealed class GameCalendar
 {
