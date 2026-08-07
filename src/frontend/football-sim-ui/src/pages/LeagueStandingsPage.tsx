@@ -54,7 +54,7 @@ export function LeagueStandingsPage() {
       if (!isCurrent) return;
       const seasonStartYear = new Date(season.startDate).getUTCFullYear();
       const seasonEndYear = new Date(season.endDate).getUTCFullYear();
-      setLeagueTitle(`${league.name} ${seasonStartYear} ${seasonEndYear}`);
+      setLeagueTitle(`${league.name} ${seasonStartYear}-${seasonEndYear}`);
       setStandings(loadedStandings);
       setFixtures(loadedFixtures);
     }
@@ -80,7 +80,9 @@ export function LeagueStandingsPage() {
 
   const sortedStandings = [...standings].sort((left, right) => left.position - right.position);
   const fixturesByRound = [...fixtures]
-    .sort((left, right) => left.round - right.round || Date.parse(left.date) - Date.parse(right.date))
+      .sort((left, right) => left.round - right.round
+          || Date.parse(left.date) - Date.parse(right.date)
+          || left.id.localeCompare(right.id))
     .reduce<Map<number, LeagueFixtureDto[]>>((rounds, fixture) => {
       const roundFixtures = rounds.get(fixture.round) ?? [];
       roundFixtures.push(fixture);
