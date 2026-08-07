@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import { AuthProvider } from './context/AuthContext';
 import { SeasonProvider } from './context/SeasonContext';
@@ -15,6 +15,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { LeagueStandingsPage } from './pages/LeagueStandingsPage';
 import { SeasonInfo } from './components/SeasonInfo';
 import { useGame } from './context/GameContext';
+import { useAuth } from './context/AuthContext';
 
 function GameIdFooter() {
   const { gameId } = useGame();
@@ -26,18 +27,46 @@ function GameIdFooter() {
   return <footer className="app-game-id-footer">Game ID: {gameId}</footer>;
 }
 
-function App() {
+function AuthenticatedHeader() {
+  const { username, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate('/login');
+  }
+
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <SeasonProvider>
-          <GameProvider>
-            <div className="app">
-            <header className="app-header">
-              <h1 className="app-title">Football Simulator ⚽</h1>
-              <SeasonInfo />
-              <NavBar />
-            </header>
+    <header className="app-header app-header--authenticated">
+      <div className="app-header-row">
+        <h1 className="app-title">Football Simulator ⚽</h1>
+        <div className="nav-auth app-header-user">
+          <span className="nav-user-chip">👤 {username}</span>
+          <button className="nav-logout-btn" type="button" onClick={handleLogout}>
+            Sign out
+          </button>
+        </div>
+      </div>
+      <SeasonInfo />
+      <NavBar />
+    </header>
+  );
+}
+
+function AppContent() {
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <div className="app">
+            {isAuthenticated ? (
+              <AuthenticatedHeader />
+            ) : (
+              <header className="app-header">
+                <h1 className="app-title">Football Simulator ⚽</h1>
+                <SeasonInfo />
+                <NavBar />
+              </header>
+            )}
 
             <Routes>
               <Route path="/" element={<HomeRedirect />} />
@@ -55,7 +84,17 @@ function App() {
               <Route path="*" element={<HomeRedirect />} />
             </Routes>
             <GameIdFooter />
-            </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <SeasonProvider>
+          <GameProvider>
+            <AppContent />
           </GameProvider>
         </SeasonProvider>
       </AuthProvider>

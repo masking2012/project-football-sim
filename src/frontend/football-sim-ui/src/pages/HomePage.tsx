@@ -60,7 +60,7 @@ export function HomePage() {
               </button>
           )}
           <button type="button" className="home-action-btn home-action-btn--secondary" onClick={handleOpenLoadGame} disabled={isLoading}>
-            {isLoading ? '⏳ Loading games...' : '📂 Load Games'}
+            {isLoading ? '⏳ Loading slots...' : '📂 Load Game'}
           </button>
         </div>
 

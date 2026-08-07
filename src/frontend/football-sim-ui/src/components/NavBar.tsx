@@ -4,7 +4,7 @@ import { fetchCountries, fetchLeagues, type CountryDto, type LeagueDto } from '.
 import { useAuth } from '../context/AuthContext';
 
 export function NavBar() {
-  const { isAuthenticated, username, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [countries, setCountries] = useState<CountryDto[]>([]);
@@ -58,11 +58,6 @@ export function NavBar() {
     }
     return grouped;
   }, [leagues]);
-
-  function handleLogout() {
-    logout();
-    navigate('/login');
-  }
 
   function handleLeagueClick(leagueId: number) {
     setIsLeaguesOpen(false);
@@ -141,15 +136,8 @@ export function NavBar() {
         </>
       )}
 
-      <div className="nav-auth">
-        {isAuthenticated ? (
-          <>
-            <span className="nav-user-chip">👤 {username}</span>
-            <button className="nav-logout-btn" type="button" onClick={handleLogout}>
-              Sign out
-            </button>
-          </>
-        ) : (
+      {!isAuthenticated && (
+        <div className="nav-auth">
           <>
             <NavLink to="/login" className={({ isActive }) => 'nav-link' + (isActive ? ' nav-link--active' : '')}>
               Sign in
@@ -158,8 +146,8 @@ export function NavBar() {
               Register
             </NavLink>
           </>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 }

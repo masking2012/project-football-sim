@@ -82,6 +82,23 @@
   border-bottom: 1px solid #1e3a60;
 }
 
+.app-header--authenticated {
+  text-align: initial;
+}
+
+.app-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-header-user {
+  margin-left: auto;
+}
+
 .game-menu-btn {
   padding: 0.5rem 1rem;
   color: #e8eaf0;
@@ -1256,6 +1273,16 @@
 }
 
 @media (max-width: 700px) {
+  .app-header-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .app-header-user {
+    margin-left: 0;
+  }
+
   .app-nav {
     flex-wrap: wrap;
   }
