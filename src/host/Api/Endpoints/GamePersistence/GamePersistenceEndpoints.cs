@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
-using ProjectFootballSim.GamePersistence.Application.Features.CreateNewGame;
 using ProjectFootballSim.GamePersistence.Application.Features.LoadGames;
+using ProjectFootballSim.GamePersistence.Application.Features.SaveGame;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.GamePersistence;

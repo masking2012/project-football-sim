@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.GamePersistence.Domain.Entities;
 using ProjectFootballSim.GamePersistence.Infrastructure.Database;
 
-namespace ProjectFootballSim.GamePersistence.Application.Features.CreateNewGame;
+namespace ProjectFootballSim.GamePersistence.Application.Features.SaveGame;
 
 public sealed class SaveGameCommandHandler(GamePersistenceDbContext dbContext)
 {

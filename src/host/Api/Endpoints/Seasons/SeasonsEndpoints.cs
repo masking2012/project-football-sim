@@ -12,7 +12,8 @@ internal static class SeasonsEndpoints
 {
     public static void MapSeasonsEndpoints(this WebApplication app)
     {
-        app.MapPost("/api/seasons", async (
+        app.MapPost("/api/games/{gameId}/seasons", async (
+            [FromRoute] Guid gameId,
             [FromBody] CreateSeasonRequest request,
             CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
             GetLeaguesQueryHandler getLeaguesQueryHandler,
@@ -24,7 +25,7 @@ internal static class SeasonsEndpoints
                 return Results.Unauthorized();
 
             var command = new CreateGameSeasonCommand(
-                GameId: request.GameId,
+                GameId: gameId,
                 UserId: userId,
                 CurrentGameDate: request.CurrentGameDate);
             var result = await createGameSeasonCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
@@ -34,17 +35,17 @@ internal static class SeasonsEndpoints
             {
                 var createGameLeagueCommand = new CreateGameLeagueCommand(
                     LeagueId: leagueDto.Id,
-                    GameId: request.GameId,
+                    GameId: gameId,
                     UserId: userId,
                     SeasonId: result.Id);
                 await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
             }
 
-            return Results.Created($"/api/seasons/{result.Id}", new CreateSeasonResponse(result.Id));
+            return Results.Created($"/api/games/{gameId}/seasons/{result.Id}", new CreateSeasonResponse(result.Id));
         }).RequireAuthorization();
 
-        app.MapGet("/api/seasons", async (
-            [FromQuery] Guid gameId,
+        app.MapGet("/api/games/{gameId}/seasons", async (
+            [FromRoute] Guid gameId,
             GetGameSeasonsQueryHandler queryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
