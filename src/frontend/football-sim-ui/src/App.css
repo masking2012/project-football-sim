@@ -28,7 +28,7 @@
   word-break: break-all;
 }
 
-.home-actions {
+.system-actions {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -36,11 +36,11 @@
   gap: 0.75rem;
 }
 
-.home-actions > button {
+.system-actions > button {
   width: min(100%, 260px);
 }
 
-.home-action-btn--secondary {
+.system-action-btn--secondary {
   background: #1e3a60;
   box-shadow: none;
 }
@@ -80,6 +80,23 @@
   padding: 0.75rem 1rem;
   background: rgba(13, 32, 68, 0.8);
   border-bottom: 1px solid #1e3a60;
+}
+
+.app-header--authenticated {
+  text-align: initial;
+}
+
+.app-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-header-user {
+  margin-left: auto;
 }
 
 .game-menu-btn {
@@ -814,8 +831,26 @@
 
 /* ── Home Page ──────────────────────────────────────────────────── */
 .home-welcome {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    background: linear-gradient(160deg, #0d2044 0%, #0a1628 100%);
+    border: 1px solid #1e3a60;
+    border-radius: 12px;
+    max-width: 600px;
+    margin: 2rem auto;
+}
+
+.home-message {
+    font-size: 1rem;
+    color: #7a9cc8;
+    margin: 0 0 2rem;
+    line-height: 1.6;
+}
+
+/* ── System Page ──────────────────────────────────────────────────── */
+.system-welcome {
   text-align: center;
-  padding: 3rem 1.5rem;
+  padding: 2rem 1.5rem;
   background: linear-gradient(160deg, #0d2044 0%, #0a1628 100%);
   border: 1px solid #1e3a60;
   border-radius: 12px;
@@ -823,22 +858,15 @@
   margin: 2rem auto;
 }
 
-.home-title {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #fff;
-  margin: 0 0 1rem;
-}
-
-.home-message {
+.system-message {
   font-size: 1rem;
   color: #7a9cc8;
   margin: 0 0 2rem;
   line-height: 1.6;
 }
 
-.home-start-btn,
-.home-action-btn {
+.start-btn,
+.action-btn {
   padding: 0.85rem 2rem;
   font-size: 1rem;
   font-weight: 700;
@@ -851,18 +879,18 @@
   box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
 }
 
-.home-start-btn:hover,
-.home-action-btn:hover {
+.start-btn:hover,
+.action-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(74, 158, 255, 0.4);
 }
 
-.home-start-btn:active,
-.home-action-btn:active {
+.start-btn:active,
+.action-btn:active {
   transform: translateY(0);
 }
 
-.home-start-btn:disabled {
+.start-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none;
@@ -1109,6 +1137,100 @@
   font-size: 0.75rem;
 }
 
+.fixtures-section {
+  padding: 1.35rem 1.4rem 1.5rem;
+  border-top: 1px solid #1e3a60;
+}
+
+.fixtures-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.fixtures-heading h3 {
+  color: #fff;
+  font-size: 1.15rem;
+}
+
+.fixtures-count {
+  color: #7a9cc8;
+  font-size: 0.8rem;
+}
+
+.fixtures-rounds {
+  display: grid;
+  gap: 1rem;
+}
+
+.fixtures-round {
+  overflow: hidden;
+  border: 1px solid rgba(30, 58, 96, 0.8);
+  border-radius: 9px;
+}
+
+.fixtures-round h4 {
+  padding: 0.65rem 0.9rem;
+  color: #7a9cc8;
+  background: rgba(5, 14, 29, 0.25);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.fixtures-list {
+  display: grid;
+}
+
+.fixture {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem 0.9rem;
+  border-top: 1px solid rgba(30, 58, 96, 0.65);
+}
+
+.fixture:first-child {
+  border-top: 0;
+}
+
+.fixture:hover {
+  background: rgba(74, 158, 255, 0.07);
+}
+
+.fixture-date {
+  color: #6685ae;
+  font-size: 0.76rem;
+}
+
+.fixture-teams {
+  display: grid;
+  grid-template-columns: 1fr 64px 1fr;
+  gap: 12px;
+  color: #dce8f8;
+  font-size: 0.88rem;
+}
+
+.fixture-team-home {
+    text-align: right;
+}
+
+.fixture-team-away {
+    text-align: left;
+}
+
+.fixture-score {
+  text-align: center;
+}
+
+.fixtures-empty {
+  color: #7a9cc8;
+  font-size: 0.88rem;
+}
+
 .standings-state {
   display: flex;
   min-height: 240px;
@@ -1162,6 +1284,16 @@
 }
 
 @media (max-width: 700px) {
+  .app-header-row {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .app-header-user {
+    margin-left: 0;
+  }
+
   .app-nav {
     flex-wrap: wrap;
   }
@@ -1186,6 +1318,21 @@
     align-items: flex-start;
     flex-direction: column;
     gap: 0.65rem;
+  }
+
+  .fixtures-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .fixture {
+    grid-template-columns: 1fr auto;
+    gap: 0.5rem 1rem;
+  }
+
+  .fixture-date {
+    grid-column: 1 / -1;
   }
 }
 

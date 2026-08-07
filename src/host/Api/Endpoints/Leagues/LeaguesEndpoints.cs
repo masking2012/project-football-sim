@@ -1,4 +1,4 @@
-using ProjectFootballSim.Leagues.Application.GetLeagues;
+using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 
 namespace ProjectFootballSim.Api.Endpoints.Leagues;
 

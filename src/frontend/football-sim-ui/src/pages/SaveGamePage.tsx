@@ -110,7 +110,7 @@ export function SaveGamePage() {
           onChange={(event) => setSlotName(event.target.value)}
           disabled={isSaving || !gameId}
         />
-        <button type="button" className="home-start-btn" onClick={handleSave} disabled={isSaving || !gameId || !slotName.trim()}>
+        <button type="button" className="start-btn" onClick={handleSave} disabled={isSaving || !gameId || !slotName.trim()}>
           {isSaving ? '⏳ Saving...' : '💾 Save Game'}
         </button>
       </div>

@@ -1,4 +1,4 @@
-﻿using ProjectFootballSim.Common.Data.Helpers;
+using ProjectFootballSim.Common.Data.Helpers;
 using System.Text.Json;
 
 namespace ProjectFootballSim.Common.Data.Entities.Leagues;
@@ -13,7 +13,13 @@ public static class LeaguesDataProvider
 
     public static IReadOnlyList<LeagueTeamData> GetLeagueTeamsByCountryId(int countryId)
     {
-        using var stream = ResourceHelper.GetEmbeddedResource($"league_teams_{countryId}");
+        using var stream = ResourceHelper.GetEmbeddedResource($"leagues_teams_{countryId}");
         return JsonSerializer.Deserialize<List<LeagueTeamData>>(stream, ResourceHelper.DefaultJsonOptions) ?? [];
+    }
+
+    public static IReadOnlyList<LeagueRoundData> GetLeagueRoundsByCountryId(int countryId)
+    {
+        using var stream = ResourceHelper.GetEmbeddedResource($"leagues_rounds_{countryId}");
+        return JsonSerializer.Deserialize<List<LeagueRoundData>>(stream, ResourceHelper.DefaultJsonOptions) ?? [];
     }
 }
