@@ -44,6 +44,10 @@ export function HomePage() {
   const [isActing, setIsActing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const effectiveDayState = day?.dayState === 'NotStarted' && day.matchEvents.length === 0
+    ? 'Completed'
+    : day?.dayState;
+
   const handleError = useCallback((err: unknown) => {
     if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
       logout();
@@ -81,9 +85,9 @@ export function HomePage() {
     setIsActing(true);
     setError(null);
     try {
-      if (day.dayState === 'NotStarted') {
+      if (effectiveDayState === 'NotStarted') {
         await simulateGameDay(gameId);
-      } else if (day.dayState === 'Completed') {
+      } else if (effectiveDayState === 'Completed') {
         await proceedCalendar(gameId);
       }
       await loadDay();
@@ -115,7 +119,7 @@ export function HomePage() {
               <p className="home-eyebrow">Current day</p>
               <h2 className="home-title">{formatDate(day.date)}</h2>
             </div>
-            <span className={`day-state day-state--${day.dayState.toLowerCase()}`}>{day.dayState}</span>
+            <span className={`day-state day-state--${effectiveDayState?.toLowerCase()}`}>{effectiveDayState}</span>
           </div>
 
           {day.matchEvents.length > 0 ? (
@@ -126,9 +130,9 @@ export function HomePage() {
             <p className="home-message">There are no matches scheduled for today.</p>
           )}
 
-          {day.dayState !== 'InProgress' && (
+          {effectiveDayState !== 'InProgress' && (
             <button type="button" className="start-btn day-action-btn" onClick={handleDayAction} disabled={isActing}>
-              {isActing ? '⏳ Updating day...' : day.dayState === 'NotStarted' ? '▶ Simulate day' : '▶ Proceed to next day'}
+              {isActing ? '⏳ Updating day...' : effectiveDayState === 'NotStarted' ? '▶ Simulate day' : '▶ Proceed to next day'}
             </button>
           )}
         </div>

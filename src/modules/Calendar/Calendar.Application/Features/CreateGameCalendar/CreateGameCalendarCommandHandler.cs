@@ -3,7 +3,8 @@ using ProjectFootballSim.Calendar.Infrastructure.Database;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 
-public sealed class CreateGameCalendarCommandHandler(CalendarDbContext dbContext)
+public sealed class CreateGameCalendarCommandHandler(
+    CalendarDbContext dbContext)
 {
     public async Task HandleAsync(
         CreateGameCalendarCommand command,

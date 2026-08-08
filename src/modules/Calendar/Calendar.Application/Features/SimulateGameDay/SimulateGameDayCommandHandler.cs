@@ -13,6 +13,9 @@ public sealed class SimulateGameDayCommandHandler(
             .GetCurrentGameDateAsync(command.UserId, command.GameId, cancellationToken)
             .ConfigureAwait(false);
 
+        if (gameCalendar.State == Domain.Enums.DayState.Completed)
+            throw new InvalidOperationException("Cannot simulate a game day that is already completed.");
+
         //TODO: implement the logic
 
         gameCalendar.UpdateState(Domain.Enums.DayState.Completed);

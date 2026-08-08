@@ -115,6 +115,7 @@ const teamsCache = new Map<string, TeamDto[]>();
 const standingsRequests = new Map<string, Promise<TeamStandingDto[]>>();
 const fixturesRequests = new Map<string, Promise<LeagueFixtureDto[]>>();
 const seasonsRequests = new Map<string, Promise<CurrentSeasonResponse[]>>();
+const gameEventsRequests = new Map<string, Promise<DayDetailsResponse>>();
 const seasonsCache = new Map<string, CurrentSeasonResponse[]>();
 let cacheGeneration = 0;
 
@@ -129,6 +130,7 @@ export function resetGameSessionCache(): void {
   standingsRequests.clear();
   fixturesRequests.clear();
   seasonsRequests.clear();
+  gameEventsRequests.clear();
   seasonsCache.clear();
 }
 
@@ -163,8 +165,27 @@ function clearLeaguesRequest(request: Promise<LeagueDto[]>) {
 }
 
 export async function fetchGameEvents(gameId: string): Promise<DayDetailsResponse> {
-  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/events`, { headers: authHeaders() });
-  return handleResponse<DayDetailsResponse>(res);
+  const existingRequest = gameEventsRequests.get(gameId);
+  if (existingRequest) {
+    return existingRequest;
+  }
+
+  const request = (async () => {
+    const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/events`, { headers: authHeaders() });
+    return handleResponse<DayDetailsResponse>(res);
+  })();
+  gameEventsRequests.set(gameId, request);
+  request.then(
+    () => clearGameEventsRequest(gameId, request),
+    () => clearGameEventsRequest(gameId, request),
+  );
+  return request;
+}
+
+function clearGameEventsRequest(gameId: string, request: Promise<DayDetailsResponse>) {
+  if (gameEventsRequests.get(gameId) === request) {
+    gameEventsRequests.delete(gameId);
+  }
 }
 
 export async function simulateGameDay(gameId: string): Promise<void> {
