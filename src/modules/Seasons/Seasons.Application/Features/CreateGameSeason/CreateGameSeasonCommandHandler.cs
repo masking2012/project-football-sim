@@ -11,6 +11,8 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
         CreateGameSeasonCommand command,
         CancellationToken cancellationToken)
     {
+        //TODO: add validation for current season, if it exists, and the new season's start date
+
         PlayerSeason? lastSeason = await dbContext.PlayerSeasons
             .Where(s => s.UserId == command.UserId && s.GameId == command.GameId && s.IsCurrent)
             .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
@@ -32,12 +34,9 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
         }
         else
         {
-            if (command.CurrentGameDate != lastSeason.EndDate)
-                throw new InvalidOperationException("Cannot create a new season before the current season ends.");
-
             lastSeason.CloseSeason();
 
-            DateTime startDate = command.CurrentGameDate.AddDays(1);
+            DateTime startDate = lastSeason.EndDate.AddDays(1);
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             newSeason = new PlayerSeason(
@@ -50,6 +49,6 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
         }
 
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        return new CreateGameSeasonCommandResult(newSeason.Id);
+        return new CreateGameSeasonCommandResult(newSeason.Id, newSeason.StartDate);
     }
 }

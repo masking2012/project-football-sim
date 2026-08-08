@@ -66,6 +66,25 @@ export interface MatchResultResponse {
   winner: string;
 }
 
+export interface MatchEventDto {
+  id: string;
+  homeTeamId: number;
+  awayTeamId: number;
+  homeTeamScore: number | null;
+  awayTeamScore: number | null;
+  round: number;
+  leagueName: string;
+  leagueId: number;
+  countryId: number;
+  countryName: string;
+}
+
+export interface DayDetailsResponse {
+  date: string;
+  dayState: 'NotStarted' | 'InProgress' | 'Completed';
+  matchEvents: MatchEventDto[];
+}
+
 export interface SimulateMatchRequest {
   homeTeamId: string;
   awayTeamId: string;
@@ -140,6 +159,36 @@ export async function fetchLeagues(): Promise<LeagueDto[]> {
 function clearLeaguesRequest(request: Promise<LeagueDto[]>) {
   if (leaguesRequest === request) {
     leaguesRequest = null;
+  }
+}
+
+export async function fetchGameEvents(gameId: string): Promise<DayDetailsResponse> {
+  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/events`, { headers: authHeaders() });
+  return handleResponse<DayDetailsResponse>(res);
+}
+
+export async function simulateGameDay(gameId: string): Promise<void> {
+  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/simulate`, {
+    method: 'POST',
+    headers: authHeaders(),
+  });
+  await handleVoidResponse(res);
+}
+
+export async function proceedCalendar(gameId: string): Promise<void> {
+  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/proceed`, {
+    headers: authHeaders(),
+  });
+  await handleVoidResponse(res);
+}
+
+async function handleVoidResponse(res: Response): Promise<void> {
+  if (res.status === 401) {
+    throw new Error('SESSION_EXPIRED');
+  }
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || `HTTP ${res.status}`);
   }
 }
 
@@ -337,7 +386,6 @@ export async function createSeason(gameId: string): Promise<void> {
   const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/seasons`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
-    body: JSON.stringify({ currentGameDate: new Date().toISOString() }),
   });
   if (res.status === 401) {
     throw new Error('SESSION_EXPIRED');
