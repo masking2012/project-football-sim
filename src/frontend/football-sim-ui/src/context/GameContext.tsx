@@ -15,11 +15,12 @@ interface GameContextValue {
 }
 
 const GameContext = createContext<GameContextValue | null>(null);
+const GAME_ID_KEY = 'football-sim.game-id';
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, logout } = useAuth();
   const { refreshSeason } = useSeason();
-  const [gameId, setGameId] = useState<string | null>(null);
+  const [gameId, setGameId] = useState<string | null>(() => localStorage.getItem(GAME_ID_KEY));
   const [saves, setSaves] = useState<GameSave[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,6 +30,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
       setGameId(null);
       setSaves([]);
       setError(null);
+      localStorage.removeItem(GAME_ID_KEY);
     }
   }, [isAuthenticated]);
 
@@ -48,6 +50,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   const selectGame = useCallback((id: string) => {
     resetGameSessionCache();
     setGameId(id);
+    localStorage.setItem(GAME_ID_KEY, id);
   }, []);
 
   const startNewGame = useCallback(async () => {
