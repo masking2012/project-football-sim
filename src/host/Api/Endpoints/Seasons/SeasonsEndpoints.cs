@@ -44,6 +44,7 @@ internal static class SeasonsEndpoints
             }
 
             var createGameCalendarCommand = new CreateGameCalendarCommand(
+                UserId: userId,
                 GameId: gameId,
                 NewDate: request.CurrentGameDate);
             await createGameCalendarCommandHandler.HandleAsync(createGameCalendarCommand, cancellationToken).ConfigureAwait(false);

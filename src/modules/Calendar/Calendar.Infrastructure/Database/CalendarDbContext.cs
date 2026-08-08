@@ -15,7 +15,8 @@ public class CalendarDbContext(DbContextOptions<CalendarDbContext> options) : Db
 
         modelBuilder.Entity<GameCalendar>(entity =>
         {
-            entity.HasKey(x => x.GameId);
+            entity.HasKey(x => new { x.UserId, x.GameId });
+            entity.Property(x => x.UserId).IsRequired();
             entity.Property(x => x.GameId).IsRequired();
             entity.Property(x => x.CurrentDate).IsRequired();
         });

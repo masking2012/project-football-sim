@@ -11,13 +11,14 @@ public sealed class UpdateGameCalendarDateCommandHandler(CalendarDbContext dbCon
         CancellationToken cancellationToken)
     {
         GameCalendar? gameCalendar = await dbContext.GameCalendars
-            .SingleOrDefaultAsync(x => x.GameId == command.GameId, cancellationToken)
+            .SingleOrDefaultAsync(x => x.UserId == command.UserId && x.GameId == command.GameId, cancellationToken)
             .ConfigureAwait(false);
 
         if (gameCalendar is null)
-            throw new InvalidOperationException("Game calendar not found for the specified game ID.");
+            throw new InvalidOperationException($"Game calendar not found for UserId: {command.UserId}, GameId: {command.GameId}");
 
         gameCalendar.UpdateDate(command.NewDate);
+        gameCalendar.UpdateState(Domain.Enums.DayState.NotStarted);
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 }

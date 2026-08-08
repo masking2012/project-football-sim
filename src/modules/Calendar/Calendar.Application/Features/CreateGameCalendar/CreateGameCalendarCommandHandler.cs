@@ -9,9 +9,8 @@ public sealed class CreateGameCalendarCommandHandler(CalendarDbContext dbContext
         CreateGameCalendarCommand command,
         CancellationToken cancellationToken)
     {
-        var gameCalendar = new GameCalendar(command.GameId, command.NewDate);
+        var gameCalendar = new GameCalendar(command.UserId, command.GameId, command.NewDate);
         dbContext.GameCalendars.Add(gameCalendar);
-
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 }

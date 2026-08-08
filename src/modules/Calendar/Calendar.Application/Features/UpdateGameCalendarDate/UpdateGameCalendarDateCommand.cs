@@ -1,3 +1,6 @@
 namespace ProjectFootballSim.Calendar.Application.Features.UpdateGameCalendarDate;
 
-public sealed record UpdateGameCalendarDateCommand(Guid GameId, DateTime NewDate);
+public sealed record UpdateGameCalendarDateCommand(
+    Guid UserId,
+    Guid GameId,
+    DateTime NewDate);

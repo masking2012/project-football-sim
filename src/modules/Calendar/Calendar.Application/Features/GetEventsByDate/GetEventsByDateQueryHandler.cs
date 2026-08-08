@@ -1,11 +1,10 @@
-using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Calendar.Infrastructure.Database;
+using ProjectFootballSim.Calendar.Application.Common.Services;
 using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueMatchesByDate;
 
 namespace ProjectFootballSim.Calendar.Application.Features.GetEventsByDate;
 
 public sealed class GetEventsByDateQueryHandler(
-    CalendarDbContext dbContext,
+    IGameCalendarRetriever gameCalendarRetriever,
     GetGameLeagueMatchesByDateQueryHandler getGameLeagueMatchesByDateQueryHandler)
 {
     public async Task<IEnumerable<MatchEventDto>> HandleAsync(GetEventsByDateQuery query, CancellationToken cancellationToken)
@@ -13,10 +12,9 @@ public sealed class GetEventsByDateQueryHandler(
         DateTime? date = query.Date;
         if (date is null)
         {
-            var gameCalendar = await dbContext.GameCalendars.SingleOrDefaultAsync(cancellationToken).ConfigureAwait(false);
-            if (gameCalendar is null)
-                throw new InvalidOperationException("Game calendar not found.");
-
+            var gameCalendar = await gameCalendarRetriever
+                .GetCurrentGameDateAsync(query.UserId, query.GameId, cancellationToken)
+                .ConfigureAwait(false);
             date = gameCalendar.CurrentDate;
         }
 
@@ -37,12 +35,3 @@ public sealed class GetEventsByDateQueryHandler(
             CountryId: x.CountryId));
     }
 }
-
-public sealed record GameLeagueMatchDto(
-    Guid Id,
-    DateTime Date,
-    int HomeTeamId,
-    int AwayTeamId,
-    int? HomeTeamScore,
-    int? AwayTeamScore,
-    int Round);

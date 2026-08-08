@@ -12,7 +12,7 @@ using ProjectFootballSim.Calendar.Infrastructure.Database;
 namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
 {
     [DbContext(typeof(CalendarDbContext))]
-    [Migration("20260807155002_CalendarInit")]
+    [Migration("20260808184252_CalendarInit")]
     partial class CalendarInit
     {
         /// <inheritdoc />
@@ -27,14 +27,19 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
 
             modelBuilder.Entity("ProjectFootballSim.Calendar.Domain.Entities.GameCalendar", b =>
                 {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("GameId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CurrentDate")
                         .HasColumnType("datetime2");
 
-                    b.HasKey("GameId");
+                    b.Property<int>("State")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "GameId");
 
                     b.ToTable("GameCalendars");
                 });

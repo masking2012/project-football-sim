@@ -15,12 +15,14 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
                 name: "GameCalendars",
                 columns: table => new
                 {
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CurrentDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CurrentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    State = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GameCalendars", x => x.GameId);
+                    table.PrimaryKey("PK_GameCalendars", x => new { x.UserId, x.GameId });
                 });
         }
 
