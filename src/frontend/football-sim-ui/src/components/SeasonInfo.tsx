@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 
 export function SeasonInfo() {
   const { isAuthenticated } = useAuth();
-  const { currentSeason } = useSeason();
+  const { currentSeason, currentDay } = useSeason();
 
   if (!isAuthenticated || !currentSeason) {
     return null;
@@ -20,13 +20,24 @@ export function SeasonInfo() {
     day: 'numeric',
     year: 'numeric',
   });
+  const currentDayState = currentDay?.dayState === 'NotStarted' && currentDay.matchEvents.length === 0
+    ? 'Completed'
+    : currentDay?.dayState;
+  const currentDayDate = currentDay
+    ? new Date(currentDay.date).toLocaleDateString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+    })
+    : 'Loading current day...';
 
   return (
     <div className="season-info">
-      <span className="season-info-label">Current Season:</span>
-      <span className="season-info-dates">
-        {startDate} - {endDate}
-      </span>
+      <span className="season-info-label">Current day:</span>
+      <span className="season-info-current-day">{currentDayDate}</span>
+      {currentDayState && <span className={`day-state day-state--${currentDayState.toLowerCase()}`}>{currentDayState}</span>}
+      <span className="season-info-season-range">({startDate} - {endDate})</span>
     </div>
   );
 }

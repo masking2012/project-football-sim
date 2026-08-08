@@ -5,15 +5,7 @@ import type { DayDetailsResponse, MatchEventDto } from '../api/footballApi';
 import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
-
-function formatDate(value: string): string {
-  return new Date(value).toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-}
+import { useSeason } from '../context/SeasonContext';
 
 function MatchEvent({ event }: { event: MatchEventDto }) {
   return (
@@ -35,6 +27,7 @@ export function HomePage() {
   const { gameId } = useGame();
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { setCurrentDay } = useSeason();
   const [day, setDay] = useState<DayDetailsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActing, setIsActing] = useState(false);
@@ -70,6 +63,7 @@ export function HomePage() {
   const loadDay = useCallback(async () => {
     if (!gameId) {
       setDay(null);
+      setCurrentDay(null);
       setIsLoading(false);
       return;
     }
@@ -77,13 +71,15 @@ export function HomePage() {
     setIsLoading(true);
     setError(null);
     try {
-      setDay(await fetchGameEvents(gameId));
+      const loadedDay = await fetchGameEvents(gameId);
+      setDay(loadedDay);
+      setCurrentDay(loadedDay);
     } catch (err) {
       handleError(err);
     } finally {
       setIsLoading(false);
     }
-  }, [gameId, handleError]);
+  }, [gameId, handleError, setCurrentDay]);
 
   useEffect(() => {
     void loadDay();
@@ -124,14 +120,6 @@ export function HomePage() {
       {isLoading && <Loader size="large" text="Loading today&apos;s events..." />}
       {!isLoading && day && (
         <div className="home-calendar">
-          <div className="home-calendar-header">
-            <div>
-              <p className="home-eyebrow">Current day</p>
-              <h2 className="home-title">{formatDate(day.date)}</h2>
-            </div>
-            <span className={`day-state day-state--${effectiveDayState?.toLowerCase()}`}>{effectiveDayState}</span>
-          </div>
-
           {day.matchEvents.length > 0 ? (
             <div className="today-fixtures fixtures-section">
               <div className="fixtures-heading">
