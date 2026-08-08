@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Calendar.Application.Common.Services;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
-using ProjectFootballSim.Calendar.Application.Features.GetEventsByDate;
+using ProjectFootballSim.Calendar.Application.Features.GetDayWithEvents;
 using ProjectFootballSim.Calendar.Application.Features.ProceedCalendar;
 using ProjectFootballSim.Calendar.Application.Features.SimulateGameDay;
 using ProjectFootballSim.Calendar.Application.Features.UpdateGameCalendarDate;
@@ -19,7 +19,7 @@ public static class DependencyRegistrator
 
         services.AddScoped<CreateGameCalendarCommandHandler>();
         services.AddScoped<UpdateGameCalendarDateCommandHandler>();
-        services.AddScoped<GetEventsByDateQueryHandler>();
+        services.AddScoped<GetDayWithEventsQueryHandler>();
 
         return services;
     }

@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
+using ProjectFootballSim.Calendar.Application.Features.GetDayWithEvents;
 using ProjectFootballSim.Calendar.Application.Features.GetEventsByDate;
+using ProjectFootballSim.Calendar.Application.Features.ProceedCalendar;
+using ProjectFootballSim.Calendar.Application.Features.SimulateGameDay;
 using ProjectFootballSim.Locations.Application.Features.GetCountries;
 using System.Security.Claims;
 
@@ -12,7 +15,7 @@ internal static class CalendarEndpoints
     {
         app.MapGet("/api/games/{gameId}/events", async (
             [FromRoute] Guid gameId,
-            GetEventsByDateQueryHandler getEventsByDateQueryHandler,
+            GetDayWithEventsQueryHandler getEventsByDateQueryHandler,
             GetCountriesQueryHandler getCountriesQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
@@ -20,23 +23,57 @@ internal static class CalendarEndpoints
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var events = await getEventsByDateQueryHandler
-                .HandleAsync(new GetEventsByDateQuery(UserId: userId, GameId: gameId, Date: null), cancellationToken)
+            var result = await getEventsByDateQueryHandler
+                .HandleAsync(new GetDayWithEventsQuery(UserId: userId, GameId: gameId, Date: null), cancellationToken)
                 .ConfigureAwait(false);
             var countries = await getCountriesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
 
-            return Results.Ok(events.Select(x => new MatchEventResponse(
-                Id: x.Id,
-                HomeTeamId: x.HomeTeamId,
-                AwayTeamId: x.AwayTeamId,
-                HomeTeamScore: x.HomeTeamScore,
-                AwayTeamScore: x.AwayTeamScore,
-                Round: x.Round,
-                LeagueName: x.LeagueName,
-                LeagueId: x.LeagueId,
-                CountryId: x.CountryId,
-                CountryName: countries.Single(c => c.Id == x.CountryId).Name
-            )));
+            return Results.Ok(new DayDetailsResponse(
+                Date: result.Date,
+                DayState: result.DayState,
+                MatchEvents: result.MatchEvents.Select(x => new MatchEventResponse(
+                    Id: x.Id,
+                    HomeTeamId: x.HomeTeamId,
+                    AwayTeamId: x.AwayTeamId,
+                    HomeTeamScore: x.HomeTeamScore,
+                    AwayTeamScore: x.AwayTeamScore,
+                    Round: x.Round,
+                    LeagueName: x.LeagueName,
+                    LeagueId: x.LeagueId,
+                    CountryId: x.CountryId,
+                    CountryName: countries.Single(c => c.Id == x.CountryId).Name
+                ))
+            ));
+        }).RequireAuthorization();
+
+        app.MapPost("/api/games/{gameId}/calendar/simulate", async (
+            [FromRoute] Guid gameId,
+            SimulateGameDayCommandHandler simulateGameDayCommandHandler,
+            ClaimsPrincipal user,
+            CancellationToken cancellationToken) =>
+        {
+            if (!user.TryGetUserId(out var userId))
+                return Results.Unauthorized();
+
+            var command = new SimulateGameDayCommand(UserId: userId, GameId: gameId);
+            await simulateGameDayCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
+
+            return Results.Ok();
+        }).RequireAuthorization();
+
+        app.MapGet("/api/games/{gameId}/calendar/proceed", async (
+            [FromRoute] Guid gameId,
+            ProceedCalendarCommandHandler proceedCalendarCommandHandler,
+            ClaimsPrincipal user,
+            CancellationToken cancellationToken) =>
+        {
+            if (!user.TryGetUserId(out var userId))
+                return Results.Unauthorized();
+
+            var command = new ProceedCalendarCommand(UserId: userId, GameId: gameId);
+            await proceedCalendarCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
+
+            return Results.Ok();
         }).RequireAuthorization();
     }
 }
