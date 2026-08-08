@@ -27,9 +27,9 @@ function MatchEvent({ event }: { event: MatchEventDto }) {
         <span>{event.countryName} · Round {event.round}</span>
       </div>
       <div className="calendar-match-teams">
-        <span>Team {event.homeTeamId}</span>
+        <span>{event.homeTeamName}</span>
         <b>{score}</b>
-        <span>Team {event.awayTeamId}</span>
+        <span>{event.awayTeamName}</span>
       </div>
     </article>
   );

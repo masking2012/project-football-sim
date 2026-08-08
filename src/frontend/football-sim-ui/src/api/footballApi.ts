@@ -69,7 +69,9 @@ export interface MatchResultResponse {
 export interface MatchEventDto {
   id: string;
   homeTeamId: number;
+  homeTeamName: string;
   awayTeamId: number;
+  awayTeamName: string;
   homeTeamScore: number | null;
   awayTeamScore: number | null;
   round: number;

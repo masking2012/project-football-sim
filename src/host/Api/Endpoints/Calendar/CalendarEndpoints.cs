@@ -5,6 +5,7 @@ using ProjectFootballSim.Calendar.Application.Features.GetEventsByDate;
 using ProjectFootballSim.Calendar.Application.Features.ProceedCalendar;
 using ProjectFootballSim.Calendar.Application.Features.SimulateGameDay;
 using ProjectFootballSim.Locations.Application.Features.GetCountries;
+using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Calendar;
@@ -17,6 +18,7 @@ internal static class CalendarEndpoints
             [FromRoute] Guid gameId,
             GetDayWithEventsQueryHandler getEventsByDateQueryHandler,
             GetCountriesQueryHandler getCountriesQueryHandler,
+            GetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -27,6 +29,9 @@ internal static class CalendarEndpoints
                 .HandleAsync(new GetDayWithEventsQuery(UserId: userId, GameId: gameId, Date: null), cancellationToken)
                 .ConfigureAwait(false);
             var countries = await getCountriesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
+            var teams = await getTeamsByIdsQueryHandler
+                .HandleAsync(result.MatchEvents.SelectMany(x => new[] { x.HomeTeamId, x.AwayTeamId }).Distinct().ToList(), cancellationToken)
+                .ConfigureAwait(false);
 
             return Results.Ok(new DayDetailsResponse(
                 Date: result.Date,
@@ -34,7 +39,9 @@ internal static class CalendarEndpoints
                 MatchEvents: result.MatchEvents.Select(x => new MatchEventResponse(
                     Id: x.Id,
                     HomeTeamId: x.HomeTeamId,
+                    HomeTeamName: teams[x.HomeTeamId].Name,
                     AwayTeamId: x.AwayTeamId,
+                    AwayTeamName: teams[x.AwayTeamId].Name,
                     HomeTeamScore: x.HomeTeamScore,
                     AwayTeamScore: x.AwayTeamScore,
                     Round: x.Round,
