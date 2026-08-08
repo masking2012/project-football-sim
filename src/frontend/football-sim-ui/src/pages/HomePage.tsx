@@ -16,22 +16,18 @@ function formatDate(value: string): string {
 }
 
 function MatchEvent({ event }: { event: MatchEventDto }) {
-  const score = event.homeTeamScore !== null && event.awayTeamScore !== null
-    ? `${event.homeTeamScore} - ${event.awayTeamScore}`
-    : '—';
-
   return (
-    <article className="calendar-match">
-      <div className="calendar-match-info">
-        <strong>{event.leagueName}</strong>
-        <span>{event.countryName} · Round {event.round}</span>
+    <div className="fixture today-fixture">
+      <div className="fixture-teams">
+        <div className="fixture-team-home">{event.homeTeamName}</div>
+        <div className="fixture-score" aria-label="Fixture score">
+          {event.homeTeamScore === null || event.awayTeamScore === null
+            ? '- : -'
+            : `${event.homeTeamScore} : ${event.awayTeamScore}`}
+        </div>
+        <div className="fixture-team-away">{event.awayTeamName}</div>
       </div>
-      <div className="calendar-match-teams">
-        <span>{event.homeTeamName}</span>
-        <b>{score}</b>
-        <span>{event.awayTeamName}</span>
-      </div>
-    </article>
+    </div>
   );
 }
 
@@ -47,6 +43,20 @@ export function HomePage() {
   const effectiveDayState = day?.dayState === 'NotStarted' && day.matchEvents.length === 0
     ? 'Completed'
     : day?.dayState;
+  const matchesByLeague = new Map<string, { countryName: string; leagueName: string; rounds: Map<number, MatchEventDto[]> }>();
+  for (const event of [...(day?.matchEvents ?? [])].sort((left, right) =>
+    left.leagueName.localeCompare(right.leagueName) || left.round - right.round || left.id.localeCompare(right.id))) {
+    const leagueKey = `${event.countryId}:${event.leagueId}`;
+    const league = matchesByLeague.get(leagueKey) ?? {
+      countryName: event.countryName,
+      leagueName: event.leagueName,
+      rounds: new Map<number, MatchEventDto[]>(),
+    };
+    const roundEvents = league.rounds.get(event.round) ?? [];
+    roundEvents.push(event);
+    league.rounds.set(event.round, roundEvents);
+    matchesByLeague.set(leagueKey, league);
+  }
 
   const handleError = useCallback((err: unknown) => {
     if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
@@ -123,8 +133,30 @@ export function HomePage() {
           </div>
 
           {day.matchEvents.length > 0 ? (
-            <div className="calendar-matches">
-              {day.matchEvents.map((event) => <MatchEvent key={event.id} event={event} />)}
+            <div className="today-fixtures fixtures-section">
+              <div className="fixtures-heading">
+                <h3>Today&apos;s matches</h3>
+                <span className="fixtures-count">{day.matchEvents.length} matches</span>
+              </div>
+              <div className="today-leagues">
+                {[...matchesByLeague].map(([leagueKey, league]) => (
+                  <section className="today-league" key={leagueKey}>
+                    <h3 className="today-league-title">{league.countryName} - {league.leagueName}</h3>
+                    <div className="fixtures-rounds">
+                      {[...league.rounds].map(([round, roundEvents]) => (
+                        <section className="fixtures-round" key={round}>
+                          <h4>Round {round}</h4>
+                          <div className="fixtures-list">
+                            {[...roundEvents]
+                              .sort((left, right) => left.id.localeCompare(right.id))
+                              .map((event) => <MatchEvent key={event.id} event={event} />)}
+                          </div>
+                        </section>
+                      ))}
+                    </div>
+                  </section>
+                ))}
+              </div>
             </div>
           ) : (
             <p className="home-message">There are no matches scheduled for today.</p>

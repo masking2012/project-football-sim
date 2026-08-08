@@ -885,6 +885,25 @@
   gap: 0.65rem;
 }
 
+.today-leagues {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.today-league {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.today-league-title {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.today-fixture {
+  grid-template-columns: 1fr;
+}
+
 .calendar-match {
   display: flex;
   align-items: center;
@@ -1310,6 +1329,10 @@
 
 .fixture:hover {
   background: rgba(74, 158, 255, 0.07);
+}
+
+.fixture.today-fixture {
+    grid-template-columns: 1fr;
 }
 
 .fixture-date {
