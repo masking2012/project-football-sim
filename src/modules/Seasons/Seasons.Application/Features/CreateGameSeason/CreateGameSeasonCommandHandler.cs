@@ -21,7 +21,7 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
         if (lastSeason is null)
         {
             var seasonDefinition = SeasonsDataProvider.GetSeasonDefinition();
-            DateTime startDate = new DateTime(seasonDefinition.StartYear, seasonDefinition.StartMonth, seasonDefinition.StartDay);
+            DateTime startDate = new DateTime(seasonDefinition.FirstSeasonYear, seasonDefinition.StartSeasonMonth, seasonDefinition.StartSeasonDay);
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             newSeason = new GameSeason(
