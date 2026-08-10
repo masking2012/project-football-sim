@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Calendar.Application.Features.GetDayWithEvents;
-using ProjectFootballSim.Calendar.Application.Features.GetEventsByDate;
 using ProjectFootballSim.Calendar.Application.Features.ProceedCalendar;
 using ProjectFootballSim.Calendar.Application.Features.SimulateGameDay;
 using ProjectFootballSim.Locations.Application.Features.GetCountries;
@@ -68,7 +67,7 @@ internal static class CalendarEndpoints
             return Results.Ok();
         }).RequireAuthorization();
 
-        app.MapGet("/api/games/{gameId}/calendar/proceed", async (
+        app.MapPost("/api/games/{gameId}/calendar/proceed", async (
             [FromRoute] Guid gameId,
             ProceedCalendarCommandHandler proceedCalendarCommandHandler,
             ClaimsPrincipal user,

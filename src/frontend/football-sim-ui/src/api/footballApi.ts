@@ -200,6 +200,7 @@ export async function simulateGameDay(gameId: string): Promise<void> {
 
 export async function proceedCalendar(gameId: string): Promise<void> {
   const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/proceed`, {
+    method: 'POST',
     headers: authHeaders(),
   });
   await handleVoidResponse(res);

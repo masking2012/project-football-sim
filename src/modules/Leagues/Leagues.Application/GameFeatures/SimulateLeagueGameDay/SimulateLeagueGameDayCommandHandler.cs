@@ -91,7 +91,9 @@ public sealed class SimulateLeagueGameDayCommandHandler(
 
     private static MatchTeamDto CreateMatchTeam(int teamId, IReadOnlyDictionary<int, TeamDto> teams)
     {
-        var team = teams[teamId];
+        if (!teams.TryGetValue(teamId, out TeamDto? team))
+            throw new InvalidOperationException($"Team with Id {teamId} not found.");
+
         return new MatchTeamDto(teamId, team.Attack, team.Midfield, team.Defence);
     }
 
