@@ -13,7 +13,7 @@ internal static class MatchEndpoints
     {
         app.MapPost("/api/matches/simulate", async (
             SimulateMatchRequest req,
-            SimulateRegularTimeCommand regularTime,
+            SimulateRegularTimeCommandHandler regularTime,
             SimulateExtraTimeCommand extraTime,
             SimulatePenaltyShootoutCommand penaltyShootout,
             GetTeamByIdQueryHandler getTeamByIdQuery,
@@ -51,7 +51,8 @@ internal static class MatchEndpoints
             );
 
             // Regular time
-            var rtScore = regularTime.Handle(homeTeam, awayTeam, settings);
+            var simulateRegularTimeCommand = new SimulateRegularTimeCommand(homeTeam, awayTeam, settings);
+            var rtScore = regularTime.Handle(simulateRegularTimeCommand);
             ScoreResponse? etScore = null;
             ScoreResponse? penScore = null;
 

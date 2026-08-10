@@ -45,7 +45,7 @@ export function LoadGamePage() {
     setShowLoadConfirmation(false);
     setLoadError(null);
     await loadGame(selectedSave.gameId);
-    navigate('/friendly');
+    navigate('/home');
   }
 
   return (

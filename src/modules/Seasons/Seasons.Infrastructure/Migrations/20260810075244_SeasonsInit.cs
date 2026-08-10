@@ -12,7 +12,7 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "PlayerSeasons",
+                name: "GameSeasons",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -25,12 +25,12 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PlayerSeasons", x => x.Id);
+                    table.PrimaryKey("PK_GameSeasons", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PlayerSeasons_GameId_UserId_Order",
-                table: "PlayerSeasons",
+                name: "IX_GameSeasons_GameId_UserId_Order",
+                table: "GameSeasons",
                 columns: new[] { "GameId", "UserId", "Order" },
                 unique: true);
         }
@@ -39,7 +39,7 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PlayerSeasons");
+                name: "GameSeasons");
         }
     }
 }

@@ -11,10 +11,12 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
         CreateGameSeasonCommand command,
         CancellationToken cancellationToken)
     {
-        PlayerSeason? lastSeason = await dbContext.PlayerSeasons
+        //TODO: add validation for current season, if it exists, and the new season's start date
+
+        GameSeason? lastSeason = await dbContext.GameSeasons
             .Where(s => s.UserId == command.UserId && s.GameId == command.GameId && s.IsCurrent)
-            .FirstOrDefaultAsync(cancellationToken).ConfigureAwait(false);
-        PlayerSeason newSeason;
+            .SingleOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+        GameSeason newSeason;
 
         if (lastSeason is null)
         {
@@ -22,34 +24,31 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
             DateTime startDate = new DateTime(seasonDefinition.StartYear, seasonDefinition.StartMonth, seasonDefinition.StartDay);
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
-            newSeason = new PlayerSeason(
+            newSeason = new GameSeason(
                 gameId: command.GameId,
                 userId: command.UserId,
                 startDate: startDate,
                 endDate: endDate,
                 order: 1);
-            dbContext.PlayerSeasons.Add(newSeason);
+            dbContext.GameSeasons.Add(newSeason);
         }
         else
         {
-            if (command.CurrentGameDate != lastSeason.EndDate)
-                throw new InvalidOperationException("Cannot create a new season before the current season ends.");
-
             lastSeason.CloseSeason();
 
-            DateTime startDate = command.CurrentGameDate.AddDays(1);
+            DateTime startDate = lastSeason.EndDate.AddDays(1);
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
-            newSeason = new PlayerSeason(
+            newSeason = new GameSeason(
                 gameId: command.GameId,
                 userId: command.UserId,
                 startDate: startDate,
                 endDate: endDate,
                 order: lastSeason.Order + 1);
-            dbContext.PlayerSeasons.Add(newSeason);
+            dbContext.GameSeasons.Add(newSeason);
         }
 
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        return new CreateGameSeasonCommandResult(newSeason.Id);
+        return new CreateGameSeasonCommandResult(newSeason.Id, newSeason.StartDate);
     }
 }

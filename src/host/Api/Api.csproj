@@ -9,6 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\modules\Calendar\Calendar.Application\Calendar.Application.csproj" />
+    <ProjectReference Include="..\..\modules\Calendar\Calendar.Infrastructure\Calendar.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\GamePersistence\GamePersistence.Application\GamePersistence.Application.csproj" />
     <ProjectReference Include="..\..\modules\GamePersistence\GamePersistence.Infrastructure\GamePersistence.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Identities\Identities.Application\Identities.Application.csproj" />

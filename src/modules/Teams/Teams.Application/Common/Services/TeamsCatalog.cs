@@ -53,7 +53,8 @@ internal sealed class TeamsCatalog(HybridCache cache, TeamsDbContext dbContext) 
                 Name: team.Name,
                 Attack: team.Attack.Value,
                 Midfield: team.Midfield.Value,
-                Defence: team.Defence.Value));
+                Defence: team.Defence.Value,
+                CountryId: team.CountryId));
 
         var teamIdsByCountry = teams
             .GroupBy(team => team.CountryId)

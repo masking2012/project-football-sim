@@ -75,7 +75,7 @@ function AppContent() {
               <Route path="/register" element={<RegisterPage />} />
 
               <Route element={<ProtectedRoute />}>
-                <Route path="/home" element={<HomePage />} />
+                <Route path="/home" element={<ProtectedRoute gameRequired><HomePage /></ProtectedRoute>} />
                 <Route path="/friendly" element={<SimulatorPage subtitle="Pick two teams and simulate a friendly match" />} />
                 <Route path="/save-game" element={<SaveGamePage />} />
                 <Route path="/load-game" element={<LoadGamePage />} />

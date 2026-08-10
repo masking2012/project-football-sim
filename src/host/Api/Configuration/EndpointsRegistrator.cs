@@ -1,3 +1,4 @@
+using ProjectFootballSim.Api.Endpoints.Calendar;
 using ProjectFootballSim.Api.Endpoints.Countries;
 using ProjectFootballSim.Api.Endpoints.GamePersistence;
 using ProjectFootballSim.Api.Endpoints.Identities;
@@ -21,5 +22,6 @@ internal static class EndpointsRegistrator
 
         app.MapLeaguesEndpoints();
         app.MapGameLeaguesEndpoints();
+        app.MapCalendarEndpoints();
     }
 }

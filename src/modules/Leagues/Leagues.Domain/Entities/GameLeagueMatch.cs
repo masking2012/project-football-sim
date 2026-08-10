@@ -6,8 +6,8 @@ public class GameLeagueMatch
     public DateTime Date { get; }
     public int HomeTeamId { get; }
     public int AwayTeamId { get; }
-    public int? HomeTeamScore { get; }
-    public int? AwayTeamScore { get; }
+    public int? HomeTeamScore { get; private set; }
+    public int? AwayTeamScore { get; private set; }
     public int Round { get; }
     public Guid GameLeagueId { get; }
 
@@ -27,5 +27,16 @@ public class GameLeagueMatch
         AwayTeamId = awayTeamId;
         Round = round;
         GameLeagueId = gameLeagueId;
+    }
+
+    public void SetScore(int homeTeamScore, int awayTeamScore)
+    {
+        if (homeTeamScore < 0)
+            throw new ArgumentException("Home team score cannot be negative.");
+        if (awayTeamScore < 0)
+            throw new ArgumentException("Away team score cannot be negative.");
+
+        HomeTeamScore = homeTeamScore;
+        AwayTeamScore = awayTeamScore;
     }
 }

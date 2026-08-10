@@ -14,8 +14,8 @@ interface GameContextValue {
   saveCurrentGame: (slotId: number, name: string) => Promise<void>;
 }
 
-const GAME_ID_KEY = 'football-sim.game-id';
 const GameContext = createContext<GameContextValue | null>(null);
+const GAME_ID_KEY = 'football-sim.game-id';
 
 export function GameProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, logout } = useAuth();

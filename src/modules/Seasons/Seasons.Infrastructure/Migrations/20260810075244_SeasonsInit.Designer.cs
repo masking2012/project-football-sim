@@ -12,7 +12,7 @@ using ProjectFootballSim.Seasons.Infrastructure.Database;
 namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
 {
     [DbContext(typeof(SeasonsDbContext))]
-    [Migration("20260803105728_SeasonsInit")]
+    [Migration("20260810075244_SeasonsInit")]
     partial class SeasonsInit
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ProjectFootballSim.Seasons.Domain.Entities.PlayerSeason", b =>
+            modelBuilder.Entity("ProjectFootballSim.Seasons.Domain.Entities.GameSeason", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -54,7 +54,7 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
                     b.HasIndex("GameId", "UserId", "Order")
                         .IsUnique();
 
-                    b.ToTable("PlayerSeasons");
+                    b.ToTable("GameSeasons");
                 });
 #pragma warning restore 612, 618
         }

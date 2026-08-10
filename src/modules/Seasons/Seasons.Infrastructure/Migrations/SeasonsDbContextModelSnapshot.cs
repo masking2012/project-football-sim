@@ -22,7 +22,7 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ProjectFootballSim.Seasons.Domain.Entities.PlayerSeason", b =>
+            modelBuilder.Entity("ProjectFootballSim.Seasons.Domain.Entities.GameSeason", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -51,7 +51,7 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
                     b.HasIndex("GameId", "UserId", "Order")
                         .IsUnique();
 
-                    b.ToTable("PlayerSeasons");
+                    b.ToTable("GameSeasons");
                 });
 #pragma warning restore 612, 618
         }

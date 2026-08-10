@@ -1,9 +1,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { createSeason, fetchSeasons, type CurrentSeasonResponse } from '../api/footballApi';
+import { createSeason, fetchSeasons, type CurrentSeasonResponse, type DayDetailsResponse } from '../api/footballApi';
 import { useAuth } from './AuthContext';
 
 interface SeasonContextValue {
   currentSeason: CurrentSeasonResponse | null;
+  currentDay: DayDetailsResponse | null;
+  setCurrentDay: (day: DayDetailsResponse | null) => void;
   isLoading: boolean;
   error: string | null;
   refreshSeason: (gameId: string | null) => Promise<void>;
@@ -15,12 +17,14 @@ const SeasonContext = createContext<SeasonContextValue | null>(null);
 export function SeasonProvider({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, logout } = useAuth();
   const [currentSeason, setCurrentSeason] = useState<CurrentSeasonResponse | null>(null);
+  const [currentDay, setCurrentDay] = useState<DayDetailsResponse | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const refreshSeason = useCallback(async (gameId: string | null) => {
     if (!isAuthenticated || !gameId) {
       setCurrentSeason(null);
+      setCurrentDay(null);
       return;
     }
 
@@ -64,12 +68,13 @@ export function SeasonProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!isAuthenticated) {
       setCurrentSeason(null);
+      setCurrentDay(null);
     }
   }, [isAuthenticated]);
 
   const value = useMemo<SeasonContextValue>(
-    () => ({ currentSeason, isLoading, error, refreshSeason, startNewSeason }),
-    [currentSeason, isLoading, error, refreshSeason, startNewSeason],
+    () => ({ currentSeason, currentDay, setCurrentDay, isLoading, error, refreshSeason, startNewSeason }),
+    [currentSeason, currentDay, isLoading, error, refreshSeason, startNewSeason],
   );
 
   return <SeasonContext value={value}>{children}</SeasonContext>;

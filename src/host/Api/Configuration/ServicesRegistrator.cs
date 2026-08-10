@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.IdentityModel.Tokens;
+using ProjectFootballSim.Calendar.Application;
+using ProjectFootballSim.Calendar.Infrastructure;
 using ProjectFootballSim.GamePersistence.Application;
 using ProjectFootballSim.GamePersistence.Infrastructure;
 using ProjectFootballSim.Identities.Application;
@@ -41,6 +43,9 @@ internal static class ServicesRegistrator
         builder.Services.AddLeaguesApplication();
 
         builder.Services.AddMatchesApplication();
+
+        builder.Services.AddCalendarInfrastructure(builder.Configuration, "CalendarAzureSql");
+        builder.Services.AddCalendarApplication();
     }
 
     public static void AddApiServices(this WebApplicationBuilder builder)

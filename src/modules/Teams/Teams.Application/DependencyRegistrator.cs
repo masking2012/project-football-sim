@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Teams.Application.Common.Services;
 using ProjectFootballSim.Teams.Application.Features.GetTeamById;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
+using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
 
 namespace ProjectFootballSim.Teams.Application;
 
@@ -13,6 +14,7 @@ public static class DependencyRegistrator
         services.AddScoped<ITeamsCatalog, TeamsCatalog>();
         services.AddScoped<GetTeamsByCountryQueryHandler>();
         services.AddScoped<GetTeamByIdQueryHandler>();
+        services.AddScoped<GetTeamsByIdsQueryHandler>();
 
         return services;
     }

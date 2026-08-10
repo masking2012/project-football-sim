@@ -264,6 +264,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: 0.25rem;
   margin-top: 0.75rem;
   padding: 0.5rem 1rem;
@@ -273,6 +275,17 @@
   max-width: fit-content;
   margin-left: auto;
   margin-right: auto;
+}
+
+.season-info-current-day {
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.season-info-season-range {
+  color: #7a9cc8;
+  font-size: 0.8rem;
 }
 
 .season-info-label {
@@ -830,6 +843,128 @@
 }
 
 /* ── Home Page ──────────────────────────────────────────────────── */
+.home-calendar {
+  width: min(100%, 760px);
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: linear-gradient(160deg, #0d2044 0%, #0a1628 100%);
+  border: 1px solid #1e3a60;
+  border-radius: 12px;
+}
+
+.home-calendar-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.home-eyebrow {
+  margin-bottom: 0.35rem;
+  color: #4a9eff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.day-state {
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.day-state--notstarted {
+  color: #fcd34d;
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.day-state--completed {
+  color: #5eead4;
+  background: rgba(45, 212, 191, 0.15);
+}
+
+.day-state--inprogress {
+  color: #93c5fd;
+  background: rgba(74, 158, 255, 0.15);
+}
+
+.calendar-matches {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.today-leagues {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.today-league {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.today-league-title {
+  color: #fff;
+  font-size: 1rem;
+}
+
+.today-fixture {
+  grid-template-columns: 1fr;
+}
+
+.today-fixtures.fixtures-section {
+    border-top: 0;
+    padding-top: 0;
+}
+
+.calendar-match {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  background: rgba(10, 22, 40, 0.65);
+  border: 1px solid #1e3a60;
+  border-radius: 8px;
+}
+
+.calendar-match-info,
+.calendar-match-teams {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.calendar-match-info strong {
+  color: #fff;
+}
+
+.calendar-match-info span,
+.calendar-match-teams span {
+  color: #7a9cc8;
+  font-size: 0.8rem;
+}
+
+.calendar-match-teams {
+  align-items: flex-end;
+  min-width: 150px;
+}
+
+.calendar-match-teams b {
+  color: #4a9eff;
+  font-size: 1.05rem;
+}
+
+.day-action-btn {
+  display: block;
+  margin: 1.5rem auto 0;
+}
+
 .home-welcome {
     text-align: center;
     padding: 2rem 1.5rem;
@@ -838,6 +973,19 @@
     border-radius: 12px;
     max-width: 600px;
     margin: 2rem auto;
+}
+
+@media (max-width: 600px) {
+  .home-calendar-header,
+  .calendar-match {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .calendar-match-teams {
+    align-items: flex-start;
+    min-width: 0;
+  }
 }
 
 .home-message {
@@ -1199,6 +1347,10 @@
 
 .fixture:hover {
   background: rgba(74, 158, 255, 0.07);
+}
+
+.fixture.today-fixture {
+    grid-template-columns: 1fr;
 }
 
 .fixture-date {

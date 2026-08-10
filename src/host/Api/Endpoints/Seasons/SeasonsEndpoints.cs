@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
+using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 using ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
@@ -14,10 +15,10 @@ internal static class SeasonsEndpoints
     {
         app.MapPost("/api/games/{gameId}/seasons", async (
             [FromRoute] Guid gameId,
-            [FromBody] CreateGameSeasonRequest request,
             CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
             GetLeaguesQueryHandler getLeaguesQueryHandler,
             CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
+            CreateGameCalendarCommandHandler createGameCalendarCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -26,8 +27,7 @@ internal static class SeasonsEndpoints
 
             var command = new CreateGameSeasonCommand(
                 GameId: gameId,
-                UserId: userId,
-                CurrentGameDate: request.CurrentGameDate);
+                UserId: userId);
             var result = await createGameSeasonCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
 
             var leaguesDtos = await getLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
@@ -40,6 +40,12 @@ internal static class SeasonsEndpoints
                     SeasonId: result.Id);
                 await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
             }
+
+            var createGameCalendarCommand = new CreateGameCalendarCommand(
+                UserId: userId,
+                GameId: gameId,
+                NewDate: result.StartDate);
+            await createGameCalendarCommandHandler.HandleAsync(createGameCalendarCommand, cancellationToken).ConfigureAwait(false);
 
             return Results.Created($"/api/games/{gameId}/seasons/{result.Id}", new CreateGameSeasonResponse(result.Id));
         }).RequireAuthorization();

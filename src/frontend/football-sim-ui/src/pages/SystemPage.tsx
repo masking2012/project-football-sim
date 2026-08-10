@@ -14,7 +14,7 @@ export function SystemPage() {
     setActionError(null);
     try {
       await startNewGame();
-      navigate('/friendly');
+      navigate('/home');
     } catch (err) {
       setActionError(err instanceof Error ? err.message : 'Could not start a new game.');
     }
