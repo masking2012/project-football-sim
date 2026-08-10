@@ -5,7 +5,7 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Database;
 
 public class SeasonsDbContext(DbContextOptions<SeasonsDbContext> options) : DbContext(options)
 {
-    public DbSet<PlayerSeason> PlayerSeasons => Set<PlayerSeason>();
+    public DbSet<GameSeason> GameSeasons => Set<GameSeason>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -13,7 +13,7 @@ public class SeasonsDbContext(DbContextOptions<SeasonsDbContext> options) : DbCo
 
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<PlayerSeason>(entity =>
+        modelBuilder.Entity<GameSeason>(entity =>
         {
             entity.HasKey(x => x.Id);
             entity.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();

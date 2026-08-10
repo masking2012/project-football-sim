@@ -9,7 +9,7 @@ public sealed class GetGameSeasonsQueryHandler(SeasonsDbContext dbContext)
         GetGameSeasonsQuery query,
         CancellationToken cancellationToken)
     {
-        var seasons = await dbContext.PlayerSeasons
+        var seasons = await dbContext.GameSeasons
             .AsNoTracking()
             .Where(s => s.UserId == query.UserId && s.GameId ==  query.GameId)
             .Select(s => new GameSeasonDto(
