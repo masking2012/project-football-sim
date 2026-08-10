@@ -62,6 +62,7 @@ public sealed class SimulateLeagueGameDayCommandHandler(
 
                 ScoreResultDto scoreResultDto = simulateRegularTimeCommandHandler.Handle(new SimulateRegularTimeCommand(
                     home, away, new MatchSettingsDto(HasHomeAdvantage: true)));
+                match.SetScore(scoreResultDto.HomeScore, scoreResultDto.AwayScore);
 
                 if (scoreResultDto.HomeScore > scoreResultDto.AwayScore)
                 {
