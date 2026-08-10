@@ -10,39 +10,32 @@ public sealed class GetCalendarDayQueryHandler(
 {
     public async Task<CalendarDayDto> HandleAsync(GetCalendarDayQuery query, CancellationToken cancellationToken)
     {
-        DateTime? date = query.Date;
-
         var gameCalendar = await gameCalendarRetriever
             .GetCurrentGameDateAsync(query.UserId, query.GameId, cancellationToken)
             .ConfigureAwait(false);
-        CalendarDayStatus dayState;
 
-        if (date is null || date == gameCalendar.CurrentDate)
+        DateTime currentDate = gameCalendar.CurrentDate;
+        DateTime date = query.Date ?? currentDate;
+        CalendarDayStatus dayStatus = date switch
         {
-            dayState = gameCalendar.DayStatus;
-            date = gameCalendar.CurrentDate;
-        }
-        else if (date < gameCalendar.CurrentDate)
-        {
-            dayState = CalendarDayStatus.Completed;
-        }
-        else if (date > gameCalendar.CurrentDate)
-        {
-            dayState = CalendarDayStatus.NotStarted;
-        }
-        else
-        {
-            throw new InvalidOperationException("Invalid date comparison.");
-        }
+            var value when value == currentDate => gameCalendar.DayStatus,
+            var value when value < currentDate => CalendarDayStatus.Completed,
+            var value when value > currentDate => CalendarDayStatus.NotStarted,
+            _ => throw new InvalidOperationException("Invalid date comparison.")
+        };
 
-        var getGameLeagueMatchesByDateQuery = new GetGameLeagueMatchesByDateQuery(UserId: query.UserId, GameId: query.GameId, Date: date.Value);
         var matches = await getGameLeagueMatchesByDateQueryHandler
-            .HandleAsync(getGameLeagueMatchesByDateQuery, cancellationToken)
+            .HandleAsync(
+                new GetGameLeagueMatchesByDateQuery(
+                    UserId: query.UserId,
+                    GameId: query.GameId,
+                    Date: date),
+                cancellationToken)
             .ConfigureAwait(false);
 
-        var result = new CalendarDayDto(
-            Date: date.Value,
-            DayStatus: dayState.ToString(),
+        return new CalendarDayDto(
+            Date: date,
+            DayStatus: dayStatus.ToString(),
             LeagueMatches: matches.Select(x => new LeagueMatchDto(
                 Id: x.Id,
                 HomeTeamId: x.HomeTeamId,
@@ -54,6 +47,5 @@ public sealed class GetCalendarDayQueryHandler(
                 LeagueId: x.LeagueId,
                 CountryId: x.CountryId))
         );
-        return result;
     }
 }

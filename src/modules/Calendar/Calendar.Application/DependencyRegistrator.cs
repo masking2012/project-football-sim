@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Calendar.Application.Common.Services;
+using ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
-using ProjectFootballSim.Calendar.Application.Features.ProceedCalendar;
 using ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
 
 namespace ProjectFootballSim.Calendar.Application;

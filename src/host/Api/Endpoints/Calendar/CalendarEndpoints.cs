@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
-using ProjectFootballSim.Calendar.Application.Features.ProceedCalendar;
 using ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
 using ProjectFootballSim.Locations.Application.Features.GetCountries;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
@@ -70,7 +69,7 @@ internal static class CalendarEndpoints
 
         app.MapPost("/api/games/{gameId}/calendar/proceed", async (
             [FromRoute] Guid gameId,
-            AdvanceCalendarDayCommandHandler proceedCalendarCommandHandler,
+            AdvanceCalendarDayCommandHandler advanceCalendarDayCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -78,7 +77,7 @@ internal static class CalendarEndpoints
                 return Results.Unauthorized();
 
             var command = new AdvanceCalendarDayCommand(UserId: userId, GameId: gameId);
-            await proceedCalendarCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
+            await advanceCalendarDayCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
 
             return Results.Ok();
         }).RequireAuthorization();
