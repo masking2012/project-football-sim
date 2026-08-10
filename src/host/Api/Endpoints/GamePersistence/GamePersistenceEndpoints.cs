@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
+using ProjectFootballSim.GamePersistence.Application.Features.CreateGame;
 using ProjectFootballSim.GamePersistence.Application.Features.LoadGames;
 using ProjectFootballSim.GamePersistence.Application.Features.SaveGame;
 using System.Security.Claims;
@@ -10,10 +11,27 @@ internal static class GamePersistenceEndpoints
 {
     public static void MapGamePersistenceEndpoints(this WebApplication app)
     {
-        app.MapPost("/api/games", async (
+        app.MapPost("/api/games", (
+            ClaimsPrincipal user,
+            CreateGameCommandHandler commandHandler) =>
+        {
+            if (!user.TryGetUserId(out var userId))
+                return Results.Unauthorized();
+
+            var command = new CreateGameCommand(
+                UserId: userId
+            );
+            Guid createdGameId = commandHandler.Handle(command);
+
+            var createdUri = new Uri($"/api/games/{createdGameId}", UriKind.Relative);
+            return Results.Created(createdUri, new CreateGameResponse(createdGameId));
+        }).RequireAuthorization();
+
+        app.MapPost("/api/games/{gameId}/save", async (
+            [FromRoute] Guid gameId,
+            [FromBody] SaveGameRequest request,
             ClaimsPrincipal user,
             SaveGameCommandHandler commandHandler,
-            [FromBody] SaveGameRequest request,
             CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
@@ -21,12 +39,13 @@ internal static class GamePersistenceEndpoints
 
             var command = new SaveGameCommand(
                 UserId: userId,
-                GameId: request.GameId,
+                GameId: gameId,
                 SlotId: request.SlotId,
                 Name: request.Name
             );
             await commandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
-            return Results.StatusCode(201);
+
+            return Results.Ok();
         }).RequireAuthorization();
 
         app.MapGet("/api/games", async (

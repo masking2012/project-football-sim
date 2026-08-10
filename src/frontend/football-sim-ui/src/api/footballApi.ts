@@ -43,6 +43,10 @@ export interface GameSave {
   createdAtUtc: string;
 }
 
+export interface CreateGameResponse {
+  gameId: string;
+}
+
 export interface TeamDto {
   id: string;
   name: string;
@@ -420,16 +424,10 @@ export async function createSeason(gameId: string): Promise<void> {
   }
 }
 
-export async function fetchGameSaves(): Promise<GameSave[]> {
-  const res = await fetch(`${BASE}/games`, { headers: authHeaders() });
-  return handleResponse<GameSave[]>(res);
-}
-
-export async function saveGame(gameId: string, slotId: number, name: string): Promise<void> {
+export async function createGame(): Promise<string> {
   const res = await fetch(`${BASE}/games`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...authHeaders() },
-    body: JSON.stringify({ gameId, slotId, name }),
+    headers: authHeaders(),
   });
   if (res.status === 401) {
     throw new Error('SESSION_EXPIRED');
@@ -438,5 +436,22 @@ export async function saveGame(gameId: string, slotId: number, name: string): Pr
     const text = await res.text();
     throw new Error(text || `HTTP ${res.status}`);
   }
+
+  const response = await handleResponse<CreateGameResponse>(res);
+  return response.gameId;
+}
+
+export async function fetchGameSaves(): Promise<GameSave[]> {
+  const res = await fetch(`${BASE}/games`, { headers: authHeaders() });
+  return handleResponse<GameSave[]>(res);
+}
+
+export async function saveGame(gameId: string, slotId: number, name: string): Promise<void> {
+  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/save`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    body: JSON.stringify({ slotId, name }),
+  });
+  await handleVoidResponse(res);
 }
 
