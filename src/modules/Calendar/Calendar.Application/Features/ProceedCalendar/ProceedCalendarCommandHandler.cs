@@ -16,12 +16,12 @@ public sealed class ProceedCalendarCommandHandler(
             .GetCurrentGameDateAsync(command.UserId, command.GameId, cancellationToken)
             .ConfigureAwait(false);
 
-        var getGameLeagueMatchesByDateQuery = new GetGameLeagueMatchesByDateQuery(GameId: command.GameId, Date: gameCalendar.CurrentDate);
+        var getGameLeagueMatchesByDateQuery = new GetGameLeagueMatchesByDateQuery(UserId: command.UserId, GameId: command.GameId, Date: gameCalendar.CurrentDate);
         var matches = await getGameLeagueMatchesByDateQueryHandler
             .HandleAsync(getGameLeagueMatchesByDateQuery, cancellationToken)
             .ConfigureAwait(false);
 
-        if (gameCalendar.State != Domain.Enums.DayState.Completed && matches is not null && matches.Any())
+        if (gameCalendar.State != Domain.Enums.DayState.Completed && matches.Any())
             throw new InvalidOperationException("Cannot proceed calendar. Current day is not completed.");
 
         gameCalendar.UpdateDate(gameCalendar.CurrentDate.AddDays(1));

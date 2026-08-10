@@ -12,6 +12,8 @@ public sealed class SimulateRegularTimeCommandHandler
 {
     public ScoreResultDto Handle(SimulateRegularTimeCommand command)
     {
+        ArgumentNullException.ThrowIfNull(command);
+
         MatchTeam home = TeamMapper.Map(command.Home);
         MatchTeam away = TeamMapper.Map(command.Away);
 

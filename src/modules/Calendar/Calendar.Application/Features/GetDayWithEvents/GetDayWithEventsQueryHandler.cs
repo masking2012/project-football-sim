@@ -36,7 +36,7 @@ public sealed class GetDayWithEventsQueryHandler(
             throw new InvalidOperationException("Invalid date comparison.");
         }
 
-        var getGameLeagueMatchesByDateQuery = new GetGameLeagueMatchesByDateQuery(GameId: query.GameId, Date: date.Value);
+        var getGameLeagueMatchesByDateQuery = new GetGameLeagueMatchesByDateQuery(UserId: query.UserId, GameId: query.GameId, Date: date.Value);
         var matches = await getGameLeagueMatchesByDateQueryHandler
             .HandleAsync(getGameLeagueMatchesByDateQuery, cancellationToken)
             .ConfigureAwait(false);
