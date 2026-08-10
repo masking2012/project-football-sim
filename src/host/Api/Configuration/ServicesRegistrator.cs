@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.IdentityModel.Tokens;
+using ProjectFootballSim.Api.Services;
 using ProjectFootballSim.Calendar.Application;
 using ProjectFootballSim.Calendar.Infrastructure;
 using ProjectFootballSim.GamePersistence.Application;
@@ -50,6 +51,8 @@ internal static class ServicesRegistrator
 
     public static void AddApiServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddScoped<GameInitializationService>();
+
         var jwtSecret = builder.Configuration["Jwt:Secret"]
             ?? throw new InvalidOperationException("JWT secret is not configured.");
 

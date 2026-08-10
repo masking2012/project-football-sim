@@ -18,7 +18,7 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CurrentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    State = table.Column<int>(type: "int", nullable: false)
+                    DayStatus = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

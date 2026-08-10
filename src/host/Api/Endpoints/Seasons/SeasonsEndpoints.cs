@@ -18,7 +18,6 @@ internal static class SeasonsEndpoints
             CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
             GetLeaguesQueryHandler getLeaguesQueryHandler,
             CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
-            CreateGameCalendarCommandHandler createGameCalendarCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -40,12 +39,6 @@ internal static class SeasonsEndpoints
                     SeasonId: result.Id);
                 await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
             }
-
-            var createGameCalendarCommand = new CreateGameCalendarCommand(
-                UserId: userId,
-                GameId: gameId,
-                NewDate: result.StartDate);
-            await createGameCalendarCommandHandler.HandleAsync(createGameCalendarCommand, cancellationToken).ConfigureAwait(false);
 
             return Results.Created($"/api/games/{gameId}/seasons/{result.Id}", new CreateGameSeasonResponse(result.Id));
         }).RequireAuthorization();

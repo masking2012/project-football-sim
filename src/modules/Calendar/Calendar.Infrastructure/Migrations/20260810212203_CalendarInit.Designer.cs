@@ -12,7 +12,7 @@ using ProjectFootballSim.Calendar.Infrastructure.Database;
 namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
 {
     [DbContext(typeof(CalendarDbContext))]
-    [Migration("20260808184252_CalendarInit")]
+    [Migration("20260810212203_CalendarInit")]
     partial class CalendarInit
     {
         /// <inheritdoc />
@@ -36,7 +36,7 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
                     b.Property<DateTime>("CurrentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("State")
+                    b.Property<int>("DayStatus")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "GameId");
