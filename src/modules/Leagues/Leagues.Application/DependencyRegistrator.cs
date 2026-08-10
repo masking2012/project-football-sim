@@ -6,6 +6,7 @@ using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueStandings;
+using ProjectFootballSim.Leagues.Application.GameFeatures.SimulateLeagueGameDay;
 
 namespace ProjectFootballSim.Leagues.Application;
 
@@ -25,6 +26,7 @@ public static class DependencyRegistrator
 
         services.AddScoped<LeagueFixtureGenerator>();
         services.AddScoped<CreateGameLeagueCommandHandler>();
+        services.AddScoped<SimulateLeagueGameDayCommandHandler>();
 
         return services;
     }

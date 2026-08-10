@@ -5,13 +5,13 @@ using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Matches.Application.Tests.Features.RegularTime;
 
-internal sealed class SimulateRegularTimeCommandTests
+internal sealed class SimulateRegularTimeCommandHandlerTests
 {
-    private readonly SimulateRegularTimeCommand _sut;
+    private readonly SimulateRegularTimeCommandHandler _sut;
 
-    public SimulateRegularTimeCommandTests()
+    public SimulateRegularTimeCommandHandlerTests()
     {
-        _sut = new SimulateRegularTimeCommand(new PossessionCalculator(), new ChancesCalculator(), new GoalsCalculator());
+        _sut = new SimulateRegularTimeCommandHandler(new PossessionCalculator(), new ChancesCalculator(), new GoalsCalculator());
     }
 
     [Test]
@@ -23,7 +23,7 @@ internal sealed class SimulateRegularTimeCommandTests
 
         foreach (var _ in Enumerable.Range(0, 100))
         {
-            ScoreResultDto result = _sut.Handle(home, away, settings);
+            ScoreResultDto result = _sut.Handle(new SimulateRegularTimeCommand(home, away, settings));
 
             await Assert.That(result.HomeScore).IsGreaterThanOrEqualTo(0).And.IsLessThanOrEqualTo(GoalChancesSettings.RegularTime.Maximum);
             await Assert.That(result.AwayScore).IsGreaterThanOrEqualTo(0).And.IsLessThanOrEqualTo(GoalChancesSettings.RegularTime.Maximum);
@@ -43,7 +43,7 @@ internal sealed class SimulateRegularTimeCommandTests
 
         foreach (var _ in Enumerable.Range(0, 1000))
         {
-            ScoreResultDto result = _sut.Handle(bayernMunchen, dynamoKyiv, settings);
+            ScoreResultDto result = _sut.Handle(new SimulateRegularTimeCommand(bayernMunchen, dynamoKyiv, settings));
 
             if (result.HomeScore > result.AwayScore)
                 homeWins++;

@@ -19,4 +19,27 @@ public sealed class GameLeagueTeam
         GameLeagueId = gameLeagueId;
         TeamId = teamId;
     }
+
+    public void AddWin(int goalsFor, int goalsAgainst)
+    {
+        Wins++;
+        GoalsFor += goalsFor;
+        GoalsAgainst += goalsAgainst;
+        Points += 3;
+    }
+
+    public void AddLoss(int goalsFor, int goalsAgainst)
+    {
+        Losses++;
+        GoalsFor += goalsFor;
+        GoalsAgainst += goalsAgainst;
+    }
+
+    public void AddDraw(int goalsFor, int goalsAgainst)
+    {
+        Draws++;
+        GoalsFor += goalsFor;
+        GoalsAgainst += goalsAgainst;
+        Points += 1;
+    }
 }
