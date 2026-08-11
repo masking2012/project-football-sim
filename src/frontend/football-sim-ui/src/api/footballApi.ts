@@ -45,6 +45,7 @@ export interface GameSave {
 
 export interface CreateGameResponse {
   gameId: string;
+  firstSeasonId: string;
 }
 
 export interface TeamDto {
