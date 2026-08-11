@@ -73,13 +73,14 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
                 .WithMany()
                 .HasForeignKey(x => x.LeagueId)
                 .IsRequired();
-        });
 
-        modelBuilder.Entity<GameLeague>()
-            .HasMany(e => e.GameLeagueMatches)
-            .WithOne(e => e.GameLeague)
-            .HasForeignKey(e => e.GameLeagueId)
-            .IsRequired();
+            entity.HasMany(e => e.GameLeagueMatches)
+                .WithOne(e => e.GameLeague)
+                .HasForeignKey(e => e.GameLeagueId)
+                .IsRequired();
+
+            entity.HasIndex(x => new { x.GameId, x.UserId, x.SeasonId, x.LeagueId }).IsUnique();
+        });            
 
         modelBuilder.Entity<GameLeagueTeam>(entity =>
         {

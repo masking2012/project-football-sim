@@ -11,20 +11,18 @@ internal static class GamePersistenceEndpoints
 {
     public static void MapGamePersistenceEndpoints(this WebApplication app)
     {
-        app.MapPost("/api/games", (
+        app.MapPost("/api/games", async (
             ClaimsPrincipal user,
-            CreateGameCommandHandler commandHandler) =>
+            GameInitializationService service,
+            CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var command = new CreateGameCommand(
-                UserId: userId
-            );
-            Guid createdGameId = commandHandler.Handle(command);
+            var response = await service.InitAsync(userId, cancellationToken).ConfigureAwait(false);
 
-            var createdUri = new Uri($"/api/games/{createdGameId}", UriKind.Relative);
-            return Results.Created(createdUri, new CreateGameResponse(createdGameId));
+            var createdUri = new Uri($"/api/games/{response.GameId}", UriKind.Relative);
+            return Results.Created(createdUri, response);
         }).RequireAuthorization();
 
         app.MapPost("/api/games/{gameId}/save", async (
