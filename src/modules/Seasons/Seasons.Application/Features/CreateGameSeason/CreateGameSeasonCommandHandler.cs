@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ProjectFootballSim.Common.Data.Entities.Seasons;
+using ProjectFootballSim.Common.Features;
 using ProjectFootballSim.Seasons.Domain.Entities;
 using ProjectFootballSim.Seasons.Infrastructure.Database;
 
-namespace ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
+namespace ProjectFootballSim.Seasons.Application.Features.CreateGameSeason;
 
-public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
+public sealed class CreateGameSeasonCommandHandler(
+    ILogger<CreateGameSeasonCommandHandler> logger,
+    SeasonsDbContext dbContext)
 {
     public async Task<CreateGameSeasonCommandResult> HandleAsync(
         CreateGameSeasonCommand command,
@@ -38,15 +42,25 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             newSeason = new GameSeason(
-                gameId: command.GameId,
                 userId: command.UserId,
+                gameId: command.GameId,
                 startDate: startDate,
                 endDate: endDate,
                 order: lastSeason.Order + 1);
             dbContext.GameSeasons.Add(newSeason);
         }
 
-        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            Log.GameSeasonCreated(logger, newSeason.Id, newSeason.UserId, newSeason.GameId);
+        }
+        catch(DbUpdateException ex) when (ex.IsUniqueViolation())
+        {
+            Log.GameSeasonExists(logger, newSeason.UserId, newSeason.GameId, newSeason.Order, ex);
+            throw;
+        }
+
         return new CreateGameSeasonCommandResult(newSeason.Id, newSeason.StartDate, newSeason.EndDate);
     }
 }

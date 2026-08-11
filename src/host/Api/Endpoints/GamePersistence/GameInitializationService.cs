@@ -1,11 +1,13 @@
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.GamePersistence.Application.Features.CreateGame;
+using ProjectFootballSim.Seasons.Application.Features.CreateGameSeason;
 
-namespace ProjectFootballSim.Api.Services;
+namespace ProjectFootballSim.Api.Endpoints.GamePersistence;
 
 internal sealed class GameInitializationService(
     CreateGameCommandHandler createGameCommandHandler,
-    CreateGameCalendarCommandHandler createGameCalendarCommandHandler)
+    CreateGameCalendarCommandHandler createGameCalendarCommandHandler,
+    CreateGameSeasonCommandHandler createGameSeasonCommandHandler)
 {
     public async Task InitAsync(Guid userId, CancellationToken cancellationToken)
     {
@@ -14,5 +16,8 @@ internal sealed class GameInitializationService(
 
         var createGameCalendarCommand = new CreateGameCalendarCommand(userId, gameId);
         await createGameCalendarCommandHandler.HandleAsync(createGameCalendarCommand, cancellationToken).ConfigureAwait(false);
+
+        var createGameSeasonCommand = new CreateGameSeasonCommand(userId, gameId);
+        await createGameSeasonCommandHandler.HandleAsync(createGameSeasonCommand, cancellationToken).ConfigureAwait(false);
     }
 }

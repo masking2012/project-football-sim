@@ -9,16 +9,16 @@ public sealed class GetGameSeasonsQueryHandler(SeasonsDbContext dbContext)
         GetGameSeasonsQuery query,
         CancellationToken cancellationToken)
     {
-        var seasons = await dbContext.GameSeasons
+        return await dbContext.GameSeasons
             .AsNoTracking()
             .Where(s => s.UserId == query.UserId && s.GameId ==  query.GameId)
             .Select(s => new GameSeasonDto(
                 Id: s.Id,
                 StartDate: s.StartDate,
                 EndDate: s.EndDate,
+                Order: s.Order,
                 IsCurrent: s.IsCurrent))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-        return seasons;
     }
 }

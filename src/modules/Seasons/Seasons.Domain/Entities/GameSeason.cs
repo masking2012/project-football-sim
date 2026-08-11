@@ -3,14 +3,14 @@ namespace ProjectFootballSim.Seasons.Domain.Entities;
 public sealed class GameSeason
 {
     public Guid Id { get; }
-    public Guid GameId { get; }
     public Guid UserId { get; }
+    public Guid GameId { get; }
     public DateTime StartDate { get; }
     public DateTime EndDate { get; }
     public int Order { get; }
     public bool IsCurrent { get; private set; }
 
-    public GameSeason(Guid gameId, Guid userId, DateTime startDate, DateTime endDate, int order)
+    public GameSeason(Guid userId, Guid gameId, DateTime startDate, DateTime endDate, int order)
     {
         if (endDate <= startDate)
             throw new ArgumentException("End date cannot be earlier than start date.");
@@ -19,8 +19,8 @@ public sealed class GameSeason
         ValidateDate(startDate);
         ValidateDate(endDate);
 
-        GameId = gameId;
         UserId = userId;
+        GameId = gameId;
         StartDate = startDate;
         EndDate = endDate;
         Order = order;
