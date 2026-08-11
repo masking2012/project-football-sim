@@ -49,7 +49,7 @@ public static class DependencyRegistrator
                             promotionPositions: leagueData.PromotionPositions,
                             promotionPlayOffPositions: leagueData.PromotionPlayOffPositions,
                             relegationPositions: leagueData.RelegationPositions,
-                            relegationPlayOffPositions: leagueData.PromotionPlayOffPositions,
+                            relegationPlayOffPositions: leagueData.RelegationPlayOffPositions,
                             uefaChampionsLeaguePositions: leagueData.UefaChampionsLeaguePositions,
                             uefaEuropaLeaguePositions: leagueData.UefaEuropaLeaguePositions,
                             uefaConferenceLeaguePositions: leagueData.UefaConferenceLeaguePositions));
@@ -62,7 +62,7 @@ public static class DependencyRegistrator
                         promotionPositions: leagueData.PromotionPositions,
                         promotionPlayOffPositions: leagueData.PromotionPlayOffPositions,
                         relegationPositions: leagueData.RelegationPositions,
-                        relegationPlayOffPositions: leagueData.PromotionPlayOffPositions,
+                        relegationPlayOffPositions: leagueData.RelegationPlayOffPositions,
                         uefaChampionsLeaguePositions: leagueData.UefaChampionsLeaguePositions,
                         uefaEuropaLeaguePositions: leagueData.UefaEuropaLeaguePositions,
                         uefaConferenceLeaguePositions: leagueData.UefaConferenceLeaguePositions);

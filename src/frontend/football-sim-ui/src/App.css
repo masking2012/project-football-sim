@@ -1267,10 +1267,43 @@
   border-radius: 50%;
 }
 
-.standings-row--leader .standings-rank {
+.standings-rank--champions-league,
+.standings-rank--europa-league,
+.standings-rank--conference-league,
+.standings-rank--relegation,
+.standings-rank--relegation-playoff,
+.standings-rank--promotion,
+.standings-rank--promotion-playoff {
   color: #081221;
-  background: #fbbf24;
   font-weight: 800;
+}
+
+.standings-rank--champions-league {
+  background: #3b82f6;
+}
+
+.standings-rank--europa-league {
+  background: #f97316;
+}
+
+.standings-rank--conference-league {
+  background: #22c55e;
+}
+
+.standings-rank--relegation {
+  background: #ef4444;
+}
+
+.standings-rank--relegation-playoff {
+  background: #fca5a5;
+}
+
+.standings-rank--promotion {
+  background: #a855f7;
+}
+
+.standings-rank--promotion-playoff {
+  background: #eab308;
 }
 
 .standings-points-column,
@@ -1283,6 +1316,47 @@
   padding: 0.9rem 1.4rem 1.1rem;
   color: #6685ae;
   font-size: 0.75rem;
+}
+
+.standings-qualification-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.1rem;
+  padding: 0 1.4rem 1.1rem;
+  color: #8ca6c9;
+  font-size: 0.75rem;
+}
+
+.standings-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.standings-legend-marker {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+}
+
+.standings-legend-marker--champions-league {
+  background: #3b82f6;
+}
+
+.standings-legend-marker--europa-league {
+  background: #f97316;
+}
+
+.standings-legend-marker--conference-league {
+  background: #22c55e;
+}
+
+.standings-legend-marker--relegation {
+  background: #ef4444;
+}
+
+.standings-legend-marker--relegation-playoff {
+  background: #fca5a5;
 }
 
 .fixtures-section {

@@ -44,6 +44,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.HasIndex("LeagueId");
 
+                    b.HasIndex("GameId", "UserId", "SeasonId", "LeagueId")
+                        .IsUnique();
+
                     b.ToTable("GameLeagues");
                 });
 

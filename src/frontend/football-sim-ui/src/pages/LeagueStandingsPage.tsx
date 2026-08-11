@@ -6,6 +6,7 @@ import {
   fetchLeagues,
   fetchSeasons,
   type LeagueFixtureDto,
+  type LeagueDto,
   type TeamStandingDto,
 } from '../api/footballApi';
 import { useAuth } from '../context/AuthContext';
@@ -18,6 +19,7 @@ export function LeagueStandingsPage() {
   const navigate = useNavigate();
   const [standings, setStandings] = useState<TeamStandingDto[]>([]);
   const [fixtures, setFixtures] = useState<LeagueFixtureDto[]>([]);
+  const [league, setLeague] = useState<LeagueDto | null>(null);
   const [leagueTitle, setLeagueTitle] = useState('League standings');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -55,6 +57,7 @@ export function LeagueStandingsPage() {
       const seasonStartYear = new Date(season.startDate).getUTCFullYear();
       const seasonEndYear = new Date(season.endDate).getUTCFullYear();
       setLeagueTitle(`${league.name} ${seasonStartYear}-${seasonEndYear}`);
+      setLeague(league);
       setStandings(loadedStandings);
       setFixtures(loadedFixtures);
     }
@@ -150,8 +153,12 @@ export function LeagueStandingsPage() {
               </thead>
               <tbody>
                 {sortedStandings.map((team) => (
-                  <tr key={team.teamId} className={team.position === 1 ? 'standings-row--leader' : undefined}>
-                    <td><span className="standings-rank">{team.position}</span></td>
+                  <tr key={team.teamId}>
+                    <td>
+                      <span className={`standings-rank ${getPositionMarkerClass(team.position, league)}`}>
+                        {team.position}
+                      </span>
+                    </td>
                     <th scope="row" className="standings-team-name">{team.name}</th>
                     <td>{team.wins + team.draws + team.losses}</td>
                     <td>{team.wins}</td>
@@ -167,6 +174,28 @@ export function LeagueStandingsPage() {
             </table>
           </div>
           <p className="standings-legend">P Played · W Wins · D Draws · L Losses · GF Goals for · GA Goals against · GD Goal difference · PTS Points</p>
+          <div className="standings-qualification-legend" aria-label="League position qualification markers">
+            <span className="standings-legend-item">
+              <span className="standings-legend-marker standings-legend-marker--champions-league" aria-hidden="true" />
+              Champions League
+            </span>
+            <span className="standings-legend-item">
+              <span className="standings-legend-marker standings-legend-marker--europa-league" aria-hidden="true" />
+              Europa League
+            </span>
+            <span className="standings-legend-item">
+              <span className="standings-legend-marker standings-legend-marker--conference-league" aria-hidden="true" />
+              Conference League
+            </span>
+            <span className="standings-legend-item">
+              <span className="standings-legend-marker standings-legend-marker--relegation-playoff" aria-hidden="true" />
+              Relegation Playoff
+            </span>
+            <span className="standings-legend-item">
+              <span className="standings-legend-marker standings-legend-marker--relegation" aria-hidden="true" />
+              Relegation
+            </span>
+          </div>
            <div className="fixtures-section">
              <div className="fixtures-heading">
                <div>
@@ -209,6 +238,18 @@ export function LeagueStandingsPage() {
       )}
     </main>
   );
+}
+
+function getPositionMarkerClass(position: number, league: LeagueDto | null): string {
+  if (!league) return '';
+  if (league.relegationPositions?.includes(position)) return 'standings-rank--relegation';
+  if (league.relegationPlayOffPositions?.includes(position)) return 'standings-rank--relegation-playoff';
+  if (league.uefaChampionsLeaguePositions?.includes(position)) return 'standings-rank--champions-league';
+  if (league.uefaEuropaLeaguePositions?.includes(position)) return 'standings-rank--europa-league';
+  if (league.uefaConferenceLeaguePositions?.includes(position)) return 'standings-rank--conference-league';
+  if (league.promotionPositions?.includes(position)) return 'standings-rank--promotion';
+  if (league.promotionPlayOffPositions?.includes(position)) return 'standings-rank--promotion-playoff';
+  return '';
 }
 
 function formatFixtureDate(date: string): string {

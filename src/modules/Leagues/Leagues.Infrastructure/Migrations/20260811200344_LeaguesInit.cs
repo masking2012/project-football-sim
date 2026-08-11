@@ -147,6 +147,12 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 column: "GameLeagueId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GameLeagues_GameId_UserId_SeasonId_LeagueId",
+                table: "GameLeagues",
+                columns: new[] { "GameId", "UserId", "SeasonId", "LeagueId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_GameLeagues_LeagueId",
                 table: "GameLeagues",
                 column: "LeagueId");

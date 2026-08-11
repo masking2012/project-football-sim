@@ -10,6 +10,14 @@ export interface LeagueDto {
   name: string;
   order: number;
   countryId: number;
+  teamsCount: number;
+  promotionPositions: number[] | null;
+  promotionPlayOffPositions: number[] | null;
+  relegationPositions: number[] | null;
+  relegationPlayOffPositions: number[] | null;
+  uefaChampionsLeaguePositions: number[] | null;
+  uefaEuropaLeaguePositions: number[] | null;
+  uefaConferenceLeaguePositions: number[] | null;
 }
 
 export interface TeamStandingDto {

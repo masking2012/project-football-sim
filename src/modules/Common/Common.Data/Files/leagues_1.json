@@ -8,7 +8,7 @@
         "promotionPositions": null,
         "promotionPlayOffPositions": null,
         "relegationPositions": [ 15, 16 ],
-        "relegationPlayOffPositions": [13, 14],
+        "relegationPlayOffPositions": [ 13, 14 ],
         "uefaChampionsLeaguePositions": [ 1 ],
         "uefaEuropaLeaguePositions": null,
         "uefaConferenceLeaguePositions": [ 2, 3 ]
