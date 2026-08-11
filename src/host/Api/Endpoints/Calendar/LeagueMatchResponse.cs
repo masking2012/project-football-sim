@@ -1,6 +1,6 @@
 namespace ProjectFootballSim.Api.Endpoints.Calendar;
 
-internal sealed record MatchEventResponse(
+internal sealed record LeagueMatchResponse(
     Guid Id,
     int HomeTeamId,
     string HomeTeamName,

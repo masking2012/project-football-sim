@@ -1,3 +1,6 @@
 namespace ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
 
-public sealed record CreateGameSeasonCommandResult(Guid Id, DateTime StartDate);
+public sealed record CreateGameSeasonCommandResult(
+    Guid Id,
+    DateTime StartDate,
+    DateTime EndDate);

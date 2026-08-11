@@ -70,7 +70,7 @@ export interface MatchResultResponse {
   winner: string;
 }
 
-export interface MatchEventDto {
+export interface LeagueMatchDto {
   id: string;
   homeTeamId: number;
   homeTeamName: string;
@@ -85,10 +85,10 @@ export interface MatchEventDto {
   countryName: string;
 }
 
-export interface DayDetailsResponse {
+export interface CalendarDayResponse {
   date: string;
-  dayState: 'NotStarted' | 'InProgress' | 'Completed';
-  matchEvents: MatchEventDto[];
+  dayStatus: 'NotStarted' | 'InProgress' | 'Completed';
+  matchEvents: LeagueMatchDto[];
 }
 
 export interface SimulateMatchRequest {
@@ -121,7 +121,7 @@ const teamsCache = new Map<string, TeamDto[]>();
 const standingsRequests = new Map<string, Promise<TeamStandingDto[]>>();
 const fixturesRequests = new Map<string, Promise<LeagueFixtureDto[]>>();
 const seasonsRequests = new Map<string, Promise<CurrentSeasonResponse[]>>();
-const gameEventsRequests = new Map<string, Promise<DayDetailsResponse>>();
+const calendarDayRequests = new Map<string, Promise<CalendarDayResponse>>();
 const seasonsCache = new Map<string, CurrentSeasonResponse[]>();
 let cacheGeneration = 0;
 
@@ -136,7 +136,7 @@ export function resetGameSessionCache(): void {
   standingsRequests.clear();
   fixturesRequests.clear();
   seasonsRequests.clear();
-  gameEventsRequests.clear();
+  calendarDayRequests.clear();
   seasonsCache.clear();
 }
 
@@ -170,31 +170,31 @@ function clearLeaguesRequest(request: Promise<LeagueDto[]>) {
   }
 }
 
-export async function fetchGameEvents(gameId: string): Promise<DayDetailsResponse> {
-  const existingRequest = gameEventsRequests.get(gameId);
+export async function fetchCalendarDay(gameId: string): Promise<CalendarDayResponse> {
+  const existingRequest = calendarDayRequests.get(gameId);
   if (existingRequest) {
     return existingRequest;
   }
 
   const request = (async () => {
-    const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/events`, { headers: authHeaders() });
-    return handleResponse<DayDetailsResponse>(res);
+    const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/day`, { headers: authHeaders() });
+    return handleResponse<CalendarDayResponse>(res);
   })();
-  gameEventsRequests.set(gameId, request);
+  calendarDayRequests.set(gameId, request);
   request.then(
-    () => clearGameEventsRequest(gameId, request),
-    () => clearGameEventsRequest(gameId, request),
+    () => clearCalendarDayRequest(gameId, request),
+    () => clearCalendarDayRequest(gameId, request),
   );
   return request;
 }
 
-function clearGameEventsRequest(gameId: string, request: Promise<DayDetailsResponse>) {
-  if (gameEventsRequests.get(gameId) === request) {
-    gameEventsRequests.delete(gameId);
+function clearCalendarDayRequest(gameId: string, request: Promise<CalendarDayResponse>) {
+  if (calendarDayRequests.get(gameId) === request) {
+    calendarDayRequests.delete(gameId);
   }
 }
 
-export async function simulateGameDay(gameId: string): Promise<void> {
+export async function simulateCalendarDay(gameId: string): Promise<void> {
   const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/simulate`, {
     method: 'POST',
     headers: authHeaders(),
@@ -202,7 +202,7 @@ export async function simulateGameDay(gameId: string): Promise<void> {
   await handleVoidResponse(res);
 }
 
-export async function proceedCalendar(gameId: string): Promise<void> {
+export async function advanceCalendarDay(gameId: string): Promise<void> {
   const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/proceed`, {
     method: 'POST',
     headers: authHeaders(),
@@ -407,20 +407,6 @@ export async function fetchSeasons(gameId: string): Promise<CurrentSeasonRespons
 function clearSeasonsRequest(gameId: string, request: Promise<CurrentSeasonResponse[]>) {
   if (seasonsRequests.get(gameId) === request) {
     seasonsRequests.delete(gameId);
-  }
-}
-
-export async function createSeason(gameId: string): Promise<void> {
-  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/seasons`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...authHeaders() },
-  });
-  if (res.status === 401) {
-    throw new Error('SESSION_EXPIRED');
-  }
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `HTTP ${res.status}`);
   }
 }
 

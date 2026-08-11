@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { createGame, createSeason, fetchGameSaves, resetGameSessionCache, saveGame, type GameSave } from '../api/footballApi';
+import { createGame, fetchGameSaves, resetGameSessionCache, saveGame, type GameSave } from '../api/footballApi';
 import { useAuth } from './AuthContext';
 import { useSeason } from './SeasonContext';
 
@@ -58,7 +58,6 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
     setError(null);
     try {
       const newGameId = await createGame();
-      await createSeason(newGameId);
       selectGame(newGameId);
       return newGameId;
     } catch (error) {

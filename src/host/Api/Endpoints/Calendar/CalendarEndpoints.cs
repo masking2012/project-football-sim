@@ -13,7 +13,7 @@ internal static class CalendarEndpoints
 {
     public static void MapCalendarEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/games/{gameId}/events", async (
+        app.MapGet("/api/games/{gameId}/calendar/day", async (
             [FromRoute] Guid gameId,
             GetCalendarDayQueryHandler getCalendarDayQueryHandler,
             GetCountriesQueryHandler getCountriesQueryHandler,
@@ -32,10 +32,10 @@ internal static class CalendarEndpoints
                 .HandleAsync(result.LeagueMatches.SelectMany(x => new[] { x.HomeTeamId, x.AwayTeamId }).Distinct().ToList(), cancellationToken)
                 .ConfigureAwait(false);
 
-            return Results.Ok(new DayDetailsResponse(
+            return Results.Ok(new CalendarDayResponse(
                 Date: result.Date,
-                DayState: result.DayStatus,
-                MatchEvents: result.LeagueMatches.Select(x => new MatchEventResponse(
+                DayStatus: result.DayStatus,
+                MatchEvents: result.LeagueMatches.Select(x => new LeagueMatchResponse(
                     Id: x.Id,
                     HomeTeamId: x.HomeTeamId,
                     HomeTeamName: teams[x.HomeTeamId].Name,
@@ -54,7 +54,7 @@ internal static class CalendarEndpoints
 
         app.MapPost("/api/games/{gameId}/calendar/simulate", async (
             [FromRoute] Guid gameId,
-            SimulateCalendarDayCommandHandler simulateGameDayCommandHandler,
+            SimulateCalendarDayCommandHandler simulateCalendarDayCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -62,9 +62,9 @@ internal static class CalendarEndpoints
                 return Results.Unauthorized();
 
             var command = new SimulateCalendarDayCommand(UserId: userId, GameId: gameId);
-            await simulateGameDayCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
+            await simulateCalendarDayCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
 
-            return Results.Ok();
+            return Results.NoContent();
         }).RequireAuthorization();
 
         app.MapPost("/api/games/{gameId}/calendar/proceed", async (
@@ -79,7 +79,7 @@ internal static class CalendarEndpoints
             var command = new AdvanceCalendarDayCommand(UserId: userId, GameId: gameId);
             await advanceCalendarDayCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
 
-            return Results.Ok();
+            return Results.NoContent();
         }).RequireAuthorization();
     }
 }

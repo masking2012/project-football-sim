@@ -20,9 +20,9 @@ export function SeasonInfo() {
     day: 'numeric',
     year: 'numeric',
   });
-  const currentDayState = currentDay?.dayState === 'NotStarted' && currentDay.matchEvents.length === 0
+  const currentDayStatus = currentDay?.dayStatus === 'NotStarted' && currentDay.matchEvents.length === 0
     ? 'Completed'
-    : currentDay?.dayState;
+    : currentDay?.dayStatus;
   const currentDayDate = currentDay
     ? new Date(currentDay.date).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -36,7 +36,7 @@ export function SeasonInfo() {
     <div className="season-info">
       <span className="season-info-label">Current day:</span>
       <span className="season-info-current-day">{currentDayDate}</span>
-      {currentDayState && <span className={`day-state day-state--${currentDayState.toLowerCase()}`}>{currentDayState}</span>}
+      {currentDayStatus && <span className={`day-state day-state--${currentDayStatus.toLowerCase()}`}>{currentDayStatus}</span>}
       <span className="season-info-season-range">({startDate} - {endDate})</span>
     </div>
   );

@@ -14,9 +14,10 @@ public sealed class GameSeason
     {
         if (endDate <= startDate)
             throw new ArgumentException("End date cannot be earlier than start date.");
-
         if (order < 1)
             throw new ArgumentException("Order must be a positive integer.");
+        ValidateDate(startDate);
+        ValidateDate(endDate);
 
         GameId = gameId;
         UserId = userId;
@@ -32,5 +33,11 @@ public sealed class GameSeason
             throw new InvalidOperationException("Cannot end a season that is not current.");
 
         IsCurrent = false;
+    }
+
+    private static void ValidateDate(DateTime date)
+    {
+        if (date.Hour != 0 || date.Minute != 0 || date.Second != 0 || date.Millisecond != 0)
+            throw new ArgumentException("Date must be at midnight (00:00:00).");
     }
 }

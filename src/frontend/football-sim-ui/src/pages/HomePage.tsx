@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchGameEvents, proceedCalendar, simulateGameDay } from '../api/footballApi';
-import type { DayDetailsResponse, MatchEventDto } from '../api/footballApi';
+import { advanceCalendarDay, fetchCalendarDay, simulateCalendarDay } from '../api/footballApi';
+import type { CalendarDayResponse, LeagueMatchDto } from '../api/footballApi';
 import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
 import { useSeason } from '../context/SeasonContext';
 
-function MatchEvent({ event }: { event: MatchEventDto }) {
+function MatchEvent({ event }: { event: LeagueMatchDto }) {
   return (
     <div className="fixture today-fixture">
       <div className="fixture-teams">
@@ -28,22 +28,22 @@ export function HomePage() {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const { setCurrentDay } = useSeason();
-  const [day, setDay] = useState<DayDetailsResponse | null>(null);
+  const [day, setDay] = useState<CalendarDayResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActing, setIsActing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const effectiveDayState = day?.dayState === 'NotStarted' && day.matchEvents.length === 0
+  const effectiveDayStatus = day?.dayStatus === 'NotStarted' && day.matchEvents.length === 0
     ? 'Completed'
-    : day?.dayState;
-  const matchesByLeague = new Map<string, { countryName: string; leagueName: string; rounds: Map<number, MatchEventDto[]> }>();
+    : day?.dayStatus;
+  const matchesByLeague = new Map<string, { countryName: string; leagueName: string; rounds: Map<number, LeagueMatchDto[]> }>();
   for (const event of [...(day?.matchEvents ?? [])].sort((left, right) =>
     left.leagueName.localeCompare(right.leagueName) || left.round - right.round || left.id.localeCompare(right.id))) {
     const leagueKey = `${event.countryId}:${event.leagueId}`;
     const league = matchesByLeague.get(leagueKey) ?? {
       countryName: event.countryName,
       leagueName: event.leagueName,
-      rounds: new Map<number, MatchEventDto[]>(),
+      rounds: new Map<number, LeagueMatchDto[]>(),
     };
     const roundEvents = league.rounds.get(event.round) ?? [];
     roundEvents.push(event);
@@ -71,7 +71,7 @@ export function HomePage() {
     setIsLoading(true);
     setError(null);
     try {
-      const loadedDay = await fetchGameEvents(gameId);
+      const loadedDay = await fetchCalendarDay(gameId);
       setDay(loadedDay);
       setCurrentDay(loadedDay);
     } catch (err) {
@@ -91,10 +91,10 @@ export function HomePage() {
     setIsActing(true);
     setError(null);
     try {
-      if (effectiveDayState === 'NotStarted') {
-        await simulateGameDay(gameId);
-      } else if (effectiveDayState === 'Completed') {
-        await proceedCalendar(gameId);
+      if (effectiveDayStatus === 'NotStarted') {
+        await simulateCalendarDay(gameId);
+      } else if (effectiveDayStatus === 'Completed') {
+        await advanceCalendarDay(gameId);
       }
       await loadDay();
     } catch (err) {
@@ -150,9 +150,9 @@ export function HomePage() {
             <p className="home-message">There are no matches scheduled for today.</p>
           )}
 
-          {effectiveDayState !== 'InProgress' && (
+          {effectiveDayStatus !== 'InProgress' && (
             <button type="button" className="start-btn day-action-btn" onClick={handleDayAction} disabled={isActing}>
-              {isActing ? '⏳ Updating day...' : effectiveDayState === 'NotStarted' ? '▶ Simulate day' : '▶ Proceed to next day'}
+              {isActing ? '⏳ Updating day...' : effectiveDayStatus === 'NotStarted' ? '▶ Simulate day' : '▶ Proceed to next day'}
             </button>
           )}
         </div>
