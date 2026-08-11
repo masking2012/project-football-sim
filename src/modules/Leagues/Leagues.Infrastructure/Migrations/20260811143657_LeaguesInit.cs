@@ -18,7 +18,15 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false)
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    TeamsCount = table.Column<int>(type: "int", nullable: false),
+                    PromotionPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PromotionPlayOffPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RelegationPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RelegationPlayOffPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaChampionsLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaEuropaLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaConferenceLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {

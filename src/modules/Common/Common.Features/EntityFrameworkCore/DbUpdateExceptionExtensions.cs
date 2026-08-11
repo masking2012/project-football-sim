@@ -1,9 +1,9 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProjectFootballSim.Common.Features;
+namespace ProjectFootballSim.Common.Features.EntityFrameworkCore;
 
-public static class EfCoreExtensions
+public static class DbUpdateExceptionExtensions
 {
     public static bool IsUniqueViolation(this DbUpdateException ex)
     {

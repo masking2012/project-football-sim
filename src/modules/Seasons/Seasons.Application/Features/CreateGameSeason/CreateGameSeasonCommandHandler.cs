@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectFootballSim.Common.Data.Entities.Seasons;
-using ProjectFootballSim.Common.Features;
+using ProjectFootballSim.Common.Features.EntityFrameworkCore;
 using ProjectFootballSim.Seasons.Domain.Entities;
 using ProjectFootballSim.Seasons.Infrastructure.Database;
 

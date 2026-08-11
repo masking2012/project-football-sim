@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20260806125209_LeaguesInit")]
+    [Migration("20260811143657_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
@@ -147,6 +147,30 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
+
+                    b.Property<string>("PromotionPlayOffPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PromotionPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RelegationPlayOffPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RelegationPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeamsCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UefaChampionsLeaguePositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UefaConferenceLeaguePositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UefaEuropaLeaguePositions")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

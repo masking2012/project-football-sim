@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Infrastructure.Database;
 using ProjectFootballSim.Common.Data.Entities.Seasons;
-using ProjectFootballSim.Common.Features;
+using ProjectFootballSim.Common.Features.EntityFrameworkCore;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 
