@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Seasons.Domain.Entities;
+namespace ProjectFootballSim.Calendar.Domain.Entities;
 
 public sealed class GameSeason
 {

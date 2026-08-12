@@ -40,6 +40,38 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
 
                     b.ToTable("GameCalendars");
                 });
+
+            modelBuilder.Entity("ProjectFootballSim.Calendar.Domain.Entities.GameSeason", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsCurrent")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GameId", "UserId", "Order")
+                        .IsUnique();
+
+                    b.ToTable("GameSeasons");
+                });
 #pragma warning restore 612, 618
         }
     }

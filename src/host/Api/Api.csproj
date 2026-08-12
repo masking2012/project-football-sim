@@ -20,8 +20,6 @@
     <ProjectReference Include="..\..\modules\Locations\Locations.Application\Locations.Application.csproj" />
     <ProjectReference Include="..\..\modules\Locations\Locations.Infrastructure\Locations.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Matches\Matches.Application\Matches.Application.csproj" />
-    <ProjectReference Include="..\..\modules\Seasons\Seasons.Application\Seasons.Application.csproj" />
-    <ProjectReference Include="..\..\modules\Seasons\Seasons.Infrastructure\Seasons.Infrastructure.csproj" />
     <ProjectReference Include="..\..\modules\Teams\Teams.Application\Teams.Application.csproj" />
     <ProjectReference Include="..\..\modules\Teams\Teams.Infrastructure\Teams.Infrastructure.csproj" />
   </ItemGroup>

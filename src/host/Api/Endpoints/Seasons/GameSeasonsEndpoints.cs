@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
+using ProjectFootballSim.Api.Endpoints.Calendar;
 using ProjectFootballSim.Api.Extensions;
+using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
+using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
-using ProjectFootballSim.Seasons.Application.Features.CreateGameSeason;
-using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Seasons;
 
-internal static class SeasonsEndpoints
+internal static class GameSeasonsEndpoints
 {
     public static void MapGameSeasonsEndpoints(this WebApplication app)
     {
@@ -35,7 +36,9 @@ internal static class SeasonsEndpoints
                     LeagueId: leagueDto.Id,
                     GameId: gameId,
                     UserId: userId,
-                    SeasonId: result.Id);
+                    SeasonId: result.Id,
+                    SeasonStartDate: default,
+                    PreviousSeasonId: null);
                 await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
             }
 
@@ -52,10 +55,10 @@ internal static class SeasonsEndpoints
                 return Results.Unauthorized();
 
             var query = new GetGameSeasonsQuery(GameId: gameId, UserId: userId);
-            var playerSeasons = await queryHandler.HandleAsync(query, cancellationToken).ConfigureAwait(false);
+            var gameSeasons = await queryHandler.HandleAsync(query, cancellationToken).ConfigureAwait(false);
 
             return Results.Ok(
-                playerSeasons
+                gameSeasons
                     .Select(s => new GameSeasonItemResponse(Id: s.Id, StartDate: s.StartDate, EndDate: s.EndDate, IsCurrent: s.IsCurrent)));
         }).RequireAuthorization();
     }

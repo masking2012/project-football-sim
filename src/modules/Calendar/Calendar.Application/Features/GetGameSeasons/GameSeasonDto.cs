@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
+namespace ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
 
 public record class GameSeasonDto(
     Guid Id,

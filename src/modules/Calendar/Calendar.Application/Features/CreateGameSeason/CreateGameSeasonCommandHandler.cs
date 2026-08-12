@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProjectFootballSim.Calendar.Domain.Entities;
+using ProjectFootballSim.Calendar.Infrastructure.Database;
 using ProjectFootballSim.Common.Data.Entities.Seasons;
 using ProjectFootballSim.Common.Features.EntityFrameworkCore;
-using ProjectFootballSim.Seasons.Domain.Entities;
-using ProjectFootballSim.Seasons.Infrastructure.Database;
 
-namespace ProjectFootballSim.Seasons.Application.Features.CreateGameSeason;
+namespace ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 
 public sealed class CreateGameSeasonCommandHandler(
     ILogger<CreateGameSeasonCommandHandler> logger,
-    SeasonsDbContext dbContext)
+    CalendarDbContext dbContext)
 {
     public async Task<CreateGameSeasonCommandResult> HandleAsync(
         CreateGameSeasonCommand command,
@@ -55,7 +55,7 @@ public sealed class CreateGameSeasonCommandHandler(
             await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
             Log.GameSeasonCreated(logger, newSeason.Id, newSeason.UserId, newSeason.GameId);
         }
-        catch(DbUpdateException ex) when (ex.IsUniqueViolation())
+        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
         {
             Log.GameSeasonExists(logger, newSeason.UserId, newSeason.GameId, newSeason.Order, ex);
             throw;

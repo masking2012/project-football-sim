@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Seasons.Application.Features.CreateGameSeason;
+namespace ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 
 public sealed record CreateGameSeasonCommand(
     Guid UserId,
