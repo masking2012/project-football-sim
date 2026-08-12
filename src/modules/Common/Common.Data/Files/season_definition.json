@@ -1,5 +1,7 @@
 {
-    "startYear": 2026,
-    "startMonth": 7,
-    "startDay": 1
+    "firstSeasonYear": 2026,
+    "startSeasonMonth": 7,
+    "startSeasonDay": 1,
+    "endSeasonMonth": 6,
+    "endSeasonDay": 30
 }

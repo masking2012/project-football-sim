@@ -1,18 +1,20 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ProjectFootballSim.Common.Data.Entities.Seasons;
+using ProjectFootballSim.Common.Features.EntityFrameworkCore;
 using ProjectFootballSim.Seasons.Domain.Entities;
 using ProjectFootballSim.Seasons.Infrastructure.Database;
 
-namespace ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
+namespace ProjectFootballSim.Seasons.Application.Features.CreateGameSeason;
 
-public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
+public sealed class CreateGameSeasonCommandHandler(
+    ILogger<CreateGameSeasonCommandHandler> logger,
+    SeasonsDbContext dbContext)
 {
     public async Task<CreateGameSeasonCommandResult> HandleAsync(
         CreateGameSeasonCommand command,
         CancellationToken cancellationToken)
     {
-        //TODO: add validation for current season, if it exists, and the new season's start date
-
         GameSeason? lastSeason = await dbContext.GameSeasons
             .Where(s => s.UserId == command.UserId && s.GameId == command.GameId && s.IsCurrent)
             .SingleOrDefaultAsync(cancellationToken).ConfigureAwait(false);
@@ -21,12 +23,12 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
         if (lastSeason is null)
         {
             var seasonDefinition = SeasonsDataProvider.GetSeasonDefinition();
-            DateTime startDate = new DateTime(seasonDefinition.StartYear, seasonDefinition.StartMonth, seasonDefinition.StartDay);
+            DateTime startDate = new DateTime(seasonDefinition.FirstSeasonYear, seasonDefinition.StartSeasonMonth, seasonDefinition.StartSeasonDay);
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             newSeason = new GameSeason(
-                gameId: command.GameId,
                 userId: command.UserId,
+                gameId: command.GameId,
                 startDate: startDate,
                 endDate: endDate,
                 order: 1);
@@ -40,15 +42,25 @@ public sealed class CreateGameSeasonCommandHandler(SeasonsDbContext dbContext)
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
 
             newSeason = new GameSeason(
-                gameId: command.GameId,
                 userId: command.UserId,
+                gameId: command.GameId,
                 startDate: startDate,
                 endDate: endDate,
                 order: lastSeason.Order + 1);
             dbContext.GameSeasons.Add(newSeason);
         }
 
-        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-        return new CreateGameSeasonCommandResult(newSeason.Id, newSeason.StartDate);
+        try
+        {
+            await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            Log.GameSeasonCreated(logger, newSeason.Id, newSeason.UserId, newSeason.GameId);
+        }
+        catch(DbUpdateException ex) when (ex.IsUniqueViolation())
+        {
+            Log.GameSeasonExists(logger, newSeason.UserId, newSeason.GameId, newSeason.Order, ex);
+            throw;
+        }
+
+        return new CreateGameSeasonCommandResult(newSeason.Id, newSeason.StartDate, newSeason.EndDate);
     }
 }

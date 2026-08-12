@@ -18,7 +18,15 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
-                    CountryId = table.Column<int>(type: "int", nullable: false)
+                    CountryId = table.Column<int>(type: "int", nullable: false),
+                    TeamsCount = table.Column<int>(type: "int", nullable: false),
+                    PromotionPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PromotionPlayOffPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RelegationPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RelegationPlayOffPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaChampionsLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaEuropaLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaConferenceLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -137,6 +145,12 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 name: "IX_GameLeagueMatches_GameLeagueId",
                 table: "GameLeagueMatches",
                 column: "GameLeagueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameLeagues_GameId_UserId_SeasonId_LeagueId",
+                table: "GameLeagues",
+                columns: new[] { "GameId", "UserId", "SeasonId", "LeagueId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_GameLeagues_LeagueId",

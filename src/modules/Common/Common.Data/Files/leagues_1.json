@@ -1,8 +1,16 @@
 [
-  {
-    "id": 101,
-    "name": "Premier League",
-    "order": 1,
-    "countryId": 1
-  }
+    {
+        "id": 101,
+        "name": "Premier League",
+        "order": 1,
+        "countryId": 1,
+        "teamsCount": 16,
+        "promotionPositions": null,
+        "promotionPlayOffPositions": null,
+        "relegationPositions": [ 15, 16 ],
+        "relegationPlayOffPositions": [ 13, 14 ],
+        "uefaChampionsLeaguePositions": [ 1 ],
+        "uefaEuropaLeaguePositions": null,
+        "uefaConferenceLeaguePositions": [ 2, 3 ]
+    }
 ]

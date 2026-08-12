@@ -1,6 +1,6 @@
-namespace ProjectFootballSim.Calendar.Application.Features.GetEventsByDate;
+namespace ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
 
-public sealed record MatchEventDto(
+public sealed record LeagueMatchDto(
     Guid Id,
     int HomeTeamId,
     int AwayTeamId,

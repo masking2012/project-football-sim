@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectFootballSim.Leagues.Application.Common.Models;
+using ProjectFootballSim.Leagues.Application.Common.Services;
 using ProjectFootballSim.Leagues.Domain.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
@@ -6,24 +8,28 @@ using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
 namespace ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 
 public sealed class CreateGameLeagueCommandHandler(
+    ILeaguesCatalog leaguesCatalog,
     LeaguesDbContext dbContext,
     GetGameSeasonsQueryHandler getGameSeasonsQueryHandler,
     LeagueFixtureGenerator leagueFixtureGenerator)
 {
     public async Task HandleAsync(CreateGameLeagueCommand command, CancellationToken cancellationToken)
     {
-        var league = await dbContext.Leagues
-            .FirstOrDefaultAsync(l => l.Id == command.LeagueId, cancellationToken)
-            .ConfigureAwait(false);
+        LeagueDto? league = await leaguesCatalog.GetByIdAsync(command.LeagueId, cancellationToken).ConfigureAwait(false);
         if (league is null)
             throw new InvalidOperationException($"League with ID '{command.LeagueId}' not found.");
+
+        //TODO: add logic for second and subsequent seasons
 
         List<int> teamIds = await dbContext.LeagueTeams
             .Where(lt => lt.LeagueId == command.LeagueId)
             .Select(lt => lt.TeamId)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
-            
+
+        if (teamIds.Count != league.TeamsCount)
+            throw new InvalidOperationException($"League with ID '{command.LeagueId}' has {league.TeamsCount} teams, but {teamIds.Count} teams were found in the database.");
+
         var gameLeague = new GameLeague
         (
             gameId: command.GameId,

@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Seasons.Application.Features.CreatePlayerSeason;
+using ProjectFootballSim.Seasons.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
 
 namespace ProjectFootballSim.Seasons.Application;

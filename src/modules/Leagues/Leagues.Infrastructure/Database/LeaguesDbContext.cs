@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectFootballSim.Common.Features.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Domain.Entities;
 using ProjectFootballSim.Leagues.Domain.ValueObjects;
 
@@ -27,6 +28,15 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.Name).IsRequired();
             entity.Property(x => x.Order).IsRequired();
             entity.Property(x => x.CountryId).IsRequired();
+            entity.Property(x => x.TeamsCount).IsRequired();
+
+            entity.Property(x => x.PromotionPositions).UseJsonCollection();
+            entity.Property(x => x.PromotionPlayOffPositions).UseJsonCollection();
+            entity.Property(x => x.RelegationPositions).UseJsonCollection();
+            entity.Property(x => x.RelegationPlayOffPositions).UseJsonCollection();
+            entity.Property(x => x.UefaChampionsLeaguePositions).UseJsonCollection();
+            entity.Property(x => x.UefaEuropaLeaguePositions).UseJsonCollection();
+            entity.Property(x => x.UefaConferenceLeaguePositions).UseJsonCollection();
         });
 
         modelBuilder.Entity<LeagueTeam>(entity =>
@@ -63,13 +73,14 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
                 .WithMany()
                 .HasForeignKey(x => x.LeagueId)
                 .IsRequired();
-        });
 
-        modelBuilder.Entity<GameLeague>()
-            .HasMany(e => e.GameLeagueMatches)
-            .WithOne(e => e.GameLeague)
-            .HasForeignKey(e => e.GameLeagueId)
-            .IsRequired();
+            entity.HasMany(e => e.GameLeagueMatches)
+                .WithOne(e => e.GameLeague)
+                .HasForeignKey(e => e.GameLeagueId)
+                .IsRequired();
+
+            entity.HasIndex(x => new { x.GameId, x.UserId, x.SeasonId, x.LeagueId }).IsUnique();
+        });            
 
         modelBuilder.Entity<GameLeagueTeam>(entity =>
         {

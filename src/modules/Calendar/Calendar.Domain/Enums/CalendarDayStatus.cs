@@ -1,6 +1,6 @@
 namespace ProjectFootballSim.Calendar.Domain.Enums;
 
-public enum DayState
+public enum CalendarDayStatus
 {
     NotStarted = 0,
     InProgress = 1,

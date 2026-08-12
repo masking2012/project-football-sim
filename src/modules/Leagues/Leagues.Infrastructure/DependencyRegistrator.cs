@@ -31,7 +31,7 @@ public static class DependencyRegistrator
     private static void SeedWithPredefinedValues(DbContext context, bool storeManagementOpetationWasPerformed)
     {
         var countries = LocationsDataProvider.GetCountries()
-            .Where(x => x.Id == 1); //TODO: temporary filter for testing purposes
+            .Where(c => c.Id == 1); //TODO: temporary filter for testing purposes, remove this line when ready to seed all countries
 
         foreach (var countryData in countries)
         {
@@ -44,12 +44,28 @@ public static class DependencyRegistrator
                             id: leagueData.Id,
                             name: leagueData.Name,
                             order: leagueData.Order,
-                            countryId: leagueData.CountryId));
+                            countryId: leagueData.CountryId,
+                            teamsCount: leagueData.TeamsCount,
+                            promotionPositions: leagueData.PromotionPositions,
+                            promotionPlayOffPositions: leagueData.PromotionPlayOffPositions,
+                            relegationPositions: leagueData.RelegationPositions,
+                            relegationPlayOffPositions: leagueData.RelegationPlayOffPositions,
+                            uefaChampionsLeaguePositions: leagueData.UefaChampionsLeaguePositions,
+                            uefaEuropaLeaguePositions: leagueData.UefaEuropaLeaguePositions,
+                            uefaConferenceLeaguePositions: leagueData.UefaConferenceLeaguePositions));
                 else
                     league.Update(
                         name: leagueData.Name,
                         order: leagueData.Order,
-                        countryId: leagueData.CountryId);
+                        countryId: leagueData.CountryId,
+                        teamsCount: leagueData.TeamsCount,
+                        promotionPositions: leagueData.PromotionPositions,
+                        promotionPlayOffPositions: leagueData.PromotionPlayOffPositions,
+                        relegationPositions: leagueData.RelegationPositions,
+                        relegationPlayOffPositions: leagueData.RelegationPlayOffPositions,
+                        uefaChampionsLeaguePositions: leagueData.UefaChampionsLeaguePositions,
+                        uefaEuropaLeaguePositions: leagueData.UefaEuropaLeaguePositions,
+                        uefaConferenceLeaguePositions: leagueData.UefaConferenceLeaguePositions);
 
                 foreach(var leagueTeamData in LeaguesDataProvider.GetLeagueTeamsByCountryId(countryData.Id))
                 {

@@ -10,6 +10,14 @@ export interface LeagueDto {
   name: string;
   order: number;
   countryId: number;
+  teamsCount: number;
+  promotionPositions: number[] | null;
+  promotionPlayOffPositions: number[] | null;
+  relegationPositions: number[] | null;
+  relegationPlayOffPositions: number[] | null;
+  uefaChampionsLeaguePositions: number[] | null;
+  uefaEuropaLeaguePositions: number[] | null;
+  uefaConferenceLeaguePositions: number[] | null;
 }
 
 export interface TeamStandingDto {
@@ -43,6 +51,11 @@ export interface GameSave {
   createdAtUtc: string;
 }
 
+export interface CreateGameResponse {
+  gameId: string;
+  firstSeasonId: string;
+}
+
 export interface TeamDto {
   id: string;
   name: string;
@@ -66,7 +79,7 @@ export interface MatchResultResponse {
   winner: string;
 }
 
-export interface MatchEventDto {
+export interface LeagueMatchDto {
   id: string;
   homeTeamId: number;
   homeTeamName: string;
@@ -81,10 +94,10 @@ export interface MatchEventDto {
   countryName: string;
 }
 
-export interface DayDetailsResponse {
+export interface CalendarDayResponse {
   date: string;
-  dayState: 'NotStarted' | 'InProgress' | 'Completed';
-  matchEvents: MatchEventDto[];
+  dayStatus: 'NotStarted' | 'InProgress' | 'Completed';
+  matchEvents: LeagueMatchDto[];
 }
 
 export interface SimulateMatchRequest {
@@ -117,7 +130,7 @@ const teamsCache = new Map<string, TeamDto[]>();
 const standingsRequests = new Map<string, Promise<TeamStandingDto[]>>();
 const fixturesRequests = new Map<string, Promise<LeagueFixtureDto[]>>();
 const seasonsRequests = new Map<string, Promise<CurrentSeasonResponse[]>>();
-const gameEventsRequests = new Map<string, Promise<DayDetailsResponse>>();
+const calendarDayRequests = new Map<string, Promise<CalendarDayResponse>>();
 const seasonsCache = new Map<string, CurrentSeasonResponse[]>();
 let cacheGeneration = 0;
 
@@ -132,7 +145,7 @@ export function resetGameSessionCache(): void {
   standingsRequests.clear();
   fixturesRequests.clear();
   seasonsRequests.clear();
-  gameEventsRequests.clear();
+  calendarDayRequests.clear();
   seasonsCache.clear();
 }
 
@@ -166,31 +179,31 @@ function clearLeaguesRequest(request: Promise<LeagueDto[]>) {
   }
 }
 
-export async function fetchGameEvents(gameId: string): Promise<DayDetailsResponse> {
-  const existingRequest = gameEventsRequests.get(gameId);
+export async function fetchCalendarDay(gameId: string): Promise<CalendarDayResponse> {
+  const existingRequest = calendarDayRequests.get(gameId);
   if (existingRequest) {
     return existingRequest;
   }
 
   const request = (async () => {
-    const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/events`, { headers: authHeaders() });
-    return handleResponse<DayDetailsResponse>(res);
+    const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/day`, { headers: authHeaders() });
+    return handleResponse<CalendarDayResponse>(res);
   })();
-  gameEventsRequests.set(gameId, request);
+  calendarDayRequests.set(gameId, request);
   request.then(
-    () => clearGameEventsRequest(gameId, request),
-    () => clearGameEventsRequest(gameId, request),
+    () => clearCalendarDayRequest(gameId, request),
+    () => clearCalendarDayRequest(gameId, request),
   );
   return request;
 }
 
-function clearGameEventsRequest(gameId: string, request: Promise<DayDetailsResponse>) {
-  if (gameEventsRequests.get(gameId) === request) {
-    gameEventsRequests.delete(gameId);
+function clearCalendarDayRequest(gameId: string, request: Promise<CalendarDayResponse>) {
+  if (calendarDayRequests.get(gameId) === request) {
+    calendarDayRequests.delete(gameId);
   }
 }
 
-export async function simulateGameDay(gameId: string): Promise<void> {
+export async function simulateCalendarDay(gameId: string): Promise<void> {
   const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/simulate`, {
     method: 'POST',
     headers: authHeaders(),
@@ -198,7 +211,7 @@ export async function simulateGameDay(gameId: string): Promise<void> {
   await handleVoidResponse(res);
 }
 
-export async function proceedCalendar(gameId: string): Promise<void> {
+export async function advanceCalendarDay(gameId: string): Promise<void> {
   const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/calendar/proceed`, {
     method: 'POST',
     headers: authHeaders(),
@@ -406,10 +419,10 @@ function clearSeasonsRequest(gameId: string, request: Promise<CurrentSeasonRespo
   }
 }
 
-export async function createSeason(gameId: string): Promise<void> {
-  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/seasons`, {
+export async function createGame(): Promise<string> {
+  const res = await fetch(`${BASE}/games`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...authHeaders() },
+    headers: authHeaders(),
   });
   if (res.status === 401) {
     throw new Error('SESSION_EXPIRED');
@@ -418,6 +431,9 @@ export async function createSeason(gameId: string): Promise<void> {
     const text = await res.text();
     throw new Error(text || `HTTP ${res.status}`);
   }
+
+  const response = await handleResponse<CreateGameResponse>(res);
+  return response.gameId;
 }
 
 export async function fetchGameSaves(): Promise<GameSave[]> {
@@ -426,17 +442,11 @@ export async function fetchGameSaves(): Promise<GameSave[]> {
 }
 
 export async function saveGame(gameId: string, slotId: number, name: string): Promise<void> {
-  const res = await fetch(`${BASE}/games`, {
+  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/save`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
-    body: JSON.stringify({ gameId, slotId, name }),
+    body: JSON.stringify({ slotId, name }),
   });
-  if (res.status === 401) {
-    throw new Error('SESSION_EXPIRED');
-  }
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `HTTP ${res.status}`);
-  }
+  await handleVoidResponse(res);
 }
 

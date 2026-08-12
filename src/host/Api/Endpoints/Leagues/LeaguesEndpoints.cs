@@ -16,7 +16,15 @@ internal static class LeaguesEndpoints
                 Id: l.Id,
                 Name: l.Name,
                 Order: l.Order,
-                CountryId: l.CountryId)));
+                CountryId: l.CountryId,
+                TeamsCount: l.TeamsCount,
+                PromotionPositions: l.PromotionPositions,
+                PromotionPlayOffPositions: l.PromotionPlayOffPositions,
+                RelegationPositions: l.RelegationPositions,
+                RelegationPlayOffPositions: l.RelegationPlayOffPositions,
+                UefaChampionsLeaguePositions: l.UefaChampionsLeaguePositions,
+                UefaEuropaLeaguePositions: l.UefaEuropaLeaguePositions,
+                UefaConferenceLeaguePositions: l.UefaConferenceLeaguePositions)));
         }).RequireAuthorization();
     }
 }

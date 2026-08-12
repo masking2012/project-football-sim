@@ -7,14 +7,14 @@ public sealed class GameCalendar
     public Guid UserId { get; }
     public Guid GameId { get; }
     public DateTime CurrentDate { get; private set; }
-    public DayState State { get; private set; } 
+    public CalendarDayStatus DayStatus { get; private set; } 
 
     public GameCalendar(Guid userId, Guid gameId, DateTime currentDate)
     {
         UserId = userId;
         GameId = gameId;
         CurrentDate = currentDate;
-        State = DayState.NotStarted;
+        DayStatus = CalendarDayStatus.NotStarted;
     }
 
     public void UpdateDate(DateTime newDate)
@@ -22,14 +22,15 @@ public sealed class GameCalendar
         if (newDate <= CurrentDate)
             throw new InvalidOperationException("New date cannot be earlier than or equal to the current date.");
 
+        DayStatus = CalendarDayStatus.NotStarted;
         CurrentDate = newDate;
     }
 
-    public void UpdateState(DayState newState)
+    public void UpdateDayStatus(CalendarDayStatus newStatus)
     {
-        if (newState == DayState.NotStarted && State == DayState.InProgress)
+        if (newStatus == CalendarDayStatus.NotStarted && DayStatus == CalendarDayStatus.InProgress)
             throw new InvalidOperationException("Cannot revert to NotStarted from InProgress.");
 
-        State = newState;
+        DayStatus = newStatus;
     }
 }

@@ -44,7 +44,15 @@ internal sealed class LeaguesCatalog(HybridCache cache, LeaguesDbContext dbConte
                 league.Id,
                 league.Name,
                 league.Order,
-                league.CountryId))
+                league.CountryId,
+                league.TeamsCount,
+                league.PromotionPositions,
+                league.PromotionPlayOffPositions,
+                league.RelegationPositions,
+                league.RelegationPlayOffPositions,
+                league.UefaChampionsLeaguePositions,
+                league.UefaEuropaLeaguePositions,
+                league.UefaConferenceLeaguePositions))
             .ToDictionary(league => league.Id);
 
         return new LeaguesCatalogSnapshot(leaguesById);

@@ -12,8 +12,23 @@ internal static class GamePersistenceEndpoints
     {
         app.MapPost("/api/games", async (
             ClaimsPrincipal user,
-            SaveGameCommandHandler commandHandler,
+            GameInitializationService service,
+            CancellationToken cancellationToken) =>
+        {
+            if (!user.TryGetUserId(out var userId))
+                return Results.Unauthorized();
+
+            var response = await service.InitAsync(userId, cancellationToken).ConfigureAwait(false);
+
+            var createdUri = new Uri($"/api/games/{response.GameId}", UriKind.Relative);
+            return Results.Created(createdUri, response);
+        }).RequireAuthorization();
+
+        app.MapPost("/api/games/{gameId}/save", async (
+            [FromRoute] Guid gameId,
             [FromBody] SaveGameRequest request,
+            ClaimsPrincipal user,
+            SaveGameCommandHandler commandHandler,
             CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
@@ -21,12 +36,13 @@ internal static class GamePersistenceEndpoints
 
             var command = new SaveGameCommand(
                 UserId: userId,
-                GameId: request.GameId,
+                GameId: gameId,
                 SlotId: request.SlotId,
                 Name: request.Name
             );
             await commandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
-            return Results.StatusCode(201);
+
+            return Results.Ok();
         }).RequireAuthorization();
 
         app.MapGet("/api/games", async (

@@ -44,6 +44,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.HasIndex("LeagueId");
 
+                    b.HasIndex("GameId", "UserId", "SeasonId", "LeagueId")
+                        .IsUnique();
+
                     b.ToTable("GameLeagues");
                 });
 
@@ -144,6 +147,30 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.Property<int>("Order")
                         .HasColumnType("int");
+
+                    b.Property<string>("PromotionPlayOffPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PromotionPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RelegationPlayOffPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RelegationPositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TeamsCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UefaChampionsLeaguePositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UefaConferenceLeaguePositions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UefaEuropaLeaguePositions")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

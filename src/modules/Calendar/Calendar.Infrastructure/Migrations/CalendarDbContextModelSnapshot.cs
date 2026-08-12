@@ -33,7 +33,7 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
                     b.Property<DateTime>("CurrentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("State")
+                    b.Property<int>("DayStatus")
                         .HasColumnType("int");
 
                     b.HasKey("UserId", "GameId");
