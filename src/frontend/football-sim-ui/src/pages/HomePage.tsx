@@ -33,11 +33,8 @@ export function HomePage() {
   const [isActing, setIsActing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const effectiveDayStatus = day?.dayStatus === 'NotStarted' && day.matchEvents.length === 0
-    ? 'Completed'
-    : day?.dayStatus;
   const matchesByLeague = new Map<string, { countryName: string; leagueName: string; rounds: Map<number, LeagueMatchDto[]> }>();
-  for (const event of [...(day?.matchEvents ?? [])].sort((left, right) =>
+  for (const event of [...(day?.leagueMatches ?? [])].sort((left, right) =>
     left.leagueName.localeCompare(right.leagueName) || left.round - right.round || left.id.localeCompare(right.id))) {
     const leagueKey = `${event.countryId}:${event.leagueId}`;
     const league = matchesByLeague.get(leagueKey) ?? {
@@ -91,9 +88,9 @@ export function HomePage() {
     setIsActing(true);
     setError(null);
     try {
-      if (effectiveDayStatus === 'NotStarted') {
+      if (day.dayStatus === 'NotStarted') {
         await simulateCalendarDay(gameId);
-      } else if (effectiveDayStatus === 'Completed') {
+      } else if (day.dayStatus === 'Completed') {
         await advanceCalendarDay(gameId);
       }
       await loadDay();
@@ -120,11 +117,11 @@ export function HomePage() {
       {isLoading && <Loader size="large" text="Loading today&apos;s events..." />}
       {!isLoading && day && (
         <div className="home-calendar">
-          {day.matchEvents.length > 0 ? (
+          {day.leagueMatches.length > 0 ? (
             <div className="today-fixtures fixtures-section">
               <div className="fixtures-heading">
                 <h3>Today&apos;s matches</h3>
-                <span className="fixtures-count">{day.matchEvents.length} matches</span>
+                <span className="fixtures-count">{day.leagueMatches.length} matches</span>
               </div>
               <div className="today-leagues">
                 {[...matchesByLeague].map(([leagueKey, league]) => (
@@ -150,9 +147,9 @@ export function HomePage() {
             <p className="home-message">There are no matches scheduled for today.</p>
           )}
 
-          {effectiveDayStatus !== 'InProgress' && (
+          {day.dayStatus !== 'InProgress' && (
             <button type="button" className="start-btn day-action-btn" onClick={handleDayAction} disabled={isActing}>
-              {isActing ? '⏳ Updating day...' : effectiveDayStatus === 'NotStarted' ? '▶ Simulate day' : '▶ Proceed to next day'}
+              {isActing ? '⏳ Updating day...' : day.dayStatus === 'NotStarted' ? '▶ Simulate day' : '▶ Proceed to next day'}
             </button>
           )}
         </div>

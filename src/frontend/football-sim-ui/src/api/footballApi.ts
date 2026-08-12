@@ -97,7 +97,7 @@ export interface LeagueMatchDto {
 export interface CalendarDayResponse {
   date: string;
   dayStatus: 'NotStarted' | 'InProgress' | 'Completed';
-  matchEvents: LeagueMatchDto[];
+  leagueMatches: LeagueMatchDto[];
 }
 
 export interface SimulateMatchRequest {

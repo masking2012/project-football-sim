@@ -20,9 +20,7 @@ export function SeasonInfo() {
     day: 'numeric',
     year: 'numeric',
   });
-  const currentDayStatus = currentDay?.dayStatus === 'NotStarted' && currentDay.matchEvents.length === 0
-    ? 'Completed'
-    : currentDay?.dayStatus;
+  const currentDayStatus = currentDay?.dayStatus;
   const currentDayDate = currentDay
     ? new Date(currentDay.date).toLocaleDateString('en-US', {
       weekday: 'long',
