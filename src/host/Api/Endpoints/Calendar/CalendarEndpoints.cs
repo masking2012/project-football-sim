@@ -35,7 +35,7 @@ internal static class CalendarEndpoints
             return Results.Ok(new CalendarDayResponse(
                 Date: result.Date,
                 DayStatus: result.DayStatus,
-                MatchEvents: result.LeagueMatches.Select(x => new LeagueMatchResponse(
+                LeagueMatches: result.LeagueMatches.Select(x => new LeagueMatchResponse(
                     Id: x.Id,
                     HomeTeamId: x.HomeTeamId,
                     HomeTeamName: teams[x.HomeTeamId].Name,

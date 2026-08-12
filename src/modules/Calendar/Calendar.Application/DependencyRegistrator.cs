@@ -14,6 +14,7 @@ public static class DependencyRegistrator
     public static IServiceCollection AddCalendarApplication(this IServiceCollection services)
     {
         services.AddScoped<IGameCalendarRetriever, GameCalendarRetriever>();
+        services.AddScoped<ISeasonsRetriever, SeasonsRetriever>();
 
         services.AddScoped<AdvanceCalendarDayCommandHandler>();
         services.AddScoped<SimulateCalendarDayCommandHandler>();
