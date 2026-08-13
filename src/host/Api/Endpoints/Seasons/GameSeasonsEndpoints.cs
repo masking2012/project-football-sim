@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
+using ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
@@ -12,9 +13,10 @@ internal static class GameSeasonsEndpoints
 {
     public static void MapGameSeasonsEndpoints(this WebApplication app)
     {
-        app.MapPost("/api/games/{gameId}/seasons", async (
+        app.MapPost("/api/games/{gameId}/seasons/{seasonId}/complete", async (
             [FromRoute] Guid gameId,
-            CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
+            [FromRoute] Guid seasonId,
+            CompleteGameSeasonCommandHandler completeGameSeasonCommandHandler,
             GetLeaguesQueryHandler getLeaguesQueryHandler,
             CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
             ClaimsPrincipal user,
@@ -23,10 +25,11 @@ internal static class GameSeasonsEndpoints
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var command = new CreateGameSeasonCommand(
+            var completeGameSeasonCommand = new CompleteGameSeasonCommand(
                 UserId: userId,
-                GameId: gameId);
-            var result = await createGameSeasonCommandHandler.HandleAsync(command, cancellationToken).ConfigureAwait(false);
+                GameId: gameId,
+                SeasonId: seasonId);
+            var completeGameSeasonResult = await completeGameSeasonCommandHandler.HandleAsync(completeGameSeasonCommand, cancellationToken).ConfigureAwait(false);
 
             var leaguesDtos = await getLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
             foreach (var leagueDto in leaguesDtos.Values)
@@ -35,13 +38,13 @@ internal static class GameSeasonsEndpoints
                     LeagueId: leagueDto.Id,
                     GameId: gameId,
                     UserId: userId,
-                    SeasonId: result.Id,
-                    SeasonStartDate: default,
-                    PreviousSeasonId: null);
+                    SeasonId: completeGameSeasonResult.Id,
+                    SeasonStartDate: completeGameSeasonResult.StartDate,
+                    PreviousSeasonId: seasonId);
                 await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
             }
 
-            return Results.Created($"/api/games/{gameId}/seasons/{result.Id}", new CreateGameSeasonResponse(result.Id));
+            return Results.Created($"/api/games/{gameId}/seasons/{completeGameSeasonResult.Id}", new CreateGameSeasonResponse(completeGameSeasonResult.Id));
         }).RequireAuthorization();
 
         app.MapGet("/api/games/{gameId}/seasons", async (

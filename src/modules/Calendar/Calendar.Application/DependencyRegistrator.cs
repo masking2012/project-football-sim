@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Calendar.Application.Common.Services;
 using ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
+using ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
@@ -23,6 +24,7 @@ public static class DependencyRegistrator
         services.AddScoped<GetCalendarDayQueryHandler>();
 
         services.AddScoped<CreateGameSeasonCommandHandler>();
+        services.AddScoped<CompleteGameSeasonCommandHandler>();
         services.AddScoped<GetGameSeasonsQueryHandler>();
 
         return services;
