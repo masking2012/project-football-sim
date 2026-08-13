@@ -1155,6 +1155,39 @@
   gap: 1rem;
 }
 
+.standings-heading-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.season-select-label {
+  color: #7a9cc8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.season-select {
+  min-width: 135px;
+  padding: 0.55rem 2rem 0.55rem 0.7rem;
+  color: #e8eaf0;
+  background: #0d2044;
+  border: 1px solid #1e3a60;
+  border-radius: 7px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.season-select:hover,
+.season-select:focus {
+  border-color: #4a9eff;
+  outline: none;
+}
+
 .standings-eyebrow,
 .standings-card-label {
   margin-bottom: 0.35rem;
@@ -1555,6 +1588,11 @@
   .standings-heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .standings-heading-actions {
+    width: 100%;
+    justify-content: flex-start;
   }
 
   .standings-card-header {

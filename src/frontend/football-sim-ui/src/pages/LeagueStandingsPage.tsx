@@ -7,6 +7,7 @@ import {
   fetchSeasons,
   type LeagueFixtureDto,
   type LeagueDto,
+  type CurrentSeasonResponse,
   type TeamStandingDto,
 } from '../api/footballApi';
 import { useAuth } from '../context/AuthContext';
@@ -20,6 +21,8 @@ export function LeagueStandingsPage() {
   const [standings, setStandings] = useState<TeamStandingDto[]>([]);
   const [fixtures, setFixtures] = useState<LeagueFixtureDto[]>([]);
   const [league, setLeague] = useState<LeagueDto | null>(null);
+  const [seasons, setSeasons] = useState<CurrentSeasonResponse[]>([]);
+  const [selectedSeasonId, setSelectedSeasonId] = useState<string | null>(null);
   const [leagueTitle, setLeagueTitle] = useState('League standings');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,33 +39,27 @@ export function LeagueStandingsPage() {
     setIsLoading(true);
     setError(null);
 
-    async function loadStandings() {
+    async function loadLeagueMetadata() {
       const activeGameId = gameId ?? await startNewGame();
       const [leagues, seasons] = await Promise.all([
         fetchLeagues(),
         fetchSeasons(activeGameId),
       ]);
       const league = leagues.find((item) => item.id === parsedLeagueId);
-      const season = seasons.find((item) => item.isCurrent) ?? seasons[0];
-      if (!league || !season) {
+      if (!league || seasons.length === 0) {
         throw new Error('League or season not found.');
       }
 
-      const [loadedStandings, loadedFixtures] = await Promise.all([
-        fetchLeagueStandings(activeGameId, season.id, parsedLeagueId),
-        fetchLeagueFixtures(activeGameId, season.id, parsedLeagueId),
-      ]);
-
       if (!isCurrent) return;
-      const seasonStartYear = new Date(season.startDate).getUTCFullYear();
-      const seasonEndYear = new Date(season.endDate).getUTCFullYear();
-      setLeagueTitle(`${league.name} ${seasonStartYear}-${seasonEndYear}`);
       setLeague(league);
-      setStandings(loadedStandings);
-      setFixtures(loadedFixtures);
+      setSeasons(seasons);
+      setSelectedSeasonId((previousSeasonId) =>
+        seasons.some((season) => season.id === previousSeasonId)
+          ? previousSeasonId
+          : (seasons.find((season) => season.isCurrent) ?? seasons[0]).id);
     }
 
-    void loadStandings()
+    void loadLeagueMetadata()
       .catch((requestError: unknown) => {
         if (!isCurrent) return;
         if (requestError instanceof Error && requestError.message === 'SESSION_EXPIRED') {
@@ -80,6 +77,49 @@ export function LeagueStandingsPage() {
       isCurrent = false;
     };
   }, [gameId, leagueId, logout, navigate, startNewGame]);
+
+  useEffect(() => {
+    const parsedLeagueId = Number(leagueId);
+    const season = seasons.find((item) => item.id === selectedSeasonId);
+    if (!gameId || !league || !season || !Number.isInteger(parsedLeagueId) || parsedLeagueId < 1) {
+      return;
+    }
+
+    let isCurrent = true;
+    setIsLoading(true);
+    setError(null);
+
+    Promise.all([
+      fetchLeagueStandings(gameId, season.id, parsedLeagueId),
+      fetchLeagueFixtures(gameId, season.id, parsedLeagueId),
+    ])
+      .then(([loadedStandings, loadedFixtures]) => {
+        if (!isCurrent) return;
+        const seasonStartYear = new Date(season.startDate).getUTCFullYear();
+        const seasonEndYear = new Date(season.endDate).getUTCFullYear();
+        setLeagueTitle(`${league.name} ${seasonStartYear}-${seasonEndYear}`);
+        setStandings(loadedStandings);
+        setFixtures(loadedFixtures);
+      })
+      .catch((requestError: unknown) => {
+        if (!isCurrent) return;
+        if (requestError instanceof Error && requestError.message === 'SESSION_EXPIRED') {
+          logout();
+          navigate('/login', { replace: true });
+        } else {
+          setError('Could not load the league standings. Please try again.');
+        }
+      })
+      .finally(() => {
+        if (isCurrent) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [gameId, league, leagueId, logout, navigate, seasons, selectedSeasonId]);
+
+  const selectedSeason = seasons.find((season) => season.id === selectedSeasonId) ?? null;
 
   const sortedStandings = [...standings].sort((left, right) => left.position - right.position);
   const fixturesByRound = [...fixtures]
@@ -100,7 +140,23 @@ export function LeagueStandingsPage() {
           <p className="standings-eyebrow">Competition centre</p>
           <h2>{leagueTitle}</h2>
         </div>
-        <Link className="standings-back-link" to="/home">← Back to dashboard</Link>
+        <div className="standings-heading-actions">
+          <label className="season-select-label" htmlFor="season-select">Season</label>
+          <select
+            id="season-select"
+            className="season-select"
+            value={selectedSeasonId ?? ''}
+            onChange={(event) => setSelectedSeasonId(event.target.value)}
+            disabled={seasons.length === 0}
+          >
+            {seasons.map((season) => (
+              <option key={season.id} value={season.id}>
+                {formatSeasonLabel(season)}
+              </option>
+            ))}
+          </select>
+          <Link className="standings-back-link" to="/home">← Back to dashboard</Link>
+        </div>
       </div>
 
       {isLoading && (
@@ -130,7 +186,7 @@ export function LeagueStandingsPage() {
         <section className="standings-card">
           <div className="standings-card-header">
             <div>
-              <span className="standings-card-label">Current table</span>
+              <span className="standings-card-label">{selectedSeason?.isCurrent ? 'Current table' : 'Historical table'}</span>
               <h3>{sortedStandings.length} teams</h3>
             </div>
             <span className="standings-live-dot">Live game data</span>
@@ -258,4 +314,12 @@ function formatFixtureDate(date: string): string {
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const year = String(d.getFullYear()).slice(-2);
     return `${day}.${month}.${year}`;
+}
+
+function formatSeasonLabel(season: CurrentSeasonResponse): string {
+  if (season.isCurrent) return 'Current';
+
+  const startYear = new Date(season.startDate).getUTCFullYear();
+  const endYear = new Date(season.endDate).getUTCFullYear();
+  return `${startYear}/${endYear}`;
 }
