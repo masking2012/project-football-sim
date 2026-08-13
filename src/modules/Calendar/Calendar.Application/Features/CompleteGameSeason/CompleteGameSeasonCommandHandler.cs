@@ -2,13 +2,15 @@ using ProjectFootballSim.Calendar.Application.Common.Services;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Domain.Enums;
+using ProjectFootballSim.Calendar.Infrastructure.Database;
 using ProjectFootballSim.Common.Data.Entities.Seasons;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
 
 public sealed class CompleteGameSeasonCommandHandler(
     IGameCalendarRetriever gameCalendarRetriever,
-    CreateGameSeasonCommandHandler createGameSeasonCommandHandler)
+    CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
+    CalendarDbContext dbContext)
 {
     public async Task<CompleteGameSeasonCommandResult> HandleAsync(CompleteGameSeasonCommand command, CancellationToken cancellationToken)
     {
@@ -20,6 +22,9 @@ public sealed class CompleteGameSeasonCommandHandler(
         var createGameSeasonCommandResult = await createGameSeasonCommandHandler.HandleAsync(new CreateGameSeasonCommand(
             UserId: command.UserId,
             GameId: command.GameId), cancellationToken).ConfigureAwait(false);
+
+        gameCalendar.UpdateDate(createGameSeasonCommandResult.StartDate);
+        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
         return new CompleteGameSeasonCommandResult
         (

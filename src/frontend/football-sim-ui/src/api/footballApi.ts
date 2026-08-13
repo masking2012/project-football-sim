@@ -113,6 +113,10 @@ export interface CurrentSeasonResponse {
   isCurrent: boolean;
 }
 
+export interface CompleteSeasonResponse {
+  id: string;
+}
+
 export interface GameSave {
   gameId: string;
   slotId: number;
@@ -217,6 +221,17 @@ export async function advanceCalendarDay(gameId: string): Promise<void> {
     headers: authHeaders(),
   });
   await handleVoidResponse(res);
+}
+
+export async function completeSeason(gameId: string, seasonId: string): Promise<CompleteSeasonResponse> {
+  const res = await fetch(
+    `${BASE}/games/${encodeURIComponent(gameId)}/seasons/${encodeURIComponent(seasonId)}/complete`,
+    {
+      method: 'POST',
+      headers: authHeaders(),
+    },
+  );
+  return handleResponse<CompleteSeasonResponse>(res);
 }
 
 async function handleVoidResponse(res: Response): Promise<void> {

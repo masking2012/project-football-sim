@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { advanceCalendarDay, fetchCalendarDay, simulateCalendarDay } from '../api/footballApi';
+import { advanceCalendarDay, completeSeason, fetchCalendarDay, resetGameSessionCache, simulateCalendarDay } from '../api/footballApi';
 import type { CalendarDayResponse, LeagueMatchDto } from '../api/footballApi';
 import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
@@ -27,7 +27,7 @@ export function HomePage() {
   const { gameId } = useGame();
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const { setCurrentDay } = useSeason();
+  const { currentSeason, refreshSeason, setCurrentDay } = useSeason();
   const [day, setDay] = useState<CalendarDayResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActing, setIsActing] = useState(false);
@@ -82,6 +82,9 @@ export function HomePage() {
     void loadDay();
   }, [loadDay]);
 
+  const isSeasonEnd = day !== null && currentSeason !== null
+    && day.date.slice(0, 10) === currentSeason.endDate.slice(0, 10);
+
   async function handleDayAction() {
     if (!gameId || !day || isActing) return;
 
@@ -90,6 +93,10 @@ export function HomePage() {
     try {
       if (day.dayStatus === 'NotStarted') {
         await simulateCalendarDay(gameId);
+      } else if (day.dayStatus === 'Completed' && isSeasonEnd && currentSeason) {
+        await completeSeason(gameId, currentSeason.id);
+        resetGameSessionCache();
+        await refreshSeason(gameId);
       } else if (day.dayStatus === 'Completed') {
         await advanceCalendarDay(gameId);
       }
@@ -148,9 +155,25 @@ export function HomePage() {
           )}
 
           {day.dayStatus !== 'InProgress' && (
-            <button type="button" className="start-btn day-action-btn" onClick={handleDayAction} disabled={isActing}>
-              {isActing ? '⏳ Updating day...' : day.dayStatus === 'NotStarted' ? '▶ Simulate day' : '▶ Proceed to next day'}
-            </button>
+            <>
+              {isSeasonEnd && day.dayStatus === 'Completed' && (
+                <div className="season-end-notice" role="status">Season end reached — complete this season to start the next one.</div>
+              )}
+              <button
+                type="button"
+                className={`start-btn day-action-btn${isSeasonEnd && day.dayStatus === 'Completed' ? ' day-action-btn--season-end' : ''}`}
+                onClick={handleDayAction}
+                disabled={isActing}
+              >
+                {isActing
+                  ? '⏳ Updating day...'
+                  : day.dayStatus === 'NotStarted'
+                    ? '▶ Simulate day'
+                    : isSeasonEnd
+                      ? '🏁 End season'
+                      : '▶ Proceed to next day'}
+              </button>
+            </>
           )}
         </div>
       )}
