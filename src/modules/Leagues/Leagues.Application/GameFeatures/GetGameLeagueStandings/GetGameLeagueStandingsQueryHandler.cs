@@ -5,11 +5,14 @@ namespace ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueStand
 
 public sealed class GetGameLeagueStandingsQueryHandler(LeaguesDbContext dbContext)
 {
-    public async Task<IReadOnlyList<GameLeagueTeamDto>> HandleAsync(GetGameLeagueStandingsQuery query, CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<GameLeagueTeamDto>> HandleAsync(
+        GetGameLeagueStandingsQuery query,
+        CancellationToken cancellationToken)
     {
         var league = await dbContext.GameLeagues
             .Where(league => league.UserId == query.UserId
                 && league.GameId == query.GameId
+                && league.SeasonId == query.SeasonId
                 && league.LeagueId == query.LeagueId)
             .Include(league => league.GameLeagueTeams)
             .FirstOrDefaultAsync(cancellationToken)

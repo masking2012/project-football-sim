@@ -11,7 +11,11 @@ public sealed class GetGameLeagueFixturesQueryHandler(LeaguesDbContext dbContext
     {
         var league = await dbContext.GameLeagues
             .AsNoTracking()
-            .Where(f => f.LeagueId == query.LeagueId && f.GameId == query.GameId && f.SeasonId == query.SeasonId)
+            .Where(f =>
+                f.UserId == query.UserId
+                && f.LeagueId == query.LeagueId
+                && f.GameId == query.GameId
+                && f.SeasonId == query.SeasonId)
             .Include(f => f.GameLeagueMatches)
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
