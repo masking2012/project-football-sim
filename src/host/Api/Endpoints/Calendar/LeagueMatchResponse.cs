@@ -12,4 +12,5 @@ internal sealed record LeagueMatchResponse(
     string LeagueName,
     int LeagueId,
     int CountryId,
-    string CountryName);
+    string CountryName,
+    int Order);

@@ -1349,11 +1349,11 @@
 }
 
 .standings-rank--promotion {
-  background: #a855f7;
+  background: #2832c2;
 }
 
 .standings-rank--promotion-playoff {
-  background: #eab308;
+  background: #63c5da;
 }
 
 .standings-points-column,
@@ -1399,6 +1399,14 @@
 
 .standings-legend-marker--conference-league {
   background: #22c55e;
+}
+
+.standings-legend-marker--promotion {
+  background: #2832c2;
+}
+
+.standings-legend-marker--promotion-playoff {
+  background: #63c5da;
 }
 
 .standings-legend-marker--relegation {

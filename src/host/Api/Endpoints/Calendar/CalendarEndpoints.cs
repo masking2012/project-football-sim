@@ -47,7 +47,8 @@ internal static class CalendarEndpoints
                     LeagueName: x.LeagueName,
                     LeagueId: x.LeagueId,
                     CountryId: x.CountryId,
-                    CountryName: countries.Single(c => c.Id == x.CountryId).Name
+                    CountryName: countries.Single(c => c.Id == x.CountryId).Name,
+                    Order: x.Order
                 ))
             ));
         }).RequireAuthorization();

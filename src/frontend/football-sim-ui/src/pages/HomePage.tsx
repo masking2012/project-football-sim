@@ -33,13 +33,17 @@ export function HomePage() {
   const [isActing, setIsActing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const matchesByLeague = new Map<string, { countryName: string; leagueName: string; rounds: Map<number, LeagueMatchDto[]> }>();
+  const matchesByLeague = new Map<string, { countryName: string; leagueName: string; order: number; rounds: Map<number, LeagueMatchDto[]> }>();
   for (const event of [...(day?.leagueMatches ?? [])].sort((left, right) =>
-    left.leagueName.localeCompare(right.leagueName) || left.round - right.round || left.id.localeCompare(right.id))) {
+    left.order - right.order
+      || left.leagueName.localeCompare(right.leagueName)
+      || left.round - right.round
+      || left.id.localeCompare(right.id))) {
     const leagueKey = `${event.countryId}:${event.leagueId}`;
     const league = matchesByLeague.get(leagueKey) ?? {
       countryName: event.countryName,
       leagueName: event.leagueName,
+      order: event.order,
       rounds: new Map<number, LeagueMatchDto[]>(),
     };
     const roundEvents = league.rounds.get(event.round) ?? [];
@@ -131,7 +135,9 @@ export function HomePage() {
                 <span className="fixtures-count">{day.leagueMatches.length} matches</span>
               </div>
               <div className="today-leagues">
-                {[...matchesByLeague].map(([leagueKey, league]) => (
+                {[...matchesByLeague]
+                  .sort(([, left], [, right]) => left.order - right.order || left.leagueName.localeCompare(right.leagueName))
+                  .map(([leagueKey, league]) => (
                   <section className="today-league" key={leagueKey}>
                     <h3 className="today-league-title">{league.countryName} - {league.leagueName}</h3>
                     <div className="fixtures-rounds">
@@ -147,7 +153,7 @@ export function HomePage() {
                       ))}
                     </div>
                   </section>
-                ))}
+                  ))}
               </div>
             </div>
           ) : (

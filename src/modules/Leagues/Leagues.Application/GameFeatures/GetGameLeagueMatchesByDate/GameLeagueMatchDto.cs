@@ -9,5 +9,6 @@ public sealed record GameLeagueMatchDto(
     int Round,
     string LeagueName,
     int LeagueId,
-    int CountryId);
+    int CountryId,
+    int Order);
 

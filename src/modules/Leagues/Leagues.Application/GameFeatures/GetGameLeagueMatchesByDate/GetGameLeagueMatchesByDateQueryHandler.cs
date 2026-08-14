@@ -32,7 +32,8 @@ public sealed class GetGameLeagueMatchesByDateQueryHandler(
                 Round: x.Round,
                 LeagueName: leagues[x.GameLeague.LeagueId].Name,
                 LeagueId: x.GameLeague.LeagueId,
-                CountryId: leagues[x.GameLeague.LeagueId].CountryId))
+                CountryId: leagues[x.GameLeague.LeagueId].CountryId,
+                Order: leagues[x.GameLeague.LeagueId].Order))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
     }

@@ -231,26 +231,48 @@ export function LeagueStandingsPage() {
           </div>
           <p className="standings-legend">P Played · W Wins · D Draws · L Losses · GF Goals for · GA Goals against · GD Goal difference · PTS Points</p>
           <div className="standings-qualification-legend" aria-label="League position qualification markers">
-            <span className="standings-legend-item">
-              <span className="standings-legend-marker standings-legend-marker--champions-league" aria-hidden="true" />
-              Champions League
-            </span>
-            <span className="standings-legend-item">
-              <span className="standings-legend-marker standings-legend-marker--europa-league" aria-hidden="true" />
-              Europa League
-            </span>
-            <span className="standings-legend-item">
-              <span className="standings-legend-marker standings-legend-marker--conference-league" aria-hidden="true" />
-              Conference League
-            </span>
-            <span className="standings-legend-item">
-              <span className="standings-legend-marker standings-legend-marker--relegation-playoff" aria-hidden="true" />
-              Relegation Playoff
-            </span>
-            <span className="standings-legend-item">
-              <span className="standings-legend-marker standings-legend-marker--relegation" aria-hidden="true" />
-              Relegation
-            </span>
+             {league?.promotionPositions?.length ? (
+               <span className="standings-legend-item">
+                 <span className="standings-legend-marker standings-legend-marker--promotion" aria-hidden="true" />
+                 Promotion
+               </span>
+             ) : null}
+             {league?.promotionPlayOffPositions?.length ? (
+               <span className="standings-legend-item">
+                 <span className="standings-legend-marker standings-legend-marker--promotion-playoff" aria-hidden="true" />
+                 Promotion Playoff
+               </span>
+             ) : null}
+             {league?.uefaChampionsLeaguePositions?.length ? (
+               <span className="standings-legend-item">
+                 <span className="standings-legend-marker standings-legend-marker--champions-league" aria-hidden="true" />
+                 Champions League
+               </span>
+             ) : null}
+             {league?.uefaEuropaLeaguePositions?.length ? (
+               <span className="standings-legend-item">
+                 <span className="standings-legend-marker standings-legend-marker--europa-league" aria-hidden="true" />
+                 Europa League
+               </span>
+             ) : null}
+             {league?.uefaConferenceLeaguePositions?.length ? (
+               <span className="standings-legend-item">
+                 <span className="standings-legend-marker standings-legend-marker--conference-league" aria-hidden="true" />
+                 Conference League
+               </span>
+             ) : null}
+             {league?.relegationPlayOffPositions?.length ? (
+               <span className="standings-legend-item">
+                 <span className="standings-legend-marker standings-legend-marker--relegation-playoff" aria-hidden="true" />
+                 Relegation Playoff
+               </span>
+             ) : null}
+             {league?.relegationPositions?.length ? (
+               <span className="standings-legend-item">
+                 <span className="standings-legend-marker standings-legend-marker--relegation" aria-hidden="true" />
+                 Relegation
+               </span>
+             ) : null}
           </div>
            <div className="fixtures-section">
              <div className="fixtures-heading">

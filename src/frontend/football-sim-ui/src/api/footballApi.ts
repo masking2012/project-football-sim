@@ -92,6 +92,7 @@ export interface LeagueMatchDto {
   leagueId: number;
   countryId: number;
   countryName: string;
+  order: number;
 }
 
 export interface CalendarDayResponse {

@@ -23,9 +23,7 @@ public static class DependencyRegistrator
                     maxRetryCount: 5,
                     maxRetryDelay: TimeSpan.FromSeconds(10),
                     errorNumbersToAdd: null))
-            .EnableSensitiveDataLogging(true)
             .UseSeeding(SeedWithPredefinedValues));
-
 
         return services;
     }
