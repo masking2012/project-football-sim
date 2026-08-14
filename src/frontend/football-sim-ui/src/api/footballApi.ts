@@ -92,12 +92,13 @@ export interface LeagueMatchDto {
   leagueId: number;
   countryId: number;
   countryName: string;
+  order: number;
 }
 
 export interface CalendarDayResponse {
   date: string;
   dayStatus: 'NotStarted' | 'InProgress' | 'Completed';
-  matchEvents: LeagueMatchDto[];
+  leagueMatches: LeagueMatchDto[];
 }
 
 export interface SimulateMatchRequest {
@@ -111,6 +112,10 @@ export interface CurrentSeasonResponse {
   startDate: string;
   endDate: string;
   isCurrent: boolean;
+}
+
+export interface CompleteSeasonResponse {
+  id: string;
 }
 
 export interface GameSave {
@@ -217,6 +222,17 @@ export async function advanceCalendarDay(gameId: string): Promise<void> {
     headers: authHeaders(),
   });
   await handleVoidResponse(res);
+}
+
+export async function completeSeason(gameId: string, seasonId: string): Promise<CompleteSeasonResponse> {
+  const res = await fetch(
+    `${BASE}/games/${encodeURIComponent(gameId)}/seasons/${encodeURIComponent(seasonId)}/complete`,
+    {
+      method: 'POST',
+      headers: authHeaders(),
+    },
+  );
+  return handleResponse<CompleteSeasonResponse>(res);
 }
 
 async function handleVoidResponse(res: Response): Promise<void> {

@@ -193,6 +193,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.HasKey("LeagueId", "Round");
 
+                    b.HasIndex("LeagueId", "Week", "IsMidweek")
+                        .IsUnique();
+
                     b.ToTable("LeagueRounds");
                 });
 

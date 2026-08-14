@@ -3,14 +3,12 @@ using ProjectFootballSim.Leagues.Application.Common.Models;
 using ProjectFootballSim.Leagues.Application.Common.Services;
 using ProjectFootballSim.Leagues.Domain.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
-using ProjectFootballSim.Seasons.Application.Features.GetPlayerSeasons;
 
 namespace ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 
 public sealed class CreateGameLeagueCommandHandler(
     ILeaguesCatalog leaguesCatalog,
     LeaguesDbContext dbContext,
-    GetGameSeasonsQueryHandler getGameSeasonsQueryHandler,
     LeagueFixtureGenerator leagueFixtureGenerator)
 {
     public async Task HandleAsync(CreateGameLeagueCommand command, CancellationToken cancellationToken)
@@ -46,10 +44,8 @@ public sealed class CreateGameLeagueCommandHandler(
             ));
         }
 
-        DateTime seasonStartDate = await GetSeasonStartDateAsync(command, cancellationToken).ConfigureAwait(false);
-
         var leagueMatches = await leagueFixtureGenerator
-            .GenerateAsync(command.LeagueId, gameLeague.Id, teamIds, seasonStartDate, cancellationToken)
+            .GenerateAsync(command.LeagueId, gameLeague.Id, teamIds, command.SeasonStartDate, cancellationToken)
             .ConfigureAwait(false);
         foreach (GameLeagueMatch match in leagueMatches)
         {
@@ -58,15 +54,5 @@ public sealed class CreateGameLeagueCommandHandler(
 
         dbContext.GameLeagues.Add(gameLeague);
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-    }
-
-    private async Task<DateTime> GetSeasonStartDateAsync(CreateGameLeagueCommand command, CancellationToken cancellationToken)
-    {
-        var query = new GetGameSeasonsQuery(GameId: command.GameId, UserId: command.UserId);
-        var seasons = await getGameSeasonsQueryHandler.HandleAsync(query, cancellationToken).ConfigureAwait(false);
-        var season = seasons.SingleOrDefault(s => s.Id == command.SeasonId);
-        if (season is null)
-            throw new InvalidOperationException($"Season with ID '{command.SeasonId}' not found.");
-        return season.StartDate;
     }
 }

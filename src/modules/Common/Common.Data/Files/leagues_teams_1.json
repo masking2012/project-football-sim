@@ -62,5 +62,70 @@
   {
     "leagueId": 101,
     "teamId": 10016
+  },
+
+  {
+    "leagueId": 102,
+    "teamId": 10101
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10102
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10103
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10104
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10105
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10106
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10107
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10108
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10109
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10110
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10111
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10112
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10113
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10114
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10115
+  },
+  {
+    "leagueId": 102,
+    "teamId": 10116
   }
 ]

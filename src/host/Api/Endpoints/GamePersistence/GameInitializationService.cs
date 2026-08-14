@@ -1,8 +1,8 @@
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
+using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.GamePersistence.Application.Features.CreateGame;
 using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
 using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
-using ProjectFootballSim.Seasons.Application.Features.CreateGameSeason;
 
 namespace ProjectFootballSim.Api.Endpoints.GamePersistence;
 
@@ -32,7 +32,9 @@ internal sealed class GameInitializationService(
                     LeagueId: league.Key,
                     GameId: gameId,
                     UserId: userId,
-                    SeasonId: season.Id), cancellationToken)
+                    SeasonId: season.Id,
+                    SeasonStartDate: season.StartDate,
+                    PreviousSeasonId: null), cancellationToken)
                 .ConfigureAwait(false);
         }
 

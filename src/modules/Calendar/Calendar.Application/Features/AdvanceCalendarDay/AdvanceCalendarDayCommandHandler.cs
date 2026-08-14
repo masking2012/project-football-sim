@@ -8,6 +8,7 @@ namespace ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 
 public sealed class AdvanceCalendarDayCommandHandler(
     IGameCalendarRetriever gameCalendarRetriever,
+    ISeasonsRetriever seasonsRetriever,
     CalendarDbContext dbContext,
     GetGameLeagueMatchesByDateQueryHandler getGameLeagueMatchesByDateQueryHandler)
 {
@@ -17,21 +18,40 @@ public sealed class AdvanceCalendarDayCommandHandler(
             .GetCurrentGameDateAsync(command.UserId, command.GameId, cancellationToken)
             .ConfigureAwait(false);
 
-        DateTime currentDate = gameCalendar.CurrentDate;
-        var matches = await getGameLeagueMatchesByDateQueryHandler
+        ValidateCurrentDayStatus(gameCalendar);
+        await ValidateSeasonBoundariesAsync(gameCalendar, command, cancellationToken).ConfigureAwait(false);
+
+        DateTime nextDay = gameCalendar.CurrentDate.AddDays(1);
+        gameCalendar.UpdateDate(nextDay);
+
+        var nextDayMatches = await getGameLeagueMatchesByDateQueryHandler
             .HandleAsync(
                 new GetGameLeagueMatchesByDateQuery(
                     UserId: command.UserId,
                     GameId: command.GameId,
-                    Date: currentDate),
+                    Date: nextDay),
                 cancellationToken)
             .ConfigureAwait(false);
 
-        if (matches.Count > 0 && gameCalendar.DayStatus != CalendarDayStatus.Completed)
-            throw new InvalidOperationException("Cannot advance calendar. Current day is not completed.");
-
-        gameCalendar.UpdateDate(currentDate.AddDays(1));
+        if (nextDayMatches.Count <= 0)
+            gameCalendar.UpdateDayStatus(CalendarDayStatus.Completed);
 
         await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    }
+
+    private async Task ValidateSeasonBoundariesAsync(GameCalendar gameCalendar, AdvanceCalendarDayCommand command, CancellationToken cancellationToken)
+    {
+        GameSeason season = await seasonsRetriever
+            .GetCurrentGameSeasonAsync(command.UserId, command.GameId, cancellationToken)
+            .ConfigureAwait(false);
+
+        if (gameCalendar.CurrentDate >= season.EndDate)
+            throw new InvalidOperationException("Cannot advance calendar. Current date is beyond the season end date.");
+    }
+
+    private static void ValidateCurrentDayStatus(GameCalendar gameCalendar)
+    {
+        if (gameCalendar.DayStatus != CalendarDayStatus.Completed)
+            throw new InvalidOperationException("Cannot advance calendar. Current day is not completed.");
     }
 }

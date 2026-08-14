@@ -31,7 +31,11 @@ internal static class GameLeaguesEndpoints
 
             var teamDtos = await teamsByCountryQueryHandler.HandleAsync(leagueDto.CountryId, cancellationToken).ConfigureAwait(false);
 
-            var query = new GetGameLeagueStandingsQuery(GameId: gameId, UserId: userId, LeagueId: leagueId);
+            var query = new GetGameLeagueStandingsQuery(
+                UserId: userId,
+                GameId: gameId,
+                SeasonId: seasonId,
+                LeagueId: leagueId);
             var gameLeagueStandings = await getGameLeagueStandingsQueryHandler
                 .HandleAsync(query, cancellationToken).ConfigureAwait(false);
 
@@ -68,7 +72,11 @@ internal static class GameLeaguesEndpoints
 
             var teamDtos = await teamsByCountryQueryHandler.HandleAsync(leagueDto.CountryId, cancellationToken).ConfigureAwait(false);
 
-            var query = new GetGameLeagueFixturesQuery(GameId: gameId, SeasonId: seasonId, LeagueId: leagueId);
+            var query = new GetGameLeagueFixturesQuery(
+                UserId: userId,
+                GameId: gameId,
+                SeasonId: seasonId,
+                LeagueId: leagueId);
             var matchesDtos = await getGameLeagueFixturesQueryHandler
                 .HandleAsync(query, cancellationToken).ConfigureAwait(false);
 

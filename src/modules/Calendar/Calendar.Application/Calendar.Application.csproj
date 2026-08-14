@@ -1,7 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\..\Common\Common.Data\Common.Data.csproj" />
+    <ProjectReference Include="..\..\Common\Common.Features\Common.Features.csproj" />
     <ProjectReference Include="..\..\Leagues\Leagues.Application\Leagues.Application.csproj" />
     <ProjectReference Include="..\Calendar.Infrastructure\Calendar.Infrastructure.csproj" />
   </ItemGroup>

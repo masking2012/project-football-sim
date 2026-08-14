@@ -66,28 +66,28 @@ public static class DependencyRegistrator
                         uefaChampionsLeaguePositions: leagueData.UefaChampionsLeaguePositions,
                         uefaEuropaLeaguePositions: leagueData.UefaEuropaLeaguePositions,
                         uefaConferenceLeaguePositions: leagueData.UefaConferenceLeaguePositions);
+            }
 
-                foreach(var leagueTeamData in LeaguesDataProvider.GetLeagueTeamsByCountryId(countryData.Id))
-                {
-                    var leagueTeam = context.Set<LeagueTeam>()
-                        .SingleOrDefault(x => x.LeagueId == leagueTeamData.LeagueId && x.TeamId == leagueTeamData.TeamId);
-                    if (league is null)
-                        context.Set<LeagueTeam>().Add(
-                            new LeagueTeam(
-                                LeagueId: leagueTeamData.LeagueId,
-                                TeamId: leagueTeamData.TeamId));
-                }
+            foreach (var leagueTeamData in LeaguesDataProvider.GetLeagueTeamsByCountryId(countryData.Id))
+            {
+                var leagueTeam = context.Set<LeagueTeam>()
+                    .SingleOrDefault(x => x.LeagueId == leagueTeamData.LeagueId && x.TeamId == leagueTeamData.TeamId);
+                if (leagueTeam is null)
+                    context.Set<LeagueTeam>().Add(
+                        new LeagueTeam(
+                            LeagueId: leagueTeamData.LeagueId,
+                            TeamId: leagueTeamData.TeamId));
+            }
 
-                foreach (var leagueRoundData in LeaguesDataProvider.GetLeagueRoundsByCountryId(countryData.Id))
-                {
-                    var leagueRound = context.Set<LeagueRound>()
-                        .SingleOrDefault(x => x.LeagueId == leagueRoundData.LeagueId && leagueRoundData.Round == leagueRoundData.Round);
-                    if (leagueRound is null)
-                        context.Set<LeagueRound>()
-                            .Add(new LeagueRound(leagueId: leagueRoundData.LeagueId, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek));
-                    else
-                        leagueRound.Update(leagueRoundData.Week, leagueRoundData.IsMidweek);
-                }
+            foreach (var leagueRoundData in LeaguesDataProvider.GetLeagueRoundsByCountryId(countryData.Id))
+            {
+                var leagueRound = context.Set<LeagueRound>()
+                    .SingleOrDefault(x => x.LeagueId == leagueRoundData.LeagueId && x.Round == leagueRoundData.Round);
+                if (leagueRound is null)
+                    context.Set<LeagueRound>()
+                        .Add(new LeagueRound(leagueId: leagueRoundData.LeagueId, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek));
+                else
+                    leagueRound.Update(leagueRoundData.Week, leagueRoundData.IsMidweek);
             }
         }
 

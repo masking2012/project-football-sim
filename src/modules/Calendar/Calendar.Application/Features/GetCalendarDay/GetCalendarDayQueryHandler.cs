@@ -45,7 +45,8 @@ public sealed class GetCalendarDayQueryHandler(
                 Round: x.Round,
                 LeagueName: x.LeagueName,
                 LeagueId: x.LeagueId,
-                CountryId: x.CountryId))
+                CountryId: x.CountryId,
+                Order: x.Order))
         );
     }
 }

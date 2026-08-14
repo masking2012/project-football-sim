@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { advanceCalendarDay, fetchCalendarDay, simulateCalendarDay } from '../api/footballApi';
+import { advanceCalendarDay, completeSeason, fetchCalendarDay, resetGameSessionCache, simulateCalendarDay } from '../api/footballApi';
 import type { CalendarDayResponse, LeagueMatchDto } from '../api/footballApi';
 import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
@@ -27,22 +27,23 @@ export function HomePage() {
   const { gameId } = useGame();
   const { logout } = useAuth();
   const navigate = useNavigate();
-  const { setCurrentDay } = useSeason();
+  const { currentSeason, refreshSeason, setCurrentDay } = useSeason();
   const [day, setDay] = useState<CalendarDayResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActing, setIsActing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const effectiveDayStatus = day?.dayStatus === 'NotStarted' && day.matchEvents.length === 0
-    ? 'Completed'
-    : day?.dayStatus;
-  const matchesByLeague = new Map<string, { countryName: string; leagueName: string; rounds: Map<number, LeagueMatchDto[]> }>();
-  for (const event of [...(day?.matchEvents ?? [])].sort((left, right) =>
-    left.leagueName.localeCompare(right.leagueName) || left.round - right.round || left.id.localeCompare(right.id))) {
+  const matchesByLeague = new Map<string, { countryName: string; leagueName: string; order: number; rounds: Map<number, LeagueMatchDto[]> }>();
+  for (const event of [...(day?.leagueMatches ?? [])].sort((left, right) =>
+    left.order - right.order
+      || left.leagueName.localeCompare(right.leagueName)
+      || left.round - right.round
+      || left.id.localeCompare(right.id))) {
     const leagueKey = `${event.countryId}:${event.leagueId}`;
     const league = matchesByLeague.get(leagueKey) ?? {
       countryName: event.countryName,
       leagueName: event.leagueName,
+      order: event.order,
       rounds: new Map<number, LeagueMatchDto[]>(),
     };
     const roundEvents = league.rounds.get(event.round) ?? [];
@@ -85,15 +86,22 @@ export function HomePage() {
     void loadDay();
   }, [loadDay]);
 
+  const isSeasonEnd = day !== null && currentSeason !== null
+    && day.date.slice(0, 10) === currentSeason.endDate.slice(0, 10);
+
   async function handleDayAction() {
     if (!gameId || !day || isActing) return;
 
     setIsActing(true);
     setError(null);
     try {
-      if (effectiveDayStatus === 'NotStarted') {
+      if (day.dayStatus === 'NotStarted') {
         await simulateCalendarDay(gameId);
-      } else if (effectiveDayStatus === 'Completed') {
+      } else if (day.dayStatus === 'Completed' && isSeasonEnd && currentSeason) {
+        await completeSeason(gameId, currentSeason.id);
+        resetGameSessionCache();
+        await refreshSeason(gameId);
+      } else if (day.dayStatus === 'Completed') {
         await advanceCalendarDay(gameId);
       }
       await loadDay();
@@ -120,14 +128,16 @@ export function HomePage() {
       {isLoading && <Loader size="large" text="Loading today&apos;s events..." />}
       {!isLoading && day && (
         <div className="home-calendar">
-          {day.matchEvents.length > 0 ? (
+          {day.leagueMatches.length > 0 ? (
             <div className="today-fixtures fixtures-section">
               <div className="fixtures-heading">
                 <h3>Today&apos;s matches</h3>
-                <span className="fixtures-count">{day.matchEvents.length} matches</span>
+                <span className="fixtures-count">{day.leagueMatches.length} matches</span>
               </div>
               <div className="today-leagues">
-                {[...matchesByLeague].map(([leagueKey, league]) => (
+                {[...matchesByLeague]
+                  .sort(([, left], [, right]) => left.order - right.order || left.leagueName.localeCompare(right.leagueName))
+                  .map(([leagueKey, league]) => (
                   <section className="today-league" key={leagueKey}>
                     <h3 className="today-league-title">{league.countryName} - {league.leagueName}</h3>
                     <div className="fixtures-rounds">
@@ -143,17 +153,33 @@ export function HomePage() {
                       ))}
                     </div>
                   </section>
-                ))}
+                  ))}
               </div>
             </div>
           ) : (
             <p className="home-message">There are no matches scheduled for today.</p>
           )}
 
-          {effectiveDayStatus !== 'InProgress' && (
-            <button type="button" className="start-btn day-action-btn" onClick={handleDayAction} disabled={isActing}>
-              {isActing ? '⏳ Updating day...' : effectiveDayStatus === 'NotStarted' ? '▶ Simulate day' : '▶ Proceed to next day'}
-            </button>
+          {day.dayStatus !== 'InProgress' && (
+            <>
+              {isSeasonEnd && day.dayStatus === 'Completed' && (
+                <div className="season-end-notice" role="status">Season end reached — complete this season to start the next one.</div>
+              )}
+              <button
+                type="button"
+                className={`start-btn day-action-btn${isSeasonEnd && day.dayStatus === 'Completed' ? ' day-action-btn--season-end' : ''}`}
+                onClick={handleDayAction}
+                disabled={isActing}
+              >
+                {isActing
+                  ? '⏳ Updating day...'
+                  : day.dayStatus === 'NotStarted'
+                    ? '▶ Simulate day'
+                    : isSeasonEnd
+                      ? '🏁 End season'
+                      : '▶ Proceed to next day'}
+              </button>
+            </>
           )}
         </div>
       )}

@@ -5,15 +5,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProjectFootballSim.Seasons.Infrastructure.Database;
+using ProjectFootballSim.Calendar.Infrastructure.Database;
 
 #nullable disable
 
-namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
+namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
 {
-    [DbContext(typeof(SeasonsDbContext))]
-    [Migration("20260810075244_SeasonsInit")]
-    partial class SeasonsInit
+    [DbContext(typeof(CalendarDbContext))]
+    [Migration("20260812205911_CalendarInit")]
+    partial class CalendarInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,7 +25,26 @@ namespace ProjectFootballSim.Seasons.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ProjectFootballSim.Seasons.Domain.Entities.GameSeason", b =>
+            modelBuilder.Entity("ProjectFootballSim.Calendar.Domain.Entities.GameCalendar", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CurrentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DayStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "GameId");
+
+                    b.ToTable("GameCalendars");
+                });
+
+            modelBuilder.Entity("ProjectFootballSim.Calendar.Domain.Entities.GameSeason", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
