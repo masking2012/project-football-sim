@@ -178,5 +178,186 @@
         "round": 30,
         "week": 48,
         "isMidweek": false
+    },
+
+    {
+        "leagueId": 102,
+        "round": 1,
+        "week": 4,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 2,
+        "week": 5,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 3,
+        "week": 6,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 4,
+        "week": 7,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 5,
+        "week": 9,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 6,
+        "week": 10,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 7,
+        "week": 11,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 8,
+        "week": 12,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 9,
+        "week": 13,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 10,
+        "week": 14,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 11,
+        "week": 15,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 12,
+        "week": 16,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 13,
+        "week": 17,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 14,
+        "week": 18,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 15,
+        "week": 19,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 16,
+        "week": 20,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 17,
+        "week": 21,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 18,
+        "week": 22,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 19,
+        "week": 40,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 20,
+        "week": 41,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 21,
+        "week": 42,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 22,
+        "week": 43,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 23,
+        "week": 44,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 24,
+        "week": 45,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 25,
+        "week": 46,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 26,
+        "week": 47,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 27,
+        "week": 48,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 28,
+        "week": 49,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 29,
+        "week": 50,
+        "isMidweek": false
+    },
+    {
+        "leagueId": 102,
+        "round": 30,
+        "week": 51,
+        "isMidweek": false
     }
 ]

@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20260811200344_LeaguesInit")]
+    [Migration("20260814122302_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
@@ -195,6 +195,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("LeagueId", "Round");
+
+                    b.HasIndex("LeagueId", "Week", "IsMidweek")
+                        .IsUnique();
 
                     b.ToTable("LeagueRounds");
                 });

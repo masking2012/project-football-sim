@@ -12,5 +12,19 @@
         "uefaChampionsLeaguePositions": [ 1 ],
         "uefaEuropaLeaguePositions": null,
         "uefaConferenceLeaguePositions": [ 2, 3 ]
+    },
+    {
+        "id": 102,
+        "name": "First League",
+        "order": 2,
+        "countryId": 1,
+        "teamsCount": 16,
+        "promotionPositions": [ 1, 2 ],
+        "promotionPlayOffPositions": [ 3, 4 ],
+        "relegationPositions": [ 15, 16 ],
+        "relegationPlayOffPositions": [ 13, 14 ],
+        "uefaChampionsLeaguePositions": null,
+        "uefaEuropaLeaguePositions": null,
+        "uefaConferenceLeaguePositions": null
     }
 ]

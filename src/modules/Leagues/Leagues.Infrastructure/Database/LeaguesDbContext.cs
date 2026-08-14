@@ -59,6 +59,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
                 .WithMany()
                 .HasForeignKey(x => x.LeagueId)
                 .IsRequired();
+            entity.HasIndex(x => new { x.LeagueId, x.Week, x.IsMidweek }).IsUnique();
         });
 
         modelBuilder.Entity<GameLeague>(entity =>

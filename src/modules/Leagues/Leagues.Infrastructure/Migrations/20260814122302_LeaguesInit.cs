@@ -161,6 +161,12 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 name: "IX_GameLeagueTeams_GameLeagueId",
                 table: "GameLeagueTeams",
                 column: "GameLeagueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeagueRounds_LeagueId_Week_IsMidweek",
+                table: "LeagueRounds",
+                columns: new[] { "LeagueId", "Week", "IsMidweek" },
+                unique: true);
         }
 
         /// <inheritdoc />
