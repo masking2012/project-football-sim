@@ -18,17 +18,17 @@
     {
         "id": 10003,
         "name": "LNZ Cherkasy",
-        "attack": 59,
-        "midfield": 63,
-        "defence": 65,
+        "attack": 57,
+        "midfield": 62,
+        "defence": 64,
         "countryId": 1
     },
     {
         "id": 10004,
         "name": "Polissya Zhytomyr",
-        "attack": 63,
-        "midfield": 64,
-        "defence": 63,
+        "attack": 64,
+        "midfield": 65,
+        "defence": 64,
         "countryId": 1
     },
     {
@@ -42,17 +42,17 @@
     {
         "id": 10006,
         "name": "Kolos Kovalivka",
-        "attack": 58,
-        "midfield": 58,
-        "defence": 60,
+        "attack": 57,
+        "midfield": 57,
+        "defence": 59,
         "countryId": 1
     },
     {
         "id": 10007,
         "name": "Kryvbas",
-        "attack": 60,
-        "midfield": 55,
-        "defence": 60,
+        "attack": 58,
+        "midfield": 53,
+        "defence": 58,
         "countryId": 1
     },
     {
@@ -66,9 +66,9 @@
     {
         "id": 10009,
         "name": "Karpaty Lviv",
-        "attack": 57,
-        "midfield": 57,
-        "defence": 57,
+        "attack": 58,
+        "midfield": 58,
+        "defence": 58,
         "countryId": 1
     },
     {
