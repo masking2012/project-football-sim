@@ -6,6 +6,7 @@ public sealed record LeagueDto(
     int Order,
     int CountryId,
     int TeamsCount,
+    IReadOnlyList<LeagueFormatDto> Format,
     ICollection<int>? PromotionPositions,
     ICollection<int>? PromotionPlayOffPositions,
     ICollection<int>? RelegationPositions,

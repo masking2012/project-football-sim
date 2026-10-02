@@ -20,6 +20,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     Order = table.Column<int>(type: "int", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
                     TeamsCount = table.Column<int>(type: "int", nullable: false),
+                    Format = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PromotionPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PromotionPlayOffPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RelegationPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),

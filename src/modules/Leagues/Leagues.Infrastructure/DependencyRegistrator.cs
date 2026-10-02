@@ -6,6 +6,8 @@ using ProjectFootballSim.Common.Data.Entities.Locations;
 using ProjectFootballSim.Leagues.Domain.Entities;
 using ProjectFootballSim.Leagues.Domain.ValueObjects;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
+using DataLeagueFormatType = ProjectFootballSim.Common.Data.Entities.Leagues.LeagueFormatType;
+using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.ValueObjects.LeagueFormatType;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -46,6 +48,7 @@ public static class DependencyRegistrator
                             order: leagueData.Order,
                             countryId: leagueData.CountryId,
                             teamsCount: leagueData.TeamsCount,
+                            format: MapFormat(leagueData.Format),
                             promotionPositions: leagueData.PromotionPositions,
                             promotionPlayOffPositions: leagueData.PromotionPlayOffPositions,
                             relegationPositions: leagueData.RelegationPositions,
@@ -59,6 +62,7 @@ public static class DependencyRegistrator
                         order: leagueData.Order,
                         countryId: leagueData.CountryId,
                         teamsCount: leagueData.TeamsCount,
+                        format: MapFormat(leagueData.Format),
                         promotionPositions: leagueData.PromotionPositions,
                         promotionPlayOffPositions: leagueData.PromotionPlayOffPositions,
                         relegationPositions: leagueData.RelegationPositions,
@@ -93,4 +97,16 @@ public static class DependencyRegistrator
 
         context.SaveChanges();
     }
+
+    private static List<LeagueFormat> MapFormat(IReadOnlyList<LeagueFormatData> format) =>
+        format
+            .Select(stage => new LeagueFormat(
+                order: stage.Order,
+                type: stage.Type switch
+                {
+                    DataLeagueFormatType.RoundRobin => DomainLeagueFormatType.RoundRobin,
+                    _ => throw new InvalidDataException($"Unsupported league format type '{stage.Type}'.")
+                },
+                legs: stage.Legs))
+            .ToList();
 }

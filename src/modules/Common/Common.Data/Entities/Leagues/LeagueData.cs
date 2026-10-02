@@ -12,5 +12,6 @@ public sealed record LeagueData(
     ICollection<int>? RelegationPlayOffPositions,
     ICollection<int>? UefaChampionsLeaguePositions,
     ICollection<int>? UefaEuropaLeaguePositions,
-    ICollection<int>? UefaConferenceLeaguePositions
+    ICollection<int>? UefaConferenceLeaguePositions,
+    IReadOnlyList<LeagueFormatData> Format
 );

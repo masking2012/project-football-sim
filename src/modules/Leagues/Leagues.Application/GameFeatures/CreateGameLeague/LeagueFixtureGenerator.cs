@@ -1,10 +1,13 @@
 using ProjectFootballSim.Common.Features;
 using ProjectFootballSim.Leagues.Application.Common.Services;
 using ProjectFootballSim.Leagues.Domain.Entities;
+using ProjectFootballSim.Leagues.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 
-public sealed class LeagueFixtureGenerator(ILeaguesRoundsCatalog leaguesRoundsCatalog)
+public sealed class LeagueFixtureGenerator(
+    ILeaguesCatalog leaguesCatalog,
+    ILeaguesRoundsCatalog leaguesRoundsCatalog)
 {
     private const int StubTeamId = -1;
     private const int MaxVenueStreak = 3;
@@ -16,12 +19,35 @@ public sealed class LeagueFixtureGenerator(ILeaguesRoundsCatalog leaguesRoundsCa
         DateTime seasonStartDate,
         CancellationToken cancellationToken)
     {
+        var league = await leaguesCatalog.GetByIdAsync(leagueId, cancellationToken).ConfigureAwait(false)
+            ?? throw new InvalidOperationException($"League with ID '{leagueId}' not found.");
         var roundDates = await LoadRoundDatesAsync(leagueId, seasonStartDate, cancellationToken).ConfigureAwait(false);
         var teams = PrepareTeams(teamIds);
         var pairings = GenerateRoundRobinPairings(teams);
+        var allFixtures = new List<GameLeagueMatch>();
+        var round = 1;
 
-        var firstHalfFixtures = CreateFirstHalfFixtures(pairings, teams.Where(t => t != StubTeamId));
-        var allFixtures = GenerateFullSeasonFixtures(firstHalfFixtures, roundDates, gameLeagueId);
+        foreach (var formatStage in league.Format.OrderBy(stage => stage.Order))
+        {
+            if (formatStage.Type != LeagueFormatType.RoundRobin)
+                throw new InvalidOperationException($"League format type '{formatStage.Type}' is not supported.");
+
+            foreach (var stageRound in GenerateRoundRobinStage(pairings, teams.Where(t => t != StubTeamId), formatStage.Legs))
+            {
+                if (!roundDates.TryGetValue(round, out var date))
+                    throw new InvalidOperationException($"League with ID '{leagueId}' has no calendar date for generated round {round}.");
+
+                foreach (var (home, away) in stageRound)
+                {
+                    allFixtures.Add(new GameLeagueMatch(date, home, away, round, gameLeagueId));
+                }
+
+                round++;
+            }
+        }
+
+        if (round - 1 != roundDates.Count)
+            throw new InvalidOperationException($"League with ID '{leagueId}' format generates {round - 1} rounds, but its calendar contains {roundDates.Count} rounds.");
 
         return allFixtures;
     }
@@ -209,29 +235,24 @@ public sealed class LeagueFixtureGenerator(ILeaguesRoundsCatalog leaguesRoundsCa
     // FULL SEASON (FIRST + SECOND HALF)
     // ------------------------------------------------------------
 
-    private static List<GameLeagueMatch> GenerateFullSeasonFixtures(
-        List<List<(int Home, int Away)>> firstHalf,
-        Dictionary<int, DateTime> roundDates,
-        Guid gameLeagueId)
+    private static List<List<(int Home, int Away)>> GenerateRoundRobinStage(
+        List<List<(int First, int Second)>> pairings,
+        IEnumerable<int> teamIds,
+        int legs)
     {
-        int numRounds = firstHalf.Count;
-        var result = new List<GameLeagueMatch>(numRounds * 2 * firstHalf[0].Count);
+        var firstHalf = CreateFirstHalfFixtures(pairings, teamIds);
+        var result = new List<List<(int Home, int Away)>>(pairings.Count * legs);
 
-        for (int round = 0; round < numRounds; round++)
+        for (var leg = 0; leg < legs; leg++)
         {
-            int firstRound = round + 1;
-            int secondRound = numRounds * 2 - round;
+            var reverse = leg % 2 == 1;
+            var rounds = reverse ? firstHalf.AsEnumerable().Reverse() : firstHalf;
 
-            foreach (var (home, away) in firstHalf[round])
+            foreach (var stageRound in rounds)
             {
-                result.Add(new GameLeagueMatch(
-                    roundDates[firstRound], home, away, firstRound, gameLeagueId));
-            }
-
-            foreach (var (home, away) in firstHalf[numRounds - round - 1])
-            {
-                result.Add(new GameLeagueMatch(
-                    roundDates[secondRound], away, home, secondRound, gameLeagueId));
+                result.Add(reverse
+                    ? stageRound.Select(fixture => (fixture.Away, fixture.Home)).ToList()
+                    : stageRound.ToList());
             }
         }
 

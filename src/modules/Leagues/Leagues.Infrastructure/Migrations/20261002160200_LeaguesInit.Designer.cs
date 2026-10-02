@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20260814122302_LeaguesInit")]
+    [Migration("20261002160200_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
@@ -143,6 +143,10 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Format")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

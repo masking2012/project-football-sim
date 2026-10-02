@@ -11,7 +11,14 @@
         "relegationPlayOffPositions": [ 13, 14 ],
         "uefaChampionsLeaguePositions": [ 1 ],
         "uefaEuropaLeaguePositions": null,
-        "uefaConferenceLeaguePositions": [ 2, 3 ]
+        "uefaConferenceLeaguePositions": [ 2, 3 ],
+        "format": [
+            {
+                "order": 1,
+                "type": "roundRobin",
+                "legs": 2
+            }
+        ]
     },
     {
         "id": 102,
@@ -25,6 +32,13 @@
         "relegationPlayOffPositions": [ 13, 14 ],
         "uefaChampionsLeaguePositions": null,
         "uefaEuropaLeaguePositions": null,
-        "uefaConferenceLeaguePositions": null
+        "uefaConferenceLeaguePositions": null,
+        "format": [
+            {
+                "order": 1,
+                "type": "roundRobin",
+                "legs": 2
+            }
+        ]
     }
 ]

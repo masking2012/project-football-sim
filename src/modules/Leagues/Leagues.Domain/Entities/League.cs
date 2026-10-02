@@ -1,3 +1,5 @@
+using ProjectFootballSim.Leagues.Domain.ValueObjects;
+
 namespace ProjectFootballSim.Leagues.Domain.Entities;
 
 public sealed class League
@@ -7,6 +9,7 @@ public sealed class League
     public int Order { get; private set; }
     public int CountryId { get; private set; }
     public int TeamsCount { get; private set; }
+    public ICollection<LeagueFormat> Format { get; private set; }
     public ICollection<int>? PromotionPositions { get; private set; }
     public ICollection<int>? PromotionPlayOffPositions { get; private set; }
     public ICollection<int>? RelegationPositions { get; private set; }
@@ -21,6 +24,7 @@ public sealed class League
         int order,
         int countryId,
         int teamsCount,
+        ICollection<LeagueFormat> format,
         ICollection<int>? promotionPositions,
         ICollection<int>? promotionPlayOffPositions,
         ICollection<int>? relegationPositions,
@@ -36,6 +40,7 @@ public sealed class League
             order,
             countryId,
             teamsCount,
+            format,
             promotionPositions,
             promotionPlayOffPositions,
             relegationPositions,
@@ -49,6 +54,7 @@ public sealed class League
         Order = order;
         CountryId = countryId;
         TeamsCount = teamsCount;
+        Format = format;
         PromotionPositions = promotionPositions;
         PromotionPlayOffPositions = promotionPlayOffPositions;
         RelegationPositions = relegationPositions;
@@ -63,6 +69,7 @@ public sealed class League
         int order,
         int countryId,
         int teamsCount,
+        ICollection<LeagueFormat> format,
         ICollection<int>? promotionPositions,
         ICollection<int>? promotionPlayOffPositions,
         ICollection<int>? relegationPositions,
@@ -76,6 +83,7 @@ public sealed class League
             order,
             countryId,
             teamsCount,
+            format,
             promotionPositions,
             promotionPlayOffPositions,
             relegationPositions,
@@ -88,6 +96,7 @@ public sealed class League
         Order = order;
         CountryId = countryId;
         TeamsCount = teamsCount;
+        Format = format;
         PromotionPositions = promotionPositions;
         PromotionPlayOffPositions = promotionPlayOffPositions;
         RelegationPositions = relegationPositions;
@@ -102,6 +111,7 @@ public sealed class League
         int order,
         int countryId,
         int teamsCount,
+        ICollection<LeagueFormat> format,
         ICollection<int>? promotionPositions,
         ICollection<int>? promotionPlayOffPositions,
         ICollection<int>? relegationPositions,
@@ -119,6 +129,8 @@ public sealed class League
         if (teamsCount < 2)
             throw new ArgumentException("Teams count in league shouldn't be less than 2");
 
+        ValidateFormat(format);
+
         ValidatePositions(
             teamsCount,
             promotionPositions,
@@ -128,6 +140,21 @@ public sealed class League
             uefaChampionsLeaguePositions,
             uefaEuropaLeaguePositions,
             uefaConferenceLeaguePositions);
+    }
+
+    private static void ValidateFormat(ICollection<LeagueFormat> format)
+    {
+        ArgumentNullException.ThrowIfNull(format);
+        if (format.Count == 0)
+            throw new ArgumentException("League format must contain at least one stage.", nameof(format));
+
+        var orderedFormat = format.OrderBy(stage => stage.Order).ToList();
+        for (var index = 0; index < orderedFormat.Count; index++)
+        {
+            var stage = orderedFormat[index];
+            if (stage.Order != index + 1)
+                throw new ArgumentException("League format orders must be unique and contiguous starting at one.", nameof(format));
+        }
     }
 
     private static void ValidatePositions(

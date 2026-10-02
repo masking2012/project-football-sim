@@ -29,6 +29,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.Order).IsRequired();
             entity.Property(x => x.CountryId).IsRequired();
             entity.Property(x => x.TeamsCount).IsRequired();
+            entity.Property<ICollection<LeagueFormat>?>(nameof(League.Format)).IsRequired().UseJsonCollection();
 
             entity.Property(x => x.PromotionPositions).UseJsonCollection();
             entity.Property(x => x.PromotionPlayOffPositions).UseJsonCollection();

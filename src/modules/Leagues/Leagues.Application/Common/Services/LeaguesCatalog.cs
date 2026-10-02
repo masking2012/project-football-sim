@@ -46,6 +46,10 @@ internal sealed class LeaguesCatalog(HybridCache cache, LeaguesDbContext dbConte
                 league.Order,
                 league.CountryId,
                 league.TeamsCount,
+                league.Format
+                    .OrderBy(stage => stage.Order)
+                    .Select(stage => new LeagueFormatDto(stage.Order, stage.Type, stage.Legs))
+                    .ToList(),
                 league.PromotionPositions,
                 league.PromotionPlayOffPositions,
                 league.RelegationPositions,
