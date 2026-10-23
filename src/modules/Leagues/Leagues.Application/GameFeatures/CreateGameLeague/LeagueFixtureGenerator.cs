@@ -1,4 +1,4 @@
-using ProjectFootballSim.Common.Features;
+using ProjectFootballSim.Shared.Features;
 using ProjectFootballSim.Leagues.Application.Common.Services;
 using ProjectFootballSim.Leagues.Domain.Entities;
 using ProjectFootballSim.Leagues.Domain.ValueObjects;

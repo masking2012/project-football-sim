@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Common.Data.Entities.Locations;
-using ProjectFootballSim.Common.Data.Entities.Teams;
+using ProjectFootballSim.Shared.Data.Entities.Locations;
+using ProjectFootballSim.Shared.Data.Entities.Teams;
 using ProjectFootballSim.Teams.Domain.Entities;
 using ProjectFootballSim.Teams.Domain.ValueObjects;
 using ProjectFootballSim.Teams.Infrastructure.Database;

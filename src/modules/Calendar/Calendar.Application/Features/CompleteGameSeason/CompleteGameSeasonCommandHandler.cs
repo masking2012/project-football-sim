@@ -3,7 +3,7 @@ using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Domain.Enums;
 using ProjectFootballSim.Calendar.Infrastructure.Database;
-using ProjectFootballSim.Common.Data.Entities.Seasons;
+using ProjectFootballSim.Shared.Data.Entities.Seasons;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
 

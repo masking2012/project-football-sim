@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Common.Features.EntityFrameworkCore;
+using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Domain.Entities;
 using ProjectFootballSim.Leagues.Domain.ValueObjects;
 

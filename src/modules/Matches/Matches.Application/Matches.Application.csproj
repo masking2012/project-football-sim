@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Matches.Domain\Matches.Domain.csproj" />
-    <ProjectReference Include="..\..\Common\Common.Features\Common.Features.csproj" />
+    <ProjectReference Include="..\..\..\shared\Shared.Features\Shared.Features.csproj" />
     <InternalsVisibleTo Include="$(AssemblyName).Tests" />
   </ItemGroup>
 

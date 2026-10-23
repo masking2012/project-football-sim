@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Common.Features;
+using ProjectFootballSim.Common.Features.Configuration;
 using ProjectFootballSim.Matches.Application.Common.Services;
 using ProjectFootballSim.Matches.Application.Features.ExtraTime;
 using ProjectFootballSim.Matches.Application.Features.Penalty;

@@ -1,4 +1,4 @@
-using ProjectFootballSim.Common.Features;
+using ProjectFootballSim.Shared.Features;
 using ProjectFootballSim.Matches.Domain.Services;
 
 namespace ProjectFootballSim.Matches.Application.Common.Services;
