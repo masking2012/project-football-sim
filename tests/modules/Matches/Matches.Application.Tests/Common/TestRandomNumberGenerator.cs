@@ -1,4 +1,4 @@
-using ProjectFootballSim.Shared.Features;
+using ProjectFootballSim.Shared.Features.Random;
 
 namespace ProjectFootballSim.Matches.Application.Tests.Common;
 

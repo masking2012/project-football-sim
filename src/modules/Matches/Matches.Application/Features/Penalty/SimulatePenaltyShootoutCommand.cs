@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
-using ProjectFootballSim.Shared.Features;
 using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Common.Services;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
+using ProjectFootballSim.Shared.Features.Random;
 
 namespace ProjectFootballSim.Matches.Application.Features.Penalty;
 

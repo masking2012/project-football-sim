@@ -4,6 +4,9 @@ namespace ProjectFootballSim.Shared.Features.Random;
 
 internal sealed class CryptoRandom : IRandomNumberGenerator
 {
+    /// <summary>
+    /// Returns a cryptographically secure random value in the range [0.0, 1.0), including 0.0 but excluding 1.0.
+    /// </summary>
     public double NextDouble()
     {
         Span<byte> bytes = stackalloc byte[8];
@@ -15,7 +18,8 @@ internal sealed class CryptoRandom : IRandomNumberGenerator
     }
 
     /// <summary>
-    /// The classic algorithm by Donald Knuth is simple and works well for football because λ is usually below 20.
+    /// Samples a Poisson-distributed event count with mean <paramref name="lambda"/> using Knuth's multiplicative algorithm.
+    /// Returns 0 when <paramref name="lambda"/> is non-positive; intended for the small rates typical of football simulations.
     /// </summary>
     /// <param name="lambda"></param>
     /// <returns></returns>

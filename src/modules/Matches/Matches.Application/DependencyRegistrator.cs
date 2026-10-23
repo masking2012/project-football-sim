@@ -1,10 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Common.Features.Configuration;
 using ProjectFootballSim.Matches.Application.Common.Services;
 using ProjectFootballSim.Matches.Application.Features.ExtraTime;
 using ProjectFootballSim.Matches.Application.Features.Penalty;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
 using ProjectFootballSim.Matches.Domain.Services;
+using ProjectFootballSim.Shared.Features;
 
 namespace ProjectFootballSim.Matches.Application;
 
