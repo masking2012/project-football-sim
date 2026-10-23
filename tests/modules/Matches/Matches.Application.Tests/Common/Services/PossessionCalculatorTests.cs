@@ -1,4 +1,5 @@
 using ProjectFootballSim.Matches.Application.Common.Services;
+using ProjectFootballSim.Matches.Application.Tests.Common;
 using ProjectFootballSim.Matches.Domain.Services;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
 
@@ -6,7 +7,7 @@ namespace ProjectFootballSim.Matches.Application.Tests.Common.Services;
 
 internal sealed class PossessionCalculatorTests
 {
-    private readonly PossessionCalculator _sut = new();
+    private readonly PossessionCalculator _sut = new(new TestRandomNumberGenerator(42));
 
     [Test]
     [Arguments(50, 50)]

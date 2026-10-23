@@ -2,9 +2,9 @@ using System.Security.Cryptography;
 
 namespace ProjectFootballSim.Common.Features;
 
-public static class CryptoRandom
+public sealed class CryptoRandom : IRandomNumberGenerator
 {
-    public static double NextDouble()
+    public double NextDouble()
     {
         Span<byte> bytes = stackalloc byte[8];
         RandomNumberGenerator.Fill(bytes);
@@ -19,7 +19,7 @@ public static class CryptoRandom
     /// </summary>
     /// <param name="lambda"></param>
     /// <returns></returns>
-    public static int NextPoisson(double lambda)
+    public int NextPoisson(double lambda)
     {
         if (lambda <= 0)
             return 0;

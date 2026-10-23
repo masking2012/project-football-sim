@@ -1,10 +1,11 @@
 using ProjectFootballSim.Matches.Application.Common.Services;
+using ProjectFootballSim.Matches.Application.Tests.Common;
 
 namespace ProjectFootballSim.Matches.Application.Tests.Common.Services;
 
 internal sealed class GoalsCalculatorTests
 {
-    private readonly GoalsCalculator _sut = new();
+    private readonly GoalsCalculator _sut = new(new TestRandomNumberGenerator(42));
 
     [Test]
     public async Task ShouldCalculateGoalsAsync()

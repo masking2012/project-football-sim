@@ -3,7 +3,7 @@ using ProjectFootballSim.Matches.Domain.Services;
 
 namespace ProjectFootballSim.Matches.Application.Common.Services;
 
-internal sealed class GoalsCalculator : IGoalsCalculator
+internal sealed class GoalsCalculator(IRandomNumberGenerator random) : IGoalsCalculator
 {
     public int Calculate(int attack, int opponentDefence, int chances)
     {
@@ -22,9 +22,9 @@ internal sealed class GoalsCalculator : IGoalsCalculator
             // Slight variation in chance quality.
             double quality =
                 conversionRate *
-                (CryptoRandom.NextDouble() * 0.3 + 0.85);
+                (random.NextDouble() * 0.3 + 0.85);
 
-            if (CryptoRandom.NextDouble() < quality)
+            if (random.NextDouble() < quality)
                 goals++;
         }
 

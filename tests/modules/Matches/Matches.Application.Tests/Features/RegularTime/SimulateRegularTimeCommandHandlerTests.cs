@@ -1,6 +1,7 @@
 using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Common.Services;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
+using ProjectFootballSim.Matches.Application.Tests.Common;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Matches.Application.Tests.Features.RegularTime;
@@ -11,7 +12,11 @@ internal sealed class SimulateRegularTimeCommandHandlerTests
 
     public SimulateRegularTimeCommandHandlerTests()
     {
-        _sut = new SimulateRegularTimeCommandHandler(new PossessionCalculator(), new ChancesCalculator(), new GoalsCalculator());
+        var random = new TestRandomNumberGenerator(42);
+        _sut = new SimulateRegularTimeCommandHandler(
+            new PossessionCalculator(random),
+            new ChancesCalculator(random),
+            new GoalsCalculator(random));
     }
 
     [Test]

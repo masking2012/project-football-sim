@@ -94,7 +94,7 @@ public sealed class SimulateLeagueGameDayCommandHandler(
         if (!teams.TryGetValue(teamId, out TeamDto? team))
             throw new InvalidOperationException($"Team with Id {teamId} not found.");
 
-        return new MatchTeamDto(teamId, team.Attack, team.Midfield, team.Defence);
+        return new MatchTeamDto(Id: teamId, Attack: team.Attack, Midfield: team.Midfield, Defence: team.Defence);
     }
 
     private static void UpdateStandings(GameLeague gameLeague, GameLeagueMatch match, ScoreResultDto score)

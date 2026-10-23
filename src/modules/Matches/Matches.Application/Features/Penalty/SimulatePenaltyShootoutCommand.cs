@@ -6,7 +6,9 @@ using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Matches.Application.Features.Penalty;
 
-public sealed class SimulatePenaltyShootoutCommand(ILogger<SimulatePenaltyShootoutCommand> logger)
+public sealed class SimulatePenaltyShootoutCommand(
+    ILogger<SimulatePenaltyShootoutCommand> logger,
+    IRandomNumberGenerator random)
 {
     public ScoreResultDto Handle(MatchTeamDto homeDto, MatchTeamDto awayDto)
     {
@@ -27,26 +29,28 @@ public sealed class SimulatePenaltyShootoutCommand(ILogger<SimulatePenaltyShooto
         for (int i = 0; i < 5; i++)
         {
             // Home penalty
-            if (CryptoRandom.NextDouble() < homeConversionRate)
+            if (random.NextDouble() < homeConversionRate)
                 homeScore++;
 
+            int remainingAwayKicks = 5 - i;
+            if (homeScore - awayScore > remainingAwayKicks)
+                break;
+
             // Away penalty
-            if (CryptoRandom.NextDouble() < awayConversionRate)
+            if (random.NextDouble() < awayConversionRate)
                 awayScore++;
 
             // Early exit if one team can't catch up
-            int remaining = 5 - (i + 1);
-            if (homeScore - awayScore > remaining)
-                break;
-            if (awayScore - homeScore > remaining)
+            int remainingHomeKicks = 4 - i;
+            if (awayScore - homeScore > remainingHomeKicks)
                 break;
         }
 
         // Sudden death if still tied
         while (homeScore == awayScore)
         {
-            bool homeScores = CryptoRandom.NextDouble() < homeConversionRate;
-            bool awayScores = CryptoRandom.NextDouble() < awayConversionRate;
+            bool homeScores = random.NextDouble() < homeConversionRate;
+            bool awayScores = random.NextDouble() < awayConversionRate;
 
             if (homeScores) homeScore++;
             if (awayScores) awayScore++;

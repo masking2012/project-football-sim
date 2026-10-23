@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using ProjectFootballSim.Common.Features;
 using ProjectFootballSim.Matches.Application.Common.Services;
 using ProjectFootballSim.Matches.Application.Features.ExtraTime;
 using ProjectFootballSim.Matches.Application.Features.Penalty;
@@ -11,6 +12,8 @@ public static class DependencyRegistrator
 {
     public static IServiceCollection AddMatchesApplication(this IServiceCollection services)
     {
+        services.AddCommonFeatures();
+
         services.AddScoped<IPossessionCalculator, PossessionCalculator>();
         services.AddScoped<IChancesCalculator, ChancesCalculator>();
         services.AddScoped<IGoalsCalculator, GoalsCalculator>();

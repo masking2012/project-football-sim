@@ -7,8 +7,8 @@ public readonly struct Possession : IEquatable<Possession>
 
     public Possession(double value)
     {
-        if (value < 0.00 || value > 1.00)
-            throw new ArgumentOutOfRangeException(nameof(value), "Possession must be between 0.00 and 1.00");
+        if (!double.IsFinite(value) || value < 0.00 || value > 1.00)
+            throw new ArgumentOutOfRangeException(nameof(value), "Possession must be finite and between 0.00 and 1.00");
 
         Value = value;
     }

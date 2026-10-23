@@ -25,6 +25,51 @@ internal sealed class LeagueFixtureGeneratorTests
     }
 
     [Test]
+    public async Task ShouldScheduleEachTeamOnlyOncePerRoundAsync()
+    {
+        var generator = CreateGenerator(legs: 1, rounds: 3);
+
+        var fixtures = await generator.GenerateAsync(
+            leagueId: 1,
+            gameLeagueId: Guid.NewGuid(),
+            teamIds: [1, 2, 3, 4],
+            seasonStartDate: new DateTime(2026, 1, 1),
+            CancellationToken.None).ConfigureAwait(false);
+
+        foreach (var round in fixtures.GroupBy(match => match.Round))
+        {
+            var participatingTeams = round
+                .SelectMany(match => new[] { match.HomeTeamId, match.AwayTeamId })
+                .ToList();
+
+            await Assert.That(participatingTeams).Count().IsEqualTo(4);
+            await Assert.That(participatingTeams.Distinct()).Count().IsEqualTo(4);
+        }
+    }
+
+    [Test]
+    public async Task ShouldScheduleFutureRoundsAfterPreviousRoundsAsync()
+    {
+        var generator = CreateGenerator(legs: 1, rounds: 3);
+
+        var fixtures = await generator.GenerateAsync(
+            leagueId: 1,
+            gameLeagueId: Guid.NewGuid(),
+            teamIds: [1, 2, 3, 4],
+            seasonStartDate: new DateTime(2026, 1, 1),
+            CancellationToken.None).ConfigureAwait(false);
+
+        var datesByRound = fixtures
+            .GroupBy(match => match.Round)
+            .ToDictionary(round => round.Key, round => round.Select(match => match.Date).ToList());
+
+        for (var round = 1; round < datesByRound.Count; round++)
+        {
+            await Assert.That(datesByRound[round].Max()).IsLessThan(datesByRound[round + 1].Min());
+        }
+    }
+
+    [Test]
     public async Task ShouldRejectCalendarRoundCountMismatchAsync()
     {
         var generator = CreateGenerator(legs: 2, rounds: 3);
