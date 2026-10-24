@@ -37,12 +37,16 @@ public sealed class SimulateLeagueGameDayCommandHandler(
         CancellationToken cancellationToken)
     {
         return await dbContext.GameLeagueMatches
-            .Include(x => x.GameLeague)
-            .Where(x =>
-                x.GameLeague.UserId == command.UserId
-                && x.GameLeague.GameId == command.GameId
-                && x.Date >= startDate
-                && x.Date < endDate)
+            .Join(
+                dbContext.GameLeagues,
+                match => match.GameLeagueId,
+                gameLeague => gameLeague.Id,
+                (match, gameLeague) => new { match, gameLeague })
+            .Where(x => x.gameLeague.UserId == command.UserId
+                && x.gameLeague.GameId == command.GameId
+                && x.match.Date >= startDate
+                && x.match.Date < endDate)
+            .Select(x => x.match)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
     }

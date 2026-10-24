@@ -61,6 +61,7 @@
   <Folder Name="/tests/modules/" />
   <Folder Name="/tests/modules/Leagues/">
     <Project Path="tests/modules/Leagues/Leagues.Application.Tests/Leagues.Application.Tests.csproj" />
+    <Project Path="tests/modules/Leagues/Leagues.Domain.Tests/Leagues.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/modules/Matches/">
     <Project Path="tests/modules/Matches/Matches.Application.Tests/Matches.Application.Tests.csproj" Id="b50f9229-c20b-4645-af88-baef81b2395a" />

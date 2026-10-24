@@ -11,8 +11,6 @@ public sealed class GameLeagueTeam
     public int GoalsAgainst { get; private set; }
     public int Points { get; private set; }
 
-    public GameLeague GameLeague { get; } = default!;
-
     public GameLeagueTeam(Guid gameLeagueId, int teamId)
     {
         if (gameLeagueId == Guid.Empty)

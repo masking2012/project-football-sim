@@ -1,5 +1,3 @@
-using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
-
 namespace ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 public sealed class GameLeague
@@ -13,7 +11,6 @@ public sealed class GameLeague
     public Guid SeasonId { get; }
     public int LeagueId { get; }
 
-    public League League { get; } = default!;
     public IReadOnlyCollection<GameLeagueTeam> GameLeagueTeams => _teams;
     public IReadOnlyCollection<GameLeagueMatch> GameLeagueMatches => _matches;
 
@@ -59,6 +56,11 @@ public sealed class GameLeague
             throw new ArgumentException("Both teams must be part of the league.");
         if (_matches.Any(match => match.Id == gameLeagueMatch.Id))
             throw new InvalidOperationException("Match is already part of the league.");
+        if (_matches.Any(match =>
+            match.Round == gameLeagueMatch.Round
+            && ((match.HomeTeamId == gameLeagueMatch.HomeTeamId && match.AwayTeamId == gameLeagueMatch.AwayTeamId)
+                || (match.HomeTeamId == gameLeagueMatch.AwayTeamId && match.AwayTeamId == gameLeagueMatch.HomeTeamId))))
+            throw new InvalidOperationException("A match between these teams already exists in this round.");
 
         _matches.Add(gameLeagueMatch);
     }

@@ -72,13 +72,13 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.GameId).IsRequired();
             entity.Property(x => x.SeasonId).IsRequired();
 
-            entity.HasOne(x => x.League)
+            entity.HasOne<League>()
                 .WithMany()
                 .HasForeignKey(x => x.LeagueId)
                 .IsRequired();
 
             entity.HasMany(e => e.GameLeagueMatches)
-                .WithOne(e => e.GameLeague)
+                .WithOne()
                 .HasForeignKey(e => e.GameLeagueId)
                 .IsRequired();
 
@@ -96,6 +96,10 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.GoalsFor).IsRequired().HasDefaultValue(0);
             entity.Property(x => x.GoalsAgainst).IsRequired().HasDefaultValue(0);
             entity.Property(x => x.Points).IsRequired().HasDefaultValue(0);
+            entity.HasOne<GameLeague>()
+                .WithMany(x => x.GameLeagueTeams)
+                .HasForeignKey(x => x.GameLeagueId)
+                .IsRequired();
         });
 
         modelBuilder.Entity<GameLeagueMatch>(entity =>
@@ -109,7 +113,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.AwayTeamScore).IsRequired(false);
             entity.Property(x => x.Round).IsRequired();
 
-            entity.HasOne(x => x.GameLeague)
+            entity.HasOne<GameLeague>()
                 .WithMany(x => x.GameLeagueMatches)
                 .HasForeignKey(x => x.GameLeagueId)
                 .IsRequired();

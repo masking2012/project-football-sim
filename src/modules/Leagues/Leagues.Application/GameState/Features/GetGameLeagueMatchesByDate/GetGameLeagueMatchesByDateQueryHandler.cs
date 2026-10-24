@@ -19,21 +19,25 @@ public sealed class GetGameLeagueMatchesByDateQueryHandler(
 
         return await dbContext.GameLeagueMatches
             .AsNoTracking()
-            .Include(x => x.GameLeague)
-            .Where(x => x.GameLeague.UserId == query.UserId
-                && x.GameLeague.GameId == query.GameId
-                && x.Date >= startDate && x.Date < endDate)
+            .Join(
+                dbContext.GameLeagues.AsNoTracking(),
+                match => match.GameLeagueId,
+                gameLeague => gameLeague.Id,
+                (match, gameLeague) => new { match, gameLeague })
+            .Where(x => x.gameLeague.UserId == query.UserId
+                && x.gameLeague.GameId == query.GameId
+                && x.match.Date >= startDate && x.match.Date < endDate)
             .Select(x => new GameLeagueMatchDto(
-                Id: x.Id,
-                HomeTeamId: x.HomeTeamId,
-                AwayTeamId: x.AwayTeamId,
-                HomeTeamScore: x.HomeTeamScore,
-                AwayTeamScore: x.AwayTeamScore,
-                Round: x.Round,
-                LeagueName: leagues[x.GameLeague.LeagueId].Name,
-                LeagueId: x.GameLeague.LeagueId,
-                CountryId: leagues[x.GameLeague.LeagueId].CountryId,
-                Order: leagues[x.GameLeague.LeagueId].Order))
+                Id: x.match.Id,
+                HomeTeamId: x.match.HomeTeamId,
+                AwayTeamId: x.match.AwayTeamId,
+                HomeTeamScore: x.match.HomeTeamScore,
+                AwayTeamScore: x.match.AwayTeamScore,
+                Round: x.match.Round,
+                LeagueName: leagues[x.gameLeague.LeagueId].Name,
+                LeagueId: x.gameLeague.LeagueId,
+                CountryId: leagues[x.gameLeague.LeagueId].CountryId,
+                Order: leagues[x.gameLeague.LeagueId].Order))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
     }
