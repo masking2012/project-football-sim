@@ -66,6 +66,10 @@
     <Project Path="tests/modules/Matches/Matches.Application.Tests/Matches.Application.Tests.csproj" Id="b50f9229-c20b-4645-af88-baef81b2395a" />
     <Project Path="tests/modules/Matches/Matches.Domain.Tests/Matches.Domain.Tests.csproj" />
   </Folder>
+  <Folder Name="/tests/modules/Teams/" Id="32be5f67-8f5e-146e-463b-3c175719b3ce">
+    <Project Path="tests/modules/Teams/Teams.Application.Tests/Teams.Application.Tests.csproj" />
+    <Project Path="tests/modules/Teams/Teams.Domain.Tests/Teams.Domain.Tests.csproj" />
+  </Folder>
   <Folder Name="/tests/shared/">
     <Project Path="tests/shared/Shared.Features.Tests/Shared.Features.Tests.csproj" Id="674923c4-8be2-4f2e-9f23-e4c5bcaaddb5" />
   </Folder>

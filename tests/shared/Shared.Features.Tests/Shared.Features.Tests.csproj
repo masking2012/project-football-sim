@@ -1,8 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
-    <PackageReference Include="TUnit" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\..\src\shared\Shared.Features\Shared.Features.csproj" />
   </ItemGroup>
 </Project>
