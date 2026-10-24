@@ -1,12 +1,12 @@
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Leagues.Application.Common.Services;
-using ProjectFootballSim.Leagues.Application.Features.GetLeagueById;
-using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
-using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
-using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueFixtures;
-using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueMatchesByDate;
-using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueStandings;
-using ProjectFootballSim.Leagues.Application.GameFeatures.SimulateLeagueGameDay;
+using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueById;
+using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagues;
+using ProjectFootballSim.Leagues.Application.Catalog.Services;
+using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
+using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
 
 namespace ProjectFootballSim.Leagues.Application;
 

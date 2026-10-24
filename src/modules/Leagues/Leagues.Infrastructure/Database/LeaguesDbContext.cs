@@ -1,7 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
-using ProjectFootballSim.Leagues.Domain.Entities;
-using ProjectFootballSim.Leagues.Domain.ValueObjects;
+using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
+using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
+using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 namespace ProjectFootballSim.Leagues.Infrastructure.Database;
 

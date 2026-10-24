@@ -22,7 +22,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.GameLeague", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.ToTable("GameLeagues");
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.GameLeagueMatch", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueMatch", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -84,7 +84,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.ToTable("GameLeagueMatches");
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.GameLeagueTeam", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueTeam", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -133,7 +133,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.ToTable("GameLeagueTeams");
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.League", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Catalog.Entities.League", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
@@ -181,7 +181,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.ToTable("Leagues");
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.LeagueRound", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Catalog.Entities.LeagueRound", b =>
                 {
                     b.Property<int>("LeagueId")
                         .HasColumnType("int");
@@ -203,7 +203,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.ToTable("LeagueRounds");
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.ValueObjects.LeagueTeam", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.LeagueTeam", b =>
                 {
                     b.Property<int>("LeagueId")
                         .HasColumnType("int");
@@ -216,9 +216,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.ToTable("LeagueTeams");
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.GameLeague", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", b =>
                 {
-                    b.HasOne("ProjectFootballSim.Leagues.Domain.Entities.League", "League")
+                    b.HasOne("ProjectFootballSim.Leagues.Domain.Catalog.Entities.League", "League")
                         .WithMany()
                         .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -227,9 +227,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Navigation("League");
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.GameLeagueMatch", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueMatch", b =>
                 {
-                    b.HasOne("ProjectFootballSim.Leagues.Domain.Entities.GameLeague", "GameLeague")
+                    b.HasOne("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", "GameLeague")
                         .WithMany("GameLeagueMatches")
                         .HasForeignKey("GameLeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -238,34 +238,34 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Navigation("GameLeague");
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.GameLeagueTeam", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueTeam", b =>
                 {
-                    b.HasOne("ProjectFootballSim.Leagues.Domain.Entities.GameLeague", null)
+                    b.HasOne("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", null)
                         .WithMany("GameLeagueTeams")
                         .HasForeignKey("GameLeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.LeagueRound", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Catalog.Entities.LeagueRound", b =>
                 {
-                    b.HasOne("ProjectFootballSim.Leagues.Domain.Entities.League", null)
+                    b.HasOne("ProjectFootballSim.Leagues.Domain.Catalog.Entities.League", null)
                         .WithMany()
                         .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.ValueObjects.LeagueTeam", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.LeagueTeam", b =>
                 {
-                    b.HasOne("ProjectFootballSim.Leagues.Domain.Entities.League", null)
+                    b.HasOne("ProjectFootballSim.Leagues.Domain.Catalog.Entities.League", null)
                         .WithMany()
                         .HasForeignKey("LeagueId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Entities.GameLeague", b =>
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", b =>
                 {
                     b.Navigation("GameLeagueMatches");
 
@@ -275,3 +275,4 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
         }
     }
 }
+

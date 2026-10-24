@@ -3,11 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Shared.Data.Entities.Leagues;
 using ProjectFootballSim.Shared.Data.Entities.Locations;
-using ProjectFootballSim.Leagues.Domain.Entities;
-using ProjectFootballSim.Leagues.Domain.ValueObjects;
+using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
+using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 using DataLeagueFormatType = ProjectFootballSim.Shared.Data.Entities.Leagues.LeagueFormatType;
-using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.ValueObjects.LeagueFormatType;
+using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.LeagueFormatType;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 

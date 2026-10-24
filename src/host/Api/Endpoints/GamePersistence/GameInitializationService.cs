@@ -1,8 +1,8 @@
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.GamePersistence.Application.Features.CreateGame;
-using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
-using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
+using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagues;
+using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
 namespace ProjectFootballSim.Api.Endpoints.GamePersistence;
 

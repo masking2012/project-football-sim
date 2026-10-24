@@ -2,7 +2,7 @@ using ProjectFootballSim.Calendar.Application.Common.Services;
 using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Domain.Enums;
 using ProjectFootballSim.Calendar.Infrastructure.Database;
-using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
 
 namespace ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 

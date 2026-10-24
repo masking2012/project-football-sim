@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
-using ProjectFootballSim.Leagues.Application.Features.GetLeagueById;
-using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueFixtures;
-using ProjectFootballSim.Leagues.Application.GameFeatures.GetGameLeagueStandings;
+using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueById;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
 using System.Security.Claims;
 

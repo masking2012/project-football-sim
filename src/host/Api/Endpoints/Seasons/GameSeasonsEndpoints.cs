@@ -3,8 +3,8 @@ using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
-using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
-using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
+using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagues;
+using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Seasons;
