@@ -2,4 +2,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\src\modules\Leagues\Leagues.Application\Leagues.Application.csproj" />
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="GameFeatures\CreateGameLeague\" />
+    </ItemGroup>
 </Project>

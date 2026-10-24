@@ -67,7 +67,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
         modelBuilder.Entity<GameLeague>(entity =>
         {
             entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            entity.Property(x => x.Id).IsRequired().ValueGeneratedNever();
             entity.Property(x => x.UserId).IsRequired();
             entity.Property(x => x.GameId).IsRequired();
             entity.Property(x => x.SeasonId).IsRequired();
@@ -87,8 +87,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
 
         modelBuilder.Entity<GameLeagueTeam>(entity =>
         {
-            entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).IsRequired();
+            entity.HasKey(x => new { x.GameLeagueId, x.TeamId });
             entity.Property(x => x.GameLeagueId).IsRequired();
             entity.Property(x => x.TeamId).IsRequired();
             entity.Property(x => x.Wins).IsRequired().HasDefaultValue(0);
@@ -102,7 +101,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
         modelBuilder.Entity<GameLeagueMatch>(entity =>
         {
             entity.HasKey(x => x.Id);
-            entity.Property(x => x.Id).IsRequired().ValueGeneratedOnAdd();
+            entity.Property(x => x.Id).IsRequired().ValueGeneratedNever();
             entity.Property(x => x.Date).IsRequired();
             entity.Property(x => x.HomeTeamId).IsRequired();
             entity.Property(x => x.AwayTeamId).IsRequired();

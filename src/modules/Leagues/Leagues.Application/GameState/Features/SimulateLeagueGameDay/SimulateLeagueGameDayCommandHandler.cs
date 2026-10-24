@@ -85,8 +85,7 @@ public sealed class SimulateLeagueGameDayCommandHandler(
             away,
             new MatchSettingsDto(HasHomeAdvantage: true)));
 
-        match.SetScore(score.HomeScore, score.AwayScore);
-        UpdateStandings(gameLeague, match, score);
+        gameLeague.RecordMatchResult(match.Id, score.HomeScore, score.AwayScore);
     }
 
     private static MatchTeamDto CreateMatchTeam(int teamId, IReadOnlyDictionary<int, TeamDto> teams)
@@ -97,25 +96,4 @@ public sealed class SimulateLeagueGameDayCommandHandler(
         return new MatchTeamDto(Id: teamId, Attack: team.Attack, Midfield: team.Midfield, Defence: team.Defence);
     }
 
-    private static void UpdateStandings(GameLeague gameLeague, GameLeagueMatch match, ScoreResultDto score)
-    {
-        var homeTeam = gameLeague.GameLeagueTeams.Single(x => x.TeamId == match.HomeTeamId);
-        var awayTeam = gameLeague.GameLeagueTeams.Single(x => x.TeamId == match.AwayTeamId);
-
-        if (score.HomeScore > score.AwayScore)
-        {
-            homeTeam.AddWin(score.HomeScore, score.AwayScore);
-            awayTeam.AddLoss(score.AwayScore, score.HomeScore);
-        }
-        else if (score.HomeScore < score.AwayScore)
-        {
-            homeTeam.AddLoss(score.HomeScore, score.AwayScore);
-            awayTeam.AddWin(score.AwayScore, score.HomeScore);
-        }
-        else
-        {
-            homeTeam.AddDraw(score.HomeScore, score.AwayScore);
-            awayTeam.AddDraw(score.AwayScore, score.HomeScore);
-        }
-    }
 }
