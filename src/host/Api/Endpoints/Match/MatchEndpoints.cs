@@ -62,7 +62,8 @@ internal static class MatchEndpoints
             // Extra time if draw
             if (rtScore.HomeScore == rtScore.AwayScore)
             {
-                var et = extraTime.Handle(homeTeam, awayTeam, settings);
+                var extraTimeCommand = new SimulateExtraTimeCommand(homeTeam, awayTeam, settings);
+                var et = extraTime.Handle(extraTimeCommand);
                 etScore = new ScoreResponse(et.HomeScore, et.AwayScore);
                 finalHome += et.HomeScore;
                 finalAway += et.AwayScore;
@@ -70,7 +71,8 @@ internal static class MatchEndpoints
                 // Penalties if still drawn
                 if (finalHome == finalAway)
                 {
-                    var pen = penaltyShootout.Handle(homeTeam, awayTeam);
+                    var penaltyCommand = new SimulatePenaltyShootoutCommand(homeTeam, awayTeam);
+                    var pen = penaltyShootout.Handle(penaltyCommand);
                     penScore = new ScoreResponse(pen.HomeScore, pen.AwayScore);
                 }
             }
