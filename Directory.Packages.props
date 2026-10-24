@@ -1,35 +1,37 @@
 <Project>
-  <PropertyGroup>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-  </PropertyGroup>
-  <ItemGroup>
-    <!-- Web -->
-    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
-    <PackageVersion Include="Microsoft.Data.SqlClient" Version="6.1.1" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="10.8.0" />
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.10" />
-    <!-- Database -->
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.10" />
-    <!-- Auth -->
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="10.0.10" />
-    <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.10" />
-    <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.12.1" />
-    <!-- Testing -->
-    <PackageVersion Include="Moq" Version="4.20.72" />
-    <PackageVersion Include="TUnit" Version="1.61.38" />
-    <!-- Code Analysis -->
-    <PackageVersion Include="Meziantou.Analyzer" Version="3.0.125">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageVersion>
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.30.0.144632">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageVersion>
-    <PackageVersion Include="Roslynator.Analyzers" Version="4.14.1">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageVersion>
-  </ItemGroup>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    </PropertyGroup>
+    <ItemGroup>
+        <!-- Web -->
+        <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.13" />
+        <PackageVersion Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+        <PackageVersion Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="10.0.13" />
+        <PackageVersion Include="Microsoft.Extensions.Caching.Hybrid" Version="10.11.0" />
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.13" />
+        <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.13" />
+        <!-- Database -->
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.13" />
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.13" />
+        <!-- Auth -->
+        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.13" />
+        <PackageVersion Include="Microsoft.Extensions.Identity.Core" Version="10.0.13" />
+        <PackageVersion Include="Microsoft.Extensions.Options.DataAnnotations" Version="10.0.13" />
+        <PackageVersion Include="System.IdentityModel.Tokens.Jwt" Version="8.23.0" />
+        <!-- Testing -->
+        <PackageVersion Include="Moq" Version="4.21.0" />
+        <PackageVersion Include="TUnit" Version="1.76.0" />
+        <!-- Code Analysis -->
+        <PackageVersion Include="Meziantou.Analyzer" Version="3.0.316">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageVersion>
+        <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.35.0.4138">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageVersion>
+        <PackageVersion Include="Roslynator.Analyzers" Version="5.0.1">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageVersion>
+    </ItemGroup>
 </Project>
