@@ -28,6 +28,11 @@ internal sealed class LeaguesRoundsCatalog(HybridCache cache, LeaguesDbContext d
     {
         var leagueRounds = await dbContext.LeagueRounds
             .AsNoTracking()
+            .Join(
+                dbContext.LeagueActivations.AsNoTracking(),
+                round => new { round.LeagueId, round.Version },
+                activation => new { LeagueId = activation.LeagueId, Version = activation.CurrentVersion },
+                (round, _) => round)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 

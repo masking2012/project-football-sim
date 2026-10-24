@@ -1,6 +1,7 @@
 [
     {
         "id": 101,
+        "version": 1,
         "name": "Premier League",
         "order": 1,
         "countryId": 1,
@@ -22,6 +23,7 @@
     },
     {
         "id": 102,
+        "version": 1,
         "name": "First League",
         "order": 2,
         "countryId": 1,

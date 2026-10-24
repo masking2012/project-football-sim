@@ -2,7 +2,6 @@ using Moq;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
 using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
-using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 
 namespace ProjectFootballSim.Leagues.Application.Tests.GameState.Features.CreateGameLeague;
 
@@ -86,6 +85,7 @@ internal sealed class LeagueFixtureGeneratorTests
     {
         var league = new LeagueDto(
             Id: 1,
+            Version: 1,
             Name: "Test League",
             Order: 1,
             CountryId: 1,

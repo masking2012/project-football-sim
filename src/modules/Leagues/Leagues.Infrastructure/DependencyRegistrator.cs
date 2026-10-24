@@ -7,7 +7,7 @@ using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 using DataLeagueFormatType = ProjectFootballSim.Shared.Data.Entities.Leagues.LeagueFormatType;
-using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.LeagueFormatType;
+using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.Enums.LeagueStageType;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -39,11 +39,12 @@ public static class DependencyRegistrator
         {
             foreach (var leagueData in LeaguesDataProvider.GetLeaguesByCountryId(countryData.Id))
             {
-                var league = context.Set<League>().SingleOrDefault(c => c.Id == leagueData.Id);
+                var league = context.Set<League>().SingleOrDefault(c => c.Id == leagueData.Id && c.Version == leagueData.Version);
                 if (league is null)
                     context.Set<League>().Add(
                         new League(
                             id: leagueData.Id,
+                            version: leagueData.Version,
                             name: leagueData.Name,
                             order: leagueData.Order,
                             countryId: leagueData.CountryId,
@@ -56,51 +57,47 @@ public static class DependencyRegistrator
                             uefaChampionsLeaguePositions: leagueData.UefaChampionsLeaguePositions,
                             uefaEuropaLeaguePositions: leagueData.UefaEuropaLeaguePositions,
                             uefaConferenceLeaguePositions: leagueData.UefaConferenceLeaguePositions));
-                else
-                    league.Update(
-                        name: leagueData.Name,
-                        order: leagueData.Order,
-                        countryId: leagueData.CountryId,
-                        teamsCount: leagueData.TeamsCount,
-                        format: MapFormat(leagueData.Format),
-                        promotionPositions: leagueData.PromotionPositions,
-                        promotionPlayOffPositions: leagueData.PromotionPlayOffPositions,
-                        relegationPositions: leagueData.RelegationPositions,
-                        relegationPlayOffPositions: leagueData.RelegationPlayOffPositions,
-                        uefaChampionsLeaguePositions: leagueData.UefaChampionsLeaguePositions,
-                        uefaEuropaLeaguePositions: leagueData.UefaEuropaLeaguePositions,
-                        uefaConferenceLeaguePositions: leagueData.UefaConferenceLeaguePositions);
             }
 
             foreach (var leagueTeamData in LeaguesDataProvider.GetLeagueTeamsByCountryId(countryData.Id))
             {
                 var leagueTeam = context.Set<LeagueTeam>()
-                    .SingleOrDefault(x => x.LeagueId == leagueTeamData.LeagueId && x.TeamId == leagueTeamData.TeamId);
+                    .SingleOrDefault(x => x.LeagueId == leagueTeamData.LeagueId && x.Version == leagueTeamData.Version && x.TeamId == leagueTeamData.TeamId);
                 if (leagueTeam is null)
                     context.Set<LeagueTeam>().Add(
                         new LeagueTeam(
                             LeagueId: leagueTeamData.LeagueId,
+                            Version: leagueTeamData.Version,
                             TeamId: leagueTeamData.TeamId));
             }
 
             foreach (var leagueRoundData in LeaguesDataProvider.GetLeagueRoundsByCountryId(countryData.Id))
             {
                 var leagueRound = context.Set<LeagueRound>()
-                    .SingleOrDefault(x => x.LeagueId == leagueRoundData.LeagueId && x.Round == leagueRoundData.Round);
+                    .SingleOrDefault(x => x.LeagueId == leagueRoundData.LeagueId && x.Version == leagueRoundData.Version && x.Round == leagueRoundData.Round);
                 if (leagueRound is null)
                     context.Set<LeagueRound>()
-                        .Add(new LeagueRound(leagueId: leagueRoundData.LeagueId, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek));
+                        .Add(new LeagueRound(leagueId: leagueRoundData.LeagueId, version: leagueRoundData.Version, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek));
+            }
+
+            foreach (var activationData in LeaguesDataProvider.GetLeagueActivationsByCountryId(countryData.Id))
+            {
+                var activation = context.Set<LeagueActivation>()
+                    .SingleOrDefault(x => x.LeagueId == activationData.LeagueId);
+                if (activation is null)
+                    context.Set<LeagueActivation>().Add(
+                        new LeagueActivation(activationData.LeagueId, activationData.CurrentVersion));
                 else
-                    leagueRound.Update(leagueRoundData.Week, leagueRoundData.IsMidweek);
+                    activation.ChangeVersion(activationData.CurrentVersion);
             }
         }
 
         context.SaveChanges();
     }
 
-    private static List<LeagueFormat> MapFormat(IReadOnlyList<LeagueFormatData> format) =>
+    private static List<LeagueStage> MapFormat(IReadOnlyList<LeagueFormatData> format) =>
         format
-            .Select(stage => new LeagueFormat(
+            .Select(stage => new LeagueStage(
                 order: stage.Order,
                 type: stage.Type switch
                 {

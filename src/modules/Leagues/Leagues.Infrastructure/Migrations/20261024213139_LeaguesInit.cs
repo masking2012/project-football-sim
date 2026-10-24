@@ -16,6 +16,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Order = table.Column<int>(type: "int", nullable: false),
                     CountryId = table.Column<int>(type: "int", nullable: false),
@@ -31,7 +32,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Leagues", x => x.Id);
+                    table.PrimaryKey("PK_Leagues", x => new { x.Id, x.Version });
                 });
 
             migrationBuilder.CreateTable(
@@ -42,16 +43,35 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LeagueId = table.Column<int>(type: "int", nullable: false)
+                    LeagueId = table.Column<int>(type: "int", nullable: false),
+                    LeagueVersion = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GameLeagues", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GameLeagues_Leagues_LeagueId",
-                        column: x => x.LeagueId,
+                        name: "FK_GameLeagues_Leagues_LeagueId_LeagueVersion",
+                        columns: x => new { x.LeagueId, x.LeagueVersion },
                         principalTable: "Leagues",
-                        principalColumn: "Id",
+                        principalColumns: new[] { "Id", "Version" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeagueActivations",
+                columns: table => new
+                {
+                    LeagueId = table.Column<int>(type: "int", nullable: false),
+                    CurrentVersion = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeagueActivations", x => x.LeagueId);
+                    table.ForeignKey(
+                        name: "FK_LeagueActivations_Leagues_LeagueId_CurrentVersion",
+                        columns: x => new { x.LeagueId, x.CurrentVersion },
+                        principalTable: "Leagues",
+                        principalColumns: new[] { "Id", "Version" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -60,18 +80,19 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 columns: table => new
                 {
                     LeagueId = table.Column<int>(type: "int", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
                     Round = table.Column<int>(type: "int", nullable: false),
                     Week = table.Column<int>(type: "int", nullable: false),
                     IsMidweek = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LeagueRounds", x => new { x.LeagueId, x.Round });
+                    table.PrimaryKey("PK_LeagueRounds", x => new { x.LeagueId, x.Version, x.Round });
                     table.ForeignKey(
-                        name: "FK_LeagueRounds_Leagues_LeagueId",
-                        column: x => x.LeagueId,
+                        name: "FK_LeagueRounds_Leagues_LeagueId_Version",
+                        columns: x => new { x.LeagueId, x.Version },
                         principalTable: "Leagues",
-                        principalColumn: "Id",
+                        principalColumns: new[] { "Id", "Version" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -80,16 +101,17 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 columns: table => new
                 {
                     LeagueId = table.Column<int>(type: "int", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
                     TeamId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LeagueTeams", x => new { x.LeagueId, x.TeamId });
+                    table.PrimaryKey("PK_LeagueTeams", x => new { x.LeagueId, x.Version, x.TeamId });
                     table.ForeignKey(
-                        name: "FK_LeagueTeams_Leagues_LeagueId",
-                        column: x => x.LeagueId,
+                        name: "FK_LeagueTeams_Leagues_LeagueId_Version",
+                        columns: x => new { x.LeagueId, x.Version },
                         principalTable: "Leagues",
-                        principalColumn: "Id",
+                        principalColumns: new[] { "Id", "Version" },
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -121,7 +143,6 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 name: "GameLeagueTeams",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     GameLeagueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     TeamId = table.Column<int>(type: "int", nullable: false),
                     Wins = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
@@ -133,7 +154,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GameLeagueTeams", x => x.Id);
+                    table.PrimaryKey("PK_GameLeagueTeams", x => new { x.GameLeagueId, x.TeamId });
                     table.ForeignKey(
                         name: "FK_GameLeagueTeams_GameLeagues_GameLeagueId",
                         column: x => x.GameLeagueId,
@@ -148,25 +169,25 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 column: "GameLeagueId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameLeagues_GameId_UserId_SeasonId_LeagueId",
+                name: "IX_GameLeagues_GameId_UserId_SeasonId_LeagueId_LeagueVersion",
                 table: "GameLeagues",
-                columns: new[] { "GameId", "UserId", "SeasonId", "LeagueId" },
+                columns: new[] { "GameId", "UserId", "SeasonId", "LeagueId", "LeagueVersion" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameLeagues_LeagueId",
+                name: "IX_GameLeagues_LeagueId_LeagueVersion",
                 table: "GameLeagues",
-                column: "LeagueId");
+                columns: new[] { "LeagueId", "LeagueVersion" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_GameLeagueTeams_GameLeagueId",
-                table: "GameLeagueTeams",
-                column: "GameLeagueId");
+                name: "IX_LeagueActivations_LeagueId_CurrentVersion",
+                table: "LeagueActivations",
+                columns: new[] { "LeagueId", "CurrentVersion" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_LeagueRounds_LeagueId_Week_IsMidweek",
+                name: "IX_LeagueRounds_LeagueId_Version_Week_IsMidweek",
                 table: "LeagueRounds",
-                columns: new[] { "LeagueId", "Week", "IsMidweek" },
+                columns: new[] { "LeagueId", "Version", "Week", "IsMidweek" },
                 unique: true);
         }
 
@@ -178,6 +199,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "GameLeagueTeams");
+
+            migrationBuilder.DropTable(
+                name: "LeagueActivations");
 
             migrationBuilder.DropTable(
                 name: "LeagueRounds");

@@ -36,19 +36,25 @@ internal sealed class LeaguesCatalog(HybridCache cache, LeaguesDbContext dbConte
     {
         var leagues = await dbContext.Leagues
             .AsNoTracking()
+            .Join(
+                dbContext.LeagueActivations.AsNoTracking(),
+                league => new { league.Id, league.Version },
+                activation => new { Id = activation.LeagueId, Version = activation.CurrentVersion },
+                (league, _) => league)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
         var leaguesById = leagues
             .Select(league => new LeagueDto(
                 league.Id,
+                league.Version,
                 league.Name,
                 league.Order,
                 league.CountryId,
                 league.TeamsCount,
                 league.Format
                     .OrderBy(stage => stage.Order)
-                    .Select(stage => new LeagueFormatDto(stage.Order, stage.Type, stage.Legs))
+                    .Select(stage => new LeagueFormatDto(stage.Order, (LeagueFormatType)stage.Type, stage.Legs))
                     .ToList(),
                 league.PromotionPositions,
                 league.PromotionPlayOffPositions,

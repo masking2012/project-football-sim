@@ -14,6 +14,7 @@ internal static class LeaguesEndpoints
 
             return Results.Ok(leagueDtos.Values.Select(l => new LeagueItemResponse(
                 Id: l.Id,
+                Version: l.Version,
                 Name: l.Name,
                 Order: l.Order,
                 CountryId: l.CountryId,

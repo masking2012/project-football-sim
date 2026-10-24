@@ -118,6 +118,7 @@ internal sealed class GameLeagueTests
         Guid.NewGuid(),
         Guid.NewGuid(),
         Guid.NewGuid(),
+        1,
         1);
 
     private static GameLeague CreateGameLeagueWithMatch()
