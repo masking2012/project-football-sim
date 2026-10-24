@@ -7,6 +7,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\shared\Shared.Data\Shared.Data.csproj" />
+      <ProjectReference Include="..\Teams.Application\Teams.Application.csproj" />
       <ProjectReference Include="..\Teams.Domain\Teams.Domain.csproj" />
     </ItemGroup>
 

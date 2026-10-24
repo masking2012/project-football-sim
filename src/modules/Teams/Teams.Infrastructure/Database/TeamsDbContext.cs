@@ -4,7 +4,7 @@ using ProjectFootballSim.Teams.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Teams.Infrastructure.Database;
 
-public class TeamsDbContext(DbContextOptions<TeamsDbContext> options) : DbContext(options)
+internal sealed class TeamsDbContext(DbContextOptions<TeamsDbContext> options) : DbContext(options)
 {
     public DbSet<Team> Teams => Set<Team>();
 

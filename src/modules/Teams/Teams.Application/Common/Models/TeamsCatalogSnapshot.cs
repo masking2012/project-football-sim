@@ -1,5 +1,5 @@
 namespace ProjectFootballSim.Teams.Application.Common.Models;
 
 internal sealed record TeamsCatalogSnapshot(
-    Dictionary<int, TeamDto> TeamsById,
-    Dictionary<int, int[]> TeamIdsByCountry);
+    IReadOnlyDictionary<int, TeamDto> TeamsById,
+    IReadOnlyDictionary<int, int[]> TeamIdsByCountry);

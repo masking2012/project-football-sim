@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Shared.Data.Entities.Locations;
 using ProjectFootballSim.Shared.Data.Entities.Teams;
+using ProjectFootballSim.Teams.Application.Common.Services;
 using ProjectFootballSim.Teams.Domain.Entities;
 using ProjectFootballSim.Teams.Domain.ValueObjects;
 using ProjectFootballSim.Teams.Infrastructure.Database;
@@ -25,6 +26,7 @@ public static class DependencyRegistrator
                 errorNumbersToAdd: null))
             .UseSeeding(SeedWithPredefinedValues)
         );
+        services.AddScoped<ITeamsRepository, TeamsRepository>();
 
         return services;
     }
@@ -52,8 +54,7 @@ public static class DependencyRegistrator
                         name: teamData.Name,
                         attack: new TeamAttributeValue(teamData.Attack),
                         midfield: new TeamAttributeValue(teamData.Midfield),
-                        defence: new TeamAttributeValue(teamData.Defence),
-                        countryId: teamData.CountryId);
+                        defence: new TeamAttributeValue(teamData.Defence));
             }
         }
 

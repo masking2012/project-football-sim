@@ -1,11 +1,10 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 using ProjectFootballSim.Teams.Application.Common.Models;
-using ProjectFootballSim.Teams.Infrastructure.Database;
+using ProjectFootballSim.Teams.Domain.Entities;
 
 namespace ProjectFootballSim.Teams.Application.Common.Services;
 
-internal sealed class TeamsCatalog(HybridCache cache, TeamsDbContext dbContext) : ITeamsCatalog
+internal sealed class TeamsCatalog(HybridCache cache, ITeamsRepository teamsRepository) : ITeamsCatalog
 {
     private const string CacheKey = "teams:catalog";
 
@@ -41,12 +40,11 @@ internal sealed class TeamsCatalog(HybridCache cache, TeamsDbContext dbContext) 
     private async Task<TeamsCatalogSnapshot> LoadCatalogAsync(
         CancellationToken cancellationToken)
     {
-        var teams = await dbContext.Teams
-            .AsNoTracking()
-            .ToListAsync(cancellationToken)
+        IReadOnlyList<Team> teams = await teamsRepository
+            .GetAllAsync(cancellationToken)
             .ConfigureAwait(false);
 
-        var teamsById = teams.ToDictionary(
+        IReadOnlyDictionary<int, TeamDto> teamsById = teams.ToDictionary(
             team => team.Id,
             team => new TeamDto(
                 Id: team.Id,
@@ -56,7 +54,7 @@ internal sealed class TeamsCatalog(HybridCache cache, TeamsDbContext dbContext) 
                 Defence: team.Defence.Value,
                 CountryId: team.CountryId));
 
-        var teamIdsByCountry = teams
+        IReadOnlyDictionary<int, int[]> teamIdsByCountry = teams
             .GroupBy(team => team.CountryId)
             .ToDictionary(
                 group => group.Key,

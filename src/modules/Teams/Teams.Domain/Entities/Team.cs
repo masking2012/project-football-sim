@@ -4,15 +4,20 @@ namespace ProjectFootballSim.Teams.Domain.Entities;
 
 public sealed class Team
 {
-    public int Id { get; private set; }
+    public int Id { get; }
     public string Name { get; private set; }
     public TeamAttributeValue Attack { get; private set; }
     public TeamAttributeValue Midfield { get; private set; }
     public TeamAttributeValue Defence { get; private set; }
-    public int CountryId { get; private set; }
+    public int CountryId { get; }
 
     public Team(int id, string name, TeamAttributeValue attack, TeamAttributeValue midfield, TeamAttributeValue defence, int countryId)
     {
+        if (id <= 0)
+            throw new ArgumentOutOfRangeException(nameof(id), "Team ID must be greater than zero.");
+        if (countryId <= 0)
+            throw new ArgumentOutOfRangeException(nameof(countryId), "Country ID must be greater than zero.");
+
         ValidateName(name);
 
         Id = id;
@@ -23,7 +28,7 @@ public sealed class Team
         CountryId = countryId;
     }
 
-    public void Update(string name, TeamAttributeValue attack, TeamAttributeValue midfield, TeamAttributeValue defence, int countryId)
+    public void Update(string name, TeamAttributeValue attack, TeamAttributeValue midfield, TeamAttributeValue defence)
     {
         ValidateName(name);
 
@@ -31,7 +36,6 @@ public sealed class Team
         Attack = attack;
         Midfield = midfield;
         Defence = defence;
-        CountryId = countryId;
     }
 
     private static void ValidateName(string name)
