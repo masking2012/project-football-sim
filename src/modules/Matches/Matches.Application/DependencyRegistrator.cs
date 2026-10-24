@@ -19,8 +19,8 @@ public static class DependencyRegistrator
         services.AddScoped<IGoalsCalculator, GoalsCalculator>();
 
         services.AddScoped<SimulateRegularTimeCommandHandler>();
-        services.AddScoped<SimulateExtraTimeCommand>();
-        services.AddScoped<SimulatePenaltyShootoutCommand>();
+        services.AddScoped<SimulateExtraTimeCommandHandler>();
+        services.AddScoped<SimulatePenaltyShootoutCommandHandler>();
         return services;
     }
 }

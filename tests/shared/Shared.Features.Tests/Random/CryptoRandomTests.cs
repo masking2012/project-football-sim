@@ -7,7 +7,7 @@ internal sealed class CryptoRandomTests
     private readonly CryptoRandom _sut = new();
 
     [Test]
-    public async Task ShouldGenerateValidValueAsync()
+    public async Task ShouldGenerateValidValue()
     {
         foreach (var _ in Enumerable.Range(0, 1000))
         {
@@ -17,7 +17,7 @@ internal sealed class CryptoRandomTests
     }
 
     [Test]
-    public async Task ShouldReturnZeroForNonPositiveLambdaAsync()
+    public async Task ShouldReturnZeroForNonPositiveLambda()
     {
         using (Assert.Multiple())
         {
@@ -27,7 +27,7 @@ internal sealed class CryptoRandomTests
     }
 
     [Test]
-    public async Task ShouldGenerateNonNegativeValuesForPositiveLambdaAsync()
+    public async Task ShouldGenerateNonNegativeValuesForPositiveLambda()
     {
         foreach (var _ in Enumerable.Range(0, 1000))
         {
@@ -36,7 +36,7 @@ internal sealed class CryptoRandomTests
     }
 
     [Test]
-    public async Task ShouldGenerateValuesWithMeanNearLambdaAsync()
+    public async Task ShouldGenerateValuesWithMeanNearLambda()
     {
         const int sampleCount = 10_000;
         const double lambda = 4;

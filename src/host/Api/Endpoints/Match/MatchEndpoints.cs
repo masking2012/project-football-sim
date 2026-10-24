@@ -14,8 +14,8 @@ internal static class MatchEndpoints
         app.MapPost("/api/matches/simulate", async (
             SimulateMatchRequest req,
             SimulateRegularTimeCommandHandler regularTime,
-            SimulateExtraTimeCommand extraTime,
-            SimulatePenaltyShootoutCommand penaltyShootout,
+            SimulateExtraTimeCommandHandler extraTime,
+            SimulatePenaltyShootoutCommandHandler penaltyShootout,
             GetTeamByIdQueryHandler getTeamByIdQuery,
             CancellationToken cancellationToken) =>
         {

@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Common.Services;
 using ProjectFootballSim.Matches.Domain.Services;
@@ -6,7 +7,8 @@ using ProjectFootballSim.Matches.Domain.ValueObjects;
 namespace ProjectFootballSim.Matches.Application.Features.RegularTime;
 
 public sealed class SimulateRegularTimeCommandHandler
-    (IPossessionCalculator possessionCalculator,
+    (ILogger<SimulateRegularTimeCommandHandler> logger,
+    IPossessionCalculator possessionCalculator,
     IChancesCalculator chancesCalculator,
     IGoalsCalculator goalsCalculator)
 {
@@ -28,6 +30,9 @@ public sealed class SimulateRegularTimeCommandHandler
         // Convert chances to goals
         int homeGoals = goalsCalculator.Calculate(home.Attack, away.Defence, homeChances);
         int awayGoals = goalsCalculator.Calculate(away.Attack, home.Defence, awayChances);
+
+        Log.RegularTimeStatistics(logger, homeTeamId: home.Id, homePossession: homePossession.Value, homeChances: homeChances, awayTeamId: away.Id, awayPossession: homePossession.OpponentPossession.Value, awayChances: awayChances);
+        Log.RegularTimeResult(logger, home.Id, homeGoals, away.Id, awayGoals);
 
         return new ScoreResultDto(homeGoals, awayGoals);
     }

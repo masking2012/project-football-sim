@@ -1,6 +1,6 @@
 using ProjectFootballSim.Shared.Features.Random;
 
-namespace ProjectFootballSim.Matches.Application.Tests.Common;
+namespace ProjectFootballSim.Matches.Application.Tests.Helpers;
 
 internal sealed class TestRandomNumberGenerator : IRandomNumberGenerator
 {

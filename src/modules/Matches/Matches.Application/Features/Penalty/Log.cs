@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Logging;
 
-namespace ProjectFootballSim.Matches.Application;
+namespace ProjectFootballSim.Matches.Application.Features.Penalty;
 
 internal static partial class Log
 {

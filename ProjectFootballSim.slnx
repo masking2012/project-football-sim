@@ -51,19 +51,22 @@
     <Project Path="src/modules/Teams/Teams.Domain/Teams.Domain.csproj" Id="4a1b6941-24f5-4760-9b9c-2ff27b6ccdbf" />
     <Project Path="src/modules/Teams/Teams.Infrastructure/Teams.Infrastructure.csproj" Id="7a0845c7-48d8-4ddc-b1de-bc95d50cac09" />
   </Folder>
-  <Folder Name="/src/shared/" Id="c8e42992-5e42-0c2b-dbfe-aa848d06431c">
+  <Folder Name="/src/shared/">
     <Project Path="src/shared/Shared.Data/Shared.Data.csproj" />
     <Project Path="src/shared/Shared.Features/Shared.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/tests/">
+    <File Path="tests/Directory.Build.props" />
+  </Folder>
   <Folder Name="/tests/modules/" />
   <Folder Name="/tests/modules/Leagues/">
     <Project Path="tests/modules/Leagues/Leagues.Application.Tests/Leagues.Application.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/modules/Matches/">
     <Project Path="tests/modules/Matches/Matches.Application.Tests/Matches.Application.Tests.csproj" Id="b50f9229-c20b-4645-af88-baef81b2395a" />
+    <Project Path="tests/modules/Matches/Matches.Domain.Tests/Matches.Domain.Tests.csproj" />
   </Folder>
-  <Folder Name="/tests/shared/" Id="d0d6b8b0-ac35-b3fa-0b96-a9b0e4a3253e">
+  <Folder Name="/tests/shared/">
     <Project Path="tests/shared/Shared.Features.Tests/Shared.Features.Tests.csproj" Id="674923c4-8be2-4f2e-9f23-e4c5bcaaddb5" />
   </Folder>
 </Solution>
