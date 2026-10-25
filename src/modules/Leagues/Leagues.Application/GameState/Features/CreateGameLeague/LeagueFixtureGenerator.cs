@@ -30,7 +30,7 @@ public sealed class LeagueFixtureGenerator(
 
         foreach (var formatStage in league.Format.OrderBy(stage => stage.Order))
         {
-            if (formatStage.Type != LeagueFormatType.RoundRobin)
+            if (formatStage.Type != LeagueStageTypeDto.RoundRobin)
                 throw new InvalidOperationException($"League format type '{formatStage.Type}' is not supported.");
 
             foreach (var stageRound in GenerateRoundRobinStage(pairings, teams.Where(t => t != StubTeamId), formatStage.Legs))

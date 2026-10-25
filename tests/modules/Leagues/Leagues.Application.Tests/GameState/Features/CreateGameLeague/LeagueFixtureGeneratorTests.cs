@@ -90,7 +90,7 @@ internal sealed class LeagueFixtureGeneratorTests
             Order: 1,
             CountryId: 1,
             TeamsCount: 4,
-            Format: [new LeagueFormatDto(1, LeagueFormatType.RoundRobin, legs)],
+            Format: [new LeagueFormatDto(1, LeagueStageTypeDto.RoundRobin, legs)],
             PromotionPositions: null,
             PromotionPlayOffPositions: null,
             RelegationPositions: null,
