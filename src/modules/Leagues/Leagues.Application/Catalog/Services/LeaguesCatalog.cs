@@ -16,6 +16,13 @@ internal sealed class LeaguesCatalog(HybridCache cache, LeaguesDbContext dbConte
         return catalog.LeaguesById;
     }
 
+    public async ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveAsync(
+        CancellationToken cancellationToken)
+    {
+        var allLeagues = await GetAllAsync(cancellationToken).ConfigureAwait(false);
+        return allLeagues.Where(kvp => kvp.Value.IsActive).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+    }
+
     public async ValueTask<LeagueDto?> GetByIdAsync(
         int leagueId,
         CancellationToken cancellationToken)

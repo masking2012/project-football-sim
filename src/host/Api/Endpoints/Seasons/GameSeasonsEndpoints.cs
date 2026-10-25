@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
-using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
-using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagues;
+using ProjectFootballSim.Leagues.Application.Catalog.Features.GetActiveLeagues;
 using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 using System.Security.Claims;
 
@@ -17,7 +16,7 @@ internal static class GameSeasonsEndpoints
             [FromRoute] Guid gameId,
             [FromRoute] Guid seasonId,
             CompleteGameSeasonCommandHandler completeGameSeasonCommandHandler,
-            GetLeaguesQueryHandler getLeaguesQueryHandler,
+            GetActiveLeaguesQueryHandler getActiveLeaguesQueryHandler,
             CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
@@ -31,7 +30,8 @@ internal static class GameSeasonsEndpoints
                 SeasonId: seasonId);
             var completeGameSeasonResult = await completeGameSeasonCommandHandler.HandleAsync(completeGameSeasonCommand, cancellationToken).ConfigureAwait(false);
 
-            var leaguesDtos = await getLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
+            //TODO: fetch leagues with versions only for the current game
+            var leaguesDtos = await getActiveLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
             foreach (var leagueDto in leaguesDtos.Values)
             {
                 var createGameLeagueCommand = new CreateGameLeagueCommand(

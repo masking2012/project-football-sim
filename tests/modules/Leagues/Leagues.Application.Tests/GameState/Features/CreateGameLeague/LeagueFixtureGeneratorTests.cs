@@ -86,6 +86,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var league = new LeagueDto(
             Id: 1,
             Version: 1,
+            IsActive: true,
             Name: "Test League",
             Order: 1,
             CountryId: 1,

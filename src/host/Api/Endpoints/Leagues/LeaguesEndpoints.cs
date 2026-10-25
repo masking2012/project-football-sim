@@ -1,4 +1,4 @@
-using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagues;
+using ProjectFootballSim.Leagues.Application.Catalog.Features.GetActiveLeagues;
 
 namespace ProjectFootballSim.Api.Endpoints.Leagues;
 
@@ -7,7 +7,7 @@ internal static class LeaguesEndpoints
     public static void MapLeaguesEndpoints(this WebApplication app)
     {
         app.MapGet("/api/leagues", async (
-            GetLeaguesQueryHandler queryHandler,
+            GetActiveLeaguesQueryHandler queryHandler,
             CancellationToken cancellationToken) =>
         {
             var leagueDtos = await queryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);

@@ -7,6 +7,9 @@ public interface ILeaguesCatalog
     ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllAsync(
         CancellationToken cancellationToken);
 
+    ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveAsync(
+        CancellationToken cancellationToken);
+
     ValueTask<LeagueDto?> GetByIdAsync(
         int leagueId,
         CancellationToken cancellationToken);
