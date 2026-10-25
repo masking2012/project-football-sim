@@ -38,31 +38,32 @@ internal sealed class LeaguesCatalog(HybridCache cache, LeaguesDbContext dbConte
             .AsNoTracking()
             .Join(
                 dbContext.LeagueActivations.AsNoTracking(),
-                league => new { league.Id, league.Version },
-                activation => new { Id = activation.LeagueId, Version = activation.CurrentVersion },
-                (league, _) => league)
+                league => league.Id,
+                activation => activation.LeagueId,
+                (league, activation) => new { league, activation })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
         var leaguesById = leagues
-            .Select(league => new LeagueDto(
-                league.Id,
-                league.Version,
-                league.Name,
-                league.Order,
-                league.CountryId,
-                league.TeamsCount,
-                league.Format
+            .Select(item => new LeagueDto(
+                item.league.Id,
+                item.league.Version,
+                IsActive: item.activation.CurrentVersion == item.league.Version,
+                item.league.Name,
+                item.league.Order,
+                item.league.CountryId,
+                item.league.TeamsCount,
+                item.league.Format
                     .OrderBy(stage => stage.Order)
                     .Select(stage => new LeagueFormatDto(stage.Order, (LeagueStageTypeDto)stage.Type, stage.Legs))
                     .ToList(),
-                league.PromotionPositions,
-                league.PromotionPlayOffPositions,
-                league.RelegationPositions,
-                league.RelegationPlayOffPositions,
-                league.UefaChampionsLeaguePositions,
-                league.UefaEuropaLeaguePositions,
-                league.UefaConferenceLeaguePositions))
+                item.league.PromotionPositions,
+                item.league.PromotionPlayOffPositions,
+                item.league.RelegationPositions,
+                item.league.RelegationPlayOffPositions,
+                item.league.UefaChampionsLeaguePositions,
+                item.league.UefaEuropaLeaguePositions,
+                item.league.UefaConferenceLeaguePositions))
             .ToDictionary(league => league.Id);
 
         return new LeaguesCatalogSnapshot(leaguesById);
