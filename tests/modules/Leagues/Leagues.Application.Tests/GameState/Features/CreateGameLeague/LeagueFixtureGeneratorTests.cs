@@ -85,6 +85,7 @@ internal sealed class LeagueFixtureGeneratorTests
     {
         var league = new LeagueDto(
             Id: 1,
+            LeagueVersionId: 101001,
             Version: 1,
             IsActive: true,
             Name: "Test League",
@@ -105,7 +106,7 @@ internal sealed class LeagueFixtureGeneratorTests
             .ReturnsAsync(league);
 
         var leagueRounds = Enumerable.Range(1, rounds)
-            .Select(round => new LeagueRoundDto(1, round, round, false))
+            .Select(round => new LeagueRoundDto(1, 101001, round, round, false))
             .ToList();
         var roundsCatalog = new Mock<ILeaguesRoundsCatalog>();
         roundsCatalog.Setup(catalog => catalog.GetAllAsync(It.IsAny<CancellationToken>()))

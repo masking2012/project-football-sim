@@ -2,6 +2,7 @@ namespace ProjectFootballSim.Leagues.Application.Catalog.Models;
 
 public sealed record LeagueDto(
     int Id,
+    int LeagueVersionId,
     int Version,
     bool IsActive,
     string Name,

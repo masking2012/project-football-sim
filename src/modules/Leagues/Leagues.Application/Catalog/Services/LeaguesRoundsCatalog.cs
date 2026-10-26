@@ -30,22 +30,28 @@ internal sealed class LeaguesRoundsCatalog(HybridCache cache, LeaguesDbContext d
             .AsNoTracking()
             .Join(
                 dbContext.LeagueActivations.AsNoTracking(),
-                round => new { round.LeagueId, round.Version },
-                activation => new { LeagueId = activation.LeagueId, Version = activation.CurrentVersion },
-                (round, _) => round)
+                round => round.LeagueVersionId,
+                activation => activation.LeagueVersionId,
+                (round, activation) => new { round, activation })
+            .Join(
+                dbContext.LeagueVersions.AsNoTracking(),
+                item => item.round.LeagueVersionId,
+                version => version.LeagueVersionId,
+                (item, version) => new { item.round, item.activation, version })
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
         var leagueRoundsByLeagueId = leagueRounds
-            .GroupBy(leagueRound => leagueRound.LeagueId)
+            .GroupBy(leagueRound => leagueRound.version.LeagueId)
             .ToDictionary(
                 group => group.Key,
                 group => (IReadOnlyList<LeagueRoundDto>)group
                     .Select(leagueRound => new LeagueRoundDto(
-                        leagueRound.LeagueId,
-                        leagueRound.Round,
-                        leagueRound.Week,
-                        leagueRound.IsMidweek))
+                        leagueRound.version.LeagueId,
+                        leagueRound.round.LeagueVersionId,
+                        leagueRound.round.Round,
+                        leagueRound.round.Week,
+                        leagueRound.round.IsMidweek))
                     .ToList());
 
         return leagueRoundsByLeagueId;

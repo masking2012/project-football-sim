@@ -18,7 +18,7 @@ internal sealed class GameLeagueTests
             await Assert.That(gameLeague.GameId).IsEqualTo(gameId);
             await Assert.That(gameLeague.SeasonId).IsEqualTo(seasonId);
             await Assert.That(gameLeague.LeagueId).IsEqualTo(7);
-            await Assert.That(gameLeague.LeagueVersion).IsEqualTo(2);
+            await Assert.That(gameLeague.LeagueVersionId).IsEqualTo(2);
             await Assert.That(gameLeague.GameLeagueTeams).IsEmpty();
             await Assert.That(gameLeague.GameLeagueMatches).IsEmpty();
         }

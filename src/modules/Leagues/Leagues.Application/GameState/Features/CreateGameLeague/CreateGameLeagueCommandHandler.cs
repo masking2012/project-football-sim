@@ -20,7 +20,7 @@ public sealed class CreateGameLeagueCommandHandler(
         //TODO: add logic for second and subsequent seasons
 
         List<int> teamIds = await dbContext.LeagueTeams
-            .Where(lt => lt.LeagueId == command.LeagueId && lt.Version == league.Version)
+            .Where(lt => lt.LeagueVersionId == league.LeagueVersionId)
             .Select(lt => lt.TeamId)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
@@ -31,8 +31,8 @@ public sealed class CreateGameLeagueCommandHandler(
         var gameLeague = new GameLeague
         (
             gameId: command.GameId,
-            leagueId: command.LeagueId,
-            leagueVersion: league.Version,
+             leagueId: command.LeagueId,
+             leagueVersionId: league.LeagueVersionId,
             userId: command.UserId,
             seasonId: command.SeasonId
         );

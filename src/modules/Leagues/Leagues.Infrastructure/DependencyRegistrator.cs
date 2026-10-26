@@ -39,45 +39,54 @@ public static class DependencyRegistrator
         {
             foreach (var leagueData in LeaguesDataProvider.GetLeaguesByCountryId(countryData.Id))
             {
-                var league = context.Set<League>().SingleOrDefault(c => c.Id == leagueData.Id && c.Version == leagueData.Version);
+                var league = context.Set<League>().SingleOrDefault(c => c.Id == leagueData.Id);
                 if (league is null)
                     context.Set<League>().Add(
                         new League(
                             id: leagueData.Id,
-                            version: leagueData.Version,
                             name: leagueData.Name,
                             order: leagueData.Order,
-                            countryId: leagueData.CountryId,
-                            teamsCount: leagueData.TeamsCount,
-                            format: MapFormat(leagueData.Format),
-                            promotionPositions: leagueData.PromotionPositions,
-                            promotionPlayOffPositions: leagueData.PromotionPlayOffPositions,
-                            relegationPositions: leagueData.RelegationPositions,
-                            relegationPlayOffPositions: leagueData.RelegationPlayOffPositions,
-                            uefaChampionsLeaguePositions: leagueData.UefaChampionsLeaguePositions,
-                            uefaEuropaLeaguePositions: leagueData.UefaEuropaLeaguePositions,
-                            uefaConferenceLeaguePositions: leagueData.UefaConferenceLeaguePositions));
+                            countryId: leagueData.CountryId));
+            }
+
+            foreach (var versionData in LeaguesDataProvider.GetLeagueVersionsByCountryId(countryData.Id))
+            {
+                var version = context.Set<LeagueVersion>().SingleOrDefault(x => x.LeagueVersionId == versionData.LeagueVersionId);
+                if (version is null)
+                    context.Set<LeagueVersion>().Add(
+                        new LeagueVersion(
+                            leagueVersionId: versionData.LeagueVersionId,
+                            leagueId: versionData.LeagueId,
+                            version: versionData.Version,
+                            teamsCount: versionData.TeamsCount,
+                            format: MapFormat(versionData.Format),
+                            promotionPositions: versionData.PromotionPositions,
+                            promotionPlayOffPositions: versionData.PromotionPlayOffPositions,
+                            relegationPositions: versionData.RelegationPositions,
+                            relegationPlayOffPositions: versionData.RelegationPlayOffPositions,
+                            uefaChampionsLeaguePositions: versionData.UefaChampionsLeaguePositions,
+                            uefaEuropaLeaguePositions: versionData.UefaEuropaLeaguePositions,
+                            uefaConferenceLeaguePositions: versionData.UefaConferenceLeaguePositions));
             }
 
             foreach (var leagueTeamData in LeaguesDataProvider.GetLeagueTeamsByCountryId(countryData.Id))
             {
                 var leagueTeam = context.Set<LeagueTeam>()
-                    .SingleOrDefault(x => x.LeagueId == leagueTeamData.LeagueId && x.Version == leagueTeamData.Version && x.TeamId == leagueTeamData.TeamId);
+                    .SingleOrDefault(x => x.LeagueVersionId == leagueTeamData.LeagueVersionId && x.TeamId == leagueTeamData.TeamId);
                 if (leagueTeam is null)
                     context.Set<LeagueTeam>().Add(
                         new LeagueTeam(
-                            LeagueId: leagueTeamData.LeagueId,
-                            Version: leagueTeamData.Version,
-                            TeamId: leagueTeamData.TeamId));
+                            leagueVersionId: leagueTeamData.LeagueVersionId,
+                            teamId: leagueTeamData.TeamId));
             }
 
             foreach (var leagueRoundData in LeaguesDataProvider.GetLeagueRoundsByCountryId(countryData.Id))
             {
                 var leagueRound = context.Set<LeagueRound>()
-                    .SingleOrDefault(x => x.LeagueId == leagueRoundData.LeagueId && x.Version == leagueRoundData.Version && x.Round == leagueRoundData.Round);
+                    .SingleOrDefault(x => x.LeagueVersionId == leagueRoundData.LeagueVersionId && x.Round == leagueRoundData.Round);
                 if (leagueRound is null)
                     context.Set<LeagueRound>()
-                        .Add(new LeagueRound(leagueId: leagueRoundData.LeagueId, version: leagueRoundData.Version, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek));
+                        .Add(new LeagueRound(leagueVersionId: leagueRoundData.LeagueVersionId, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek));
             }
 
             foreach (var activationData in LeaguesDataProvider.GetLeagueActivationsByCountryId(countryData.Id))
@@ -86,9 +95,9 @@ public static class DependencyRegistrator
                     .SingleOrDefault(x => x.LeagueId == activationData.LeagueId);
                 if (activation is null)
                     context.Set<LeagueActivation>().Add(
-                        new LeagueActivation(activationData.LeagueId, activationData.CurrentVersion));
+                        new LeagueActivation(activationData.LeagueId, activationData.LeagueVersionId));
                 else
-                    activation.ChangeVersion(activationData.CurrentVersion);
+                    activation.ChangeVersion(activationData.LeagueVersionId);
             }
         }
 

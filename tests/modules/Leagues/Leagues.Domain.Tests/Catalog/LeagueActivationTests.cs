@@ -14,7 +14,7 @@ internal sealed class LeagueActivationTests
         using (Assert.Multiple())
         {
             await Assert.That(activation.LeagueId).IsEqualTo(7);
-            await Assert.That(activation.CurrentVersion).IsEqualTo(3);
+            await Assert.That(activation.LeagueVersionId).IsEqualTo(3);
         }
     }
 

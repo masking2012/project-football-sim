@@ -2,21 +2,17 @@ namespace ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 
 public sealed record LeagueTeam
 {
-    public int LeagueId { get; }
-    public int Version { get; }
+    public int LeagueVersionId { get; }
     public int TeamId { get; }
 
-    public LeagueTeam(int LeagueId, int Version, int TeamId)
+    public LeagueTeam(int leagueVersionId, int teamId)
     {
-        if (LeagueId <= 0)
-            throw new ArgumentOutOfRangeException(nameof(LeagueId), LeagueId, "League ID must be positive.");
-        if (Version <= 0)
-            throw new ArgumentOutOfRangeException(nameof(Version), Version, "League version must be positive.");
-        if (TeamId <= 0)
-            throw new ArgumentOutOfRangeException(nameof(TeamId), TeamId, "Team ID must be positive.");
+        if (leagueVersionId <= 0)
+            throw new ArgumentOutOfRangeException(nameof(leagueVersionId), leagueVersionId, "League version ID must be positive.");
+        if (teamId <= 0)
+            throw new ArgumentOutOfRangeException(nameof(teamId), teamId, "Team ID must be positive.");
 
-        this.LeagueId = LeagueId;
-        this.Version = Version;
-        this.TeamId = TeamId;
+        LeagueVersionId = leagueVersionId;
+        TeamId = teamId;
     }
 }

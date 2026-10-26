@@ -9,6 +9,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Database;
 public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbContext(options)
 {
     public DbSet<League> Leagues => Set<League>();
+    public DbSet<LeagueVersion> LeagueVersions => Set<LeagueVersion>();
     public DbSet<LeagueActivation> LeagueActivations => Set<LeagueActivation>();
     public DbSet<LeagueTeam> LeagueTeams => Set<LeagueTeam>();
     public DbSet<LeagueRound> LeagueRounds => Set<LeagueRound>();
@@ -25,14 +26,21 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
 
         modelBuilder.Entity<League>(entity =>
         {
-            entity.HasKey(x => new { x.Id, x.Version });
+            entity.HasKey(x => x.Id);
             entity.Property(x => x.Id).IsRequired().ValueGeneratedNever();
-            entity.Property(x => x.Version).IsRequired();
             entity.Property(x => x.Name).IsRequired();
             entity.Property(x => x.Order).IsRequired();
             entity.Property(x => x.CountryId).IsRequired();
+        });
+
+        modelBuilder.Entity<LeagueVersion>(entity =>
+        {
+            entity.HasKey(x => x.LeagueVersionId);
+            entity.Property(x => x.LeagueVersionId).IsRequired().ValueGeneratedNever();
+            entity.Property(x => x.LeagueId).IsRequired();
+            entity.Property(x => x.Version).IsRequired();
             entity.Property(x => x.TeamsCount).IsRequired();
-            entity.Property<ICollection<LeagueStage>?>(nameof(League.Format)).IsRequired().UseJsonCollection();
+            entity.Property<ICollection<LeagueStage>?>(nameof(LeagueVersion.Format)).IsRequired().UseJsonCollection();
 
             entity.Property(x => x.PromotionPositions).UseJsonCollection();
             entity.Property(x => x.PromotionPlayOffPositions).UseJsonCollection();
@@ -41,45 +49,47 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.UefaChampionsLeaguePositions).UseJsonCollection();
             entity.Property(x => x.UefaEuropaLeaguePositions).UseJsonCollection();
             entity.Property(x => x.UefaConferenceLeaguePositions).UseJsonCollection();
+            entity.HasOne<League>()
+                .WithMany()
+                .HasForeignKey(x => x.LeagueId)
+                .IsRequired();
+            entity.HasIndex(x => new { x.LeagueId, x.Version }).IsUnique();
         });
 
         modelBuilder.Entity<LeagueActivation>(entity =>
         {
             entity.HasKey(x => x.LeagueId);
             entity.Property(x => x.LeagueId).IsRequired();
-            entity.Property(x => x.CurrentVersion).IsRequired();
-            entity.HasOne<League>()
+            entity.Property(x => x.LeagueVersionId).IsRequired();
+            entity.HasOne<LeagueVersion>()
                 .WithMany()
-                .HasForeignKey(x => new { x.LeagueId, x.CurrentVersion })
-                .HasPrincipalKey(x => new { x.Id, x.Version })
+                .HasForeignKey(x => x.LeagueVersionId)
                 .IsRequired();
         });
 
         modelBuilder.Entity<LeagueTeam>(entity =>
         {
-            entity.HasKey(x => new { x.LeagueId, x.Version, x.TeamId });
-            entity.Property(x => x.Version).IsRequired();
+            entity.HasKey(x => new { x.LeagueVersionId, x.TeamId });
+            entity.Property(x => x.LeagueVersionId).IsRequired();
             entity.Property(x => x.TeamId).IsRequired();
-            entity.HasOne<League>()
+            entity.HasOne<LeagueVersion>()
                 .WithMany()
-                .HasForeignKey(x => new { x.LeagueId, x.Version })
-                .HasPrincipalKey(x => new { x.Id, x.Version })
+                .HasForeignKey(x => x.LeagueVersionId)
                 .IsRequired();
         });
 
         modelBuilder.Entity<LeagueRound>(entity =>
         {
-            entity.HasKey(x => new { x.LeagueId, x.Version, x.Round });
-            entity.Property(x => x.Version).IsRequired();
+            entity.HasKey(x => new { x.LeagueVersionId, x.Round });
+            entity.Property(x => x.LeagueVersionId).IsRequired();
             entity.Property(x => x.Round).IsRequired();
             entity.Property(x => x.Week).IsRequired();
             entity.Property(x => x.IsMidweek).IsRequired();
-            entity.HasOne<League>()
+            entity.HasOne<LeagueVersion>()
                 .WithMany()
-                .HasForeignKey(x => new { x.LeagueId, x.Version })
-                .HasPrincipalKey(x => new { x.Id, x.Version })
+                .HasForeignKey(x => x.LeagueVersionId)
                 .IsRequired();
-            entity.HasIndex(x => new { x.LeagueId, x.Version, x.Week, x.IsMidweek }).IsUnique();
+            entity.HasIndex(x => new { x.LeagueVersionId, x.Week, x.IsMidweek }).IsUnique();
         });
 
         modelBuilder.Entity<GameLeague>(entity =>
@@ -89,12 +99,12 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.UserId).IsRequired();
             entity.Property(x => x.GameId).IsRequired();
             entity.Property(x => x.SeasonId).IsRequired();
-            entity.Property(x => x.LeagueVersion).IsRequired();
+            entity.Property(x => x.LeagueId).IsRequired();
+            entity.Property(x => x.LeagueVersionId).IsRequired();
 
-            entity.HasOne<League>()
+            entity.HasOne<LeagueVersion>()
                 .WithMany()
-                .HasForeignKey(x => new { x.LeagueId, x.LeagueVersion })
-                .HasPrincipalKey(x => new { x.Id, x.Version })
+                .HasForeignKey(x => x.LeagueVersionId)
                 .IsRequired();
 
             entity.HasMany(e => e.GameLeagueMatches)
@@ -102,7 +112,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
                 .HasForeignKey(e => e.GameLeagueId)
                 .IsRequired();
 
-            entity.HasIndex(x => new { x.GameId, x.UserId, x.SeasonId, x.LeagueId, x.LeagueVersion }).IsUnique();
+            entity.HasIndex(x => new { x.GameId, x.UserId, x.SeasonId, x.LeagueId, x.LeagueVersionId }).IsUnique();
         });            
 
         modelBuilder.Entity<GameLeagueTeam>(entity =>
