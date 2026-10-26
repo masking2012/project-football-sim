@@ -4,6 +4,7 @@ namespace ProjectFootballSim.Leagues.Application.Catalog.Services;
 
 public interface ILeaguesRoundsCatalog
 {
-    ValueTask<IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>>> GetAllAsync(
+    ValueTask<IReadOnlyList<LeagueRoundDto>> GetRoundsForLeagueVersionAsync(
+        int leagueVersionId,
         CancellationToken cancellationToken);
 }

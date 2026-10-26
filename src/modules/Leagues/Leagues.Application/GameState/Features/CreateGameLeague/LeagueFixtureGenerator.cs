@@ -37,7 +37,7 @@ public sealed class LeagueFixtureGenerator(
             foreach (var stageRound in GenerateRoundRobinStage(pairings, teams.Where(t => t != StubTeamId), formatStage.Legs))
             {
                 if (!roundDates.TryGetValue(round, out var date))
-                    throw new InvalidOperationException($"League with ID '{leagueVersionId}' has no calendar date for generated round {round}.");
+                    throw new InvalidOperationException($"League with version ID '{leagueVersionId}' has no calendar date for generated round {round}.");
 
                 foreach (var (home, away) in stageRound)
                 {
@@ -58,12 +58,10 @@ public sealed class LeagueFixtureGenerator(
     // ROUND DATES
     // ------------------------------------------------------------
 
-    private async Task<Dictionary<int, DateTime>> LoadRoundDatesAsync(int leagueId, DateTime seasonStartDate, CancellationToken cancellationToken)
+    private async Task<Dictionary<int, DateTime>> LoadRoundDatesAsync(int leagueVersionId, DateTime seasonStartDate, CancellationToken cancellationToken)
     {
-        var leaguesRounds = await leaguesRoundsCatalog.GetAllAsync(cancellationToken)
+        var leagueRounds = await leaguesRoundsCatalog.GetRoundsForLeagueVersionAsync(leagueVersionId, cancellationToken)
             .ConfigureAwait(false);
-
-        var leagueRounds = leaguesRounds[leagueId];
 
         var firstSunday = DateTimeUtils.GetNextDayOfWeek(seasonStartDate, DayOfWeek.Sunday);
 

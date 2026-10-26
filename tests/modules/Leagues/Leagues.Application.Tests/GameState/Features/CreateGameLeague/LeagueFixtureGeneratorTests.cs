@@ -13,7 +13,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
         var fixtures = await generator.GenerateAsync(
-            leagueVersionId: 1,
+            leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
@@ -29,7 +29,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
         var fixtures = await generator.GenerateAsync(
-            leagueVersionId: 1,
+            leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
@@ -52,7 +52,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
         var fixtures = await generator.GenerateAsync(
-            leagueVersionId: 1,
+            leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
@@ -74,7 +74,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var generator = CreateGenerator(legs: 2, rounds: 3);
 
         await Assert.That(async () => await generator.GenerateAsync(
-            leagueVersionId: 1,
+            leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
@@ -102,18 +102,19 @@ internal sealed class LeagueFixtureGeneratorTests
             UefaConferenceLeaguePositions: null);
 
         var leaguesCatalog = new Mock<ILeaguesCatalog>();
-        leaguesCatalog.Setup(catalog => catalog.GetAllActiveAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Dictionary<int, LeagueDto> { [1] = league });
+        leaguesCatalog.Setup(catalog => catalog.GetByLeagueVersionIdAsync(
+                101001,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(league);
 
         var leagueRounds = Enumerable.Range(1, rounds)
             .Select(round => new LeagueRoundDto(1, 101001, round, round, false))
             .ToList();
         var roundsCatalog = new Mock<ILeaguesRoundsCatalog>();
-        roundsCatalog.Setup(catalog => catalog.GetAllAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new Dictionary<int, IReadOnlyList<LeagueRoundDto>>
-            {
-                [1] = leagueRounds
-            });
+        roundsCatalog.Setup(catalog => catalog.GetRoundsForLeagueVersionAsync(
+                101001,
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(leagueRounds);
 
         return new LeagueFixtureGenerator(leaguesCatalog.Object, roundsCatalog.Object);
     }
