@@ -10,4 +10,8 @@ public interface ILeaguesCatalog
     ValueTask<LeagueDto?> GetByLeagueVersionIdAsync(
         int leagueVersionId,
         CancellationToken cancellationToken);
+
+    ValueTask<IReadOnlyList<LeagueDto>> GetLeaguesByVersionIdsAsync(
+        IReadOnlyCollection<int> leagueVersionIds,
+        CancellationToken cancellationToken);
 }

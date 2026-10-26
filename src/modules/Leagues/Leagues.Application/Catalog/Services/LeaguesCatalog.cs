@@ -45,6 +45,27 @@ internal sealed class LeaguesCatalog(HybridCache cache, LeaguesDbContext dbConte
         return league;
     }
 
+    public async ValueTask<IReadOnlyList<LeagueDto>> GetLeaguesByVersionIdsAsync(
+        IReadOnlyCollection<int> leagueVersionIds,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(leagueVersionIds);
+
+        var leagues = new List<LeagueDto>(leagueVersionIds.Count);
+        foreach (var leagueVersionId in leagueVersionIds.Distinct())
+        {
+            var league = await GetByLeagueVersionIdAsync(leagueVersionId, cancellationToken)
+                .ConfigureAwait(false);
+
+            if (league is null)
+                throw new InvalidOperationException($"League version with ID '{leagueVersionId}' was not found.");
+
+            leagues.Add(league);
+        }
+
+        return leagues;
+    }
+
     private ValueTask<Dictionary<int, LeagueDto>> GetCachedLeaguesAsync(
         CancellationToken cancellationToken) =>
         cache.GetOrCreateAsync(
