@@ -24,6 +24,11 @@ public sealed class GetGameLeagueMatchesByDateQueryHandler(
                 match => match.GameLeagueId,
                 gameLeague => gameLeague.Id,
                 (match, gameLeague) => new { match, gameLeague })
+            .Join(
+                dbContext.LeagueVersions.AsNoTracking(),
+                item => item.gameLeague.LeagueVersionId,
+                version => version.LeagueVersionId,
+                (item, version) => new { item.match, item.gameLeague, version })
             .Where(x => x.gameLeague.UserId == query.UserId
                 && x.gameLeague.GameId == query.GameId
                 && x.match.Date >= startDate && x.match.Date < endDate)
@@ -34,10 +39,10 @@ public sealed class GetGameLeagueMatchesByDateQueryHandler(
                 HomeTeamScore: x.match.HomeTeamScore,
                 AwayTeamScore: x.match.AwayTeamScore,
                 Round: x.match.Round,
-                LeagueName: leagues[x.gameLeague.LeagueId].Name,
-                LeagueId: x.gameLeague.LeagueId,
-                CountryId: leagues[x.gameLeague.LeagueId].CountryId,
-                Order: leagues[x.gameLeague.LeagueId].Order))
+                 LeagueName: leagues[x.version.LeagueId].Name,
+                 LeagueId: x.version.LeagueId,
+                 CountryId: leagues[x.version.LeagueId].CountryId,
+                 Order: leagues[x.version.LeagueId].Order))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
     }

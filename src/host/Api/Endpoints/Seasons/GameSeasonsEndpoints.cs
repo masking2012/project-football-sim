@@ -35,7 +35,7 @@ internal static class GameSeasonsEndpoints
             foreach (var leagueDto in leaguesDtos.Values)
             {
                 var createGameLeagueCommand = new CreateGameLeagueCommand(
-                    LeagueId: leagueDto.Id,
+                    LeagueVersionId: leagueDto.Id,
                     GameId: gameId,
                     UserId: userId,
                     SeasonId: completeGameSeasonResult.Id,

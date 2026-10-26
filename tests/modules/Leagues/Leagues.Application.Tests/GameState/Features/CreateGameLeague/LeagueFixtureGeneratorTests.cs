@@ -13,7 +13,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
         var fixtures = await generator.GenerateAsync(
-            leagueId: 1,
+            leagueVersionId: 1,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
@@ -29,7 +29,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
         var fixtures = await generator.GenerateAsync(
-            leagueId: 1,
+            leagueVersionId: 1,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
@@ -52,7 +52,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
         var fixtures = await generator.GenerateAsync(
-            leagueId: 1,
+            leagueVersionId: 1,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
@@ -74,7 +74,7 @@ internal sealed class LeagueFixtureGeneratorTests
         var generator = CreateGenerator(legs: 2, rounds: 3);
 
         await Assert.That(async () => await generator.GenerateAsync(
-            leagueId: 1,
+            leagueVersionId: 1,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),

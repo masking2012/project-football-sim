@@ -10,14 +10,13 @@ internal sealed class GameLeagueTests
         var userId = Guid.NewGuid();
         var gameId = Guid.NewGuid();
         var seasonId = Guid.NewGuid();
-        var gameLeague = new GameLeague(userId, gameId, seasonId, 7, 2);
+        var gameLeague = new GameLeague(userId, gameId, seasonId, 2);
 
         using (Assert.Multiple())
         {
             await Assert.That(gameLeague.UserId).IsEqualTo(userId);
             await Assert.That(gameLeague.GameId).IsEqualTo(gameId);
             await Assert.That(gameLeague.SeasonId).IsEqualTo(seasonId);
-            await Assert.That(gameLeague.LeagueId).IsEqualTo(7);
             await Assert.That(gameLeague.LeagueVersionId).IsEqualTo(2);
             await Assert.That(gameLeague.GameLeagueTeams).IsEmpty();
             await Assert.That(gameLeague.GameLeagueMatches).IsEmpty();
@@ -25,19 +24,17 @@ internal sealed class GameLeagueTests
     }
 
     [Test]
-    [Arguments(0, 1, 1, 1, 1)]
-    [Arguments(1, 0, 1, 1, 1)]
-    [Arguments(1, 1, 0, 1, 1)]
-    [Arguments(1, 1, 1, 0, 1)]
-    [Arguments(1, 1, 1, 1, 0)]
-    public async Task ShouldRejectInvalidConstructorValues(int userId, int gameId, int seasonId, int leagueId, int version)
+    [Arguments(0, 1, 1, 1)]
+    [Arguments(1, 0, 1, 1)]
+    [Arguments(1, 1, 0, 1)]
+    [Arguments(1, 1, 1, 0)]
+    public async Task ShouldRejectInvalidConstructorValues(int userId, int gameId, int seasonId, int leagueVersionId)
     {
         await Assert.That(() => new GameLeague(
             userId == 0 ? Guid.Empty : Guid.NewGuid(),
             gameId == 0 ? Guid.Empty : Guid.NewGuid(),
             seasonId == 0 ? Guid.Empty : Guid.NewGuid(),
-            leagueId,
-            version)).Throws<ArgumentException>();
+            leagueVersionId)).Throws<ArgumentException>();
     }
 
     [Test]
@@ -206,7 +203,6 @@ internal sealed class GameLeagueTests
         Guid.NewGuid(),
         Guid.NewGuid(),
         Guid.NewGuid(),
-        1,
         1);
 
     private static GameLeague CreateGameLeagueWithMatch()

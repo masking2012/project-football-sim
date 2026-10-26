@@ -1,6 +1,5 @@
 using ProjectFootballSim.Shared.Features;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
-using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 
@@ -14,16 +13,17 @@ public sealed class LeagueFixtureGenerator(
     private const int MaxVenueStreak = 3;
 
     public async Task<IReadOnlyList<GameLeagueMatch>> GenerateAsync(
-        int leagueId,
+        int leagueVersionId,
         Guid gameLeagueId,
         IEnumerable<int> teamIds,
         DateTime seasonStartDate,
         CancellationToken cancellationToken)
     {
-        var activeLeagues = await leaguesCatalog.GetAllActiveAsync(cancellationToken).ConfigureAwait(false);
-        var league = activeLeagues.GetValueOrDefault(leagueId)
-            ?? throw new InvalidOperationException($"League with ID '{leagueId}' not found.");
-        var roundDates = await LoadRoundDatesAsync(leagueId, seasonStartDate, cancellationToken).ConfigureAwait(false);
+        LeagueDto? league = await leaguesCatalog.GetByLeagueVersionIdAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
+        if (league is null)
+            throw new InvalidOperationException($"League with version ID '{leagueVersionId}' not found.");
+
+        var roundDates = await LoadRoundDatesAsync(leagueVersionId, seasonStartDate, cancellationToken).ConfigureAwait(false);
         var teams = PrepareTeams(teamIds);
         var pairings = GenerateRoundRobinPairings(teams);
         var allFixtures = new List<GameLeagueMatch>();
@@ -37,7 +37,7 @@ public sealed class LeagueFixtureGenerator(
             foreach (var stageRound in GenerateRoundRobinStage(pairings, teams.Where(t => t != StubTeamId), formatStage.Legs))
             {
                 if (!roundDates.TryGetValue(round, out var date))
-                    throw new InvalidOperationException($"League with ID '{leagueId}' has no calendar date for generated round {round}.");
+                    throw new InvalidOperationException($"League with ID '{leagueVersionId}' has no calendar date for generated round {round}.");
 
                 foreach (var (home, away) in stageRound)
                 {
@@ -49,7 +49,7 @@ public sealed class LeagueFixtureGenerator(
         }
 
         if (round - 1 != roundDates.Count)
-            throw new InvalidOperationException($"League with ID '{leagueId}' format generates {round - 1} rounds, but its calendar contains {roundDates.Count} rounds.");
+            throw new InvalidOperationException($"League with ID '{leagueVersionId}' format generates {round - 1} rounds, but its calendar contains {roundDates.Count} rounds.");
 
         return allFixtures;
     }

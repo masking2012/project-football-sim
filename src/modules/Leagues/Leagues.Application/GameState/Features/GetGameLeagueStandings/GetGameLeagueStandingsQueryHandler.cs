@@ -10,10 +10,16 @@ public sealed class GetGameLeagueStandingsQueryHandler(LeaguesDbContext dbContex
         CancellationToken cancellationToken)
     {
         var league = await dbContext.GameLeagues
-            .Where(league => league.UserId == query.UserId
-                && league.GameId == query.GameId
-                && league.SeasonId == query.SeasonId
-                && league.LeagueId == query.LeagueId)
+            .Join(
+                dbContext.LeagueVersions.AsNoTracking(),
+                gameLeague => gameLeague.LeagueVersionId,
+                version => version.LeagueVersionId,
+                (gameLeague, version) => new { gameLeague, version })
+            .Where(league => league.gameLeague.UserId == query.UserId
+                && league.gameLeague.GameId == query.GameId
+                && league.gameLeague.SeasonId == query.SeasonId
+                && league.version.LeagueId == query.LeagueId)
+            .Select(league => league.gameLeague)
             .Include(league => league.GameLeagueTeams)
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);

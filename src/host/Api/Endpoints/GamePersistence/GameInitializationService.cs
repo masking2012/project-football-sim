@@ -32,7 +32,7 @@ internal sealed class GameInitializationService(
             //TODO: send LeagueVersionId instead of LeagueId
             await createGameLeagueCommandHandler
                 .HandleAsync(new CreateGameLeagueCommand(
-                    LeagueId: league.Key,
+                    LeagueVersionId: league.Key,
                     GameId: gameId,
                     UserId: userId,
                     SeasonId: season.Id,

@@ -13,10 +13,9 @@ public sealed class CreateGameLeagueCommandHandler(
 {
     public async Task HandleAsync(CreateGameLeagueCommand command, CancellationToken cancellationToken)
     {
-        var activeLeagues = await leaguesCatalog.GetAllActiveAsync(cancellationToken).ConfigureAwait(false);
-        LeagueDto? league = activeLeagues.GetValueOrDefault(command.LeagueId);
+        LeagueDto? league = await leaguesCatalog.GetByLeagueVersionIdAsync(command.LeagueVersionId, cancellationToken).ConfigureAwait(false);
         if (league is null)
-            throw new InvalidOperationException($"League with ID '{command.LeagueId}' not found.");
+            throw new InvalidOperationException($"League with ID '{command.LeagueVersionId}' not found.");
 
         //TODO: add logic for second and subsequent seasons
 
@@ -27,13 +26,12 @@ public sealed class CreateGameLeagueCommandHandler(
             .ConfigureAwait(false);
 
         if (teamIds.Count != league.TeamsCount)
-            throw new InvalidOperationException($"League with ID '{command.LeagueId}' has {league.TeamsCount} teams, but {teamIds.Count} teams were found in the database.");
+            throw new InvalidOperationException($"League with ID '{command.LeagueVersionId}' has {league.TeamsCount} teams, but {teamIds.Count} teams were found in the database.");
 
         var gameLeague = new GameLeague
         (
             gameId: command.GameId,
-             leagueId: command.LeagueId,
-             leagueVersionId: league.LeagueVersionId,
+            leagueVersionId: league.LeagueVersionId,
             userId: command.UserId,
             seasonId: command.SeasonId
         );
@@ -47,7 +45,7 @@ public sealed class CreateGameLeagueCommandHandler(
         }
 
         var leagueMatches = await leagueFixtureGenerator
-            .GenerateAsync(command.LeagueId, gameLeague.Id, teamIds, command.SeasonStartDate, cancellationToken)
+            .GenerateAsync(command.LeagueVersionId, gameLeague.Id, teamIds, command.SeasonStartDate, cancellationToken)
             .ConfigureAwait(false);
         foreach (GameLeagueMatch match in leagueMatches)
         {

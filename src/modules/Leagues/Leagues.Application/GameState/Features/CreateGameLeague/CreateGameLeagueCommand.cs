@@ -6,4 +6,4 @@ public sealed record CreateGameLeagueCommand(
     Guid SeasonId,
     DateTime SeasonStartDate,
     Guid? PreviousSeasonId,
-    int LeagueId);
+    int LeagueVersionId);

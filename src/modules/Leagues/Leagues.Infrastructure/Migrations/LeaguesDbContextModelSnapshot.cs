@@ -150,9 +150,6 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("LeagueId")
-                        .HasColumnType("int");
-
                     b.Property<int>("LeagueVersionId")
                         .HasColumnType("int");
 
@@ -166,7 +163,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.HasIndex("LeagueVersionId");
 
-                    b.HasIndex("GameId", "UserId", "SeasonId", "LeagueId", "LeagueVersionId")
+                    b.HasIndex("GameId", "UserId", "SeasonId", "LeagueVersionId")
                         .IsUnique();
 
                     b.ToTable("GameLeagues");

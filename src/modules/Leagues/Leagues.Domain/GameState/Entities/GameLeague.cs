@@ -9,13 +9,12 @@ public sealed class GameLeague
     public Guid UserId { get; }
     public Guid GameId { get; }
     public Guid SeasonId { get; }
-    public int LeagueId { get; }
     public int LeagueVersionId { get; }
 
     public IReadOnlyCollection<GameLeagueTeam> GameLeagueTeams => _teams;
     public IReadOnlyCollection<GameLeagueMatch> GameLeagueMatches => _matches;
 
-    public GameLeague(Guid userId, Guid gameId, Guid seasonId, int leagueId, int leagueVersionId)
+    public GameLeague(Guid userId, Guid gameId, Guid seasonId, int leagueVersionId)
     {
         if (userId == Guid.Empty)
             throw new ArgumentException("User ID cannot be empty.", nameof(userId));
@@ -23,8 +22,6 @@ public sealed class GameLeague
             throw new ArgumentException("Game ID cannot be empty.", nameof(gameId));
         if (seasonId == Guid.Empty)
             throw new ArgumentException("Season ID cannot be empty.", nameof(seasonId));
-        if (leagueId <= 0)
-            throw new ArgumentOutOfRangeException(nameof(leagueId), leagueId, "League ID must be positive.");
         if (leagueVersionId <= 0)
             throw new ArgumentOutOfRangeException(nameof(leagueVersionId), leagueVersionId, "League version ID must be positive.");
 
@@ -32,7 +29,6 @@ public sealed class GameLeague
         UserId = userId;
         GameId = gameId;
         SeasonId = seasonId;
-        LeagueId = leagueId;
         LeagueVersionId = leagueVersionId;
     }
 

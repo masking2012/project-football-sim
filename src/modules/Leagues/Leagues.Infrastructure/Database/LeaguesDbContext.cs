@@ -59,7 +59,6 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
         modelBuilder.Entity<LeagueActivation>(entity =>
         {
             entity.HasKey(x => x.LeagueId);
-            entity.Property(x => x.LeagueId).IsRequired();
             entity.Property(x => x.LeagueVersionId).IsRequired();
             entity.HasOne<LeagueVersion>()
                 .WithMany()
@@ -99,7 +98,6 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.UserId).IsRequired();
             entity.Property(x => x.GameId).IsRequired();
             entity.Property(x => x.SeasonId).IsRequired();
-            entity.Property(x => x.LeagueId).IsRequired();
             entity.Property(x => x.LeagueVersionId).IsRequired();
 
             entity.HasOne<LeagueVersion>()
@@ -112,7 +110,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
                 .HasForeignKey(e => e.GameLeagueId)
                 .IsRequired();
 
-            entity.HasIndex(x => new { x.GameId, x.UserId, x.SeasonId, x.LeagueId, x.LeagueVersionId }).IsUnique();
+            entity.HasIndex(x => new { x.GameId, x.UserId, x.SeasonId, x.LeagueVersionId }).IsUnique();
         });            
 
         modelBuilder.Entity<GameLeagueTeam>(entity =>

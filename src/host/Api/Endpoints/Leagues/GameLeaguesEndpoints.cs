@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
-using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueById;
+using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueByVersionId;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
@@ -18,7 +18,7 @@ internal static class GameLeaguesEndpoints
             [FromRoute] Guid seasonId,
             GetGameLeagueStandingsQueryHandler getGameLeagueStandingsQueryHandler,
             GetTeamsByCountryQueryHandler teamsByCountryQueryHandler,
-            GetLeagueByIdQueryHandler getLeagueByIdQueryHandler,
+            GetLeagueByVersionIdQueryHandler getLeagueByIdQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -59,7 +59,7 @@ internal static class GameLeaguesEndpoints
             [FromRoute] Guid seasonId,
             GetGameLeagueFixturesQueryHandler getGameLeagueFixturesQueryHandler,
             GetTeamsByCountryQueryHandler teamsByCountryQueryHandler,
-            GetLeagueByIdQueryHandler getLeagueByIdQueryHandler,
+            GetLeagueByVersionIdQueryHandler getLeagueByIdQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
