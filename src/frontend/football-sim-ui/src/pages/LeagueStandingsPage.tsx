@@ -42,7 +42,7 @@ export function LeagueStandingsPage() {
     async function loadLeagueMetadata() {
       const activeGameId = gameId ?? await startNewGame();
       const [leagues, seasons] = await Promise.all([
-        fetchLeagues(),
+        fetchLeagues(activeGameId),
         fetchSeasons(activeGameId),
       ]);
       const league = leagues.find((item) => item.id === parsedLeagueId);

@@ -20,6 +20,12 @@ export interface LeagueDto {
   uefaConferenceLeaguePositions: number[] | null;
 }
 
+export interface GameLeagueDto {
+  gameLeagueId: string;
+  seasonId: string;
+  league: LeagueDto;
+}
+
 export interface TeamStandingDto {
   teamId: number;
   name: string;
@@ -130,6 +136,7 @@ let countriesRequest: Promise<CountryDto[]> | null = null;
 let countriesCache: CountryDto[] | null = null;
 let leaguesRequest: Promise<LeagueDto[]> | null = null;
 let leaguesCache: LeagueDto[] | null = null;
+let leaguesCacheGameId: string | null = null;
 const teamsRequests = new Map<string, Promise<TeamDto[]>>();
 const teamsCache = new Map<string, TeamDto[]>();
 const standingsRequests = new Map<string, Promise<TeamStandingDto[]>>();
@@ -145,6 +152,7 @@ export function resetGameSessionCache(): void {
   countriesCache = null;
   leaguesRequest = null;
   leaguesCache = null;
+  leaguesCacheGameId = null;
   teamsRequests.clear();
   teamsCache.clear();
   standingsRequests.clear();
@@ -154,8 +162,8 @@ export function resetGameSessionCache(): void {
   seasonsCache.clear();
 }
 
-export async function fetchLeagues(): Promise<LeagueDto[]> {
-  if (leaguesCache) {
+export async function fetchLeagues(gameId: string): Promise<LeagueDto[]> {
+  if (leaguesCache && leaguesCacheGameId === gameId) {
     return leaguesCache;
   }
 
@@ -164,13 +172,15 @@ export async function fetchLeagues(): Promise<LeagueDto[]> {
   }
 
   const request = (async () => {
-    const res = await fetch(`${BASE}/leagues`, { headers: authHeaders() });
-    return handleResponse<LeagueDto[]>(res);
+    const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/leagues`, { headers: authHeaders() });
+    const gameLeagues = await handleResponse<GameLeagueDto[]>(res);
+    return gameLeagues.map((gameLeague) => gameLeague.league);
   })();
   leaguesRequest = request;
   request.then(
     (leagues) => {
       leaguesCache = leagues;
+      leaguesCacheGameId = gameId;
       clearLeaguesRequest(request);
     },
     () => clearLeaguesRequest(request),

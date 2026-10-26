@@ -25,10 +25,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
             modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Catalog.Entities.LeagueActivation", b =>
                 {
                     b.Property<int>("LeagueId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeagueId"));
 
                     b.Property<int>("LeagueVersionId")
                         .HasColumnType("int");

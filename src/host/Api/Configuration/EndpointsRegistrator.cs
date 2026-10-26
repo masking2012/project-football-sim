@@ -19,8 +19,6 @@ internal static class EndpointsRegistrator
         app.MapTeamsEndpoints();
         app.MapMatchEndpoints();
         app.MapGameSeasonsEndpoints();
-
-        app.MapLeaguesEndpoints();
         app.MapGameLeaguesEndpoints();
         app.MapCalendarEndpoints();
     }

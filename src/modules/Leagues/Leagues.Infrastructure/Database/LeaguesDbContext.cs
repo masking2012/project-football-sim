@@ -59,6 +59,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
         modelBuilder.Entity<LeagueActivation>(entity =>
         {
             entity.HasKey(x => x.LeagueId);
+            entity.Property(x => x.LeagueId).IsRequired().ValueGeneratedNever();
             entity.Property(x => x.LeagueVersionId).IsRequired();
             entity.HasOne<LeagueVersion>()
                 .WithMany()

@@ -12,8 +12,8 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20261026113046_LeagueVersionCatalog")]
-    partial class LeagueVersionCatalog
+    [Migration("20261026212353_LeaguesInit")]
+    partial class LeaguesInit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,10 +28,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
             modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.Catalog.Entities.LeagueActivation", b =>
                 {
                     b.Property<int>("LeagueId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LeagueId"));
 
                     b.Property<int>("LeagueVersionId")
                         .HasColumnType("int");
@@ -153,9 +150,6 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Property<Guid>("GameId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("LeagueId")
-                        .HasColumnType("int");
-
                     b.Property<int>("LeagueVersionId")
                         .HasColumnType("int");
 
@@ -169,7 +163,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.HasIndex("LeagueVersionId");
 
-                    b.HasIndex("GameId", "UserId", "SeasonId", "LeagueId", "LeagueVersionId")
+                    b.HasIndex("GameId", "UserId", "SeasonId", "LeagueVersionId")
                         .IsUnique();
 
                     b.ToTable("GameLeagues");
