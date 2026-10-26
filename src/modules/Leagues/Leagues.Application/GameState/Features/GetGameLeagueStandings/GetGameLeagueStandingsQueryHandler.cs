@@ -10,22 +10,16 @@ public sealed class GetGameLeagueStandingsQueryHandler(LeaguesDbContext dbContex
         CancellationToken cancellationToken)
     {
         var league = await dbContext.GameLeagues
-            .Join(
-                dbContext.LeagueVersions.AsNoTracking(),
-                gameLeague => gameLeague.LeagueVersionId,
-                version => version.LeagueVersionId,
-                (gameLeague, version) => new { gameLeague, version })
-            .Where(league => league.gameLeague.UserId == query.UserId
-                && league.gameLeague.GameId == query.GameId
-                && league.gameLeague.SeasonId == query.SeasonId
-                && league.version.LeagueId == query.LeagueId)
-            .Select(league => league.gameLeague)
+            .Where(gameLeague => gameLeague.UserId == query.UserId
+                && gameLeague.GameId == query.GameId
+                && gameLeague.SeasonId == query.SeasonId
+                && gameLeague.LeagueVersionId == query.LeagueVersionId)
             .Include(league => league.GameLeagueTeams)
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
 
         if (league is null)
-            throw new InvalidOperationException($"Game league not found for user {query.UserId}, game {query.GameId}, league {query.LeagueId}");
+            throw new InvalidOperationException($"Game league not found for user {query.UserId}, game {query.GameId}, league version {query.LeagueVersionId}");
 
         return league.GameLeagueTeams
             .OrderByDescending(t => t.Points)

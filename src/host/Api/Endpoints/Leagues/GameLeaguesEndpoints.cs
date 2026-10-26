@@ -44,8 +44,8 @@ internal static class GameLeaguesEndpoints
                 UefaConferenceLeaguePositions: l.UefaConferenceLeaguePositions)));
         }).RequireAuthorization();
 
-        app.MapGet("/api/games/{gameId}/seasons/{seasonId}/leagues/{leagueId}/standings", async (
-            [FromRoute] int leagueId,
+        app.MapGet("/api/games/{gameId}/seasons/{seasonId}/leagues/{leagueVersionId}/standings", async (
+            [FromRoute] int leagueVersionId,
             [FromRoute] Guid gameId,
             [FromRoute] Guid seasonId,
             GetGameLeagueStandingsQueryHandler getGameLeagueStandingsQueryHandler,
@@ -57,9 +57,9 @@ internal static class GameLeaguesEndpoints
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var leagueDto = await getLeagueByIdQueryHandler.HandleAsync(leagueId, cancellationToken).ConfigureAwait(false);
+            var leagueDto = await getLeagueByIdQueryHandler.HandleAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
             if (leagueDto is null)
-                throw new InvalidOperationException($"League with ID {leagueId} not found.");
+                throw new InvalidOperationException($"League with version ID {leagueVersionId} not found.");
 
             var teamDtos = await teamsByCountryQueryHandler.HandleAsync(leagueDto.CountryId, cancellationToken).ConfigureAwait(false);
 
@@ -67,7 +67,7 @@ internal static class GameLeaguesEndpoints
                 UserId: userId,
                 GameId: gameId,
                 SeasonId: seasonId,
-                LeagueId: leagueId);
+                LeagueVersionId: leagueVersionId);
             var gameLeagueStandings = await getGameLeagueStandingsQueryHandler
                 .HandleAsync(query, cancellationToken).ConfigureAwait(false);
 

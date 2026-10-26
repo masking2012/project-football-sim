@@ -4,4 +4,4 @@ public sealed record GetGameLeagueStandingsQuery(
     Guid UserId,
     Guid GameId,
     Guid SeasonId,
-    int LeagueId);
+    int LeagueVersionId);
