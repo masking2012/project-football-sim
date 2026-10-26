@@ -4,4 +4,4 @@ public sealed record GetGameLeagueFixturesQuery(
     Guid UserId,
     Guid GameId,
     Guid SeasonId,
-    int LeagueId);
+    int LeagueVersionId);

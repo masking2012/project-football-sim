@@ -11,17 +11,11 @@ public sealed class GetGameLeagueFixturesQueryHandler(LeaguesDbContext dbContext
     {
         var league = await dbContext.GameLeagues
             .AsNoTracking()
-            .Join(
-                dbContext.LeagueVersions.AsNoTracking(),
-                gameLeague => gameLeague.LeagueVersionId,
-                version => version.LeagueVersionId,
-                (gameLeague, version) => new { gameLeague, version })
             .Where(f =>
-                f.gameLeague.UserId == query.UserId
-                && f.version.LeagueId == query.LeagueId
-                && f.gameLeague.GameId == query.GameId
-                && f.gameLeague.SeasonId == query.SeasonId)
-            .Select(f => f.gameLeague)
+                f.UserId == query.UserId
+                && f.LeagueVersionId == query.LeagueVersionId
+                && f.GameId == query.GameId
+                && f.SeasonId == query.SeasonId)
             .Include(f => f.GameLeagueMatches)
             .FirstOrDefaultAsync(cancellationToken)
             .ConfigureAwait(false);
