@@ -20,12 +20,6 @@ export interface LeagueDto {
   uefaConferenceLeaguePositions: number[] | null;
 }
 
-export interface GameLeagueDto {
-  gameLeagueId: string;
-  seasonId: string;
-  league: LeagueDto;
-}
-
 export interface TeamStandingDto {
   teamId: number;
   name: string;
@@ -173,8 +167,7 @@ export async function fetchLeagues(gameId: string): Promise<LeagueDto[]> {
 
   const request = (async () => {
     const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/leagues`, { headers: authHeaders() });
-    const gameLeagues = await handleResponse<GameLeagueDto[]>(res);
-    return gameLeagues.map((gameLeague) => gameLeague.league);
+    return handleResponse<LeagueDto[]>(res);
   })();
   leaguesRequest = request;
   request.then(
