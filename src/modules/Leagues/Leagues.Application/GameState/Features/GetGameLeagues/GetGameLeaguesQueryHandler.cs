@@ -1,28 +1,14 @@
-using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
-using ProjectFootballSim.Leagues.Application.Catalog.Services;
-using ProjectFootballSim.Leagues.Infrastructure.Database;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 
 public sealed class GetGameLeaguesQueryHandler(
-    LeaguesDbContext dbContext,
-    ILeaguesCatalog leaguesCatalog)
+    IGameLeagueCatalog gameLeagueCatalog)
 {
     public async Task<IReadOnlyList<LeagueDto>> HandleAsync(
         GetGameLeaguesQuery query,
-        CancellationToken cancellationToken)
-    {
-        List<int> gameLeagueVersionIds = await dbContext.GameLeagues
-            .AsNoTracking()
-            .Where(gameLeague =>
-                gameLeague.UserId == query.UserId
-                && gameLeague.GameId == query.GameId)
-            .Select(gameLeague => gameLeague.LeagueVersionId)
-            .Distinct()
-            .ToListAsync(cancellationToken)
+        CancellationToken cancellationToken) => await gameLeagueCatalog
+            .GetByGameAsync(query.UserId, query.GameId, cancellationToken)
             .ConfigureAwait(false);
-
-        return await leaguesCatalog.GetLeaguesByVersionIdsAsync(gameLeagueVersionIds, cancellationToken).ConfigureAwait(false);
-    }
 }

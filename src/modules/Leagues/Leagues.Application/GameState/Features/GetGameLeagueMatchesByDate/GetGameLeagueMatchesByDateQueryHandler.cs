@@ -1,23 +1,26 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Leagues.Application.Catalog.Services;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
 
 public sealed class GetGameLeagueMatchesByDateQueryHandler(
     LeaguesDbContext dbContext,
-    ILeaguesCatalog leaguesCatalog)
+    IGameLeagueCatalog gameLeagueCatalog)
 {
     public async Task<IReadOnlyList<GameLeagueMatchDto>> HandleAsync(
         GetGameLeagueMatchesByDateQuery query,
         CancellationToken cancellationToken)
     {
-        var leagues = await leaguesCatalog.GetAllActiveAsync(cancellationToken).ConfigureAwait(false);
+        var leagues = (await gameLeagueCatalog
+            .GetByGameAsync(query.UserId, query.GameId, cancellationToken)
+            .ConfigureAwait(false))
+            .ToDictionary(league => league.LeagueVersionId);
 
         var startDate = new DateTime(query.Date.Year, query.Date.Month, query.Date.Day);
         var endDate = startDate.AddDays(1);
 
-        return await dbContext.GameLeagueMatches
+        var matches = await dbContext.GameLeagueMatches
             .AsNoTracking()
             .Join(
                 dbContext.GameLeagues.AsNoTracking(),
@@ -32,6 +35,10 @@ public sealed class GetGameLeagueMatchesByDateQueryHandler(
             .Where(x => x.gameLeague.UserId == query.UserId
                 && x.gameLeague.GameId == query.GameId
                 && x.match.Date >= startDate && x.match.Date < endDate)
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+        return matches
             .Select(x => new GameLeagueMatchDto(
                 Id: x.match.Id,
                 HomeTeamId: x.match.HomeTeamId,
@@ -39,11 +46,10 @@ public sealed class GetGameLeagueMatchesByDateQueryHandler(
                 HomeTeamScore: x.match.HomeTeamScore,
                 AwayTeamScore: x.match.AwayTeamScore,
                 Round: x.match.Round,
-                 LeagueName: leagues[x.version.LeagueId].Name,
+                 LeagueName: leagues[x.version.LeagueVersionId].Name,
                  LeagueId: x.version.LeagueId,
-                 CountryId: leagues[x.version.LeagueId].CountryId,
-                 Order: leagues[x.version.LeagueId].Order))
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
+                 CountryId: leagues[x.version.LeagueVersionId].CountryId,
+                 Order: leagues[x.version.LeagueVersionId].Order))
+            .ToList();
     }
 }

@@ -7,6 +7,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFix
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
 
 namespace ProjectFootballSim.Leagues.Application;
@@ -17,6 +18,7 @@ public static class DependencyRegistrator
     {
         services.AddScoped<ILeaguesCatalog, LeaguesCatalog>();
         services.AddScoped<ILeaguesRoundsCatalog, LeaguesRoundsCatalog>();
+        services.AddScoped<IGameLeagueCatalog, GameLeagueCatalog>();
 
         services.AddScoped<GetActiveLeaguesQueryHandler>();
         services.AddScoped<GetLeagueByVersionIdQueryHandler>();
