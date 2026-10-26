@@ -1,10 +1,10 @@
 [
     {
-        "leagueId": 101,
-        "currentVersion": 1
+        "leagueId":  101,
+        "leagueVersionId":  101001
     },
     {
-        "leagueId": 102,
-        "currentVersion": 1
+        "leagueId":  102,
+        "leagueVersionId":  102001
     }
 ]

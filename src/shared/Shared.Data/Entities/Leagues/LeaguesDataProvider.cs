@@ -17,16 +17,31 @@ public static class LeaguesDataProvider
         return JsonSerializer.Deserialize<List<LeagueActivationData>>(stream, ResourceHelper.DefaultJsonOptions) ?? [];
     }
 
+    public static IReadOnlyList<LeagueVersionData> GetLeagueVersionsByCountryId(int countryId)
+    {
+        using var stream = ResourceHelper.GetEmbeddedResource($"league_versions_{countryId}");
+        var result = JsonSerializer.Deserialize<List<LeagueVersionData>>(stream, ResourceHelper.DefaultJsonOptions) ?? [];
+
+        var uniqueVersions = new HashSet<int>();
+        foreach (var item in result)
+        {
+            if (!uniqueVersions.Add(item.LeagueVersionId))
+                throw new InvalidDataException($"GetLeagueVersionsByCountryId. Duplicate entry found for LeagueVersionId: {item.LeagueVersionId}");
+        }
+
+        return result;
+    }
+
     public static IReadOnlyList<LeagueTeamData> GetLeagueTeamsByCountryId(int countryId)
     {
         using var stream = ResourceHelper.GetEmbeddedResource($"leagues_teams_{countryId}");
         var result = JsonSerializer.Deserialize<List<LeagueTeamData>>(stream, ResourceHelper.DefaultJsonOptions) ?? [];
 
-        var uniquePairs = new HashSet<Tuple<int, int, int>>();
+        var uniquePairs = new HashSet<Tuple<int, int>>();
         foreach (var item in result)
         {
-            if (!uniquePairs.Add(Tuple.Create(item.LeagueId, item.Version, item.TeamId)))
-                throw new InvalidDataException($"GetLeagueTeamsByCountryId. Duplicate entry found for LeagueId: {item.LeagueId}, Version: {item.Version}, TeamId: {item.TeamId}");
+            if (!uniquePairs.Add(Tuple.Create(item.LeagueVersionId, item.TeamId)))
+                throw new InvalidDataException($"GetLeagueTeamsByCountryId. Duplicate entry found for LeagueVersionId: {item.LeagueVersionId}, TeamId: {item.TeamId}");
         }
 
         return result;
@@ -42,17 +57,17 @@ public static class LeaguesDataProvider
 
     private static void ValidateLeagueRoundData(List<LeagueRoundData> items)
     {
-        var uniqueLeagueDates = new HashSet<Tuple<int, int, int, bool>>();
-        var uniqueLeagueRounds = new HashSet<Tuple<int, int, int>>();
+        var uniqueLeagueDates = new HashSet<Tuple<int, int, bool>>();
+        var uniqueLeagueRounds = new HashSet<Tuple<int, int>>();
         foreach (var item in items)
         {
-            if (!uniqueLeagueDates.Add(Tuple.Create(item.LeagueId, item.Version, item.Week, item.IsMidweek)))
-                throw new InvalidDataException($"GetLeagueRoundsByCountryId. Duplicate entry found for LeagueId: {item.LeagueId}, Version: {item.Version}, Week: {item.Week}, IsMidweek: {item.IsMidweek}");
-            if (!uniqueLeagueRounds.Add(Tuple.Create(item.LeagueId, item.Version, item.Round)))
-                throw new InvalidDataException($"GetLeagueRoundsByCountryId. Duplicate entry found for LeagueId: {item.LeagueId}, Version: {item.Version}, Round: {item.Round}");
+            if (!uniqueLeagueDates.Add(Tuple.Create(item.LeagueVersionId, item.Week, item.IsMidweek)))
+                throw new InvalidDataException($"GetLeagueRoundsByCountryId. Duplicate entry found for LeagueVersionId: {item.LeagueVersionId}, Week: {item.Week}, IsMidweek: {item.IsMidweek}");
+            if (!uniqueLeagueRounds.Add(Tuple.Create(item.LeagueVersionId, item.Round)))
+                throw new InvalidDataException($"GetLeagueRoundsByCountryId. Duplicate entry found for LeagueVersionId: {item.LeagueVersionId}, Round: {item.Round}");
         }
 
-        foreach (var leagueRounds in items.GroupBy(item => new { item.LeagueId, item.Version }))
+        foreach (var leagueRounds in items.GroupBy(item => item.LeagueVersionId))
         {
             var orderedRounds = leagueRounds.OrderBy(item => item.Round).ToList();
             for (var i = 1; i < orderedRounds.Count; i++)
@@ -60,7 +75,7 @@ public static class LeaguesDataProvider
                 var previousRound = orderedRounds[i - 1];
                 var currentRound = orderedRounds[i];
                 if (currentRound.Week < previousRound.Week)
-                    throw new InvalidDataException($"GetLeagueRoundsByCountryId. Round {currentRound.Round} for LeagueId: {currentRound.LeagueId} has Week: {currentRound.Week}, which is earlier than the previous Round {previousRound.Round} in Week: {previousRound.Week}");
+                    throw new InvalidDataException($"GetLeagueRoundsByCountryId. Round {currentRound.Round} for LeagueVersionId: {currentRound.LeagueVersionId} has Week: {currentRound.Week}, which is earlier than the previous Round {previousRound.Round} in Week: {previousRound.Week}");
             }
         }
     }

@@ -1,46 +1,14 @@
 [
     {
         "id": 101,
-        "version": 1,
         "name": "Premier League",
         "order": 1,
-        "countryId": 1,
-        "teamsCount": 16,
-        "promotionPositions": null,
-        "promotionPlayOffPositions": null,
-        "relegationPositions": [ 15, 16 ],
-        "relegationPlayOffPositions": [ 13, 14 ],
-        "uefaChampionsLeaguePositions": [ 1 ],
-        "uefaEuropaLeaguePositions": null,
-        "uefaConferenceLeaguePositions": [ 2, 3 ],
-        "format": [
-            {
-                "order": 1,
-                "type": "roundRobin",
-                "legs": 2
-            }
-        ]
+        "countryId": 1
     },
     {
         "id": 102,
-        "version": 1,
         "name": "First League",
         "order": 2,
-        "countryId": 1,
-        "teamsCount": 16,
-        "promotionPositions": [ 1, 2 ],
-        "promotionPlayOffPositions": [ 3, 4 ],
-        "relegationPositions": [ 15, 16 ],
-        "relegationPlayOffPositions": [ 13, 14 ],
-        "uefaChampionsLeaguePositions": null,
-        "uefaEuropaLeaguePositions": null,
-        "uefaConferenceLeaguePositions": null,
-        "format": [
-            {
-                "order": 1,
-                "type": "roundRobin",
-                "legs": 2
-            }
-        ]
+        "countryId": 1
     }
 ]

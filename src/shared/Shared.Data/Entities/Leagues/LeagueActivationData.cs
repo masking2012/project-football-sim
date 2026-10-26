@@ -1,3 +1,3 @@
 namespace ProjectFootballSim.Shared.Data.Entities.Leagues;
 
-public sealed record LeagueActivationData(int LeagueId, int CurrentVersion);
+public sealed record LeagueActivationData(int LeagueId, int LeagueVersionId);
