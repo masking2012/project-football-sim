@@ -2,6 +2,7 @@ using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.GamePersistence.Application.Features.CreateGame;
 using ProjectFootballSim.Leagues.Application.Catalog.Features.GetActiveLeagues;
+using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
 namespace ProjectFootballSim.Api.Endpoints.GamePersistence;
@@ -24,9 +25,11 @@ internal sealed class GameInitializationService(
         var createGameSeasonCommand = new CreateGameSeasonCommand(userId, gameId);
         CreateGameSeasonCommandResult season = await createGameSeasonCommandHandler.HandleAsync(createGameSeasonCommand, cancellationToken).ConfigureAwait(false);
 
-        var leagues = await getActiveLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
-        foreach(var league in leagues)
+        IReadOnlyDictionary<int, LeagueDto> activeLeagues
+            = await getActiveLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
+        foreach(var league in activeLeagues)
         {
+            //TODO: send LeagueVersionId instead of LeagueId
             await createGameLeagueCommandHandler
                 .HandleAsync(new CreateGameLeagueCommand(
                     LeagueId: league.Key,

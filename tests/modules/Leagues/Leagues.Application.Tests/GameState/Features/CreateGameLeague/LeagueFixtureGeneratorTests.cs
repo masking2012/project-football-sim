@@ -102,8 +102,8 @@ internal sealed class LeagueFixtureGeneratorTests
             UefaConferenceLeaguePositions: null);
 
         var leaguesCatalog = new Mock<ILeaguesCatalog>();
-        leaguesCatalog.Setup(catalog => catalog.GetByIdAsync(1, It.IsAny<CancellationToken>()))
-            .ReturnsAsync(league);
+        leaguesCatalog.Setup(catalog => catalog.GetAllActiveAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new Dictionary<int, LeagueDto> { [1] = league });
 
         var leagueRounds = Enumerable.Range(1, rounds)
             .Select(round => new LeagueRoundDto(1, 101001, round, round, false))

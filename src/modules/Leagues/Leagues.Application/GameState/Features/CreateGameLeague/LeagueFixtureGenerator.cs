@@ -20,7 +20,8 @@ public sealed class LeagueFixtureGenerator(
         DateTime seasonStartDate,
         CancellationToken cancellationToken)
     {
-        var league = await leaguesCatalog.GetByIdAsync(leagueId, cancellationToken).ConfigureAwait(false)
+        var activeLeagues = await leaguesCatalog.GetAllActiveAsync(cancellationToken).ConfigureAwait(false);
+        var league = activeLeagues.GetValueOrDefault(leagueId)
             ?? throw new InvalidOperationException($"League with ID '{leagueId}' not found.");
         var roundDates = await LoadRoundDatesAsync(leagueId, seasonStartDate, cancellationToken).ConfigureAwait(false);
         var teams = PrepareTeams(teamIds);

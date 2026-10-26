@@ -13,7 +13,8 @@ public sealed class CreateGameLeagueCommandHandler(
 {
     public async Task HandleAsync(CreateGameLeagueCommand command, CancellationToken cancellationToken)
     {
-        LeagueDto? league = await leaguesCatalog.GetByIdAsync(command.LeagueId, cancellationToken).ConfigureAwait(false);
+        var activeLeagues = await leaguesCatalog.GetAllActiveAsync(cancellationToken).ConfigureAwait(false);
+        LeagueDto? league = activeLeagues.GetValueOrDefault(command.LeagueId);
         if (league is null)
             throw new InvalidOperationException($"League with ID '{command.LeagueId}' not found.");
 

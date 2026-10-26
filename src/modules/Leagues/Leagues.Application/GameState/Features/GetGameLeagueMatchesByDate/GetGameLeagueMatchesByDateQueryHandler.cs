@@ -12,7 +12,7 @@ public sealed class GetGameLeagueMatchesByDateQueryHandler(
         GetGameLeagueMatchesByDateQuery query,
         CancellationToken cancellationToken)
     {
-        var leagues = await leaguesCatalog.GetAllAsync(cancellationToken).ConfigureAwait(false);
+        var leagues = await leaguesCatalog.GetAllActiveAsync(cancellationToken).ConfigureAwait(false);
 
         var startDate = new DateTime(query.Date.Year, query.Date.Month, query.Date.Day);
         var endDate = startDate.AddDays(1);

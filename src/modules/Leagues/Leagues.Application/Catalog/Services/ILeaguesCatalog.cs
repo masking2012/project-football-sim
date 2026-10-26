@@ -4,13 +4,10 @@ namespace ProjectFootballSim.Leagues.Application.Catalog.Services;
 
 public interface ILeaguesCatalog
 {
-    ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllAsync(
-        CancellationToken cancellationToken);
-
     ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveAsync(
         CancellationToken cancellationToken);
 
-    ValueTask<LeagueDto?> GetByIdAsync(
-        int leagueId,
+    ValueTask<LeagueDto?> GetByLeagueVersionIdAsync(
+        int leagueVersionId,
         CancellationToken cancellationToken);
 }

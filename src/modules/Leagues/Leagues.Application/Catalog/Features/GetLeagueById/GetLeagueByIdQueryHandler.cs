@@ -5,8 +5,11 @@ namespace ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueById;
 
 public sealed class GetLeagueByIdQueryHandler(ILeaguesCatalog leagueCatalog)
 {
-    public ValueTask<LeagueDto?> HandleAsync(
+    public async ValueTask<LeagueDto?> HandleAsync(
         int leagueId,
-        CancellationToken cancellationToken) =>
-        leagueCatalog.GetByIdAsync(leagueId, cancellationToken);
+        CancellationToken cancellationToken)
+    {
+        var leagues = await leagueCatalog.GetAllActiveAsync(cancellationToken).ConfigureAwait(false);
+        return leagues.GetValueOrDefault(leagueId);
+    }
 }
