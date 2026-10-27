@@ -42,14 +42,8 @@ internal sealed class CachedLeaguesRetriever(
         if (roundsDto is null || roundsDto.Count == 0)
             throw new InvalidDataException($"League rounds for league version with ID '{leagueVersionId}' were not found.");
 
-        var updatedLeagues = new Dictionary<int, LeagueSnapshot>(cachedLeagues)
-        {
-            [leagueDto.LeagueVersionId] = new LeagueSnapshot(leagueDto, roundsDto)
-        };
-        await cache.SetAsync(
-            CacheKey,
-            updatedLeagues,
-            cancellationToken: cancellationToken).ConfigureAwait(false);
+        await SaveInCacheAsync(cachedLeagues, leagueDto, roundsDto, cancellationToken)
+            .ConfigureAwait(false);
 
         return leagueDto;
     }
@@ -77,6 +71,33 @@ internal sealed class CachedLeaguesRetriever(
         }
 
         return leagues;
+    }
+
+    public async ValueTask<IReadOnlyList<LeagueRoundDto>> GetLeagueRoundsAsync(
+        int leagueVersionId,
+        CancellationToken cancellationToken)
+    {
+        IReadOnlyDictionary<int, LeagueSnapshot> cachedLeagues
+            = await GetCachedLeaguesAsync(cancellationToken).ConfigureAwait(false);
+
+        if (cachedLeagues.TryGetValue(leagueVersionId, out var snapshot))
+            return snapshot.Rounds;
+
+        LeagueDto? leagueDto = await leaguesRetriever
+            .GetAsync(leagueVersionId, cancellationToken)
+            .ConfigureAwait(false);
+        if (leagueDto is null)
+            throw new InvalidDataException($"League version with ID '{leagueVersionId}' was not found.");
+
+        IReadOnlyList<LeagueRoundDto> roundsDto = await leaguesRoundsRetriever.GetAsync(leagueVersionId, cancellationToken)
+            .ConfigureAwait(false);
+        if (roundsDto is null || roundsDto.Count == 0)
+            throw new InvalidDataException($"League rounds for league version with ID '{leagueVersionId}' were not found.");
+
+        await SaveInCacheAsync(cachedLeagues, leagueDto, roundsDto, cancellationToken)
+            .ConfigureAwait(false);
+
+        return roundsDto;
     }
 
     private ValueTask<Dictionary<int, LeagueSnapshot>> GetCachedLeaguesAsync(
@@ -107,6 +128,22 @@ internal sealed class CachedLeaguesRetriever(
                 return cachedLeagues;
             },
             cancellationToken: cancellationToken);
+
+    private ValueTask SaveInCacheAsync(
+        IReadOnlyDictionary<int, LeagueSnapshot> currentCache,
+        LeagueDto leagueDto,
+        IReadOnlyList<LeagueRoundDto> roundsDto,
+        CancellationToken cancellationToken)
+    {
+        var updatedLeagues = new Dictionary<int, LeagueSnapshot>(currentCache)
+        {
+            [leagueDto.LeagueVersionId] = new LeagueSnapshot(leagueDto, roundsDto)
+        };
+        return cache.SetAsync(
+            CacheKey,
+            updatedLeagues,
+            cancellationToken: cancellationToken);
+    }
 
     private sealed record LeagueSnapshot(LeagueDto League, IReadOnlyList<LeagueRoundDto> Rounds);
 }

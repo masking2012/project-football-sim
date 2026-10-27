@@ -5,7 +5,7 @@ namespace ProjectFootballSim.Leagues.Application.GameState.Services;
 
 internal sealed class GameLeagueCatalog(
     IGameLeagueRepository repository,
-    ICachedLeaguesRetriever leaguesCatalog) : IGameLeagueCatalog
+    ICachedLeaguesRetriever leaguesRetriever) : IGameLeagueCatalog
 {
     public async Task<IReadOnlyList<LeagueDto>> GetByGameAsync(
         Guid userId,
@@ -16,7 +16,7 @@ internal sealed class GameLeagueCatalog(
             .GetLeagueVersionIdsAsync(userId, gameId, cancellationToken)
             .ConfigureAwait(false);
 
-        return await leaguesCatalog
+        return await leaguesRetriever
             .GetLeaguesAsync(leagueVersionIds, cancellationToken)
             .ConfigureAwait(false);
     }

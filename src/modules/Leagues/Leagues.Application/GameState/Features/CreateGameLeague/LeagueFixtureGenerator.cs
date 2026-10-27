@@ -6,8 +6,7 @@ using ProjectFootballSim.Leagues.Application.Catalog.Models;
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
 public sealed class LeagueFixtureGenerator(
-    ICachedLeaguesRetriever leaguesCatalog,
-    ILeaguesRoundsCatalog leaguesRoundsCatalog)
+    ICachedLeaguesRetriever leaguesRetriever)
 {
     private const int StubTeamId = -1;
     private const int MaxVenueStreak = 3;
@@ -19,7 +18,7 @@ public sealed class LeagueFixtureGenerator(
         DateTime seasonStartDate,
         CancellationToken cancellationToken)
     {
-        LeagueDto? league = await leaguesCatalog.GetLeagueAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
+        LeagueDto? league = await leaguesRetriever.GetLeagueAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
         if (league is null)
             throw new InvalidOperationException($"League with version ID '{leagueVersionId}' not found.");
 
@@ -60,7 +59,7 @@ public sealed class LeagueFixtureGenerator(
 
     private async Task<Dictionary<int, DateTime>> LoadRoundDatesAsync(int leagueVersionId, DateTime seasonStartDate, CancellationToken cancellationToken)
     {
-        var leagueRounds = await leaguesRoundsCatalog.GetRoundsForLeagueVersionAsync(leagueVersionId, cancellationToken)
+        var leagueRounds = await leaguesRetriever.GetLeagueRoundsAsync(leagueVersionId, cancellationToken)
             .ConfigureAwait(false);
 
         var firstSunday = DateTimeUtils.GetNextDayOfWeek(seasonStartDate, DayOfWeek.Sunday);

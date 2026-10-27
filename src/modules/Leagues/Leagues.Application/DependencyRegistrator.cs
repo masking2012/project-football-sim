@@ -17,7 +17,6 @@ public static class DependencyRegistrator
     public static IServiceCollection AddLeaguesApplication(this IServiceCollection services)
     {
         services.AddScoped<ICachedLeaguesRetriever, CachedLeaguesRetriever>();
-        services.AddScoped<ILeaguesRoundsCatalog, LeaguesRoundsCatalog>();
         services.AddScoped<IGameLeagueCatalog, GameLeagueCatalog>();
 
         services.AddScoped<GetActiveLeaguesQueryHandler>();

@@ -3,9 +3,9 @@ using ProjectFootballSim.Leagues.Application.Catalog.Services;
 
 namespace ProjectFootballSim.Leagues.Application.Catalog.Features.GetActiveLeagues;
 
-public sealed class GetActiveLeaguesQueryHandler(ICachedLeaguesRetriever leagueCatalog)
+public sealed class GetActiveLeaguesQueryHandler(ICachedLeaguesRetriever leaguesRetriever)
 {
     public ValueTask<IReadOnlyDictionary<int, LeagueDto>> HandleAsync(
         CancellationToken cancellationToken) =>
-        leagueCatalog.GetAllActiveLeaguesAsync(cancellationToken);
+        leaguesRetriever.GetAllActiveLeaguesAsync(cancellationToken);
 }

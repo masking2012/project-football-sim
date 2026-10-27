@@ -14,4 +14,8 @@ public interface ICachedLeaguesRetriever
     ValueTask<IReadOnlyList<LeagueDto>> GetLeaguesAsync(
         IReadOnlyCollection<int> leagueVersionIds,
         CancellationToken cancellationToken);
+
+    ValueTask<IReadOnlyList<LeagueRoundDto>> GetLeagueRoundsAsync(
+        int leagueVersionId,
+        CancellationToken cancellationToken);
 }
