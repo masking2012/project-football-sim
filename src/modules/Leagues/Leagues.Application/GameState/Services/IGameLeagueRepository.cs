@@ -1,4 +1,3 @@
-using ProjectFootballSim.Leagues.Application.GameState.Models;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Services;
@@ -6,6 +5,11 @@ namespace ProjectFootballSim.Leagues.Application.GameState.Services;
 public interface IGameLeagueRepository
 {
     Task<IReadOnlyList<int>> GetLeagueVersionIdsAsync(
+        Guid userId,
+        Guid gameId,
+        CancellationToken cancellationToken);
+
+    Task<IReadOnlyDictionary<Guid, int>> GetLeagueVersionIdsByGameLeagueAsync(
         Guid userId,
         Guid gameId,
         CancellationToken cancellationToken);
@@ -23,13 +27,6 @@ public interface IGameLeagueRepository
         CancellationToken cancellationToken);
 
     Task<IReadOnlyList<GameLeagueMatch>> GetMatchesForDateAsync(
-        Guid userId,
-        Guid gameId,
-        DateTime startDate,
-        DateTime endDate,
-        CancellationToken cancellationToken);
-
-    Task<IReadOnlyList<GameLeagueMatchByDateDto>> GetMatchesByDateAsync(
         Guid userId,
         Guid gameId,
         DateTime startDate,

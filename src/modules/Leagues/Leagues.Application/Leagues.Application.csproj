@@ -9,6 +9,7 @@
         <ProjectReference Include="..\..\Teams\Teams.Application\Teams.Application.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="GameState\Models\" />
       <Folder Include="Persistence\Models\" />
       <Folder Include="Persistence\Repositories\" />
     </ItemGroup>

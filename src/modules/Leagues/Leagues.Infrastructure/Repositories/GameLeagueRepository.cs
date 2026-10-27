@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Leagues.Application.GameState.Models;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
@@ -18,6 +17,19 @@ internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLe
             .Select(league => league.LeagueVersionId)
             .Distinct()
             .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+
+    public async Task<IReadOnlyDictionary<Guid, int>> GetLeagueVersionIdsByGameLeagueAsync(
+        Guid userId,
+        Guid gameId,
+        CancellationToken cancellationToken) =>
+        await dbContext.GameLeagues
+            .AsNoTracking()
+            .Where(league => league.UserId == userId && league.GameId == gameId)
+            .ToDictionaryAsync(
+                league => league.Id,
+                league => league.LeagueVersionId,
+                cancellationToken)
             .ConfigureAwait(false);
 
     public Task<GameLeague?> GetAsync(
@@ -68,32 +80,4 @@ internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLe
             .ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<GameLeagueMatchByDateDto>> GetMatchesByDateAsync(
-        Guid userId,
-        Guid gameId,
-        DateTime startDate,
-        DateTime endDate,
-        CancellationToken cancellationToken)
-    {
-        return await dbContext.GameLeagueMatches
-            .AsNoTracking()
-            .Join(
-                dbContext.GameLeagues.AsNoTracking(),
-                match => match.GameLeagueId,
-                league => league.Id,
-                (match, league) => new { match, league })
-            .Join(
-                dbContext.LeagueVersions.AsNoTracking(),
-                item => item.league.LeagueVersionId,
-                version => version.LeagueVersionId,
-                (item, version) => new { item.match, item.league, version })
-            .Where(item =>
-                item.league.UserId == userId
-                && item.league.GameId == gameId
-                && item.match.Date >= startDate
-                && item.match.Date < endDate)
-            .Select(item => new GameLeagueMatchByDateDto(item.match, item.version.LeagueVersionId))
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-    }
 }
