@@ -1,6 +1,6 @@
 using Moq;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
-using ProjectFootballSim.Leagues.Application.Catalog.Services;
 using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
 namespace ProjectFootballSim.Leagues.Application.Tests.GameState.Features.CreateGameLeague;

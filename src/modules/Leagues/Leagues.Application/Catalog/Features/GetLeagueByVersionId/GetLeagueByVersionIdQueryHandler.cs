@@ -1,5 +1,5 @@
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
-using ProjectFootballSim.Leagues.Application.Catalog.Services;
 
 namespace ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueByVersionId;
 

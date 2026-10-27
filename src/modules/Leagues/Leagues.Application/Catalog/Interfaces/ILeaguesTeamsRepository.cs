@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Leagues.Application.Catalog.Services;
+namespace ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 
 public interface ILeaguesTeamsRepository
 {

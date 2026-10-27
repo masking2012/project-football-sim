@@ -9,6 +9,8 @@ using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
+using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 
 namespace ProjectFootballSim.Leagues.Application;
 
@@ -17,7 +19,7 @@ public static class DependencyRegistrator
     public static IServiceCollection AddLeaguesApplication(this IServiceCollection services)
     {
         services.AddScoped<ICachedLeaguesRetriever, CachedLeaguesRetriever>();
-        services.AddScoped<IGameLeagueCatalog, GameLeagueCatalog>();
+        services.AddScoped<IGameLeaguesRetriever, GameLeagueCatalog>();
 
         services.AddScoped<GetActiveLeaguesQueryHandler>();
         services.AddScoped<GetLeagueByVersionIdQueryHandler>();

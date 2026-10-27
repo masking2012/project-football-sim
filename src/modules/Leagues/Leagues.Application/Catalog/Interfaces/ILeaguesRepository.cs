@@ -2,7 +2,7 @@ using ProjectFootballSim.Leagues.Application.Catalog.Models;
 
 namespace ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 
-public interface ILeaguesRetriever
+public interface ILeaguesRepository
 {
     Task<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveAsync(CancellationToken cancellationToken);
 

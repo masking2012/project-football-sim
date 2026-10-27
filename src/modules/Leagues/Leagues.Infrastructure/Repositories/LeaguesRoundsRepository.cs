@@ -4,9 +4,9 @@ using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 using LeagueRoundDomain = ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.LeagueRound;
 
-namespace ProjectFootballSim.Leagues.Infrastructure.Retrievers;
+namespace ProjectFootballSim.Leagues.Infrastructure.Repositories;
 
-internal sealed class LeaguesRoundsRetriever(LeaguesDbContext dbContext) : ILeaguesRoundsRetriever
+internal sealed class LeaguesRoundsRepository(LeaguesDbContext dbContext) : ILeaguesRoundsRepository
 {
     public async Task<IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>>> GetRoundsFromAllActiveVersionsAsync(
         CancellationToken cancellationToken)

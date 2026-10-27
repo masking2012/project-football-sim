@@ -5,9 +5,9 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 using LeagueDomain = ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.League;
 using LeagueVersionDomain = ProjectFootballSim.Leagues.Domain.Catalog.Entities.LeagueVersion;
 
-namespace ProjectFootballSim.Leagues.Infrastructure.Retrievers;
+namespace ProjectFootballSim.Leagues.Infrastructure.Repositories;
 
-internal sealed class LeaguesRetriever(LeaguesDbContext dbContext) : ILeaguesRetriever
+internal sealed class LeaguesRepository(LeaguesDbContext dbContext) : ILeaguesRepository
 {
     public async Task<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveAsync(
         CancellationToken cancellationToken)

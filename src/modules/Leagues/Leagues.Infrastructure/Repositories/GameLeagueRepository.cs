@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Leagues.Application.GameState.Services;
+using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 
 namespace ProjectFootballSim.Leagues.Infrastructure.Repositories;
 
-internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLeagueRepository
+internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLeaguesRepository
 {
     public async Task<IReadOnlyList<int>> GetLeagueVersionIdsAsync(
         Guid userId,

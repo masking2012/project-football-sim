@@ -1,9 +1,9 @@
-using ProjectFootballSim.Leagues.Application.GameState.Services;
+using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 
-public sealed class GetGameLeagueStandingsQueryHandler(IGameLeagueRepository repository)
+public sealed class GetGameLeagueStandingsQueryHandler(IGameLeaguesRepository repository)
 {
     public async Task<IReadOnlyList<GameLeagueTeamDto>> HandleAsync(
         GetGameLeagueStandingsQuery query,

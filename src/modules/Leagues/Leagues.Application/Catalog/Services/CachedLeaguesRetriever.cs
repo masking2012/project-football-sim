@@ -6,8 +6,8 @@ namespace ProjectFootballSim.Leagues.Application.Catalog.Services;
 
 internal sealed class CachedLeaguesRetriever(
     HybridCache cache,
-    ILeaguesRetriever leaguesRetriever,
-    ILeaguesRoundsRetriever leaguesRoundsRetriever)
+    ILeaguesRepository leaguesRepository,
+    ILeaguesRoundsRepository leaguesRoundsRepository)
     : ICachedLeaguesRetriever
 {
     private const string CacheKey = "leagues";
@@ -31,13 +31,13 @@ internal sealed class CachedLeaguesRetriever(
         if (cachedLeagues.TryGetValue(leagueVersionId, out var snapshot))
             return snapshot.League;
 
-        LeagueDto? leagueDto = await leaguesRetriever
+        LeagueDto? leagueDto = await leaguesRepository
             .GetAsync(leagueVersionId, cancellationToken)
             .ConfigureAwait(false);
         if (leagueDto is null)
             return null;
 
-        IReadOnlyList<LeagueRoundDto> roundsDto = await leaguesRoundsRetriever.GetAsync(leagueVersionId, cancellationToken)
+        IReadOnlyList<LeagueRoundDto> roundsDto = await leaguesRoundsRepository.GetAsync(leagueVersionId, cancellationToken)
             .ConfigureAwait(false);
         if (roundsDto is null || roundsDto.Count == 0)
             throw new InvalidDataException($"League rounds for league version with ID '{leagueVersionId}' were not found.");
@@ -48,7 +48,7 @@ internal sealed class CachedLeaguesRetriever(
         return leagueDto;
     }
 
-    public async ValueTask<IReadOnlyList<LeagueDto>> GetLeaguesAsync(
+    public async ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetLeaguesAsync(
         IReadOnlyCollection<int> leagueVersionIds,
         CancellationToken cancellationToken)
     {
@@ -70,7 +70,7 @@ internal sealed class CachedLeaguesRetriever(
             leagues.Add(league);
         }
 
-        return leagues;
+        return leagues.ToDictionary(k => k.LeagueVersionId);
     }
 
     public async ValueTask<IReadOnlyList<LeagueRoundDto>> GetLeagueRoundsAsync(
@@ -83,13 +83,13 @@ internal sealed class CachedLeaguesRetriever(
         if (cachedLeagues.TryGetValue(leagueVersionId, out var snapshot))
             return snapshot.Rounds;
 
-        LeagueDto? leagueDto = await leaguesRetriever
+        LeagueDto? leagueDto = await leaguesRepository
             .GetAsync(leagueVersionId, cancellationToken)
             .ConfigureAwait(false);
         if (leagueDto is null)
             throw new InvalidDataException($"League version with ID '{leagueVersionId}' was not found.");
 
-        IReadOnlyList<LeagueRoundDto> roundsDto = await leaguesRoundsRetriever.GetAsync(leagueVersionId, cancellationToken)
+        IReadOnlyList<LeagueRoundDto> roundsDto = await leaguesRoundsRepository.GetAsync(leagueVersionId, cancellationToken)
             .ConfigureAwait(false);
         if (roundsDto is null || roundsDto.Count == 0)
             throw new InvalidDataException($"League rounds for league version with ID '{leagueVersionId}' were not found.");
@@ -108,10 +108,10 @@ internal sealed class CachedLeaguesRetriever(
             {
                 Dictionary<int, LeagueSnapshot> cachedLeagues = new();
 
-                IReadOnlyDictionary<int, LeagueDto> leagues = await leaguesRetriever
+                IReadOnlyDictionary<int, LeagueDto> leagues = await leaguesRepository
                     .GetAllActiveAsync(cancellationToken)
                     .ConfigureAwait(false);
-                IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>> leaguesRounds = await leaguesRoundsRetriever
+                IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>> leaguesRounds = await leaguesRoundsRepository
                     .GetRoundsFromAllActiveVersionsAsync(cancellationToken)
                     .ConfigureAwait(false);
                 foreach (var league in leagues)

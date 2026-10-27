@@ -4,11 +4,12 @@ using ProjectFootballSim.Matches.Application.Features.RegularTime;
 using ProjectFootballSim.Teams.Application.Common.Models;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
+using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
 
 public sealed class SimulateLeagueGameDayCommandHandler(
-    IGameLeagueRepository readRepository,
+    IGameLeaguesRepository readRepository,
     IGameLeagueWriteRepository writeRepository,
     GetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
     SimulateRegularTimeCommandHandler simulateRegularTimeCommandHandler)

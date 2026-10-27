@@ -1,8 +1,8 @@
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
-namespace ProjectFootballSim.Leagues.Application.GameState.Services;
+namespace ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 
-public interface IGameLeagueRepository
+public interface IGameLeaguesRepository
 {
     Task<IReadOnlyList<int>> GetLeagueVersionIdsAsync(
         Guid userId,

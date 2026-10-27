@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Leagues.Application.Catalog.Services;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 
 namespace ProjectFootballSim.Leagues.Infrastructure.Repositories;

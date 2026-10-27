@@ -2,7 +2,7 @@ using ProjectFootballSim.Leagues.Application.Catalog.Models;
 
 namespace ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 
-public interface ILeaguesRoundsRetriever
+public interface ILeaguesRoundsRepository
 {
     Task<IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>>> GetRoundsFromAllActiveVersionsAsync(
         CancellationToken cancellationToken);

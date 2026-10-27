@@ -1,18 +1,18 @@
-using ProjectFootballSim.Leagues.Application.GameState.Services;
+using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
 
 public sealed class GetGameLeagueMatchesByDateQueryHandler(
-    IGameLeagueRepository repository,
-    IGameLeagueCatalog gameLeagueCatalog)
+    IGameLeaguesRepository repository,
+    IGameLeaguesRetriever gameLeagueCatalog)
 {
     public async Task<IReadOnlyList<GameLeagueMatchDto>> HandleAsync(
         GetGameLeagueMatchesByDateQuery query,
         CancellationToken cancellationToken)
     {
         var leagues = (await gameLeagueCatalog
-            .GetByGameAsync(query.UserId, query.GameId, cancellationToken)
+            .GetLeaguesAsync(query.UserId, query.GameId, cancellationToken)
             .ConfigureAwait(false))
             .ToDictionary(league => league.LeagueVersionId);
 
