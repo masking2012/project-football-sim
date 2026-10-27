@@ -8,7 +8,7 @@ namespace ProjectFootballSim.Leagues.Application.Tests.GameState.Features.Create
 internal sealed class LeagueFixtureGeneratorTests
 {
     [Test]
-    public async Task ShouldGenerateConfiguredNumberOfLegsAsync()
+    public async Task ShouldGenerateConfiguredNumberOfLegs()
     {
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
@@ -24,7 +24,7 @@ internal sealed class LeagueFixtureGeneratorTests
     }
 
     [Test]
-    public async Task ShouldScheduleEachTeamOnlyOncePerRoundAsync()
+    public async Task ShouldScheduleEachTeamOnlyOncePerRound()
     {
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
@@ -47,7 +47,7 @@ internal sealed class LeagueFixtureGeneratorTests
     }
 
     [Test]
-    public async Task ShouldScheduleFutureRoundsAfterPreviousRoundsAsync()
+    public async Task ShouldScheduleFutureRoundsAfterPreviousRounds()
     {
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
@@ -69,7 +69,7 @@ internal sealed class LeagueFixtureGeneratorTests
     }
 
     [Test]
-    public async Task ShouldRejectCalendarRoundCountMismatchAsync()
+    public async Task ShouldRejectCalendarRoundCountMismatch()
     {
         var generator = CreateGenerator(legs: 2, rounds: 3);
 
@@ -110,12 +110,11 @@ internal sealed class LeagueFixtureGeneratorTests
         var leagueRounds = Enumerable.Range(1, rounds)
             .Select(round => new LeagueRoundDto(1, 101001, round, round, false))
             .ToList();
-        var roundsCatalog = new Mock<ILeaguesRoundsCatalog>();
-        roundsCatalog.Setup(catalog => catalog.GetRoundsForLeagueVersionAsync(
+        leaguesCatalog.Setup(catalog => catalog.GetLeagueRoundsAsync(
                 101001,
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(leagueRounds);
 
-        return new LeagueFixtureGenerator(leaguesCatalog.Object, roundsCatalog.Object);
+        return new LeagueFixtureGenerator(leaguesCatalog.Object);
     }
 }
