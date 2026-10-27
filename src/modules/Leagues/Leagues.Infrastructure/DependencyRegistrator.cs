@@ -33,7 +33,7 @@ public static class DependencyRegistrator
             .UseSeeding(SeedWithPredefinedValues));
 
         services.AddScoped<ILeaguesRetriever, LeaguesRetriever>();
-        services.AddScoped<ILeaguesRoundsRepository, LeaguesRoundsRepository>();
+        services.AddScoped<ILeaguesRoundsRetriever, LeaguesRoundsRetriever>();
         services.AddScoped<ILeaguesTeamsRepository, LeaguesTeamsRepository>();
         services.AddScoped<IGameLeagueRepository, GameLeagueRepository>();
         services.AddScoped<IGameLeagueWriteRepository, GameLeagueWriteRepository>();

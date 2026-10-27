@@ -1,9 +1,10 @@
 using Microsoft.Extensions.Caching.Hybrid;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 
 namespace ProjectFootballSim.Leagues.Application.Catalog.Services;
 
-internal sealed class LeaguesRoundsCatalog(HybridCache cache, ILeaguesRoundsRepository repository)
+internal sealed class LeaguesRoundsCatalog(HybridCache cache, ILeaguesRoundsRetriever repository)
     : ILeaguesRoundsCatalog
 {
     private const string CacheKey = "leagues:rounds";
@@ -17,7 +18,7 @@ internal sealed class LeaguesRoundsCatalog(HybridCache cache, ILeaguesRoundsRepo
             return rounds;
 
         rounds = await repository
-            .GetForVersionAsync(leagueVersionId, cancellationToken)
+            .GetAsync(leagueVersionId, cancellationToken)
             .ConfigureAwait(false);
 
         var updatedRounds = new Dictionary<int, IReadOnlyList<LeagueRoundDto>>(cachedRounds)
@@ -36,6 +37,6 @@ internal sealed class LeaguesRoundsCatalog(HybridCache cache, ILeaguesRoundsRepo
         CancellationToken cancellationToken) =>
         cache.GetOrCreateAsync(
             CacheKey,
-            async cancellationToken => await repository.GetActiveAsync(cancellationToken).ConfigureAwait(false),
+            async cancellationToken => await repository.GetRoundsFromAllActiveVersionsAsync(cancellationToken).ConfigureAwait(false),
             cancellationToken: cancellationToken);
 }

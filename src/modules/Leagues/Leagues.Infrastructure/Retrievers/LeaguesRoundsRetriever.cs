@@ -1,14 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
-using ProjectFootballSim.Leagues.Application.Catalog.Services;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 using LeagueRoundDomain = ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.LeagueRound;
 
-namespace ProjectFootballSim.Leagues.Infrastructure.Repositories;
+namespace ProjectFootballSim.Leagues.Infrastructure.Retrievers;
 
-internal sealed class LeaguesRoundsRepository(LeaguesDbContext dbContext) : ILeaguesRoundsRepository
+internal sealed class LeaguesRoundsRetriever(LeaguesDbContext dbContext) : ILeaguesRoundsRetriever
 {
-    public async Task<IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>>> GetActiveAsync(
+    public async Task<IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>>> GetRoundsFromAllActiveVersionsAsync(
         CancellationToken cancellationToken)
     {
         var activeRounds = await dbContext.LeagueRounds
@@ -35,7 +35,7 @@ internal sealed class LeaguesRoundsRepository(LeaguesDbContext dbContext) : ILea
                     .ToList());
     }
 
-    public async Task<IReadOnlyList<LeagueRoundDto>> GetForVersionAsync(
+    public async Task<IReadOnlyList<LeagueRoundDto>> GetAsync(
         int leagueVersionId,
         CancellationToken cancellationToken)
     {
@@ -56,5 +56,6 @@ internal sealed class LeaguesRoundsRepository(LeaguesDbContext dbContext) : ILea
     }
 
     private static LeagueRoundDto CreateRoundDto(int leagueId, LeagueRoundDomain round) =>
-        new(leagueId, round.LeagueVersionId, round.Round, round.Week, round.IsMidweek);
+        new(LeagueId: leagueId,
+            LeagueVersionId: round.LeagueVersionId, Round: round.Round, Week: round.Week, IsMidweek: round.IsMidweek);
 }
