@@ -77,7 +77,34 @@ internal sealed class LeagueValueObjectTests
             await Assert.That(first).IsEqualTo(second);
             await Assert.That(first.GetHashCode()).IsEqualTo(second.GetHashCode());
             await Assert.That(round.IsMidweek).IsTrue();
+            await Assert.That(new LeagueStage(1, LeagueStageType.RoundRobin, 2))
+                .IsEqualTo(new LeagueStage(1, LeagueStageType.RoundRobin, 2));
         }
+    }
+
+    [Test]
+    public async Task ShouldProtectLeagueVersionCollections()
+    {
+        var format = new List<LeagueStage> { new(1, LeagueStageType.RoundRobin, 2) };
+        var positions = new List<int> { 1 };
+        var version = CreateLeagueVersion(format, positions);
+
+        format.Add(new LeagueStage(2, LeagueStageType.RoundRobin, 2));
+        positions.Add(2);
+
+        using (Assert.Multiple())
+        {
+            await Assert.That(version.Format.Count).IsEqualTo(1);
+            await Assert.That(version.PromotionPositions!.Count).IsEqualTo(1);
+            await Assert.That(() => version.Format.Add(new LeagueStage(2, LeagueStageType.RoundRobin, 2)))
+                .Throws<NotSupportedException>();
+        }
+    }
+
+    [Test]
+    public async Task ShouldRejectNullFormatStages()
+    {
+        await Assert.That(() => CreateLeagueVersion([null!]!)).Throws<ArgumentException>();
     }
 
     [Test]

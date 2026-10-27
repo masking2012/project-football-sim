@@ -22,7 +22,7 @@ public sealed class GameLeagueTeam
         TeamId = teamId;
     }
 
-    public void AddWin(int goalsFor, int goalsAgainst)
+    internal void AddWin(int goalsFor, int goalsAgainst)
     {
         ValidateGoals(goalsFor, goalsAgainst);
         Wins++;
@@ -31,7 +31,7 @@ public sealed class GameLeagueTeam
         Points += 3;
     }
 
-    public void AddLoss(int goalsFor, int goalsAgainst)
+    internal void AddLoss(int goalsFor, int goalsAgainst)
     {
         ValidateGoals(goalsFor, goalsAgainst);
         Losses++;
@@ -39,7 +39,7 @@ public sealed class GameLeagueTeam
         GoalsAgainst += goalsAgainst;
     }
 
-    public void AddDraw(int goalsFor, int goalsAgainst)
+    internal void AddDraw(int goalsFor, int goalsAgainst)
     {
         ValidateGoals(goalsFor, goalsAgainst);
         Draws++;

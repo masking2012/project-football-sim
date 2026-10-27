@@ -13,14 +13,16 @@ public sealed class GameLeagueMatch
 
     public GameLeagueMatch(DateTime date, int homeTeamId, int awayTeamId, int round, Guid gameLeagueId)
     {
+        if (date == default)
+            throw new ArgumentException("Match date must be specified.", nameof(date));
         if (homeTeamId <= 0)
-            throw new ArgumentException("Home team ID must be positive value");
+            throw new ArgumentOutOfRangeException(nameof(homeTeamId), homeTeamId, "Home team ID must be positive.");
         if (awayTeamId <= 0)
-            throw new ArgumentException("Away team ID must be positive value");
+            throw new ArgumentOutOfRangeException(nameof(awayTeamId), awayTeamId, "Away team ID must be positive.");
         if (homeTeamId == awayTeamId)
             throw new ArgumentException("Home team and away team cannot be the same.");
         if (round <= 0)
-            throw new ArgumentException("Round must be positive value");
+            throw new ArgumentOutOfRangeException(nameof(round), round, "Round must be positive.");
         if (gameLeagueId == Guid.Empty)
             throw new ArgumentException("Game league ID cannot be empty.", nameof(gameLeagueId));
 
@@ -32,7 +34,7 @@ public sealed class GameLeagueMatch
         GameLeagueId = gameLeagueId;
     }
 
-    public void SetScore(int homeTeamScore, int awayTeamScore)
+    internal void SetScore(int homeTeamScore, int awayTeamScore)
     {
         if (HomeTeamScore.HasValue || AwayTeamScore.HasValue)
             throw new InvalidOperationException("A result has already been recorded for this match.");

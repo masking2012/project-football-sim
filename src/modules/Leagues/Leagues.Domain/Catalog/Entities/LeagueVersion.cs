@@ -55,14 +55,14 @@ public sealed class LeagueVersion
         LeagueId = leagueId;
         Version = version;
         TeamsCount = teamsCount;
-        Format = format;
-        PromotionPositions = promotionPositions;
-        PromotionPlayOffPositions = promotionPlayOffPositions;
-        RelegationPositions = relegationPositions;
-        RelegationPlayOffPositions = relegationPlayOffPositions;
-        UefaChampionsLeaguePositions = uefaChampionsLeaguePositions;
-        UefaEuropaLeaguePositions = uefaEuropaLeaguePositions;
-        UefaConferenceLeaguePositions = uefaConferenceLeaguePositions;
+        Format = format.ToList().AsReadOnly();
+        PromotionPositions = CopyPositions(promotionPositions);
+        PromotionPlayOffPositions = CopyPositions(promotionPlayOffPositions);
+        RelegationPositions = CopyPositions(relegationPositions);
+        RelegationPlayOffPositions = CopyPositions(relegationPlayOffPositions);
+        UefaChampionsLeaguePositions = CopyPositions(uefaChampionsLeaguePositions);
+        UefaEuropaLeaguePositions = CopyPositions(uefaEuropaLeaguePositions);
+        UefaConferenceLeaguePositions = CopyPositions(uefaConferenceLeaguePositions);
     }
 
     private static void ValidateFormat(ICollection<LeagueStage> stages)
@@ -70,6 +70,8 @@ public sealed class LeagueVersion
         ArgumentNullException.ThrowIfNull(stages);
         if (stages.Count == 0)
             throw new ArgumentException("League format must contain at least one stage.", nameof(stages));
+        if (stages.Any(stage => stage is null))
+            throw new ArgumentException("League format cannot contain null stages.", nameof(stages));
 
         var orderedStages = stages.OrderBy(stage => stage.Order).ToList();
         for (var index = 0; index < orderedStages.Count; index++)
@@ -120,4 +122,7 @@ public sealed class LeagueVersion
         if (duplicates.Count != 0)
             throw new ArgumentException($"Duplicate league positions are not allowed. Duplicates: {string.Join(", ", duplicates)}");
     }
+
+    private static System.Collections.ObjectModel.ReadOnlyCollection<int>? CopyPositions(ICollection<int>? positions) =>
+        positions?.ToList().AsReadOnly();
 }

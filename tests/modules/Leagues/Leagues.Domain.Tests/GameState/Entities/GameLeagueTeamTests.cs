@@ -7,11 +7,12 @@ internal sealed class GameLeagueTeamTests
     [Test]
     public async Task ShouldUpdateStatisticsForWinLossAndDraw()
     {
-        var team = new GameLeagueTeam(Guid.NewGuid(), 1);
-
-        team.AddWin(3, 1);
-        team.AddLoss(0, 2);
-        team.AddDraw(1, 1);
+        var gameLeague = CreateGameLeagueWithMatches();
+        var matches = gameLeague.GameLeagueMatches.OrderBy(match => match.Round).ToArray();
+        gameLeague.RecordMatchResult(matches[0].Id, 3, 1);
+        gameLeague.RecordMatchResult(matches[1].Id, 0, 2);
+        gameLeague.RecordMatchResult(matches[2].Id, 1, 1);
+        var team = gameLeague.GameLeagueTeams.Single(team => team.TeamId == 1);
 
         using (Assert.Multiple())
         {
@@ -29,9 +30,10 @@ internal sealed class GameLeagueTeamTests
     [Arguments(0, -1)]
     public async Task ShouldRejectNegativeGoals(int goalsFor, int goalsAgainst)
     {
-        var team = new GameLeagueTeam(Guid.NewGuid(), 1);
+        var gameLeague = CreateGameLeagueWithMatches();
+        var match = gameLeague.GameLeagueMatches.First();
 
-        await Assert.That(() => team.AddWin(goalsFor, goalsAgainst))
+        await Assert.That(() => gameLeague.RecordMatchResult(match.Id, goalsFor, goalsAgainst))
             .Throws<ArgumentOutOfRangeException>();
     }
 
@@ -40,5 +42,15 @@ internal sealed class GameLeagueTeamTests
     {
         await Assert.That(() => new GameLeagueTeam(Guid.Empty, 1)).Throws<ArgumentException>();
         await Assert.That(() => new GameLeagueTeam(Guid.NewGuid(), 0)).Throws<ArgumentOutOfRangeException>();
+    }
+
+    private static GameLeague CreateGameLeagueWithMatches()
+    {
+        var gameLeague = new GameLeague(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(), 1);
+        gameLeague.AddGameLeagueTeam(new GameLeagueTeam(gameLeague.Id, 1));
+        gameLeague.AddGameLeagueTeam(new GameLeagueTeam(gameLeague.Id, 2));
+        for (var round = 1; round <= 3; round++)
+            gameLeague.AddGameLeagueMatch(new GameLeagueMatch(DateTime.UtcNow, 1, 2, round, gameLeague.Id));
+        return gameLeague;
     }
 }

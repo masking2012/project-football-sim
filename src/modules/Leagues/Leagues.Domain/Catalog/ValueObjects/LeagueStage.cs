@@ -2,7 +2,7 @@ using ProjectFootballSim.Leagues.Domain.Catalog.Enums;
 
 namespace ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 
-public sealed class LeagueStage
+public sealed record LeagueStage
 {
     public int Order { get; }
     public LeagueStageType Type { get; }
