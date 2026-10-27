@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectFootballSim.Leagues.Application.GameState.Models;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
-using ProjectFootballSim.Leagues.Application.Persistence.Models;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 
@@ -68,7 +68,7 @@ internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLe
             .ConfigureAwait(false);
     }
 
-    public async Task<IReadOnlyList<GameLeagueMatchByDate>> GetMatchesByDateAsync(
+    public async Task<IReadOnlyList<GameLeagueMatchByDateDto>> GetMatchesByDateAsync(
         Guid userId,
         Guid gameId,
         DateTime startDate,
@@ -92,7 +92,7 @@ internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLe
                 && item.league.GameId == gameId
                 && item.match.Date >= startDate
                 && item.match.Date < endDate)
-            .Select(item => new GameLeagueMatchByDate(item.match, item.version.LeagueVersionId))
+            .Select(item => new GameLeagueMatchByDateDto(item.match, item.version.LeagueVersionId))
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
     }

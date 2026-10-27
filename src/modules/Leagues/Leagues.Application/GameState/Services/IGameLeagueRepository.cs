@@ -1,4 +1,4 @@
-using ProjectFootballSim.Leagues.Application.Persistence.Models;
+using ProjectFootballSim.Leagues.Application.GameState.Models;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Services;
@@ -29,7 +29,7 @@ public interface IGameLeagueRepository
         DateTime endDate,
         CancellationToken cancellationToken);
 
-    Task<IReadOnlyList<GameLeagueMatchByDate>> GetMatchesByDateAsync(
+    Task<IReadOnlyList<GameLeagueMatchByDateDto>> GetMatchesByDateAsync(
         Guid userId,
         Guid gameId,
         DateTime startDate,

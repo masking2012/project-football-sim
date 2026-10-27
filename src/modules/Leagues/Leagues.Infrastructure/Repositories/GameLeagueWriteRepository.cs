@@ -1,4 +1,4 @@
-using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 

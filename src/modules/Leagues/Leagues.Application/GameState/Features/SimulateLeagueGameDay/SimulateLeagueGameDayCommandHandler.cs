@@ -1,5 +1,4 @@
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
-using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
 using ProjectFootballSim.Teams.Application.Common.Models;

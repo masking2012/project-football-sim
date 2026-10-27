@@ -1,6 +1,6 @@
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
-using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;

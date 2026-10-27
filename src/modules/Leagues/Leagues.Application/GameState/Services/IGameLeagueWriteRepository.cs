@@ -1,6 +1,6 @@
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
-namespace ProjectFootballSim.Leagues.Application.Persistence.Repositories;
+namespace ProjectFootballSim.Leagues.Application.GameState.Services;
 
 public interface IGameLeagueWriteRepository
 {

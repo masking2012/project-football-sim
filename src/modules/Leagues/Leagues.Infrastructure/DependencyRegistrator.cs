@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Shared.Data.Entities.Leagues;
 using ProjectFootballSim.Shared.Data.Entities.Locations;
-using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
