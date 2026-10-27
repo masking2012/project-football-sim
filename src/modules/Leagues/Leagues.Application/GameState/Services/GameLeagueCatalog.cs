@@ -1,6 +1,5 @@
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
-using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Services;
 

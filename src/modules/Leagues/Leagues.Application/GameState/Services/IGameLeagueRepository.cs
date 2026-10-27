@@ -1,17 +1,13 @@
 using ProjectFootballSim.Leagues.Application.Persistence.Models;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
-namespace ProjectFootballSim.Leagues.Application.Persistence.Repositories;
+namespace ProjectFootballSim.Leagues.Application.GameState.Services;
 
 public interface IGameLeagueRepository
 {
     Task<IReadOnlyList<int>> GetLeagueVersionIdsAsync(
         Guid userId,
         Guid gameId,
-        CancellationToken cancellationToken);
-
-    Task<IReadOnlyList<int>> GetTeamIdsAsync(
-        int leagueVersionId,
         CancellationToken cancellationToken);
 
     Task<GameLeague?> GetAsync(

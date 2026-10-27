@@ -7,7 +7,7 @@ namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLe
 
 public sealed class CreateGameLeagueCommandHandler(
     ILeaguesCatalog leaguesCatalog,
-    IGameLeagueRepository readRepository,
+    ILeaguesTeamsRepository leaguesTeamsRepository,
     IGameLeagueWriteRepository writeRepository,
     LeagueFixtureGenerator leagueFixtureGenerator)
 {
@@ -19,7 +19,7 @@ public sealed class CreateGameLeagueCommandHandler(
 
         //TODO: add logic for second and subsequent seasons
 
-        IReadOnlyList<int> teamIds = await readRepository
+        IReadOnlyList<int> teamIds = await leaguesTeamsRepository
             .GetTeamIdsAsync(league.LeagueVersionId, cancellationToken)
             .ConfigureAwait(false);
 

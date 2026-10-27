@@ -1,5 +1,4 @@
 using ProjectFootballSim.Leagues.Application.GameState.Services;
-using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
 

@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Application.Persistence.Models;
-using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 
 namespace ProjectFootballSim.Leagues.Infrastructure.Repositories;
 
-internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLeagueRepository, IGameLeagueWriteRepository
+internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLeagueRepository
 {
     public async Task<IReadOnlyList<int>> GetLeagueVersionIdsAsync(
         Guid userId,
@@ -17,16 +17,6 @@ internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLe
             .Where(league => league.UserId == userId && league.GameId == gameId)
             .Select(league => league.LeagueVersionId)
             .Distinct()
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-    public async Task<IReadOnlyList<int>> GetTeamIdsAsync(
-        int leagueVersionId,
-        CancellationToken cancellationToken) =>
-        await dbContext.LeagueTeams
-            .AsNoTracking()
-            .Where(team => team.LeagueVersionId == leagueVersionId)
-            .Select(team => team.TeamId)
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
 
@@ -51,9 +41,9 @@ internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLe
         Guid gameLeagueId,
         CancellationToken cancellationToken) =>
         dbContext.GameLeagues
-            .Include(league => league.GameLeagueTeams)
-            .Include(league => league.GameLeagueMatches)
-            .SingleOrDefaultAsync(league => league.UserId == userId && league.Id == gameLeagueId, cancellationToken);
+            .Include(gl => gl.GameLeagueTeams)
+            .Include(gl => gl.GameLeagueMatches)
+            .SingleOrDefaultAsync(gl => gl.UserId == userId && gl.Id == gameLeagueId, cancellationToken);
 
     public async Task<IReadOnlyList<GameLeagueMatch>> GetMatchesForDateAsync(
         Guid userId,
@@ -106,13 +96,4 @@ internal sealed class GameLeagueRepository(LeaguesDbContext dbContext) : IGameLe
             .ToListAsync(cancellationToken)
             .ConfigureAwait(false);
     }
-
-    public Task AddAsync(GameLeague gameLeague, CancellationToken cancellationToken)
-    {
-        dbContext.GameLeagues.Add(gameLeague);
-        return Task.CompletedTask;
-    }
-
-    public Task SaveChangesAsync(CancellationToken cancellationToken) =>
-        dbContext.SaveChangesAsync(cancellationToken);
 }

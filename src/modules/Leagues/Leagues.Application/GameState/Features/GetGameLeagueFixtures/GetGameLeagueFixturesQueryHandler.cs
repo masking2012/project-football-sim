@@ -1,4 +1,5 @@
-using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
+using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 
@@ -8,7 +9,7 @@ public sealed class GetGameLeagueFixturesQueryHandler(IGameLeagueRepository repo
         GetGameLeagueFixturesQuery query,
         CancellationToken cancellationToken)
     {
-        var league = await repository
+        GameLeague? league = await repository
             .GetAsync(query.UserId, query.GameId, query.SeasonId, query.LeagueVersionId, cancellationToken)
             .ConfigureAwait(false);
 
