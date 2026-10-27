@@ -1,12 +1,11 @@
-using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
-using ProjectFootballSim.Leagues.Infrastructure.Database;
+using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Services;
 
 internal sealed class GameLeagueCatalog(
-    LeaguesDbContext dbContext,
+    IGameLeagueRepository repository,
     ILeaguesCatalog leaguesCatalog) : IGameLeagueCatalog
 {
     public async Task<IReadOnlyList<LeagueDto>> GetByGameAsync(
@@ -14,14 +13,8 @@ internal sealed class GameLeagueCatalog(
         Guid gameId,
         CancellationToken cancellationToken)
     {
-        List<int> leagueVersionIds = await dbContext.GameLeagues
-            .AsNoTracking()
-            .Where(gameLeague =>
-                gameLeague.UserId == userId
-                && gameLeague.GameId == gameId)
-            .Select(gameLeague => gameLeague.LeagueVersionId)
-            .Distinct()
-            .ToListAsync(cancellationToken)
+        IReadOnlyList<int> leagueVersionIds = await repository
+            .GetLeagueVersionIdsAsync(userId, gameId, cancellationToken)
             .ConfigureAwait(false);
 
         return await leaguesCatalog

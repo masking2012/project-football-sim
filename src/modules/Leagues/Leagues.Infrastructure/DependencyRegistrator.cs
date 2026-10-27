@@ -3,11 +3,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Shared.Data.Entities.Leagues;
 using ProjectFootballSim.Shared.Data.Entities.Locations;
+using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
+using ProjectFootballSim.Leagues.Infrastructure.Repositories;
 using DataLeagueFormatType = ProjectFootballSim.Shared.Data.Entities.Leagues.LeagueFormatType;
 using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.Enums.LeagueStageType;
+using ProjectFootballSim.Leagues.Application.Catalog.Services;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -26,6 +29,11 @@ public static class DependencyRegistrator
                     maxRetryDelay: TimeSpan.FromSeconds(10),
                     errorNumbersToAdd: null))
             .UseSeeding(SeedWithPredefinedValues));
+
+        services.AddScoped<ILeaguesRepository, LeaguesRepository>();
+        services.AddScoped<ILeaguesRoundsRepository, LeaguesRoundsRepository>();
+        services.AddScoped<IGameLeagueRepository, GameLeagueRepository>();
+        services.AddScoped<IGameLeagueWriteRepository, GameLeagueRepository>();
 
         return services;
     }

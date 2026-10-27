@@ -11,8 +11,8 @@ public sealed class GameLeague
     public Guid SeasonId { get; }
     public int LeagueVersionId { get; }
 
-    public IReadOnlyCollection<GameLeagueTeam> GameLeagueTeams => _teams.AsReadOnly();
-    public IReadOnlyCollection<GameLeagueMatch> GameLeagueMatches => _matches.AsReadOnly();
+    public IReadOnlyCollection<GameLeagueTeam> GameLeagueTeams => _teams;
+    public IReadOnlyCollection<GameLeagueMatch> GameLeagueMatches => _matches;
 
     public GameLeague(Guid userId, Guid gameId, Guid seasonId, int leagueVersionId)
     {

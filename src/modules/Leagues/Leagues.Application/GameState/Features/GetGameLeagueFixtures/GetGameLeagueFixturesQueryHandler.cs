@@ -1,23 +1,15 @@
-using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Leagues.Infrastructure.Database;
+using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 
-public sealed class GetGameLeagueFixturesQueryHandler(LeaguesDbContext dbContext)
+public sealed class GetGameLeagueFixturesQueryHandler(IGameLeagueRepository repository)
 {
     public async Task<IReadOnlyList<GameLeagueMatchDto>> HandleAsync(
         GetGameLeagueFixturesQuery query,
         CancellationToken cancellationToken)
     {
-        var league = await dbContext.GameLeagues
-            .AsNoTracking()
-            .Where(f =>
-                f.UserId == query.UserId
-                && f.LeagueVersionId == query.LeagueVersionId
-                && f.GameId == query.GameId
-                && f.SeasonId == query.SeasonId)
-            .Include(f => f.GameLeagueMatches)
-            .FirstOrDefaultAsync(cancellationToken)
+        var league = await repository
+            .GetAsync(query.UserId, query.GameId, query.SeasonId, query.LeagueVersionId, cancellationToken)
             .ConfigureAwait(false);
 
         if (league is null)

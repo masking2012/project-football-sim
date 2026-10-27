@@ -1,6 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
-using ProjectFootballSim.Leagues.Infrastructure.Database;
+using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
 using ProjectFootballSim.Teams.Application.Common.Models;
@@ -9,7 +8,8 @@ using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
 
 public sealed class SimulateLeagueGameDayCommandHandler(
-    LeaguesDbContext dbContext,
+    IGameLeagueRepository readRepository,
+    IGameLeagueWriteRepository writeRepository,
     GetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
     SimulateRegularTimeCommandHandler simulateRegularTimeCommandHandler)
 {
@@ -27,27 +27,17 @@ public sealed class SimulateLeagueGameDayCommandHandler(
                 SimulateMatch(match, gameLeague, teams);
         }
 
-        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await writeRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 
-    private async Task<List<GameLeagueMatch>> GetTodaysMatchesAsync(
+    private async Task<IReadOnlyList<GameLeagueMatch>> GetTodaysMatchesAsync(
         SimulateLeagueGameDayCommand command,
         DateTime startDate,
         DateTime endDate,
         CancellationToken cancellationToken)
     {
-        return await dbContext.GameLeagueMatches
-            .Join(
-                dbContext.GameLeagues,
-                match => match.GameLeagueId,
-                gameLeague => gameLeague.Id,
-                (match, gameLeague) => new { match, gameLeague })
-            .Where(x => x.gameLeague.UserId == command.UserId
-                && x.gameLeague.GameId == command.GameId
-                && x.match.Date >= startDate
-                && x.match.Date < endDate)
-            .Select(x => x.match)
-            .ToListAsync(cancellationToken)
+        return await readRepository
+            .GetMatchesForDateAsync(command.UserId, command.GameId, startDate, endDate, cancellationToken)
             .ConfigureAwait(false);
     }
 
@@ -68,9 +58,8 @@ public sealed class SimulateLeagueGameDayCommandHandler(
         Guid gameLeagueId,
         CancellationToken cancellationToken)
     {
-        var gameLeague = await dbContext.GameLeagues
-            .Include(x => x.GameLeagueTeams)
-            .SingleOrDefaultAsync(x => x.UserId == userId && x.Id == gameLeagueId, cancellationToken)
+        var gameLeague = await readRepository
+            .GetAsync(userId, gameLeagueId, cancellationToken)
             .ConfigureAwait(false);
 
         return gameLeague ?? throw new InvalidOperationException(

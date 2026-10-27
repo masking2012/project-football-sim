@@ -1,14 +1,14 @@
-using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
+using ProjectFootballSim.Leagues.Application.Persistence.Repositories;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
-using ProjectFootballSim.Leagues.Infrastructure.Database;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
 public sealed class CreateGameLeagueCommandHandler(
     ILeaguesCatalog leaguesCatalog,
-    LeaguesDbContext dbContext,
+    IGameLeagueRepository readRepository,
+    IGameLeagueWriteRepository writeRepository,
     LeagueFixtureGenerator leagueFixtureGenerator)
 {
     public async Task HandleAsync(CreateGameLeagueCommand command, CancellationToken cancellationToken)
@@ -19,10 +19,8 @@ public sealed class CreateGameLeagueCommandHandler(
 
         //TODO: add logic for second and subsequent seasons
 
-        List<int> teamIds = await dbContext.LeagueTeams
-            .Where(lt => lt.LeagueVersionId == league.LeagueVersionId)
-            .Select(lt => lt.TeamId)
-            .ToListAsync(cancellationToken)
+        IReadOnlyList<int> teamIds = await readRepository
+            .GetTeamIdsAsync(league.LeagueVersionId, cancellationToken)
             .ConfigureAwait(false);
 
         if (teamIds.Count != league.TeamsCount)
@@ -52,7 +50,7 @@ public sealed class CreateGameLeagueCommandHandler(
             gameLeague.AddGameLeagueMatch(match);
         }
 
-        dbContext.GameLeagues.Add(gameLeague);
-        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await writeRepository.AddAsync(gameLeague, cancellationToken).ConfigureAwait(false);
+        await writeRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 }

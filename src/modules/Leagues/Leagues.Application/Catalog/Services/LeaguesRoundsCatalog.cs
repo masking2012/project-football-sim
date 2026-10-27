@@ -1,12 +1,9 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
-using ProjectFootballSim.Leagues.Infrastructure.Database;
-using LeagueRoundDomain = ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.LeagueRound;
 
 namespace ProjectFootballSim.Leagues.Application.Catalog.Services;
 
-internal sealed class LeaguesRoundsCatalog(HybridCache cache, LeaguesDbContext dbContext)
+internal sealed class LeaguesRoundsCatalog(HybridCache cache, ILeaguesRoundsRepository repository)
     : ILeaguesRoundsCatalog
 {
     private const string CacheKey = "leagues:rounds";
@@ -19,7 +16,9 @@ internal sealed class LeaguesRoundsCatalog(HybridCache cache, LeaguesDbContext d
         if (cachedRounds.TryGetValue(leagueVersionId, out var rounds))
             return rounds;
 
-        rounds = await LoadRoundsForVersionAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
+        rounds = await repository
+            .GetForVersionAsync(leagueVersionId, cancellationToken)
+            .ConfigureAwait(false);
 
         var updatedRounds = new Dictionary<int, IReadOnlyList<LeagueRoundDto>>(cachedRounds)
         {
@@ -33,60 +32,10 @@ internal sealed class LeaguesRoundsCatalog(HybridCache cache, LeaguesDbContext d
         return rounds;
     }
 
-    private ValueTask<Dictionary<int, IReadOnlyList<LeagueRoundDto>>> GetCachedRoundsAsync(
+    private ValueTask<IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>>> GetCachedRoundsAsync(
         CancellationToken cancellationToken) =>
         cache.GetOrCreateAsync(
             CacheKey,
-            async cancellationToken => await LoadActiveRoundsAsync(cancellationToken).ConfigureAwait(false),
+            async cancellationToken => await repository.GetActiveAsync(cancellationToken).ConfigureAwait(false),
             cancellationToken: cancellationToken);
-
-    private async Task<Dictionary<int, IReadOnlyList<LeagueRoundDto>>> LoadActiveRoundsAsync(
-        CancellationToken cancellationToken)
-    {
-        var activeRounds = await dbContext.LeagueRounds
-            .AsNoTracking()
-            .Join(
-                dbContext.LeagueActivations.AsNoTracking(),
-                round => round.LeagueVersionId,
-                activation => activation.LeagueVersionId,
-                (round, activation) => round)
-            .Join(
-                dbContext.LeagueVersions.AsNoTracking(),
-                round => round.LeagueVersionId,
-                version => version.LeagueVersionId,
-                (round, version) => new { round, version })
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-        return activeRounds
-            .GroupBy(item => item.round.LeagueVersionId)
-            .ToDictionary(
-                group => group.Key,
-                group => (IReadOnlyList<LeagueRoundDto>)group
-                    .Select(item => CreateRoundDto(item.version.LeagueId, item.round))
-                    .ToList());
-    }
-
-    private async Task<IReadOnlyList<LeagueRoundDto>> LoadRoundsForVersionAsync(
-        int leagueVersionId,
-        CancellationToken cancellationToken)
-    {
-        var rounds = await dbContext.LeagueRounds
-            .AsNoTracking()
-            .Where(round => round.LeagueVersionId == leagueVersionId)
-            .Join(
-                dbContext.LeagueVersions.AsNoTracking(),
-                round => round.LeagueVersionId,
-                version => version.LeagueVersionId,
-                (round, version) => new { round, version })
-            .ToListAsync(cancellationToken)
-            .ConfigureAwait(false);
-
-        return rounds
-            .Select(item => CreateRoundDto(item.version.LeagueId, item.round))
-            .ToList();
-    }
-
-    private static LeagueRoundDto CreateRoundDto(int leagueId, LeagueRoundDomain round) =>
-        new(leagueId, round.LeagueVersionId, round.Round, round.Week, round.IsMidweek);
 }
