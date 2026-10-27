@@ -6,14 +6,14 @@ using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
 public sealed class CreateGameLeagueCommandHandler(
-    ILeaguesCatalog leaguesCatalog,
+    ICachedLeaguesRetriever leaguesCatalog,
     ILeaguesTeamsRepository leaguesTeamsRepository,
     IGameLeagueWriteRepository writeRepository,
     LeagueFixtureGenerator leagueFixtureGenerator)
 {
     public async Task HandleAsync(CreateGameLeagueCommand command, CancellationToken cancellationToken)
     {
-        LeagueDto? league = await leaguesCatalog.GetByLeagueVersionIdAsync(command.LeagueVersionId, cancellationToken).ConfigureAwait(false);
+        LeagueDto? league = await leaguesCatalog.GetLeagueAsync(command.LeagueVersionId, cancellationToken).ConfigureAwait(false);
         if (league is null)
             throw new InvalidOperationException($"League with ID '{command.LeagueVersionId}' not found.");
 

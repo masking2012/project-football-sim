@@ -1,15 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
-using ProjectFootballSim.Leagues.Application.Catalog.Services;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 using LeagueDomain = ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects.League;
 using LeagueVersionDomain = ProjectFootballSim.Leagues.Domain.Catalog.Entities.LeagueVersion;
 
-namespace ProjectFootballSim.Leagues.Infrastructure.Repositories;
+namespace ProjectFootballSim.Leagues.Infrastructure.Retrievers;
 
-internal sealed class LeaguesRepository(LeaguesDbContext dbContext) : ILeaguesRepository
+internal sealed class LeaguesRetriever(LeaguesDbContext dbContext) : ILeaguesRetriever
 {
-    public async Task<IReadOnlyDictionary<int, LeagueDto>> GetActiveAsync(
+    public async Task<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveAsync(
         CancellationToken cancellationToken)
     {
         var activeLeagues = await dbContext.Leagues
@@ -32,7 +32,7 @@ internal sealed class LeaguesRepository(LeaguesDbContext dbContext) : ILeaguesRe
             .ToDictionary(league => league.LeagueVersionId);
     }
 
-    public async Task<LeagueDto?> GetByLeagueVersionIdAsync(
+    public async Task<LeagueDto?> GetAsync(
         int leagueVersionId,
         CancellationToken cancellationToken)
     {

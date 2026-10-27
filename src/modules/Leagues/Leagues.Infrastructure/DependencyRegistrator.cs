@@ -11,6 +11,8 @@ using DataLeagueFormatType = ProjectFootballSim.Shared.Data.Entities.Leagues.Lea
 using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.Enums.LeagueStageType;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
+using ProjectFootballSim.Leagues.Infrastructure.Retrievers;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -30,7 +32,7 @@ public static class DependencyRegistrator
                     errorNumbersToAdd: null))
             .UseSeeding(SeedWithPredefinedValues));
 
-        services.AddScoped<ILeaguesRepository, LeaguesRepository>();
+        services.AddScoped<ILeaguesRetriever, LeaguesRetriever>();
         services.AddScoped<ILeaguesRoundsRepository, LeaguesRoundsRepository>();
         services.AddScoped<ILeaguesTeamsRepository, LeaguesTeamsRepository>();
         services.AddScoped<IGameLeagueRepository, GameLeagueRepository>();

@@ -101,8 +101,8 @@ internal sealed class LeagueFixtureGeneratorTests
             UefaEuropaLeaguePositions: null,
             UefaConferenceLeaguePositions: null);
 
-        var leaguesCatalog = new Mock<ILeaguesCatalog>();
-        leaguesCatalog.Setup(catalog => catalog.GetByLeagueVersionIdAsync(
+        var leaguesCatalog = new Mock<ICachedLeaguesRetriever>();
+        leaguesCatalog.Setup(catalog => catalog.GetLeagueAsync(
                 101001,
                 It.IsAny<CancellationToken>()))
             .ReturnsAsync(league);

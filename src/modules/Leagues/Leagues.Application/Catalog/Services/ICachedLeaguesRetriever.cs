@@ -2,16 +2,16 @@ using ProjectFootballSim.Leagues.Application.Catalog.Models;
 
 namespace ProjectFootballSim.Leagues.Application.Catalog.Services;
 
-public interface ILeaguesCatalog
+public interface ICachedLeaguesRetriever
 {
-    ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveAsync(
+    ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveLeaguesAsync(
         CancellationToken cancellationToken);
 
-    ValueTask<LeagueDto?> GetByLeagueVersionIdAsync(
+    ValueTask<LeagueDto?> GetLeagueAsync(
         int leagueVersionId,
         CancellationToken cancellationToken);
 
-    ValueTask<IReadOnlyList<LeagueDto>> GetLeaguesByVersionIdsAsync(
+    ValueTask<IReadOnlyList<LeagueDto>> GetLeaguesAsync(
         IReadOnlyCollection<int> leagueVersionIds,
         CancellationToken cancellationToken);
 }

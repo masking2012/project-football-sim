@@ -1,13 +1,15 @@
 using Microsoft.Extensions.Caching.Hybrid;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 
 namespace ProjectFootballSim.Leagues.Application.Catalog.Services;
 
-internal sealed class LeaguesCatalog(HybridCache cache, ILeaguesRepository repository) : ILeaguesCatalog
+internal sealed class CachedLeaguesRetriever(HybridCache cache, ILeaguesRetriever leaguesRetriever)
+    : ICachedLeaguesRetriever
 {
     private const string CacheKey = "leagues";
 
-    public async ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveAsync(
+    public async ValueTask<IReadOnlyDictionary<int, LeagueDto>> GetAllActiveLeaguesAsync(
         CancellationToken cancellationToken)
     {
         IReadOnlyDictionary<int, LeagueDto> cachedLeagues
@@ -17,7 +19,7 @@ internal sealed class LeaguesCatalog(HybridCache cache, ILeaguesRepository repos
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
     }
 
-    public async ValueTask<LeagueDto?> GetByLeagueVersionIdAsync(
+    public async ValueTask<LeagueDto?> GetLeagueAsync(
         int leagueVersionId,
         CancellationToken cancellationToken)
     {
@@ -25,8 +27,8 @@ internal sealed class LeaguesCatalog(HybridCache cache, ILeaguesRepository repos
         if (cachedLeagues.TryGetValue(leagueVersionId, out var league))
             return league;
 
-        league = await repository
-            .GetByLeagueVersionIdAsync(leagueVersionId, cancellationToken)
+        league = await leaguesRetriever
+            .GetAsync(leagueVersionId, cancellationToken)
             .ConfigureAwait(false);
         if (league is null)
             return null;
@@ -43,7 +45,7 @@ internal sealed class LeaguesCatalog(HybridCache cache, ILeaguesRepository repos
         return league;
     }
 
-    public async ValueTask<IReadOnlyList<LeagueDto>> GetLeaguesByVersionIdsAsync(
+    public async ValueTask<IReadOnlyList<LeagueDto>> GetLeaguesAsync(
         IReadOnlyCollection<int> leagueVersionIds,
         CancellationToken cancellationToken)
     {
@@ -52,7 +54,7 @@ internal sealed class LeaguesCatalog(HybridCache cache, ILeaguesRepository repos
         var leagues = new List<LeagueDto>(leagueVersionIds.Count);
         foreach (var leagueVersionId in leagueVersionIds.Distinct())
         {
-            var league = await GetByLeagueVersionIdAsync(leagueVersionId, cancellationToken)
+            var league = await GetLeagueAsync(leagueVersionId, cancellationToken)
                 .ConfigureAwait(false);
 
             if (league is null)
@@ -68,6 +70,6 @@ internal sealed class LeaguesCatalog(HybridCache cache, ILeaguesRepository repos
         CancellationToken cancellationToken) =>
         cache.GetOrCreateAsync(
             CacheKey,
-            async cancellationToken => await repository.GetActiveAsync(cancellationToken).ConfigureAwait(false),
+            async cancellationToken => await leaguesRetriever.GetAllActiveAsync(cancellationToken).ConfigureAwait(false),
             cancellationToken: cancellationToken);
 }

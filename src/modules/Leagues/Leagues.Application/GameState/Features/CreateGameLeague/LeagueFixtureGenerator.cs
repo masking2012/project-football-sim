@@ -6,7 +6,7 @@ using ProjectFootballSim.Leagues.Application.Catalog.Models;
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
 public sealed class LeagueFixtureGenerator(
-    ILeaguesCatalog leaguesCatalog,
+    ICachedLeaguesRetriever leaguesCatalog,
     ILeaguesRoundsCatalog leaguesRoundsCatalog)
 {
     private const int StubTeamId = -1;
@@ -19,7 +19,7 @@ public sealed class LeagueFixtureGenerator(
         DateTime seasonStartDate,
         CancellationToken cancellationToken)
     {
-        LeagueDto? league = await leaguesCatalog.GetByLeagueVersionIdAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
+        LeagueDto? league = await leaguesCatalog.GetLeagueAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
         if (league is null)
             throw new InvalidOperationException($"League with version ID '{leagueVersionId}' not found.");
 
