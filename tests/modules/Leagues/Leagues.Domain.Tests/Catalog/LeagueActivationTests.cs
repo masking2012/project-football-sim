@@ -34,5 +34,6 @@ internal sealed class LeagueActivationTests
 
         await Assert.That(() => activation.ChangeVersion(0))
             .Throws<ArgumentOutOfRangeException>();
+        await Assert.That(activation.LeagueVersionId).IsEqualTo(1);
     }
 }

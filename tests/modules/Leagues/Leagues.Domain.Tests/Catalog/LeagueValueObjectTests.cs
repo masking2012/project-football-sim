@@ -21,6 +21,21 @@ internal sealed class LeagueValueObjectTests
     }
 
     [Test]
+    [Arguments(0, "Premier", 1, 1)]
+    [Arguments(-1, "Premier", 1, 1)]
+    [Arguments(1, "", 1, 1)]
+    [Arguments(1, " ", 1, 1)]
+    [Arguments(1, "Premier", 0, 1)]
+    [Arguments(1, "Premier", -1, 1)]
+    [Arguments(1, "Premier", 1, 0)]
+    [Arguments(1, "Premier", 1, -1)]
+    public async Task ShouldRejectInvalidLeagueValues(int id, string name, int order, int countryId)
+    {
+        await Assert.That(() => new League(id, name, order, countryId))
+            .Throws<ArgumentException>();
+    }
+
+    [Test]
     public async Task ShouldExposeLeagueVersionValues()
     {
         var stage = new LeagueStage(1, LeagueStageType.RoundRobin, 2);
@@ -39,9 +54,11 @@ internal sealed class LeagueValueObjectTests
     [Test]
     public async Task ShouldRejectInvalidFormat()
     {
+        await Assert.That(() => CreateLeagueVersion(null!)).Throws<ArgumentNullException>();
         await Assert.That(() => CreateLeagueVersion([])).Throws<ArgumentException>();
         await Assert.That(() => CreateLeagueVersion([new LeagueStage(2, LeagueStageType.RoundRobin, 1)]))
             .Throws<ArgumentException>();
+        await Assert.That(() => CreateLeagueVersion([null!]!)).Throws<ArgumentException>();
     }
 
     [Test]
@@ -49,7 +66,58 @@ internal sealed class LeagueValueObjectTests
     {
         await Assert.That(() => CreateLeagueVersion([new LeagueStage(1, LeagueStageType.RoundRobin, 1)], [0]))
             .Throws<ArgumentException>();
+        await Assert.That(() => CreateLeagueVersion([new LeagueStage(1, LeagueStageType.RoundRobin, 1)], [5]))
+            .Throws<ArgumentException>();
         await Assert.That(() => CreateLeagueVersion([new LeagueStage(1, LeagueStageType.RoundRobin, 1)], [1], [1]))
+            .Throws<ArgumentException>();
+        await Assert.That(() => CreateLeagueVersion([new LeagueStage(1, LeagueStageType.RoundRobin, 1)], [1, 1]))
+            .Throws<ArgumentException>();
+        await Assert.That(() => CreateLeagueVersion(
+            [new LeagueStage(1, LeagueStageType.RoundRobin, 1)],
+            promotionPositions: [1],
+            relegationPositions: [1]))
+            .Throws<ArgumentException>();
+    }
+
+    [Test]
+    [Arguments(0, 1, 1, 4)]
+    [Arguments(-1, 1, 1, 4)]
+    [Arguments(101001, 0, 1, 4)]
+    [Arguments(101001, -1, 1, 4)]
+    [Arguments(101001, 1, 0, 4)]
+    [Arguments(101001, 1, -1, 4)]
+    [Arguments(101001, 1, 1, 1)]
+    public async Task ShouldRejectInvalidLeagueVersionValues(
+        int leagueVersionId,
+        int leagueId,
+        int version,
+        int teamsCount)
+    {
+        await Assert.That(() => new LeagueVersion(
+            leagueVersionId,
+            leagueId,
+            version,
+            teamsCount,
+            [new LeagueStage(1, LeagueStageType.RoundRobin, 1)],
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null)).Throws<ArgumentException>();
+    }
+
+    [Test]
+    [Arguments(0, 1, 1)]
+    [Arguments(-1, 1, 1)]
+    [Arguments(1, 999, 1)]
+    [Arguments(1, -1, 1)]
+    [Arguments(1, 1, 0)]
+    [Arguments(1, 1, -1)]
+    public async Task ShouldRejectInvalidStageValues(int order, int type, int legs)
+    {
+        await Assert.That(() => new LeagueStage(order, (LeagueStageType)type, legs))
             .Throws<ArgumentException>();
     }
 
@@ -68,17 +136,23 @@ internal sealed class LeagueValueObjectTests
     [Test]
     public async Task ShouldSupportRecordEquality()
     {
+        var league = new League(1, "Premier", 3, 4);
         var first = new LeagueTeam(101001, 3);
         var second = new LeagueTeam(101001, 3);
         var round = new LeagueRound(101001, 3, 4, true);
 
         using (Assert.Multiple())
         {
+            await Assert.That(league).IsEqualTo(new League(1, "Premier", 3, 4));
             await Assert.That(first).IsEqualTo(second);
             await Assert.That(first.GetHashCode()).IsEqualTo(second.GetHashCode());
             await Assert.That(round.IsMidweek).IsTrue();
+            await Assert.That(new LeagueRound(101001, 3, 4, true))
+                .IsEqualTo(round);
             await Assert.That(new LeagueStage(1, LeagueStageType.RoundRobin, 2))
                 .IsEqualTo(new LeagueStage(1, LeagueStageType.RoundRobin, 2));
+            await Assert.That(new LeagueStage(1, LeagueStageType.RoundRobin, 2))
+                .IsNotEqualTo(new LeagueStage(2, LeagueStageType.RoundRobin, 2));
         }
     }
 
@@ -97,6 +171,8 @@ internal sealed class LeagueValueObjectTests
             await Assert.That(version.Format.Count).IsEqualTo(1);
             await Assert.That(version.PromotionPositions!.Count).IsEqualTo(1);
             await Assert.That(() => version.Format.Add(new LeagueStage(2, LeagueStageType.RoundRobin, 2)))
+                .Throws<NotSupportedException>();
+            await Assert.That(() => version.PromotionPositions!.Add(2))
                 .Throws<NotSupportedException>();
         }
     }
@@ -131,6 +207,7 @@ internal sealed class LeagueValueObjectTests
     private static LeagueVersion CreateLeagueVersion(
         ICollection<LeagueStage> format,
         ICollection<int>? promotionPositions = null,
-        ICollection<int>? promotionPlayOffPositions = null) =>
-        new(101001, 1, 1, 4, format, promotionPositions, promotionPlayOffPositions, null, null, null, null, null);
+        ICollection<int>? promotionPlayOffPositions = null,
+        ICollection<int>? relegationPositions = null) =>
+        new(101001, 1, 1, 4, format, promotionPositions, promotionPlayOffPositions, relegationPositions, null, null, null, null);
 }

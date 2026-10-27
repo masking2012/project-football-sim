@@ -24,6 +24,19 @@ internal sealed class GameLeagueTests
     }
 
     [Test]
+    public async Task ShouldExposeReadOnlyChildCollections()
+    {
+        var gameLeague = CreateGameLeague();
+        var team = new GameLeagueTeam(gameLeague.Id, 1);
+        var match = new GameLeagueMatch(DateTime.UtcNow, 1, 2, 1, gameLeague.Id);
+
+        await Assert.That(() => ((ICollection<GameLeagueTeam>)gameLeague.GameLeagueTeams).Add(team))
+            .Throws<NotSupportedException>();
+        await Assert.That(() => ((ICollection<GameLeagueMatch>)gameLeague.GameLeagueMatches).Add(match))
+            .Throws<NotSupportedException>();
+    }
+
+    [Test]
     [Arguments(0, 1, 1, 1)]
     [Arguments(1, 0, 1, 1)]
     [Arguments(1, 1, 0, 1)]
@@ -154,9 +167,35 @@ internal sealed class GameLeagueTests
     public async Task ShouldRejectNegativeMatchScore()
     {
         var gameLeague = CreateGameLeagueWithMatch();
+        var match = gameLeague.GameLeagueMatches.Single();
 
-        await Assert.That(() => gameLeague.RecordMatchResult(gameLeague.GameLeagueMatches.Single().Id, -1, 0))
+        await Assert.That(() => gameLeague.RecordMatchResult(match.Id, -1, 0))
             .Throws<ArgumentOutOfRangeException>();
+
+        var homeTeam = gameLeague.GameLeagueTeams.Single(team => team.TeamId == 1);
+        var awayTeam = gameLeague.GameLeagueTeams.Single(team => team.TeamId == 2);
+        using (Assert.Multiple())
+        {
+            await Assert.That(match.HomeTeamScore).IsNull();
+            await Assert.That(match.AwayTeamScore).IsNull();
+            await Assert.That(homeTeam.Wins).IsEqualTo(0);
+            await Assert.That(homeTeam.Draws).IsEqualTo(0);
+            await Assert.That(homeTeam.Losses).IsEqualTo(0);
+            await Assert.That(awayTeam.Wins).IsEqualTo(0);
+            await Assert.That(awayTeam.Draws).IsEqualTo(0);
+            await Assert.That(awayTeam.Losses).IsEqualTo(0);
+        }
+    }
+
+    [Test]
+    public async Task ShouldAllowSameTeamPairInDifferentRounds()
+    {
+        var gameLeague = CreateGameLeagueWithTeams();
+
+        gameLeague.AddGameLeagueMatch(new GameLeagueMatch(DateTime.UtcNow, 1, 2, 1, gameLeague.Id));
+        gameLeague.AddGameLeagueMatch(new GameLeagueMatch(DateTime.UtcNow, 2, 1, 2, gameLeague.Id));
+
+        await Assert.That(gameLeague.GameLeagueMatches.Count).IsEqualTo(2);
     }
 
     [Test]
