@@ -4,7 +4,7 @@ using ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
 using ProjectFootballSim.Locations.Application.Features.GetCountries;
-using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Calendar;
@@ -17,7 +17,7 @@ internal static class CalendarEndpoints
             [FromRoute] Guid gameId,
             GetCalendarDayQueryHandler getCalendarDayQueryHandler,
             GetCountriesQueryHandler getCountriesQueryHandler,
-            GetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
+            IGetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -28,6 +28,14 @@ internal static class CalendarEndpoints
                 .HandleAsync(new GetCalendarDayQuery(UserId: userId, GameId: gameId, Date: null), cancellationToken)
                 .ConfigureAwait(false);
             var countries = await getCountriesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
+
+            if (!result.LeagueMatches.Any())
+                return Results.Ok(new CalendarDayResponse(
+                    Date: result.Date,
+                    DayStatus: result.DayStatus,
+                    LeagueMatches: Array.Empty<LeagueMatchResponse>()
+                ));
+
             var teams = await getTeamsByIdsQueryHandler
                 .HandleAsync(result.LeagueMatches.SelectMany(x => new[] { x.HomeTeamId, x.AwayTeamId }).Distinct().ToList(), cancellationToken)
                 .ConfigureAwait(false);

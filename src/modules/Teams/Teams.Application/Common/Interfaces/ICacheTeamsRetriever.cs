@@ -4,9 +4,9 @@ namespace ProjectFootballSim.Teams.Application.Common.Interfaces;
 
 public interface ICacheTeamsRetriever
 {
-    ValueTask<TeamDto?> GetByIdAsync(int teamId, CancellationToken cancellationToken);
+    ValueTask<IReadOnlyList<TeamDto>> GetByIdsAsync(
+        IReadOnlyList<int> teamIds, CancellationToken cancellationToken);
 
     ValueTask<IReadOnlyList<TeamDto>> GetByCountryAsync(
-        int countryId,
-        CancellationToken cancellationToken);
+        int countryId, CancellationToken cancellationToken);
 }

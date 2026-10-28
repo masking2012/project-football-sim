@@ -1,19 +1,35 @@
 using ProjectFootballSim.Teams.Application.Common.Interfaces;
-using ProjectFootballSim.Teams.Application.Common.Models;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 
 namespace ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
 
-public sealed class GetTeamsByIdsQueryHandler(ICacheTeamsRetriever teamsCatalog)
+internal sealed class GetTeamsByIdsQueryHandler(ICacheTeamsRetriever teamsCatalog) : IGetTeamsByIdsQueryHandler
 {
-    public async ValueTask<IReadOnlyDictionary<int, TeamDto>> HandleAsync(IReadOnlyList<int> teamIds, CancellationToken cancellationToken)
+    public async Task<IReadOnlyDictionary<int, TeamByIdsDto>> HandleAsync(
+        IReadOnlyList<int> teamIds, CancellationToken cancellationToken)
     {
-        var result = new Dictionary<int, TeamDto>();
-        foreach (var teamId in teamIds.Distinct())
+        ArgumentNullException.ThrowIfNull(teamIds);
+        if (teamIds.Count == 0)
+            throw new ArgumentException("The list of team ids cannot be empty.", nameof(teamIds));
+        if (teamIds.Count != teamIds.Distinct().Count())
+            throw new ArgumentException("The list of team ids cannot contain duplicates.", nameof(teamIds));
+
+        var teams = await teamsCatalog.GetByIdsAsync(teamIds, cancellationToken).ConfigureAwait(false);
+        if (teams.Count != teamIds.Count)
         {
-            var team = await teamsCatalog.GetByIdAsync(teamId, cancellationToken).ConfigureAwait(false);
-            if (team != null)
-                result[teamId] = team;
+            var missingTeamIds = teamIds.Except(teams.Select(t => t.Id)).ToList();
+            throw new InvalidOperationException(
+                $"The following team IDs were not found in the catalog: {string.Join(", ", missingTeamIds)}");
         }
-        return result;
+
+        return teams.Select(t => new TeamByIdsDto
+        (
+            Id: t.Id,
+            Name: t.Name,
+            Attack: t.Attack,
+            Midfield: t.Midfield,
+            Defence: t.Defence,
+            CountryId: t.CountryId
+        )).ToDictionary(t => t.Id);
     }
 }

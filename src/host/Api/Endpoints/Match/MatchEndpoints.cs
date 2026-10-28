@@ -2,7 +2,7 @@ using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Features.ExtraTime;
 using ProjectFootballSim.Matches.Application.Features.Penalty;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
-using ProjectFootballSim.Teams.Application.Features.GetTeamById;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 using System.Globalization;
 
 namespace ProjectFootballSim.Api.Endpoints.Match;
@@ -16,21 +16,19 @@ internal static class MatchEndpoints
             SimulateRegularTimeCommandHandler regularTime,
             SimulateExtraTimeCommandHandler extraTime,
             SimulatePenaltyShootoutCommandHandler penaltyShootout,
-            GetTeamByIdQueryHandler getTeamByIdQuery,
+            IGetTeamsByIdsQueryHandler getTeamsByIdsQuery,
             CancellationToken cancellationToken) =>
         {
             int homeTeamId = Convert.ToInt32(req.HomeTeamId, CultureInfo.InvariantCulture);
             int awayTeamId = Convert.ToInt32(req.AwayTeamId, CultureInfo.InvariantCulture);
-
-            var homePair = await getTeamByIdQuery.HandleAsync(homeTeamId, cancellationToken).ConfigureAwait(false);
-            var awayPair = await getTeamByIdQuery.HandleAsync(awayTeamId, cancellationToken).ConfigureAwait(false);
-
-            if (homePair is null)
-                return Results.BadRequest($"Home team '{req.HomeTeamId}' not found.");
-            if (awayPair is null)
-                return Results.BadRequest($"Away team '{req.AwayTeamId}' not found.");
             if (homeTeamId == awayTeamId)
                 return Results.BadRequest("Home and away teams must be different.");
+
+            var teams = await getTeamsByIdsQuery.HandleAsync([homeTeamId, awayTeamId], cancellationToken).ConfigureAwait(false);
+            if (!teams.TryGetValue(homeTeamId, out var homePair))
+                return Results.BadRequest($"Home team '{req.HomeTeamId}' not found.");
+            if (!teams.TryGetValue(awayTeamId, out var awayPair))
+                return Results.BadRequest($"Away team '{req.AwayTeamId}' not found.");
 
             var settings = new MatchSettingsDto(HasHomeAdvantage: req.HasHomeAdvantage);
 

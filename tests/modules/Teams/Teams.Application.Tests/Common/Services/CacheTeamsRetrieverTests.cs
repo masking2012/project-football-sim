@@ -20,12 +20,13 @@ internal sealed class CacheTeamsRetrieverTests
 
         var retriever = CreateRetriever(repository);
 
-        var team = await retriever.GetByIdAsync(7, CancellationToken.None).ConfigureAwait(false);
+        var teams = await retriever.GetByIdsAsync([7], CancellationToken.None).ConfigureAwait(false);
         var countryTeams = await retriever.GetByCountryAsync(3, CancellationToken.None).ConfigureAwait(false);
 
         using (Assert.Multiple())
         {
-            await Assert.That(team).IsEqualTo(new TeamDto(7, "Home Team", 80, 70, 60, 3));
+            await Assert.That(teams).Count().IsEqualTo(1);
+            await Assert.That(teams[0]).IsEqualTo(new TeamDto(7, "Home Team", 80, 70, 60, 3));
             await Assert.That(countryTeams).Count().IsEqualTo(2);
             await Assert.That(countryTeams[0].Id).IsEqualTo(7);
             await Assert.That(countryTeams[1].Id).IsEqualTo(8);
@@ -42,9 +43,9 @@ internal sealed class CacheTeamsRetrieverTests
 
         var retriever = CreateRetriever(repository);
 
-        var result = await retriever.GetByIdAsync(999, CancellationToken.None).ConfigureAwait(false);
+        var result = await retriever.GetByIdsAsync([999], CancellationToken.None).ConfigureAwait(false);
 
-        await Assert.That(result).IsNull();
+        await Assert.That(result).Count().IsEqualTo(0);
     }
 
     [Test]
@@ -72,7 +73,7 @@ internal sealed class CacheTeamsRetrieverTests
 
         var retriever = CreateRetriever(repository);
 
-        await retriever.GetByIdAsync(7, CancellationToken.None).ConfigureAwait(false);
+        await retriever.GetByIdsAsync([7], CancellationToken.None).ConfigureAwait(false);
         await retriever.GetByCountryAsync(3, CancellationToken.None).ConfigureAwait(false);
 
         repository.Verify(value => value.GetAllAsync(It.IsAny<CancellationToken>()), Times.Once);

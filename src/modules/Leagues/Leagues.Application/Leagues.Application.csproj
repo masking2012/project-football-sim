@@ -4,9 +4,9 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\shared\Shared.Features\Shared.Features.csproj" />
+        <ProjectReference Include="..\..\Teams\Teams.Contracts\Teams.Contracts.csproj" />
         <ProjectReference Include="..\Leagues.Domain\Leagues.Domain.csproj" />
         <ProjectReference Include="..\..\Matches\Matches.Application\Matches.Application.csproj" />
-        <ProjectReference Include="..\..\Teams\Teams.Application\Teams.Application.csproj" />
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Persistence\Models\" />

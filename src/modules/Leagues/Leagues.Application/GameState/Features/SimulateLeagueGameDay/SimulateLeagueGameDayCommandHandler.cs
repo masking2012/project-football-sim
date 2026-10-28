@@ -1,17 +1,16 @@
+using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
 using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
-using ProjectFootballSim.Teams.Application.Common.Models;
-using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
-using ProjectFootballSim.Leagues.Application.GameState.Services;
-using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
 
 public sealed class SimulateLeagueGameDayCommandHandler(
     IGameLeaguesRepository readRepository,
     IGameLeagueWriteRepository writeRepository,
-    GetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
+    IGetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
     SimulateRegularTimeCommandHandler simulateRegularTimeCommandHandler)
 {
     public async Task HandleAsync(SimulateLeagueGameDayCommand command, CancellationToken cancellationToken)
@@ -42,16 +41,15 @@ public sealed class SimulateLeagueGameDayCommandHandler(
             .ConfigureAwait(false);
     }
 
-    private async Task<IReadOnlyDictionary<int, TeamDto>> GetTeamsAsync(
+    private Task<IReadOnlyDictionary<int, TeamByIdsDto>> GetTeamsAsync(
         IReadOnlyCollection<GameLeagueMatch> matches,
         CancellationToken cancellationToken)
     {
-        var teamIds = matches
+        List<int> teamIds = matches
             .SelectMany(match => new[] { match.HomeTeamId, match.AwayTeamId })
             .Distinct()
             .ToList();
-
-        return await getTeamsByIdsQueryHandler.HandleAsync(teamIds, cancellationToken).ConfigureAwait(false);
+        return getTeamsByIdsQueryHandler.HandleAsync(teamIds, cancellationToken);
     }
 
     private async Task<GameLeague> GetGameLeagueAsync(
@@ -70,7 +68,7 @@ public sealed class SimulateLeagueGameDayCommandHandler(
     private void SimulateMatch(
         GameLeagueMatch match,
         GameLeague gameLeague,
-        IReadOnlyDictionary<int, TeamDto> teams)
+        IReadOnlyDictionary<int, TeamByIdsDto> teams)
     {
         var home = CreateMatchTeam(match.HomeTeamId, teams);
         var away = CreateMatchTeam(match.AwayTeamId, teams);
@@ -82,9 +80,9 @@ public sealed class SimulateLeagueGameDayCommandHandler(
         gameLeague.RecordMatchResult(match.Id, score.HomeScore, score.AwayScore);
     }
 
-    private static MatchTeamDto CreateMatchTeam(int teamId, IReadOnlyDictionary<int, TeamDto> teams)
+    private static MatchTeamDto CreateMatchTeam(int teamId, IReadOnlyDictionary<int, TeamByIdsDto> teams)
     {
-        if (!teams.TryGetValue(teamId, out TeamDto? team))
+        if (!teams.TryGetValue(teamId, out TeamByIdsDto? team))
             throw new InvalidOperationException($"Team with Id {teamId} not found.");
 
         return new MatchTeamDto(Id: teamId, Attack: team.Attack, Midfield: team.Midfield, Defence: team.Defence);

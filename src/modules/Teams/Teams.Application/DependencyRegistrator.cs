@@ -1,10 +1,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Teams.Application.Common.Interfaces;
 using ProjectFootballSim.Teams.Application.Common.Services;
-using ProjectFootballSim.Teams.Application.Features.GetTeamById;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
 using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByCountry;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 
 namespace ProjectFootballSim.Teams.Application;
 
@@ -15,8 +15,7 @@ public static class DependencyRegistrator
     {
         services.AddScoped<ICacheTeamsRetriever, CacheTeamsRetriever>();
         services.AddScoped<IGetTeamsByCountryQueryHandler, GetTeamsByCountryQueryHandler>();
-        services.AddScoped<GetTeamByIdQueryHandler>();
-        services.AddScoped<GetTeamsByIdsQueryHandler>();
+        services.AddScoped<IGetTeamsByIdsQueryHandler, GetTeamsByIdsQueryHandler>();
 
         return services;
     }
