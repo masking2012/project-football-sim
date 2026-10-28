@@ -7,6 +7,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueSta
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
 using System.Security.Claims;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByCountry;
 
 namespace ProjectFootballSim.Api.Endpoints.Leagues;
 
@@ -49,7 +50,7 @@ internal static class GameLeaguesEndpoints
             [FromRoute] Guid seasonId,
             [FromRoute] int leagueVersionId,
             GetGameLeagueStandingsQueryHandler getGameLeagueStandingsQueryHandler,
-            GetTeamsByCountryQueryHandler teamsByCountryQueryHandler,
+            IGetTeamsByCountryQueryHandler teamsByCountryQueryHandler,
             GetLeagueByVersionIdQueryHandler getLeagueByVersionIdQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
@@ -76,7 +77,7 @@ internal static class GameLeaguesEndpoints
                     .Select(s => new TeamStandingItemResponse(
                         Position: s.Position,
                         TeamId: s.TeamId,
-                        Name: teamDtos.Single(t => t.Id == s.TeamId).Name, //TODO: Optimize this by creating a dictionary of teamDtos by Id to avoid multiple enumerations
+                        Name: teamDtos[s.TeamId].Name, //TODO: Optimize this by creating a dictionary of teamDtos by Id to avoid multiple enumerations
                         Wins: s.Wins,
                         Draws: s.Draws,
                         Losses: s.Losses,
@@ -90,7 +91,7 @@ internal static class GameLeaguesEndpoints
             [FromRoute] Guid seasonId,
             [FromRoute] int leagueVersionId,
             GetGameLeagueFixturesQueryHandler getGameLeagueFixturesQueryHandler,
-            GetTeamsByCountryQueryHandler teamsByCountryQueryHandler,
+            IGetTeamsByCountryQueryHandler teamsByCountryQueryHandler,
             GetLeagueByVersionIdQueryHandler getLeagueByVersionIdQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
@@ -122,8 +123,8 @@ internal static class GameLeaguesEndpoints
                         HomeTeamScore: s.HomeTeamScore,
                         AwayTeamScore: s.AwayTeamScore,
                         Round: s.Round,
-                        HomeTeamName: teamDtos.Single(t => t.Id == s.HomeTeamId).Name, //TODO: Optimize this by creating a dictionary of teamDtos by Id to avoid multiple enumerations
-                        AwayTeamName: teamDtos.Single(t => t.Id == s.AwayTeamId).Name)));
+                        HomeTeamName: teamDtos[s.HomeTeamId].Name, //TODO: Optimize this by creating a dictionary of teamDtos by Id to avoid multiple enumerations
+                        AwayTeamName: teamDtos[s.AwayTeamId].Name)));
         }).RequireAuthorization();
     }
 }

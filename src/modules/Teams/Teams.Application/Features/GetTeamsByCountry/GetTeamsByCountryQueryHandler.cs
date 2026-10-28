@@ -1,12 +1,23 @@
-using ProjectFootballSim.Teams.Application.Common.Models;
-using ProjectFootballSim.Teams.Application.Common.Services;
+using ProjectFootballSim.Teams.Application.Common.Interfaces;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByCountry;
 
 namespace ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
 
-public sealed class GetTeamsByCountryQueryHandler(ITeamsCatalog teamsCatalog)
+internal sealed class GetTeamsByCountryQueryHandler(ICacheTeamsRetriever teamsRetriever)
+    : IGetTeamsByCountryQueryHandler
 {
-    public ValueTask<IReadOnlyList<TeamDto>> HandleAsync(
+    public async Task<IReadOnlyDictionary<int, TeamByCountryDto>> HandleAsync(
         int countryId,
-        CancellationToken cancellationToken) =>
-        teamsCatalog.GetByCountryAsync(countryId, cancellationToken);
+        CancellationToken cancellationToken)
+    {
+        var countryTeams = await teamsRetriever.GetByCountryAsync(countryId, cancellationToken).ConfigureAwait(false);
+        return countryTeams.ToDictionary(t => t.Id, t => new TeamByCountryDto
+        (
+            Id: t.Id,
+            Name: t.Name,
+            Attack: t.Attack,
+            Midfield: t.Midfield,
+            Defence: t.Defence
+        ));
+    }
 }

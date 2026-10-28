@@ -1,6 +1,6 @@
 using Moq;
+using ProjectFootballSim.Teams.Application.Common.Interfaces;
 using ProjectFootballSim.Teams.Application.Common.Models;
-using ProjectFootballSim.Teams.Application.Common.Services;
 using ProjectFootballSim.Teams.Application.Features.GetTeamById;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
 using ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
@@ -13,7 +13,7 @@ internal sealed class TeamQueryHandlerTests
     public async Task GetTeamByIdShouldReturnCatalogTeam()
     {
         var expected = CreateTeamDto(7, 3);
-        var catalog = new Mock<ITeamsCatalog>();
+        var catalog = new Mock<ICacheTeamsRetriever>();
         catalog
             .Setup(value => value.GetByIdAsync(7, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expected);
@@ -27,7 +27,7 @@ internal sealed class TeamQueryHandlerTests
     [Test]
     public async Task GetTeamByIdShouldReturnNullWhenTeamDoesNotExist()
     {
-        var catalog = new Mock<ITeamsCatalog>();
+        var catalog = new Mock<ICacheTeamsRetriever>();
         catalog
             .Setup(value => value.GetByIdAsync(999, It.IsAny<CancellationToken>()))
             .ReturnsAsync((TeamDto?)null);
@@ -42,7 +42,7 @@ internal sealed class TeamQueryHandlerTests
     public async Task GetTeamsByCountryShouldReturnCatalogTeams()
     {
         IReadOnlyList<TeamDto> expected = [CreateTeamDto(7, 3), CreateTeamDto(8, 3)];
-        var catalog = new Mock<ITeamsCatalog>();
+        var catalog = new Mock<ICacheTeamsRetriever>();
         catalog
             .Setup(value => value.GetByCountryAsync(3, It.IsAny<CancellationToken>()))
             .ReturnsAsync(expected);
@@ -63,7 +63,7 @@ internal sealed class TeamQueryHandlerTests
     {
         var first = CreateTeamDto(7, 3);
         var second = CreateTeamDto(8, 3);
-        var catalog = new Mock<ITeamsCatalog>();
+        var catalog = new Mock<ICacheTeamsRetriever>();
         catalog
             .Setup(value => value.GetByIdAsync(7, It.IsAny<CancellationToken>()))
             .ReturnsAsync(first);

@@ -48,6 +48,7 @@
   </Folder>
   <Folder Name="/src/modules/Teams/">
     <Project Path="src/modules/Teams/Teams.Application/Teams.Application.csproj" Id="fece5387-6766-4419-ae8f-a9595c345c4f" />
+    <Project Path="src/modules/Teams/Teams.Contracts/Teams.Contracts.csproj" Id="ff62f0ca-490c-4fe5-a2ed-8e7fc344c85d" />
     <Project Path="src/modules/Teams/Teams.Domain/Teams.Domain.csproj" Id="4a1b6941-24f5-4760-9b9c-2ff27b6ccdbf" />
     <Project Path="src/modules/Teams/Teams.Infrastructure/Teams.Infrastructure.csproj" Id="7a0845c7-48d8-4ddc-b1de-bc95d50cac09" />
   </Folder>
@@ -67,7 +68,7 @@
     <Project Path="tests/modules/Matches/Matches.Application.Tests/Matches.Application.Tests.csproj" Id="b50f9229-c20b-4645-af88-baef81b2395a" />
     <Project Path="tests/modules/Matches/Matches.Domain.Tests/Matches.Domain.Tests.csproj" />
   </Folder>
-  <Folder Name="/tests/modules/Teams/" Id="32be5f67-8f5e-146e-463b-3c175719b3ce">
+  <Folder Name="/tests/modules/Teams/">
     <Project Path="tests/modules/Teams/Teams.Application.Tests/Teams.Application.Tests.csproj" />
     <Project Path="tests/modules/Teams/Teams.Domain.Tests/Teams.Domain.Tests.csproj" />
   </Folder>

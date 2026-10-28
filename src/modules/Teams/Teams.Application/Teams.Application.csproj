@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
-
   <ItemGroup>
+    <ProjectReference Include="..\Teams.Contracts\Teams.Contracts.csproj" />
     <ProjectReference Include="..\Teams.Domain\Teams.Domain.csproj" />
   </ItemGroup>
-
+  <ItemGroup>    
+    <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+  </ItemGroup>
 </Project>

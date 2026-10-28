@@ -1,9 +1,9 @@
+using ProjectFootballSim.Teams.Application.Common.Interfaces;
 using ProjectFootballSim.Teams.Application.Common.Models;
-using ProjectFootballSim.Teams.Application.Common.Services;
 
 namespace ProjectFootballSim.Teams.Application.Features.GetTeamById;
 
-public sealed class GetTeamByIdQueryHandler(ITeamsCatalog teamsCatalog)
+public sealed class GetTeamByIdQueryHandler(ICacheTeamsRetriever teamsCatalog)
 {
     public ValueTask<TeamDto?> HandleAsync(
         int teamId,

@@ -1,9 +1,9 @@
+using ProjectFootballSim.Teams.Application.Common.Interfaces;
 using ProjectFootballSim.Teams.Application.Common.Models;
-using ProjectFootballSim.Teams.Application.Common.Services;
 
 namespace ProjectFootballSim.Teams.Application.Features.GetTeamsByIds;
 
-public sealed class GetTeamsByIdsQueryHandler(ITeamsCatalog teamsCatalog)
+public sealed class GetTeamsByIdsQueryHandler(ICacheTeamsRetriever teamsCatalog)
 {
     public async ValueTask<IReadOnlyDictionary<int, TeamDto>> HandleAsync(IReadOnlyList<int> teamIds, CancellationToken cancellationToken)
     {

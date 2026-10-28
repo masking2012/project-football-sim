@@ -3,10 +3,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Shared.Data.Entities.Locations;
 using ProjectFootballSim.Shared.Data.Entities.Teams;
-using ProjectFootballSim.Teams.Application.Common.Services;
+using ProjectFootballSim.Teams.Application.Common.Interfaces;
 using ProjectFootballSim.Teams.Domain.Entities;
 using ProjectFootballSim.Teams.Domain.ValueObjects;
 using ProjectFootballSim.Teams.Infrastructure.Database;
+using ProjectFootballSim.Teams.Infrastructure.Repositories;
 
 namespace ProjectFootballSim.Teams.Infrastructure;
 
@@ -26,7 +27,7 @@ public static class DependencyRegistrator
                 errorNumbersToAdd: null))
             .UseSeeding(SeedWithPredefinedValues)
         );
-        services.AddScoped<ITeamsRepository, TeamsRepository>();
+        services.AddScoped<IGetTeamsRepository, GetTeamsRepository>();
 
         return services;
     }

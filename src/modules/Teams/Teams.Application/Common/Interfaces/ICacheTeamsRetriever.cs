@@ -1,8 +1,8 @@
 using ProjectFootballSim.Teams.Application.Common.Models;
 
-namespace ProjectFootballSim.Teams.Application.Common.Services;
+namespace ProjectFootballSim.Teams.Application.Common.Interfaces;
 
-public interface ITeamsCatalog
+public interface ICacheTeamsRetriever
 {
     ValueTask<TeamDto?> GetByIdAsync(int teamId, CancellationToken cancellationToken);
 
