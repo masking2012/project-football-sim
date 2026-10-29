@@ -10,8 +10,4 @@
         <ProjectReference Include="..\Leagues.Domain\Leagues.Domain.csproj" />
         <ProjectReference Include="..\..\Matches\Matches.Application\Matches.Application.csproj" />
     </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Persistence\Models\" />
-      <Folder Include="Persistence\Repositories\" />
-    </ItemGroup>
 </Project>
