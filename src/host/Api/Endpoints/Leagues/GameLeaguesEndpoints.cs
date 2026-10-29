@@ -60,23 +60,12 @@ internal static class GameLeaguesEndpoints
                 GameId: gameId,
                 SeasonId: seasonId,
                 LeagueVersionId: leagueVersionId);
-            var gameLeagueStandings = await getGameLeagueStandingsQueryHandler
+            IReadOnlyList<LeagueStandingsTeamDto> gameLeagueStandings = await getGameLeagueStandingsQueryHandler
                 .HandleAsync(query, cancellationToken).ConfigureAwait(false);
 
-            return Results.Ok(
-                gameLeagueStandings
-                    .Select(s => new TeamStandingItemResponse(
-                        Position: s.Position,
-                        TeamId: s.TeamId,
-                        Name: s.Name,
-                        Wins: s.Wins,
-                        Draws: s.Draws,
-                        Losses: s.Losses,
-                        GoalsFor: s.GoalsFor,
-                        GoalsAgainst: s.GoalsAgainst,
-                        Points: s.Points)));
+            return Results.Ok(gameLeagueStandings);
         }).RequireAuthorization();
-
+        
         app.MapGet("/api/games/{gameId}/seasons/{seasonId}/leagues/{leagueVersionId}/fixtures", async (
             [FromRoute] Guid gameId,
             [FromRoute] Guid seasonId,
