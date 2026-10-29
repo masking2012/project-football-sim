@@ -1,0 +1,31 @@
+﻿/* ── Nav bar ──────────────────────────────────────────────────────────────── */
+.app-nav {
+  display: flex;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-top: 1.25rem;
+}
+
+.nav-link {
+  padding: 0.55rem 1.2rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-radius: 6px 6px 0 0;
+  border: 1px solid transparent;
+  border-bottom: none;
+  transition: color 0.15s, background 0.15s;
+}
+
+.nav-link:hover {
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nav-link--active {
+  color: var(--color-white);
+  background: var(--color-bg-deep);
+  border-color: var(--color-border);
+}
+

@@ -1,0 +1,133 @@
+﻿/* ── Layout ───────────────────────────────────────────────── */
+.app {
+  min-height: 100dvh;
+  padding-bottom: 2.25rem;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg-deep);
+  color: var(--color-text);
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+.app-game-id-footer {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  box-sizing: border-box;
+  height: 2.25rem;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: var(--color-white);
+  background: var(--color-bg-darkest);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+
+.system-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.system-actions > button {
+  width: min(100%, 260px);
+}
+
+.system-action-btn--secondary {
+  background: var(--color-border);
+  box-shadow: none;
+}
+
+.save-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.save-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  color: var(--color-white);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.save-list-item:hover {
+  border-color: var(--color-accent);
+}
+
+.save-list-item small {
+  color: var(--color-text-muted);
+}
+
+.game-menu {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: rgba(13, 32, 68, 0.8);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.app-header--authenticated {
+  text-align: initial;
+}
+
+.app-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.app-header-user {
+  margin-left: auto;
+}
+
+.game-menu-btn {
+  padding: 0.5rem 1rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.game-menu-btn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+}
+
+.game-menu-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.game-menu-message {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.game-id-footer {
+  margin: 1.5rem 0 0;
+  color: var(--color-white);
+  font-size: 0.75rem;
+  text-align: center;
+  word-break: break-all;
+}
+

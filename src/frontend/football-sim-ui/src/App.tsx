@@ -1,5 +1,17 @@
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import './App.css';
+import './styles/tokens.css';
+import './styles/layout.css';
+import './styles/save-game.css';
+import './styles/header.css';
+import './styles/nav.css';
+import './styles/match-setup.css';
+import './styles/feedback.css';
+import './styles/match-result.css';
+import './styles/auth.css';
+import './styles/home.css';
+import './styles/system.css';
+import './styles/league-nav.css';
+import './styles/standings.css';
 import { AuthProvider } from './context/AuthContext';
 import { SeasonProvider } from './context/SeasonContext';
 import { GameProvider } from './context/GameContext';

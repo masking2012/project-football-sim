@@ -1,0 +1,87 @@
+﻿/* ── League navigation ───────────────────────────────────────────────────── */
+.nav-leagues {
+  position: relative;
+}
+
+.nav-leagues-toggle {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text-muted);
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.nav-chevron,
+.league-country-chevron {
+  display: inline-block;
+  margin-left: 0.35rem;
+  color: var(--color-accent);
+  font-size: 1rem;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.league-menu {
+  position: absolute;
+  top: calc(100% - 1px);
+  left: 50%;
+  z-index: 30;
+  min-width: 210px;
+  padding: 0.45rem;
+  transform: translateX(-50%);
+  background: var(--color-surface);
+  border: 1px solid #2d5383;
+  border-radius: 0 0 10px 10px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+}
+
+.league-country {
+  position: relative;
+}
+
+.league-country-button,
+.league-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.75rem;
+  color: var(--color-text);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 0.88rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.league-country-button:hover,
+.league-country-button:focus-visible,
+.league-item:hover,
+.league-item:focus-visible {
+  color: var(--color-white);
+  background: rgba(74, 158, 255, 0.18);
+  outline: none;
+}
+
+.league-list {
+  position: absolute;
+  top: -0.45rem;
+  left: calc(100% + 0.45rem);
+  min-width: 190px;
+  padding: 0.45rem;
+  background: #102a52;
+  border: 1px solid #2d5383;
+  border-radius: 8px;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.35);
+}
+
+.league-menu-message {
+  padding: 0.65rem 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+

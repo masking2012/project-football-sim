@@ -1,0 +1,49 @@
+﻿/* ── System Page ──────────────────────────────────────────────────── */
+.system-welcome {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(160deg, var(--color-surface) 0%, var(--color-bg-deep) 100%);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.system-message {
+  font-size: 1rem;
+  color: var(--color-text-muted);
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.start-btn,
+.action-btn {
+  padding: 0.85rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-white);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-teal) 100%);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+}
+
+.start-btn:hover,
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 158, 255, 0.4);
+}
+
+.start-btn:active,
+.action-btn:active {
+  transform: translateY(0);
+}
+
+.start-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+

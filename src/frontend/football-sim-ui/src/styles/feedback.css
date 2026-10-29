@@ -1,0 +1,72 @@
+﻿/* ── Error banner ─────────────────────────────────────────── */
+.error-banner {
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  color: var(--color-danger-text);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.confirmation-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(3, 10, 24, 0.75);
+}
+
+.confirmation-modal {
+  width: min(100%, 420px);
+  padding: 1.5rem;
+  color: var(--color-text);
+  background: linear-gradient(160deg, var(--color-surface) 0%, var(--color-bg-deep) 100%);
+  border: 1px solid var(--color-accent);
+  border-radius: 12px;
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.45);
+}
+
+.confirmation-modal h2 {
+  margin: 0 0 0.75rem;
+  color: var(--color-white);
+  font-size: 1.25rem;
+}
+
+.confirmation-modal p {
+  margin: 0;
+  color: var(--color-text-soft);
+  line-height: 1.5;
+}
+
+.confirmation-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.confirmation-modal-confirm-btn {
+  padding: 0.5rem 1rem;
+  color: var(--color-white);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.confirmation-modal-confirm-btn:hover {
+  opacity: 0.9;
+}
+
+.success-banner {
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  color: var(--color-success-text);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
