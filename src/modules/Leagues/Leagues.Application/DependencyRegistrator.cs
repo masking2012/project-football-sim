@@ -14,6 +14,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Shared.Features.Events;
 using ProjectFootballSim.Leagues.Contracts.CatalogFeatures.GetActiveLeagues;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
 
 namespace ProjectFootballSim.Leagues.Application;
 
@@ -27,7 +28,7 @@ public static class DependencyRegistrator
         services.AddScoped<IGetActiveLeaguesQueryHandler, GetActiveLeaguesQueryHandler>();
         services.AddScoped<GetLeagueByVersionIdQueryHandler>();
 
-        services.AddScoped<GetGameLeagueStandingsQueryHandler>();
+        services.AddScoped<IGetGameLeagueStandingsQueryHandler, GetGameLeagueStandingsQueryHandler>();
         services.AddScoped<GetGameLeagueFixturesQueryHandler>();
         services.AddScoped<GetGameLeagueMatchesByDateQueryHandler>();
         services.AddScoped<GetGameLeaguesQueryHandler>();

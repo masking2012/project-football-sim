@@ -12,6 +12,7 @@ using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.Enums.L
 using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -36,6 +37,8 @@ public static class DependencyRegistrator
         services.AddScoped<ILeaguesTeamsRepository, LeaguesTeamsRepository>();
         services.AddScoped<IGameLeaguesRepository, GameLeagueRepository>();
         services.AddScoped<IGameLeagueWriteRepository, GameLeagueWriteRepository>();
+
+        services.AddScoped<IGetGameLeagueStandingsRepository, GetGameLeagueStandingsRepository>();
 
         return services;
     }

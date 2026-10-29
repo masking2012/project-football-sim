@@ -1,29 +1,32 @@
-using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
-using ProjectFootballSim.Leagues.Domain.GameState.Entities;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 
-public sealed class GetGameLeagueStandingsQueryHandler(IGameLeaguesRepository repository)
+internal sealed class GetGameLeagueStandingsQueryHandler(
+    IGetGameLeagueStandingsRepository repository,
+    IGetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler) : IGetGameLeagueStandingsQueryHandler
 {
-    public async Task<IReadOnlyList<GameLeagueTeamDto>> HandleAsync(
+    public async Task<IReadOnlyList<LeagueStandingsTeamDto>> HandleAsync(
         GetGameLeagueStandingsQuery query,
         CancellationToken cancellationToken)
     {
-        GameLeague? league = await repository
+        IReadOnlyList<GameLeagueTeamDto> gameLeagueStandindsTeams = await repository
             .GetAsync(query.UserId, query.GameId, query.SeasonId, query.LeagueVersionId, cancellationToken)
             .ConfigureAwait(false);
 
-        if (league is null)
-            throw new InvalidOperationException($"Game league not found for user {query.UserId}, game {query.GameId}, league version {query.LeagueVersionId}");
+        var gameLeagueStandindsTeamsIds = gameLeagueStandindsTeams.Select(t => t.TeamId).ToList();
+        IReadOnlyDictionary<int, TeamByIdsDto> teams = await getTeamsByIdsQueryHandler.HandleAsync(gameLeagueStandindsTeamsIds, cancellationToken).ConfigureAwait(false);
 
-        return league.GameLeagueTeams
+        return gameLeagueStandindsTeams
             .OrderByDescending(t => t.Points)
             .ThenByDescending(t => t.GoalsFor - t.GoalsAgainst)
             .ThenByDescending(t => t.GoalsFor)
-            .ThenBy(t => t.TeamId)
-            .Select((t, index) => new GameLeagueTeamDto(
+            .ThenBy(t => teams[t.TeamId].Name)
+            .Select((t, index) => new LeagueStandingsTeamDto(
                 Position: index + 1,
                 TeamId: t.TeamId,
+                Name: teams[t.TeamId].Name,
                 Wins: t.Wins,
                 Draws: t.Draws,
                 Losses: t.Losses,

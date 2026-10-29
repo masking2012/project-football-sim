@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
+namespace ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
 
 public sealed record GetGameLeagueStandingsQuery(
     Guid UserId,

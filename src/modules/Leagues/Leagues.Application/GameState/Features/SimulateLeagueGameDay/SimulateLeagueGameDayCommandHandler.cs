@@ -18,6 +18,9 @@ public sealed class SimulateLeagueGameDayCommandHandler(
         var startDate = new DateTime(command.Date.Year, command.Date.Month, command.Date.Day);
         var endDate = startDate.AddDays(1);
         var todaysMatches = await GetTodaysMatchesAsync(command, startDate, endDate, cancellationToken).ConfigureAwait(false);
+        if (todaysMatches is null || todaysMatches.Count == 0)
+            return;
+
         var teams = await GetTeamsAsync(todaysMatches, cancellationToken).ConfigureAwait(false);
 
         foreach (var matchesForLeague in todaysMatches.GroupBy(x => x.GameLeagueId))

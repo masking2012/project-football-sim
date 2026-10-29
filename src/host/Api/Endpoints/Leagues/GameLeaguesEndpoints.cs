@@ -3,10 +3,10 @@ using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueByVersionId;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
-using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 using System.Security.Claims;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByCountry;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
 
 namespace ProjectFootballSim.Api.Endpoints.Leagues;
 
@@ -48,20 +48,12 @@ internal static class GameLeaguesEndpoints
             [FromRoute] Guid gameId,
             [FromRoute] Guid seasonId,
             [FromRoute] int leagueVersionId,
-            GetGameLeagueStandingsQueryHandler getGameLeagueStandingsQueryHandler,
-            IGetTeamsByCountryQueryHandler teamsByCountryQueryHandler,
-            GetLeagueByVersionIdQueryHandler getLeagueByVersionIdQueryHandler,
+            IGetGameLeagueStandingsQueryHandler getGameLeagueStandingsQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
-
-            var leagueDto = await getLeagueByVersionIdQueryHandler.HandleAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
-            if (leagueDto is null)
-                throw new InvalidOperationException($"League with version ID {leagueVersionId} not found.");
-
-            var teamDtos = await teamsByCountryQueryHandler.HandleAsync(leagueDto.CountryId, cancellationToken).ConfigureAwait(false);
 
             var query = new GetGameLeagueStandingsQuery(
                 UserId: userId,
@@ -76,7 +68,7 @@ internal static class GameLeaguesEndpoints
                     .Select(s => new TeamStandingItemResponse(
                         Position: s.Position,
                         TeamId: s.TeamId,
-                        Name: teamDtos[s.TeamId].Name, //TODO: Optimize this by creating a dictionary of teamDtos by Id to avoid multiple enumerations
+                        Name: s.Name,
                         Wins: s.Wins,
                         Draws: s.Draws,
                         Losses: s.Losses,
