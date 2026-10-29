@@ -130,6 +130,8 @@ let countriesRequest: Promise<CountryDto[]> | null = null;
 let countriesCache: CountryDto[] | null = null;
 let leaguesRequest: Promise<LeagueDto[]> | null = null;
 let leaguesCache: LeagueDto[] | null = null;
+let leaguesCacheGameId: string | null = null;
+let leaguesRequestGameId: string | null = null;
 const teamsRequests = new Map<string, Promise<TeamDto[]>>();
 const teamsCache = new Map<string, TeamDto[]>();
 const standingsRequests = new Map<string, Promise<TeamStandingDto[]>>();
@@ -144,7 +146,9 @@ export function resetGameSessionCache(): void {
   countriesRequest = null;
   countriesCache = null;
   leaguesRequest = null;
+  leaguesRequestGameId = null;
   leaguesCache = null;
+  leaguesCacheGameId = null;
   teamsRequests.clear();
   teamsCache.clear();
   standingsRequests.clear();
@@ -154,23 +158,25 @@ export function resetGameSessionCache(): void {
   seasonsCache.clear();
 }
 
-export async function fetchLeagues(): Promise<LeagueDto[]> {
-  if (leaguesCache) {
+export async function fetchLeagues(gameId: string): Promise<LeagueDto[]> {
+  if (leaguesCache && leaguesCacheGameId === gameId) {
     return leaguesCache;
   }
 
-  if (leaguesRequest) {
+  if (leaguesRequest && leaguesRequestGameId === gameId) {
     return leaguesRequest;
   }
 
   const request = (async () => {
-    const res = await fetch(`${BASE}/leagues`, { headers: authHeaders() });
+    const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/leagues`, { headers: authHeaders() });
     return handleResponse<LeagueDto[]>(res);
   })();
   leaguesRequest = request;
+  leaguesRequestGameId = gameId;
   request.then(
     (leagues) => {
       leaguesCache = leagues;
+      leaguesCacheGameId = gameId;
       clearLeaguesRequest(request);
     },
     () => clearLeaguesRequest(request),
@@ -181,6 +187,7 @@ export async function fetchLeagues(): Promise<LeagueDto[]> {
 function clearLeaguesRequest(request: Promise<LeagueDto[]>) {
   if (leaguesRequest === request) {
     leaguesRequest = null;
+    leaguesRequestGameId = null;
   }
 }
 

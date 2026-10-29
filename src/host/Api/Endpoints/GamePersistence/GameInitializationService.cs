@@ -1,17 +1,13 @@
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.GamePersistence.Application.Features.CreateGame;
-using ProjectFootballSim.Leagues.Application.Features.GetLeagues;
-using ProjectFootballSim.Leagues.Application.GameFeatures.CreateGameLeague;
 
 namespace ProjectFootballSim.Api.Endpoints.GamePersistence;
 
 internal sealed class GameInitializationService(
     CreateGameCommandHandler createGameCommandHandler,
     CreateGameCalendarCommandHandler createGameCalendarCommandHandler,
-    CreateGameSeasonCommandHandler createGameSeasonCommandHandler,
-    GetLeaguesQueryHandler getLeaguesQueryHandler,
-    CreateGameLeagueCommandHandler createGameLeagueCommandHandler)
+    CreateGameSeasonCommandHandler createGameSeasonCommandHandler)
 {
     public async Task<CreateGameResponse> InitAsync(Guid userId, CancellationToken cancellationToken)
     {
@@ -23,20 +19,6 @@ internal sealed class GameInitializationService(
 
         var createGameSeasonCommand = new CreateGameSeasonCommand(userId, gameId);
         CreateGameSeasonCommandResult season = await createGameSeasonCommandHandler.HandleAsync(createGameSeasonCommand, cancellationToken).ConfigureAwait(false);
-
-        var leagues = await getLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
-        foreach(var league in leagues)
-        {
-            await createGameLeagueCommandHandler
-                .HandleAsync(new CreateGameLeagueCommand(
-                    LeagueId: league.Key,
-                    GameId: gameId,
-                    UserId: userId,
-                    SeasonId: season.Id,
-                    SeasonStartDate: season.StartDate,
-                    PreviousSeasonId: null), cancellationToken)
-                .ConfigureAwait(false);
-        }
 
         return new CreateGameResponse(GameId: gameId, FirstSeasonId: season.Id);
     }

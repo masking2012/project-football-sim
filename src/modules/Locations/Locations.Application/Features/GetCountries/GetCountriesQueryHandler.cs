@@ -1,24 +1,22 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
-using ProjectFootballSim.Locations.Domain.Entities;
-using ProjectFootballSim.Locations.Infrastructure.Database;
+using ProjectFootballSim.Locations.Contracts.Features.GetCountries;
 
 namespace ProjectFootballSim.Locations.Application.Features.GetCountries;
 
-public sealed class GetCountriesQueryHandler(HybridCache cache, LocationsDbContext dbContext)
+internal sealed class GetCountriesQueryHandler(HybridCache cache, IGetCountriesRepository repository) : IGetCountriesQueryHandler
 {
-    public ValueTask<IEnumerable<CountryDto>> HandleAsync(CancellationToken cancellationToken)
+    public async Task<IReadOnlyList<GetCountryDto>> HandleAsync(CancellationToken cancellationToken)
+    {
+        var cachedCountries = await GetCachedCountriesAsync(cancellationToken).ConfigureAwait(false);
+        return cachedCountries.Select(country => new GetCountryDto(country.Id, country.Name, country.Code)).ToList();
+    }
+
+    private ValueTask<IReadOnlyList<CountryDto>> GetCachedCountriesAsync(CancellationToken cancellationToken)
     {
         return cache.GetOrCreateAsync(
             "countries",
-            async lambdaCancellationToken => await GetDataFromTheSourceAsync(lambdaCancellationToken).ConfigureAwait(false),
+            async lambdaCancellationToken => await repository.GetAllAsync(lambdaCancellationToken).ConfigureAwait(false),
             cancellationToken: cancellationToken
         );
-    }
-
-    private async Task<IEnumerable<CountryDto>> GetDataFromTheSourceAsync(CancellationToken cancellationToken)
-    {
-        List<Country> countries = await dbContext.Countries.ToListAsync(cancellationToken).ConfigureAwait(false);
-        return countries.Select(c => new CountryDto(c.Id, c.Name, c.Code));
     }
 }

@@ -8,8 +8,8 @@ public readonly struct AdvantageRatio : IEquatable<AdvantageRatio>
 
     public AdvantageRatio(double value)
     {
-        if (value < 1.00 || value > 2.00)
-            throw new ArgumentOutOfRangeException(nameof(value), "Advantage ratio must be between 1.00 and 2.00");
+        if (!double.IsFinite(value) || value < 1.00 || value > 2.00)
+            throw new ArgumentOutOfRangeException(nameof(value), "Advantage ratio must be finite and between 1.00 and 2.00");
 
         Value = value;
     }

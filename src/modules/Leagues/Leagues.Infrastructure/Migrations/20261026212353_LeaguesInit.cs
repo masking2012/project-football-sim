@@ -1,0 +1,243 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
+{
+    /// <inheritdoc />
+    public partial class LeaguesInit : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "Leagues",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Order = table.Column<int>(type: "int", nullable: false),
+                    CountryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Leagues", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeagueVersions",
+                columns: table => new
+                {
+                    LeagueVersionId = table.Column<int>(type: "int", nullable: false),
+                    LeagueId = table.Column<int>(type: "int", nullable: false),
+                    Version = table.Column<int>(type: "int", nullable: false),
+                    TeamsCount = table.Column<int>(type: "int", nullable: false),
+                    Format = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PromotionPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PromotionPlayOffPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RelegationPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RelegationPlayOffPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaChampionsLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaEuropaLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UefaConferenceLeaguePositions = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeagueVersions", x => x.LeagueVersionId);
+                    table.ForeignKey(
+                        name: "FK_LeagueVersions_Leagues_LeagueId",
+                        column: x => x.LeagueId,
+                        principalTable: "Leagues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameLeagues",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    SeasonId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LeagueVersionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameLeagues", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GameLeagues_LeagueVersions_LeagueVersionId",
+                        column: x => x.LeagueVersionId,
+                        principalTable: "LeagueVersions",
+                        principalColumn: "LeagueVersionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeagueActivations",
+                columns: table => new
+                {
+                    LeagueId = table.Column<int>(type: "int", nullable: false),
+                    LeagueVersionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeagueActivations", x => x.LeagueId);
+                    table.ForeignKey(
+                        name: "FK_LeagueActivations_LeagueVersions_LeagueVersionId",
+                        column: x => x.LeagueVersionId,
+                        principalTable: "LeagueVersions",
+                        principalColumn: "LeagueVersionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeagueRounds",
+                columns: table => new
+                {
+                    LeagueVersionId = table.Column<int>(type: "int", nullable: false),
+                    Round = table.Column<int>(type: "int", nullable: false),
+                    Week = table.Column<int>(type: "int", nullable: false),
+                    IsMidweek = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeagueRounds", x => new { x.LeagueVersionId, x.Round });
+                    table.ForeignKey(
+                        name: "FK_LeagueRounds_LeagueVersions_LeagueVersionId",
+                        column: x => x.LeagueVersionId,
+                        principalTable: "LeagueVersions",
+                        principalColumn: "LeagueVersionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LeagueTeams",
+                columns: table => new
+                {
+                    LeagueVersionId = table.Column<int>(type: "int", nullable: false),
+                    TeamId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeagueTeams", x => new { x.LeagueVersionId, x.TeamId });
+                    table.ForeignKey(
+                        name: "FK_LeagueTeams_LeagueVersions_LeagueVersionId",
+                        column: x => x.LeagueVersionId,
+                        principalTable: "LeagueVersions",
+                        principalColumn: "LeagueVersionId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameLeagueMatches",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    HomeTeamId = table.Column<int>(type: "int", nullable: false),
+                    AwayTeamId = table.Column<int>(type: "int", nullable: false),
+                    HomeTeamScore = table.Column<int>(type: "int", nullable: true),
+                    AwayTeamScore = table.Column<int>(type: "int", nullable: true),
+                    Round = table.Column<int>(type: "int", nullable: false),
+                    GameLeagueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameLeagueMatches", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GameLeagueMatches_GameLeagues_GameLeagueId",
+                        column: x => x.GameLeagueId,
+                        principalTable: "GameLeagues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GameLeagueTeams",
+                columns: table => new
+                {
+                    GameLeagueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TeamId = table.Column<int>(type: "int", nullable: false),
+                    Wins = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Draws = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Losses = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    GoalsFor = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    GoalsAgainst = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
+                    Points = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameLeagueTeams", x => new { x.GameLeagueId, x.TeamId });
+                    table.ForeignKey(
+                        name: "FK_GameLeagueTeams_GameLeagues_GameLeagueId",
+                        column: x => x.GameLeagueId,
+                        principalTable: "GameLeagues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameLeagueMatches_GameLeagueId",
+                table: "GameLeagueMatches",
+                column: "GameLeagueId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameLeagues_GameId_UserId_SeasonId_LeagueVersionId",
+                table: "GameLeagues",
+                columns: new[] { "GameId", "UserId", "SeasonId", "LeagueVersionId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_GameLeagues_LeagueVersionId",
+                table: "GameLeagues",
+                column: "LeagueVersionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeagueActivations_LeagueVersionId",
+                table: "LeagueActivations",
+                column: "LeagueVersionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeagueRounds_LeagueVersionId_Week_IsMidweek",
+                table: "LeagueRounds",
+                columns: new[] { "LeagueVersionId", "Week", "IsMidweek" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeagueVersions_LeagueId_Version",
+                table: "LeagueVersions",
+                columns: new[] { "LeagueId", "Version" },
+                unique: true);
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "GameLeagueMatches");
+
+            migrationBuilder.DropTable(
+                name: "GameLeagueTeams");
+
+            migrationBuilder.DropTable(
+                name: "LeagueActivations");
+
+            migrationBuilder.DropTable(
+                name: "LeagueRounds");
+
+            migrationBuilder.DropTable(
+                name: "LeagueTeams");
+
+            migrationBuilder.DropTable(
+                name: "GameLeagues");
+
+            migrationBuilder.DropTable(
+                name: "LeagueVersions");
+
+            migrationBuilder.DropTable(
+                name: "Leagues");
+        }
+    }
+}

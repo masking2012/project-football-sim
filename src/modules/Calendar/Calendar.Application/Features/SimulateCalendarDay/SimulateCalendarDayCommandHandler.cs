@@ -1,7 +1,7 @@
 using ProjectFootballSim.Calendar.Application.Common.Services;
 using ProjectFootballSim.Calendar.Domain.Enums;
 using ProjectFootballSim.Calendar.Infrastructure.Database;
-using ProjectFootballSim.Leagues.Application.GameFeatures.SimulateLeagueGameDay;
+using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
 
 namespace ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
 

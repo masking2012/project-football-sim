@@ -1,14 +1,15 @@
 using ProjectFootballSim.Matches.Application.Common.Services;
+using ProjectFootballSim.Matches.Application.Tests.Helpers;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
 
 namespace ProjectFootballSim.Matches.Application.Tests.Common.Services;
 
 internal sealed class ChancesCalculatorTests
 {
-    private readonly ChancesCalculator _sut = new();
+    private readonly ChancesCalculator _sut = new(new TestRandomNumberGenerator(42));
 
     [Test]
-    public async Task ShouldCalculateChancesAsync()
+    public async Task ShouldCalculateChances()
     {
         MatchTeam attacking = new MatchTeam(1, 50, 50, 50);
         MatchTeam defending = new MatchTeam(2, 50, 50, 50);

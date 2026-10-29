@@ -4,6 +4,7 @@ using ProjectFootballSim.Matches.Application.Features.ExtraTime;
 using ProjectFootballSim.Matches.Application.Features.Penalty;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
 using ProjectFootballSim.Matches.Domain.Services;
+using ProjectFootballSim.Shared.Features;
 
 namespace ProjectFootballSim.Matches.Application;
 
@@ -11,13 +12,15 @@ public static class DependencyRegistrator
 {
     public static IServiceCollection AddMatchesApplication(this IServiceCollection services)
     {
+        services.AddCommonFeatures();
+
         services.AddScoped<IPossessionCalculator, PossessionCalculator>();
         services.AddScoped<IChancesCalculator, ChancesCalculator>();
         services.AddScoped<IGoalsCalculator, GoalsCalculator>();
 
         services.AddScoped<SimulateRegularTimeCommandHandler>();
-        services.AddScoped<SimulateExtraTimeCommand>();
-        services.AddScoped<SimulatePenaltyShootoutCommand>();
+        services.AddScoped<SimulateExtraTimeCommandHandler>();
+        services.AddScoped<SimulatePenaltyShootoutCommandHandler>();
         return services;
     }
 }

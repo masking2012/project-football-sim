@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Common.Data.Entities.Locations;
+using ProjectFootballSim.Locations.Application.Features.GetCountries;
 using ProjectFootballSim.Locations.Domain.Entities;
 using ProjectFootballSim.Locations.Infrastructure.Database;
+using ProjectFootballSim.Locations.Infrastructure.Repositories;
+using ProjectFootballSim.Shared.Data.Entities.Locations;
 
 namespace ProjectFootballSim.Locations.Infrastructure;
 
@@ -24,6 +26,7 @@ public static class DependencyRegistrator
             .UseSeeding(SeedWithPredefinedValues)
         );
 
+        services.AddScoped<IGetCountriesRepository, GetCountriesRepository>();
         return services;
     }
 

@@ -1,15 +1,18 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using ProjectFootballSim.Calendar.Contracts;
 using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Infrastructure.Database;
-using ProjectFootballSim.Common.Data.Entities.Seasons;
-using ProjectFootballSim.Common.Features.EntityFrameworkCore;
+using ProjectFootballSim.Shared.Data.Entities.Seasons;
+using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
+using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 
 public sealed class CreateGameSeasonCommandHandler(
     ILogger<CreateGameSeasonCommandHandler> logger,
-    CalendarDbContext dbContext)
+    CalendarDbContext dbContext,
+    IEventPublisher eventPublisher)
 {
     public async Task<CreateGameSeasonCommandResult> HandleAsync(
         CreateGameSeasonCommand command,
@@ -60,6 +63,13 @@ public sealed class CreateGameSeasonCommandHandler(
             Log.GameSeasonExists(logger, newSeason.UserId, newSeason.GameId, newSeason.Order, ex);
             throw;
         }
+
+        await eventPublisher.PublishAsync(new GameSeasonStartedEvent(
+            UserId: newSeason.UserId,
+            GameId: newSeason.GameId,
+            SeasonId: newSeason.Id,
+            StartDate: newSeason.StartDate,
+            PreviousSeasonId: lastSeason?.Id), cancellationToken).ConfigureAwait(false);
 
         return new CreateGameSeasonCommandResult(newSeason.Id, newSeason.StartDate, newSeason.EndDate);
     }

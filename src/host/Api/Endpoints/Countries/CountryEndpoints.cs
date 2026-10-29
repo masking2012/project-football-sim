@@ -1,4 +1,4 @@
-using ProjectFootballSim.Locations.Application.Features.GetCountries;
+using ProjectFootballSim.Locations.Contracts.Features.GetCountries;
 using System.Globalization;
 
 namespace ProjectFootballSim.Api.Endpoints.Countries;
@@ -7,7 +7,7 @@ internal static class CountriesEndpoints
 {
     public static void MapCountriesEndpoints(this WebApplication app)
     {
-        app.MapGet("/api/countries", async (GetCountriesQueryHandler queryHandler, CancellationToken cancellationToken) =>
+        app.MapGet("/api/countries", async (IGetCountriesQueryHandler queryHandler, CancellationToken cancellationToken) =>
         {
             var countries = await queryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
             var countryItems = countries

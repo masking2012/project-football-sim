@@ -17,14 +17,11 @@
     <Project Path="src/host/Api/Api.csproj" />
   </Folder>
   <Folder Name="/src/modules/" />
-  <Folder Name="/src/modules/Calendar/" Id="07fa420d-2907-57ef-713b-52cd3fbe2c68">
+  <Folder Name="/src/modules/Calendar/">
     <Project Path="src/modules/Calendar/Calendar.Application/Calendar.Application.csproj" />
+    <Project Path="src/modules/Calendar/Calendar.Contracts/Calendar.Contracts.csproj" />
     <Project Path="src/modules/Calendar/Calendar.Domain/Calendar.Domain.csproj" />
     <Project Path="src/modules/Calendar/Calendar.Infrastructure/Calendar.Infrastructure.csproj" />
-  </Folder>
-  <Folder Name="/src/modules/Common/">
-    <Project Path="src/modules/Common/Common.Data/Common.Data.csproj" />
-    <Project Path="src/modules/Common/Common.Features/Common.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
   </Folder>
   <Folder Name="/src/modules/GamePersistence/">
     <Project Path="src/modules/GamePersistence/GamePersistence.Application/GamePersistence.Application.csproj" />
@@ -38,11 +35,13 @@
   </Folder>
   <Folder Name="/src/modules/Leagues/">
     <Project Path="src/modules/Leagues/Leagues.Application/Leagues.Application.csproj" Id="94e411cc-201b-448a-a1d7-06cca5693a74" />
+    <Project Path="src/modules/Leagues/Leagues.Contracts/Leagues.Contracts.csproj" />
     <Project Path="src/modules/Leagues/Leagues.Domain/Leagues.Domain.csproj" Id="9573d25b-70fb-4d1b-b9b6-b59c66f6792c" />
     <Project Path="src/modules/Leagues/Leagues.Infrastructure/Leagues.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/modules/Locations/">
     <Project Path="src/modules/Locations/Locations.Application/Locations.Application.csproj" Id="9847d5f4-89df-4c14-8d0f-969251145f30" />
+    <Project Path="src/modules/Locations/Locations.Contracts/Locations.Contracts.csproj" />
     <Project Path="src/modules/Locations/Locations.Domain/Locations.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />
     <Project Path="src/modules/Locations/Locations.Infrastructure/Locations.Infrastructure.csproj" Id="23bc63f2-9c04-458c-9c82-731bc1f18bfd" />
   </Folder>
@@ -52,16 +51,32 @@
   </Folder>
   <Folder Name="/src/modules/Teams/">
     <Project Path="src/modules/Teams/Teams.Application/Teams.Application.csproj" Id="fece5387-6766-4419-ae8f-a9595c345c4f" />
+    <Project Path="src/modules/Teams/Teams.Contracts/Teams.Contracts.csproj" Id="ff62f0ca-490c-4fe5-a2ed-8e7fc344c85d" />
     <Project Path="src/modules/Teams/Teams.Domain/Teams.Domain.csproj" Id="4a1b6941-24f5-4760-9b9c-2ff27b6ccdbf" />
     <Project Path="src/modules/Teams/Teams.Infrastructure/Teams.Infrastructure.csproj" Id="7a0845c7-48d8-4ddc-b1de-bc95d50cac09" />
   </Folder>
-  <Folder Name="/tests/" />
+  <Folder Name="/src/shared/">
+    <Project Path="src/shared/Shared.Data/Shared.Data.csproj" />
+    <Project Path="src/shared/Shared.Features/Shared.Features.csproj" Id="5ff28135-bbd4-491e-8225-6fb396c18304" />
+  </Folder>
+  <Folder Name="/tests/">
+    <File Path="tests/Directory.Build.props" />
+  </Folder>
   <Folder Name="/tests/modules/" />
-  <Folder Name="/tests/modules/Common/">
-    <Project Path="tests/modules/Common/Common.Features.Tests/Common.Features.Tests.csproj" Id="674923c4-8be2-4f2e-9f23-e4c5bcaaddb5" />
+  <Folder Name="/tests/modules/Leagues/">
+    <Project Path="tests/modules/Leagues/Leagues.Application.Tests/Leagues.Application.Tests.csproj" />
+    <Project Path="tests/modules/Leagues/Leagues.Domain.Tests/Leagues.Domain.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/modules/Matches/">
     <Project Path="tests/modules/Matches/Matches.Application.Tests/Matches.Application.Tests.csproj" Id="b50f9229-c20b-4645-af88-baef81b2395a" />
+    <Project Path="tests/modules/Matches/Matches.Domain.Tests/Matches.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/modules/Teams/">
+    <Project Path="tests/modules/Teams/Teams.Application.Tests/Teams.Application.Tests.csproj" />
+    <Project Path="tests/modules/Teams/Teams.Domain.Tests/Teams.Domain.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/shared/">
+    <Project Path="tests/shared/Shared.Features.Tests/Shared.Features.Tests.csproj" Id="674923c4-8be2-4f2e-9f23-e4c5bcaaddb5" />
   </Folder>
 </Solution>
 

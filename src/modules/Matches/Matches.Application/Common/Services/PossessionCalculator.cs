@@ -1,10 +1,10 @@
-using ProjectFootballSim.Common.Features;
 using ProjectFootballSim.Matches.Domain.Services;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
+using ProjectFootballSim.Shared.Features.Random;
 
 namespace ProjectFootballSim.Matches.Application.Common.Services;
 
-internal sealed class PossessionCalculator : IPossessionCalculator
+internal sealed class PossessionCalculator(IRandomNumberGenerator random) : IPossessionCalculator
 {
     public Possession Calculate(int homeMidfield, int awayMidfield)
     {
@@ -16,7 +16,7 @@ internal sealed class PossessionCalculator : IPossessionCalculator
 
         // Small match-to-match variation (±2%).
         // For example, reducing 0.06 → 0.04 makes results less noisy and more consistent from match to match.
-        possession += (CryptoRandom.NextDouble() - 0.5) * 0.04;
+        possession += (random.NextDouble() - 0.5) * 0.04;
 
         return new Possession(Math.Clamp(possession, IPossessionCalculator.MinPossession, IPossessionCalculator.MaxPossession));
     }

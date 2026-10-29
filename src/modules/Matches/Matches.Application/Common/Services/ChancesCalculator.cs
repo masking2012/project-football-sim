@@ -1,10 +1,10 @@
-using ProjectFootballSim.Common.Features;
 using ProjectFootballSim.Matches.Domain.Services;
 using ProjectFootballSim.Matches.Domain.ValueObjects;
+using ProjectFootballSim.Shared.Features.Random;
 
 namespace ProjectFootballSim.Matches.Application.Common.Services;
 
-internal sealed class ChancesCalculator : IChancesCalculator
+internal sealed class ChancesCalculator(IRandomNumberGenerator random) : IChancesCalculator
 {
     public int Calculate(MatchTeam attacking, MatchTeam defending,
         Possession attackingTeamPossession, AdvantageRatio attackingAdvantageRatio,
@@ -27,10 +27,10 @@ internal sealed class ChancesCalculator : IChancesCalculator
         double expectedChances = baseChances * multiplier;
 
         // Add randomness
-        expectedChances *= CryptoRandom.NextDouble() * 0.2 + 0.9;
+        expectedChances *= random.NextDouble() * 0.2 + 0.9;
 
         expectedChances = Math.Clamp(expectedChances, goalChancesSettings.Minimum, goalChancesSettings.Maximum);
 
-        return CryptoRandom.NextPoisson(expectedChances);
+        return random.NextPoisson(expectedChances);
     }
 }

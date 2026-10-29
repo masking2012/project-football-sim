@@ -26,7 +26,7 @@ export function NavBar() {
     }
 
     let isCurrent = true;
-    void Promise.all([fetchCountries(), fetchLeagues()])
+    void Promise.all([fetchCountries(), fetchLeagues(gameId)])
       .then(([loadedCountries, loadedLeagues]) => {
         if (!isCurrent) return;
         setCountries(loadedCountries);

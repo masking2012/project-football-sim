@@ -1,0 +1,259 @@
+[
+    {
+        "id": 10001,
+        "name": "Dynamo Kyiv",
+        "attack": 59,
+        "midfield": 63,
+        "defence": 61,
+        "countryId": 1
+    },
+    {
+        "id": 10002,
+        "name": "Shakhtar Donetsk",
+        "attack": 67,
+        "midfield": 69,
+        "defence": 69,
+        "countryId": 1
+    },
+    {
+        "id": 10003,
+        "name": "LNZ Cherkasy",
+        "attack": 56,
+        "midfield": 61,
+        "defence": 63,
+        "countryId": 1
+    },
+    {
+        "id": 10004,
+        "name": "Polissya Zhytomyr",
+        "attack": 64,
+        "midfield": 65,
+        "defence": 64,
+        "countryId": 1
+    },
+    {
+        "id": 10005,
+        "name": "FC Kharkiv",
+        "attack": 62,
+        "midfield": 63,
+        "defence": 62,
+        "countryId": 1
+    },
+    {
+        "id": 10006,
+        "name": "Kolos Kovalivka",
+        "attack": 57,
+        "midfield": 57,
+        "defence": 59,
+        "countryId": 1
+    },
+    {
+        "id": 10007,
+        "name": "Kryvbas",
+        "attack": 57,
+        "midfield": 52,
+        "defence": 57,
+        "countryId": 1
+    },
+    {
+        "id": 10008,
+        "name": "Zorya Luhansk",
+        "attack": 57,
+        "midfield": 57,
+        "defence": 57,
+        "countryId": 1
+    },
+    {
+        "id": 10009,
+        "name": "Karpaty Lviv",
+        "attack": 58,
+        "midfield": 58,
+        "defence": 58,
+        "countryId": 1
+    },
+    {
+        "id": 10010,
+        "name": "Epitsentr",
+        "attack": 55,
+        "midfield": 55,
+        "defence": 55,
+        "countryId": 1
+    },
+    {
+        "id": 10011,
+        "name": "Veres Rivne",
+        "attack": 54,
+        "midfield": 54,
+        "defence": 54,
+        "countryId": 1
+    },
+    {
+        "id": 10012,
+        "name": "Obolon Kyiv",
+        "attack": 54,
+        "midfield": 54,
+        "defence": 54,
+        "countryId": 1
+    },
+    {
+        "id": 10013,
+        "name": "Kudrivka",
+        "attack": 50,
+        "midfield": 50,
+        "defence": 50,
+        "countryId": 1
+    },
+    {
+        "id": 10014,
+        "name": "Chornomorets Odesa",
+        "attack": 53,
+        "midfield": 53,
+        "defence": 53,
+        "countryId": 1
+    },
+    {
+        "id": 10015,
+        "name": "Bukovyna Chernivtsi",
+        "attack": 57,
+        "midfield": 57,
+        "defence": 57,
+        "countryId": 1
+    },
+    {
+        "id": 10016,
+        "name": "Livyi Bereh",
+        "attack": 50,
+        "midfield": 50,
+        "defence": 50,
+        "countryId": 1
+    },
+
+    {
+        "id": 10101,
+        "name": "Viktoriya Sumy",
+        "attack": 45,
+        "midfield": 45,
+        "defence": 45,
+        "countryId": 1
+    },
+    {
+        "id": 10102,
+        "name": "Poltava",
+        "attack": 44,
+        "midfield": 44,
+        "defence": 44,
+        "countryId": 1
+    },
+    {
+        "id": 10103,
+        "name": "Mariupol",
+        "attack": 32,
+        "midfield": 32,
+        "defence": 32,
+        "countryId": 1
+    },
+    {
+        "id": 10104,
+        "name": "Kulykiv-Bilka",
+        "attack": 40,
+        "midfield": 40,
+        "defence": 40,
+        "countryId": 1
+    },
+    {
+        "id": 10105,
+        "name": "Metalist Kharkiv",
+        "attack": 45,
+        "midfield": 45,
+        "defence": 45,
+        "countryId": 1
+    },
+    {
+        "id": 10106,
+        "name": "Ahrobiznes Volochysk",
+        "attack": 43,
+        "midfield": 43,
+        "defence": 43,
+        "countryId": 1
+    },
+    {
+        "id": 10107,
+        "name": "Oleksandriya",
+        "attack": 52,
+        "midfield": 52,
+        "defence": 52,
+        "countryId": 1
+    },
+    {
+        "id": 10108,
+        "name": "UCSA Tarasivka",
+        "attack": 40,
+        "midfield": 40,
+        "defence": 40,
+        "countryId": 1
+    },
+    {
+        "id": 10109,
+        "name": "Inhulets",
+        "attack": 48,
+        "midfield": 48,
+        "defence": 48,
+        "countryId": 1
+    },
+    {
+        "id": 10110,
+        "name": "Chernihiv",
+        "attack": 40,
+        "midfield": 40,
+        "defence": 40,
+        "countryId": 1
+    },
+    {
+        "id": 10111,
+        "name": "Kolos-2 Kovalivka",
+        "attack": 35,
+        "midfield": 35,
+        "defence": 35,
+        "countryId": 1
+    },
+    {
+        "id": 10112,
+        "name": "Lokomotyv Kyiv",
+        "attack": 40,
+        "midfield": 40,
+        "defence": 40,
+        "countryId": 1
+    },
+    {
+        "id": 10113,
+        "name": "Nyva Ternopil",
+        "attack": 40,
+        "midfield": 40,
+        "defence": 40,
+        "countryId": 1
+    },
+    {
+        "id": 10114,
+        "name": "Probiy Horodenka",
+        "attack": 35,
+        "midfield": 35,
+        "defence": 35,
+        "countryId": 1
+    },
+    {
+        "id": 10115,
+        "name": "Polissya-2 Zhytomyr",
+        "attack": 37,
+        "midfield": 37,
+        "defence": 37,
+        "countryId": 1
+    },
+    {
+        "id": 10116,
+        "name": "Prykarpattia",
+        "attack": 37,
+        "midfield": 37,
+        "defence": 37,
+        "countryId": 1
+    }
+]

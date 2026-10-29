@@ -2,7 +2,7 @@ using ProjectFootballSim.Matches.Application.Common.Models;
 using ProjectFootballSim.Matches.Application.Features.ExtraTime;
 using ProjectFootballSim.Matches.Application.Features.Penalty;
 using ProjectFootballSim.Matches.Application.Features.RegularTime;
-using ProjectFootballSim.Teams.Application.Features.GetTeamById;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 using System.Globalization;
 
 namespace ProjectFootballSim.Api.Endpoints.Match;
@@ -14,23 +14,30 @@ internal static class MatchEndpoints
         app.MapPost("/api/matches/simulate", async (
             SimulateMatchRequest req,
             SimulateRegularTimeCommandHandler regularTime,
-            SimulateExtraTimeCommand extraTime,
-            SimulatePenaltyShootoutCommand penaltyShootout,
-            GetTeamByIdQueryHandler getTeamByIdQuery,
+            SimulateExtraTimeCommandHandler extraTime,
+            SimulatePenaltyShootoutCommandHandler penaltyShootout,
+            IGetTeamsByIdsQueryHandler getTeamsByIdsQuery,
             CancellationToken cancellationToken) =>
         {
             int homeTeamId = Convert.ToInt32(req.HomeTeamId, CultureInfo.InvariantCulture);
             int awayTeamId = Convert.ToInt32(req.AwayTeamId, CultureInfo.InvariantCulture);
-
-            var homePair = await getTeamByIdQuery.HandleAsync(homeTeamId, cancellationToken).ConfigureAwait(false);
-            var awayPair = await getTeamByIdQuery.HandleAsync(awayTeamId, cancellationToken).ConfigureAwait(false);
-
-            if (homePair is null)
-                return Results.BadRequest($"Home team '{req.HomeTeamId}' not found.");
-            if (awayPair is null)
-                return Results.BadRequest($"Away team '{req.AwayTeamId}' not found.");
             if (homeTeamId == awayTeamId)
                 return Results.BadRequest("Home and away teams must be different.");
+
+            IReadOnlyDictionary<int, TeamByIdsDto> teams;
+            try
+            {
+                teams = await getTeamsByIdsQuery.HandleAsync([homeTeamId, awayTeamId], cancellationToken).ConfigureAwait(false);
+            }
+            catch (InvalidOperationException exception)
+            {
+                return Results.BadRequest(exception.Message);
+            }
+
+            if (!teams.TryGetValue(homeTeamId, out var homePair))
+                return Results.BadRequest($"Home team '{req.HomeTeamId}' not found.");
+            if (!teams.TryGetValue(awayTeamId, out var awayPair))
+                return Results.BadRequest($"Away team '{req.AwayTeamId}' not found.");
 
             var settings = new MatchSettingsDto(HasHomeAdvantage: req.HasHomeAdvantage);
 
@@ -62,7 +69,8 @@ internal static class MatchEndpoints
             // Extra time if draw
             if (rtScore.HomeScore == rtScore.AwayScore)
             {
-                var et = extraTime.Handle(homeTeam, awayTeam, settings);
+                var extraTimeCommand = new SimulateExtraTimeCommand(homeTeam, awayTeam, settings);
+                var et = extraTime.Handle(extraTimeCommand);
                 etScore = new ScoreResponse(et.HomeScore, et.AwayScore);
                 finalHome += et.HomeScore;
                 finalAway += et.AwayScore;
@@ -70,7 +78,8 @@ internal static class MatchEndpoints
                 // Penalties if still drawn
                 if (finalHome == finalAway)
                 {
-                    var pen = penaltyShootout.Handle(homeTeam, awayTeam);
+                    var penaltyCommand = new SimulatePenaltyShootoutCommand(homeTeam, awayTeam);
+                    var pen = penaltyShootout.Handle(penaltyCommand);
                     penScore = new ScoreResponse(pen.HomeScore, pen.AwayScore);
                 }
             }

@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\src\modules\Leagues\Leagues.Domain\Leagues.Domain.csproj" />
+  </ItemGroup>
+</Project>

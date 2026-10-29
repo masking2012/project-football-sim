@@ -1,0 +1,14 @@
+[
+    {
+        "id": 101,
+        "name": "Premier League",
+        "order": 1,
+        "countryId": 1
+    },
+    {
+        "id": 102,
+        "name": "First League",
+        "order": 2,
+        "countryId": 1
+    }
+]
