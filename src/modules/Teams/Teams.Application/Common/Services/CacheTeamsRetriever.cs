@@ -11,9 +11,13 @@ internal sealed class CacheTeamsRetriever(HybridCache cache, IGetTeamsRepository
     public async ValueTask<IReadOnlyList<TeamDto>> GetByIdsAsync(IReadOnlyList<int> teamIds, CancellationToken cancellationToken)
     {
         var cachedTeams = await GetAllCachedTeamsAsync(cancellationToken).ConfigureAwait(false);
-        return cachedTeams.Values
-            .Where(team => teamIds.Contains(team.Id))
-            .ToList();
+        var result = new List<TeamDto>(teamIds.Count);
+        foreach (var teamId in teamIds.Distinct())
+        {
+            if (cachedTeams.TryGetValue(teamId, out var team))
+                result.Add(team);
+        }
+        return result;
     }
 
     public async ValueTask<IReadOnlyList<TeamDto>> GetByCountryAsync(

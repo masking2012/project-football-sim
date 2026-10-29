@@ -24,7 +24,16 @@ internal static class MatchEndpoints
             if (homeTeamId == awayTeamId)
                 return Results.BadRequest("Home and away teams must be different.");
 
-            var teams = await getTeamsByIdsQuery.HandleAsync([homeTeamId, awayTeamId], cancellationToken).ConfigureAwait(false);
+            IReadOnlyDictionary<int, TeamByIdsDto> teams;
+            try
+            {
+                teams = await getTeamsByIdsQuery.HandleAsync([homeTeamId, awayTeamId], cancellationToken).ConfigureAwait(false);
+            }
+            catch (InvalidOperationException exception)
+            {
+                return Results.BadRequest(exception.Message);
+            }
+
             if (!teams.TryGetValue(homeTeamId, out var homePair))
                 return Results.BadRequest($"Home team '{req.HomeTeamId}' not found.");
             if (!teams.TryGetValue(awayTeamId, out var awayPair))

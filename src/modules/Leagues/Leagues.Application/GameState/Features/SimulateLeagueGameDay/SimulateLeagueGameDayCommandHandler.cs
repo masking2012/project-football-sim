@@ -26,7 +26,7 @@ public sealed class SimulateLeagueGameDayCommandHandler(
         foreach (var matchesForLeague in todaysMatches.GroupBy(x => x.GameLeagueId))
         {
             var gameLeague = await GetGameLeagueAsync(command.UserId, matchesForLeague.Key, cancellationToken).ConfigureAwait(false);
-            foreach (var match in matchesForLeague)
+            foreach (var match in matchesForLeague.Where(match => !match.HomeTeamScore.HasValue && !match.AwayTeamScore.HasValue))
                 SimulateMatch(match, gameLeague, teams);
         }
 
