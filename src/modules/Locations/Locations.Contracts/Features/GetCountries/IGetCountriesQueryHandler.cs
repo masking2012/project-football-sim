@@ -2,5 +2,5 @@ namespace ProjectFootballSim.Locations.Contracts.Features.GetCountries;
 
 public interface IGetCountriesQueryHandler
 {
-    ValueTask<IReadOnlyList<CountryDto>> HandleAsync(CancellationToken cancellationToken);
+    Task<IReadOnlyList<GetCountryDto>> HandleAsync(CancellationToken cancellationToken);
 }
