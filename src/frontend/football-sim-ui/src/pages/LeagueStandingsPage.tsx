@@ -12,6 +12,7 @@ import {
 } from '../api/footballApi';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
+import { isSessionExpiredError } from '../api/httpClient';
 
 export function LeagueStandingsPage() {
   const { leagueId } = useParams<{ leagueId: string }>();
@@ -67,7 +68,7 @@ export function LeagueStandingsPage() {
     void loadLeagueMetadata(gameId)
       .catch((requestError: unknown) => {
         if (!isCurrent) return;
-        if (requestError instanceof Error && requestError.message === 'SESSION_EXPIRED') {
+        if (isSessionExpiredError(requestError)) {
           logout();
           navigate('/login', { replace: true });
         } else {
@@ -108,7 +109,7 @@ export function LeagueStandingsPage() {
       })
       .catch((requestError: unknown) => {
         if (!isCurrent) return;
-        if (requestError instanceof Error && requestError.message === 'SESSION_EXPIRED') {
+        if (isSessionExpiredError(requestError)) {
           logout();
           navigate('/login', { replace: true });
         } else {

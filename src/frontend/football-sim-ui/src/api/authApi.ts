@@ -6,11 +6,15 @@ export interface AuthResponse {
   token: string;
 }
 
-async function handleResponse<T>(res: Response): Promise<T> {
+async function ensureSuccess(res: Response): Promise<void> {
   if (!res.ok) {
     const text = await res.text();
     throw new Error(text || `HTTP ${res.status}`);
   }
+}
+
+async function handleResponse<T>(res: Response): Promise<T> {
+  await ensureSuccess(res);
   return res.json() as Promise<T>;
 }
 
@@ -20,10 +24,7 @@ export async function registerUser(username: string, password: string): Promise<
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
   });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `HTTP ${res.status}`);
-  }
+  await ensureSuccess(res);
 }
 
 export async function loginUser(username: string, password: string): Promise<AuthResponse> {

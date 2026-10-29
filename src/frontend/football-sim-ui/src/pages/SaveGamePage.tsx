@@ -3,15 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 import { useGame } from '../context/GameContext';
 import { ConfirmationModal } from '../components/ConfirmationModal';
-
-const SLOT_IDS = [1, 2, 3];
-
-function formatCreatedDate(value: string): string {
-  return new Date(value).toLocaleString('en-US', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
-  });
-}
+import { SaveSlotList } from '../components/SaveSlotList';
 
 export function SaveGamePage() {
   const { gameId, saves, isLoading, error, loadGames, saveCurrentGame } = useGame();
@@ -69,30 +61,11 @@ export function SaveGamePage() {
 
       {isLoading && <Loader size="small" text="Loading saved games..." />}
 
-      <div className="save-slots">
-        {SLOT_IDS.map((slotId) => {
-          const save = savesBySlot.get(slotId);
-          return (
-            <button
-              key={slotId}
-              type="button"
-              className={`save-slot${selectedSlotId === slotId ? ' save-slot--selected' : ''}`}
-              onClick={() => { setSaveSuccess(null); setSelectedSlotId(slotId); setSlotName(save?.name ?? ''); }}
-            >
-              <span className="save-slot-title">Slot {slotId}</span>
-              {save ? (
-                <>
-                  <strong>{save.name}</strong>
-                  <small>Game ID: {save.gameId}</small>
-                  <small>Saved: {formatCreatedDate(save.createdAtUtc)}</small>
-                </>
-              ) : (
-                <small>Empty slot</small>
-              )}
-            </button>
-          );
-        })}
-      </div>
+      <SaveSlotList
+        saves={saves}
+        selectedSlotId={selectedSlotId}
+        onSelect={(slotId) => { setSaveSuccess(null); setSelectedSlotId(slotId); setSlotName(savesBySlot.get(slotId)?.name ?? ''); }}
+      />
 
       <div className="save-game-form">
         <label htmlFor="save-game-name">Slot {selectedSlotId} name</label>

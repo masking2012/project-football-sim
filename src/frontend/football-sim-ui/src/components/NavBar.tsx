@@ -3,6 +3,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { fetchCountries, fetchLeagues, type CountryDto, type LeagueDto } from '../api/footballApi';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
+import { isSessionExpiredError } from '../api/httpClient';
 
 export function NavBar() {
   const { isAuthenticated, logout } = useAuth();
@@ -35,7 +36,7 @@ export function NavBar() {
       })
       .catch((error: unknown) => {
         if (!isCurrent) return;
-        if (error instanceof Error && error.message === 'SESSION_EXPIRED') {
+        if (isSessionExpiredError(error)) {
           logout();
         } else {
           setLeaguesError('Could not load leagues.');

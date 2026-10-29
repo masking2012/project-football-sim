@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSeasons, type CalendarDayResponse, type CurrentSeasonResponse } from '../api/footballApi';
 import { useAuth } from './AuthContext';
+import { isSessionExpiredError } from '../api/httpClient';
 
 interface SeasonContextValue {
   currentSeason: CurrentSeasonResponse | null;
@@ -40,7 +41,7 @@ export function SeasonProvider({ children }: { children: React.ReactNode }) {
       setCurrentSeason(season);
     } catch (err) {
       if (requestId !== latestRequestRef.current) return;
-      if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
+      if (isSessionExpiredError(err)) {
         setCurrentSeason(null);
         logout();
       } else {

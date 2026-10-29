@@ -21,6 +21,15 @@ function isTokenExpired(token: string): boolean {
   return typeof exp === 'number' && exp * 1000 <= Date.now();
 }
 
+function readValidStoredToken(): string | null {
+  const stored = localStorage.getItem(TOKEN_KEY);
+  if (stored && isTokenExpired(stored)) {
+    localStorage.removeItem(TOKEN_KEY);
+    return null;
+  }
+  return stored;
+}
+
 interface AuthContextValue {
   token: string | null;
   username: string | null;
@@ -32,11 +41,8 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
-  const [username, setUsername] = useState<string | null>(() => {
-    const stored = localStorage.getItem(TOKEN_KEY);
-    return stored ? decodeUsername(stored) : null;
-  });
+  const [token, setToken] = useState<string | null>(readValidStoredToken);
+  const [username, setUsername] = useState<string | null>(() => (token ? decodeUsername(token) : null));
 
   const login = useCallback((newToken: string) => {
     localStorage.setItem(TOKEN_KEY, newToken);

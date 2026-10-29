@@ -40,8 +40,8 @@ function GameIdFooter() {
   return <footer className="app-game-id-footer">Game ID: {gameId}</footer>;
 }
 
-function AuthenticatedHeader() {
-  const { username, logout } = useAuth();
+function AppHeader() {
+  const { isAuthenticated, username, logout } = useAuth();
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -50,16 +50,20 @@ function AuthenticatedHeader() {
   }
 
   return (
-    <header className="app-header app-header--authenticated">
-      <div className="app-header-row">
-        <h1 className="app-title">Football Simulator ⚽</h1>
-        <div className="nav-auth app-header-user">
-          <span className="nav-user-chip">👤 {username}</span>
-          <button className="nav-logout-btn" type="button" onClick={handleLogout}>
-            Sign out
-          </button>
+    <header className={isAuthenticated ? 'app-header app-header--authenticated' : 'app-header'}>
+      {isAuthenticated ? (
+        <div className="app-header-row">
+          <h1 className="app-title">Football Simulator ⚽</h1>
+          <div className="nav-auth app-header-user">
+            <span className="nav-user-chip">👤 {username}</span>
+            <button className="nav-logout-btn" type="button" onClick={handleLogout}>
+              Sign out
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <h1 className="app-title">Football Simulator ⚽</h1>
+      )}
       <SeasonInfo />
       <NavBar />
     </header>
@@ -67,19 +71,9 @@ function AuthenticatedHeader() {
 }
 
 function AppContent() {
-  const { isAuthenticated } = useAuth();
-
   return (
     <div className="app">
-            {isAuthenticated ? (
-              <AuthenticatedHeader />
-            ) : (
-              <header className="app-header">
-                <h1 className="app-title">Football Simulator ⚽</h1>
-                <SeasonInfo />
-                <NavBar />
-              </header>
-            )}
+      <AppHeader />
 
             <Routes>
               <Route path="/" element={<HomeRedirect />} />

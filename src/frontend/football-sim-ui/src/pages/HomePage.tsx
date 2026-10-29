@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { advanceCalendarDay, completeSeason, fetchCalendarDay, resetGameSessionCache, simulateCalendarDay } from '../api/footballApi';
 import type { CalendarDayResponse, LeagueMatchDto } from '../api/footballApi';
@@ -6,6 +6,7 @@ import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
 import { useSeason } from '../context/SeasonContext';
+import { isSessionExpiredError } from '../api/httpClient';
 
 function MatchEvent({ event }: { event: LeagueMatchDto }) {
   return (
@@ -33,27 +34,30 @@ export function HomePage() {
   const [isActing, setIsActing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const matchesByLeague = new Map<string, { countryName: string; leagueName: string; order: number; rounds: Map<number, LeagueMatchDto[]> }>();
-  for (const event of [...(day?.leagueMatches ?? [])].sort((left, right) =>
-    left.order - right.order
-      || left.leagueName.localeCompare(right.leagueName)
-      || left.round - right.round
-      || left.id.localeCompare(right.id))) {
-    const leagueKey = `${event.countryId}:${event.leagueId}`;
-    const league = matchesByLeague.get(leagueKey) ?? {
-      countryName: event.countryName,
-      leagueName: event.leagueName,
-      order: event.order,
-      rounds: new Map<number, LeagueMatchDto[]>(),
-    };
-    const roundEvents = league.rounds.get(event.round) ?? [];
-    roundEvents.push(event);
-    league.rounds.set(event.round, roundEvents);
-    matchesByLeague.set(leagueKey, league);
-  }
+  const matchesByLeague = useMemo(() => {
+    const grouped = new Map<string, { countryName: string; leagueName: string; order: number; rounds: Map<number, LeagueMatchDto[]> }>();
+    for (const event of [...(day?.leagueMatches ?? [])].sort((left, right) =>
+      left.order - right.order
+        || left.leagueName.localeCompare(right.leagueName)
+        || left.round - right.round
+        || left.id.localeCompare(right.id))) {
+      const leagueKey = `${event.countryId}:${event.leagueId}`;
+      const league = grouped.get(leagueKey) ?? {
+        countryName: event.countryName,
+        leagueName: event.leagueName,
+        order: event.order,
+        rounds: new Map<number, LeagueMatchDto[]>(),
+      };
+      const roundEvents = league.rounds.get(event.round) ?? [];
+      roundEvents.push(event);
+      league.rounds.set(event.round, roundEvents);
+      grouped.set(leagueKey, league);
+    }
+    return grouped;
+  }, [day]);
 
   const handleError = useCallback((err: unknown) => {
-    if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
+    if (isSessionExpiredError(err)) {
       logout();
       navigate('/login');
       return;

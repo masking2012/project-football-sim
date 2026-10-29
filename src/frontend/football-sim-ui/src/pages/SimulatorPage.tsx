@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchCountries, fetchTeams, simulateMatch } from '../api/footballApi';
-import type { CountryDto, MatchResultResponse, TeamDto } from '../api/footballApi';
+import { fetchCountries, simulateMatch } from '../api/footballApi';
+import type { CountryDto, MatchResultResponse } from '../api/footballApi';
 import { CountrySelector } from '../components/CountrySelector';
 import { TeamSelector } from '../components/TeamSelector';
 import { MatchResult } from '../components/MatchResult';
 import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
+import { useTeamsByCountry } from '../hooks/useTeamsByCountry';
+import { isSessionExpiredError } from '../api/httpClient';
 
 interface SimulatorPageProps {
   subtitle?: string;
@@ -19,26 +21,33 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
   const [countries, setCountries] = useState<CountryDto[]>([]);
   const [homeCountryId, setHomeCountryId] = useState<string>('');
   const [awayCountryId, setAwayCountryId] = useState<string>('');
-  const [homeTeams, setHomeTeams] = useState<TeamDto[]>([]);
-  const [awayTeams, setAwayTeams] = useState<TeamDto[]>([]);
   const [homeId, setHomeId] = useState<string>('');
   const [awayId, setAwayId] = useState<string>('');
   const [homeAdvantage, setHomeAdvantage] = useState(true);
   const [result, setResult] = useState<MatchResultResponse | null>(null);
   const [loadingCountries, setLoadingCountries] = useState(false);
-  const [loadingHomeTeams, setLoadingHomeTeams] = useState(false);
-  const [loadingAwayTeams, setLoadingAwayTeams] = useState(false);
   const [loadingSimulation, setLoadingSimulation] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleApiError = useCallback((err: unknown, fallback: string) => {
-    if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
+    if (isSessionExpiredError(err)) {
       logout();
       navigate('/login');
       return;
     }
     setError(err instanceof Error ? err.message : fallback);
   }, [logout, navigate]);
+
+  const home = useTeamsByCountry(homeCountryId, 'Could not load home teams. Is the API running?', handleApiError);
+  const away = useTeamsByCountry(awayCountryId, 'Could not load away teams. Is the API running?', handleApiError);
+
+  useEffect(() => {
+    setHomeId('');
+  }, [homeCountryId]);
+
+  useEffect(() => {
+    setAwayId('');
+  }, [awayCountryId]);
 
   useEffect(() => {
     setLoadingCountries(true);
@@ -47,42 +56,6 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
       .catch((err) => handleApiError(err, 'Could not load countries. Is the API running?'))
       .finally(() => setLoadingCountries(false));
   }, [handleApiError]);
-
-  useEffect(() => {
-    if (!homeCountryId) {
-      setHomeTeams([]);
-      setHomeId('');
-      return;
-    }
-    let ignore = false;
-    setHomeId('');
-    setLoadingHomeTeams(true);
-    fetchTeams(homeCountryId)
-      .then((teams) => !ignore && setHomeTeams(teams))
-      .catch((err) => !ignore && handleApiError(err, 'Could not load home teams. Is the API running?'))
-      .finally(() => !ignore && setLoadingHomeTeams(false));
-    return () => {
-      ignore = true;
-    };
-  }, [homeCountryId, handleApiError]);
-
-  useEffect(() => {
-    if (!awayCountryId) {
-      setAwayTeams([]);
-      setAwayId('');
-      return;
-    }
-    let ignore = false;
-    setAwayId('');
-    setLoadingAwayTeams(true);
-    fetchTeams(awayCountryId)
-      .then((teams) => !ignore && setAwayTeams(teams))
-      .catch((err) => !ignore && handleApiError(err, 'Could not load away teams. Is the API running?'))
-      .finally(() => !ignore && setLoadingAwayTeams(false));
-    return () => {
-      ignore = true;
-    };
-  }, [awayCountryId, handleApiError]);
 
   async function handleSimulate() {
     if (!homeId || !awayId) return;
@@ -118,11 +91,11 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
                   selectedId={homeCountryId}
                   onChange={setHomeCountryId}
                 />
-                {loadingHomeTeams && <Loader size="small" text="Loading teams..." />}
-                {homeCountryId && !loadingHomeTeams && (
+                {home.isLoading && <Loader size="small" text="Loading teams..." />}
+                {homeCountryId && !home.isLoading && (
                   <TeamSelector
                     label="🏠 Home Team"
-                    teams={homeTeams}
+                    teams={home.teams}
                     selectedId={homeId}
                     disabledId={awayId}
                     onChange={setHomeId}
@@ -139,11 +112,11 @@ export function SimulatorPage({ subtitle = 'Pick two teams and simulate a match'
                   selectedId={awayCountryId}
                   onChange={setAwayCountryId}
                 />
-                {loadingAwayTeams && <Loader size="small" text="Loading teams..." />}
-                {awayCountryId && !loadingAwayTeams && (
+                {away.isLoading && <Loader size="small" text="Loading teams..." />}
+                {awayCountryId && !away.isLoading && (
                   <TeamSelector
                     label="✈️ Away Team"
-                    teams={awayTeams}
+                    teams={away.teams}
                     selectedId={awayId}
                     disabledId={homeId}
                     onChange={setAwayId}
