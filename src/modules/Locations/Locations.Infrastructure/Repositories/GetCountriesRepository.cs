@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Locations.Application.Features.GetCountries;
-using ProjectFootballSim.Locations.Contracts.Features.GetCountries;
 using ProjectFootballSim.Locations.Infrastructure.Database;
 
 namespace ProjectFootballSim.Locations.Infrastructure.Repositories;
