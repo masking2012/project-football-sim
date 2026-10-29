@@ -1,6 +1,7 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSeasons, type CalendarDayResponse, type CurrentSeasonResponse } from '../api/footballApi';
 import { useAuth } from './AuthContext';
+import { isSessionExpiredError } from '../api/httpClient';
 
 interface SeasonContextValue {
   currentSeason: CurrentSeasonResponse | null;
@@ -20,7 +21,10 @@ export function SeasonProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const latestRequestRef = useRef(0);
+
   const refreshSeason = useCallback(async (gameId: string | null) => {
+    const requestId = ++latestRequestRef.current;
     if (!isAuthenticated || !gameId) {
       setCurrentSeason(null);
       setCurrentDay(null);
@@ -32,16 +36,19 @@ export function SeasonProvider({ children }: { children: React.ReactNode }) {
 
     try {
       const seasons = await fetchSeasons(gameId);
+      if (requestId !== latestRequestRef.current) return;
       const season = seasons.find((item) => item.isCurrent) ?? null;
       setCurrentSeason(season);
     } catch (err) {
-      if (err instanceof Error && err.message === 'SESSION_EXPIRED') {
+      if (requestId !== latestRequestRef.current) return;
+      if (isSessionExpiredError(err)) {
+        setCurrentSeason(null);
         logout();
       } else {
         setError(err instanceof Error ? err.message : 'Failed to fetch season');
       }
     } finally {
-      setIsLoading(false);
+      if (requestId === latestRequestRef.current) setIsLoading(false);
     }
   }, [isAuthenticated, logout]);
 

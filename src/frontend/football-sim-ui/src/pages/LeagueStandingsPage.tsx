@@ -12,10 +12,11 @@ import {
 } from '../api/footballApi';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
+import { isSessionExpiredError } from '../api/httpClient';
 
 export function LeagueStandingsPage() {
   const { leagueId } = useParams<{ leagueId: string }>();
-  const { gameId, startNewGame } = useGame();
+  const { gameId } = useGame();
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [standings, setStandings] = useState<TeamStandingDto[]>([]);
@@ -35,12 +36,17 @@ export function LeagueStandingsPage() {
       return;
     }
 
+    if (!gameId) {
+      setError('No game is loaded. Load or start a game to view standings.');
+      setIsLoading(false);
+      return;
+    }
+
     let isCurrent = true;
     setIsLoading(true);
     setError(null);
 
-    async function loadLeagueMetadata() {
-      const activeGameId = gameId ?? await startNewGame();
+    async function loadLeagueMetadata(activeGameId: string) {
       const [leagues, seasons] = await Promise.all([
         fetchLeagues(activeGameId),
         fetchSeasons(activeGameId),
@@ -59,10 +65,10 @@ export function LeagueStandingsPage() {
           : (seasons.find((season) => season.isCurrent) ?? seasons[0]).id);
     }
 
-    void loadLeagueMetadata()
+    void loadLeagueMetadata(gameId)
       .catch((requestError: unknown) => {
         if (!isCurrent) return;
-        if (requestError instanceof Error && requestError.message === 'SESSION_EXPIRED') {
+        if (isSessionExpiredError(requestError)) {
           logout();
           navigate('/login', { replace: true });
         } else {
@@ -76,7 +82,7 @@ export function LeagueStandingsPage() {
     return () => {
       isCurrent = false;
     };
-  }, [gameId, leagueId, logout, navigate, startNewGame]);
+  }, [gameId, leagueId, logout, navigate]);
 
   useEffect(() => {
     const parsedLeagueId = Number(leagueId);
@@ -103,7 +109,7 @@ export function LeagueStandingsPage() {
       })
       .catch((requestError: unknown) => {
         if (!isCurrent) return;
-        if (requestError instanceof Error && requestError.message === 'SESSION_EXPIRED') {
+        if (isSessionExpiredError(requestError)) {
           logout();
           navigate('/login', { replace: true });
         } else {

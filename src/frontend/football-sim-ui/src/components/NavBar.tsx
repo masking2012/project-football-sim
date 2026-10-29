@@ -3,6 +3,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { fetchCountries, fetchLeagues, type CountryDto, type LeagueDto } from '../api/footballApi';
 import { useAuth } from '../context/AuthContext';
 import { useGame } from '../context/GameContext';
+import { isSessionExpiredError } from '../api/httpClient';
 
 export function NavBar() {
   const { isAuthenticated, logout } = useAuth();
@@ -35,7 +36,7 @@ export function NavBar() {
       })
       .catch((error: unknown) => {
         if (!isCurrent) return;
-        if (error instanceof Error && error.message === 'SESSION_EXPIRED') {
+        if (isSessionExpiredError(error)) {
           logout();
         } else {
           setLeaguesError('Could not load leagues.');
@@ -87,12 +88,12 @@ export function NavBar() {
                   aria-expanded={isLeaguesOpen}
                   onClick={() => setIsLeaguesOpen((isOpen) => !isOpen)}
                 >
-                  🏆 Leagues <span className="nav-chevron">⌄</span>
+                  🏆 Leagues <span className="nav-chevron">▾</span>
                 </button>
                 {isLeaguesOpen && (
                   <div className="league-menu" role="menu">
                     {leaguesError && <p className="league-menu-message">{leaguesError}</p>}
-                    {!leaguesError && countries.length === 0 && <p className="league-menu-message">No leagues available.</p>}
+                    {!leaguesError && leaguesByCountry.size === 0 && <p className="league-menu-message">No leagues available.</p>}
                     {countries.map((country) => {
                       const countryId = String(country.id);
                       const countryLeagues = leaguesByCountry.get(countryId) ?? [];

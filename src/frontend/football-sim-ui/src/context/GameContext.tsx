@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { createGame, fetchGameSaves, resetGameSessionCache, saveGame, type GameSave } from '../api/footballApi';
 import { useAuth } from './AuthContext';
 import { useSeason } from './SeasonContext';
+import { isSessionExpiredError } from '../api/httpClient';
 
 interface GameContextValue {
   gameId: string | null;
@@ -39,7 +40,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
   }, [gameId, refreshSeason]);
 
   const handleError = useCallback((error: unknown) => {
-    if (error instanceof Error && error.message === 'SESSION_EXPIRED') {
+    if (isSessionExpiredError(error)) {
       logout();
       return;
     }
@@ -82,8 +83,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const loadGame = useCallback(async (id: string) => {
     selectGame(id);
-    await refreshSeason(id);
-  }, [refreshSeason, selectGame]);
+  }, [selectGame]);
 
   const saveCurrentGame = useCallback(async (slotId: number, name: string) => {
     if (!gameId) return;

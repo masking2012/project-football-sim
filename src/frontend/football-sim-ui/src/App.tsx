@@ -1,5 +1,17 @@
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
-import './App.css';
+import './styles/tokens.css';
+import './styles/layout.css';
+import './styles/save-game.css';
+import './styles/header.css';
+import './styles/nav.css';
+import './styles/match-setup.css';
+import './styles/feedback.css';
+import './styles/match-result.css';
+import './styles/auth.css';
+import './styles/home.css';
+import './styles/system.css';
+import './styles/league-nav.css';
+import './styles/standings.css';
 import { AuthProvider } from './context/AuthContext';
 import { SeasonProvider } from './context/SeasonContext';
 import { GameProvider } from './context/GameContext';
@@ -28,8 +40,8 @@ function GameIdFooter() {
   return <footer className="app-game-id-footer">Game ID: {gameId}</footer>;
 }
 
-function AuthenticatedHeader() {
-  const { username, logout } = useAuth();
+function AppHeader() {
+  const { isAuthenticated, username, logout } = useAuth();
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -38,16 +50,20 @@ function AuthenticatedHeader() {
   }
 
   return (
-    <header className="app-header app-header--authenticated">
-      <div className="app-header-row">
-        <h1 className="app-title">Football Simulator ⚽</h1>
-        <div className="nav-auth app-header-user">
-          <span className="nav-user-chip">👤 {username}</span>
-          <button className="nav-logout-btn" type="button" onClick={handleLogout}>
-            Sign out
-          </button>
+    <header className={isAuthenticated ? 'app-header app-header--authenticated' : 'app-header'}>
+      {isAuthenticated ? (
+        <div className="app-header-row">
+          <h1 className="app-title">Football Simulator ⚽</h1>
+          <div className="nav-auth app-header-user">
+            <span className="nav-user-chip">👤 {username}</span>
+            <button className="nav-logout-btn" type="button" onClick={handleLogout}>
+              Sign out
+            </button>
+          </div>
         </div>
-      </div>
+      ) : (
+        <h1 className="app-title">Football Simulator ⚽</h1>
+      )}
       <SeasonInfo />
       <NavBar />
     </header>
@@ -55,19 +71,9 @@ function AuthenticatedHeader() {
 }
 
 function AppContent() {
-  const { isAuthenticated } = useAuth();
-
   return (
     <div className="app">
-            {isAuthenticated ? (
-              <AuthenticatedHeader />
-            ) : (
-              <header className="app-header">
-                <h1 className="app-title">Football Simulator ⚽</h1>
-                <SeasonInfo />
-                <NavBar />
-              </header>
-            )}
+      <AppHeader />
 
             <Routes>
               <Route path="/" element={<HomeRedirect />} />

@@ -18,7 +18,7 @@ export function LoginPage() {
     if (justRegistered) {
       window.history.replaceState({}, '');
     }
-  }, []);
+  }, [justRegistered]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();

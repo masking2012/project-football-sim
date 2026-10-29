@@ -1,13 +1,33 @@
 import { createContext, useCallback, useContext, useMemo, useState } from 'react';
 import { TOKEN_KEY } from '../api/authApi';
 
-function decodeUsername(token: string): string {
+function decodeTokenPayload(token: string): Record<string, unknown> | null {
   try {
-    const payload = JSON.parse(atob(token.split('.')[1])) as Record<string, unknown>;
-    return (payload['unique_name'] ?? payload['sub'] ?? 'User') as string;
+    const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+    return JSON.parse(atob(base64)) as Record<string, unknown>;
   } catch {
-    return 'User';
+    return null;
   }
+}
+
+function decodeUsername(token: string): string {
+  const payload = decodeTokenPayload(token);
+  const name = payload?.['unique_name'] ?? payload?.['sub'];
+  return typeof name === 'string' ? name : 'User';
+}
+
+function isTokenExpired(token: string): boolean {
+  const exp = decodeTokenPayload(token)?.['exp'];
+  return typeof exp === 'number' && exp * 1000 <= Date.now();
+}
+
+function readValidStoredToken(): string | null {
+  const stored = localStorage.getItem(TOKEN_KEY);
+  if (stored && isTokenExpired(stored)) {
+    localStorage.removeItem(TOKEN_KEY);
+    return null;
+  }
+  return stored;
 }
 
 interface AuthContextValue {
@@ -21,11 +41,8 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
-  const [username, setUsername] = useState<string | null>(() => {
-    const stored = localStorage.getItem(TOKEN_KEY);
-    return stored ? decodeUsername(stored) : null;
-  });
+  const [token, setToken] = useState<string | null>(readValidStoredToken);
+  const [username, setUsername] = useState<string | null>(() => (token ? decodeUsername(token) : null));
 
   const login = useCallback((newToken: string) => {
     localStorage.setItem(TOKEN_KEY, newToken);
@@ -40,7 +57,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo<AuthContextValue>(
-    () => ({ token, username, isAuthenticated: token !== null, login, logout }),
+    () => ({ token, username, isAuthenticated: token !== null && !isTokenExpired(token), login, logout }),
     [token, username, login, logout],
   );
 

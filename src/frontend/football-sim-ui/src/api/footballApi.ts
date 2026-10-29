@@ -1,4 +1,4 @@
-import { TOKEN_KEY } from './authApi';
+import { authHeaders, ensureSuccess, handleResponse } from './httpClient';
 
 export interface CountryDto {
   id: string;
@@ -118,13 +118,6 @@ export interface CompleteSeasonResponse {
   id: string;
 }
 
-export interface GameSave {
-  gameId: string;
-  slotId: number;
-  name: string;
-  createdAtUtc: string;
-}
-
 const BASE = '/api';
 let countriesRequest: Promise<CountryDto[]> | null = null;
 let countriesCache: CountryDto[] | null = null;
@@ -171,12 +164,15 @@ export async function fetchLeagues(gameId: string): Promise<LeagueDto[]> {
     const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/leagues`, { headers: authHeaders() });
     return handleResponse<LeagueDto[]>(res);
   })();
+  const generation = cacheGeneration;
   leaguesRequest = request;
   leaguesRequestGameId = gameId;
   request.then(
     (leagues) => {
-      leaguesCache = leagues;
-      leaguesCacheGameId = gameId;
+      if (generation === cacheGeneration) {
+        leaguesCache = leagues;
+        leaguesCacheGameId = gameId;
+      }
       clearLeaguesRequest(request);
     },
     () => clearLeaguesRequest(request),
@@ -220,7 +216,7 @@ export async function simulateCalendarDay(gameId: string): Promise<void> {
     method: 'POST',
     headers: authHeaders(),
   });
-  await handleVoidResponse(res);
+  await ensureSuccess(res);
 }
 
 export async function advanceCalendarDay(gameId: string): Promise<void> {
@@ -228,11 +224,10 @@ export async function advanceCalendarDay(gameId: string): Promise<void> {
     method: 'POST',
     headers: authHeaders(),
   });
-  await handleVoidResponse(res);
+  await ensureSuccess(res);
 }
 
-export async function completeSeason(gameId: string, seasonId: string): Promise<CompleteSeasonResponse> {
-  const res = await fetch(
+export async function completeSeason(gameId: string, seasonId: string): Promise<CompleteSeasonResponse> {  const res = await fetch(
     `${BASE}/games/${encodeURIComponent(gameId)}/seasons/${encodeURIComponent(seasonId)}/complete`,
     {
       method: 'POST',
@@ -242,18 +237,7 @@ export async function completeSeason(gameId: string, seasonId: string): Promise<
   return handleResponse<CompleteSeasonResponse>(res);
 }
 
-async function handleVoidResponse(res: Response): Promise<void> {
-  if (res.status === 401) {
-    throw new Error('SESSION_EXPIRED');
-  }
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `HTTP ${res.status}`);
-  }
-}
-
-export async function fetchLeagueStandings(gameId: string, seasonId: string, leagueId: number): Promise<TeamStandingDto[]> {
-  const requestKey = `${gameId}:${seasonId}:${leagueId}`;
+export async function fetchLeagueStandings(gameId: string, seasonId: string, leagueId: number): Promise<TeamStandingDto[]> {  const requestKey = `${gameId}:${seasonId}:${leagueId}`;
   const existingRequest = standingsRequests.get(requestKey);
   if (existingRequest) {
     return existingRequest;
@@ -310,22 +294,6 @@ function clearFixturesRequest(requestKey: string, request: Promise<LeagueFixture
   if (fixturesRequests.get(requestKey) === request) {
     fixturesRequests.delete(requestKey);
   }
-}
-
-function authHeaders(): Record<string, string> {
-  const token = localStorage.getItem(TOKEN_KEY);
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
-
-async function handleResponse<T>(res: Response): Promise<T> {
-  if (res.status === 401) {
-    throw new Error('SESSION_EXPIRED');
-  }
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `HTTP ${res.status}`);
-  }
-  return res.json() as Promise<T>;
 }
 
 export async function fetchCountries(): Promise<CountryDto[]> {
@@ -447,14 +415,6 @@ export async function createGame(): Promise<string> {
     method: 'POST',
     headers: authHeaders(),
   });
-  if (res.status === 401) {
-    throw new Error('SESSION_EXPIRED');
-  }
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `HTTP ${res.status}`);
-  }
-
   const response = await handleResponse<CreateGameResponse>(res);
   return response.gameId;
 }
@@ -470,6 +430,6 @@ export async function saveGame(gameId: string, slotId: number, name: string): Pr
     headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify({ slotId, name }),
   });
-  await handleVoidResponse(res);
+  await ensureSuccess(res);
 }
 
