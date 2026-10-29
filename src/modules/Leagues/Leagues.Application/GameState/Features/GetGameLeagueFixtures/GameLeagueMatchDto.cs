@@ -5,6 +5,6 @@ public sealed record GameLeagueMatchDto(
     DateTime Date,
     int HomeTeamId,
     int AwayTeamId,
-    int? HomeTeamScore,
-    int? AwayTeamScore,
+    int? HomeTeamGoals,
+    int? AwayTeamGoals,
     int Round);

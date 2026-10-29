@@ -13,6 +13,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -39,6 +40,7 @@ public static class DependencyRegistrator
         services.AddScoped<IGameLeagueWriteRepository, GameLeagueWriteRepository>();
 
         services.AddScoped<IGetGameLeagueStandingsRepository, GetGameLeagueStandingsRepository>();
+        services.AddScoped<IGetGameLeagueMatchesRepository, GetGameLeagueMatchesRepository>();
 
         return services;
     }

@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
+namespace ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueFixtures;
 
 public sealed record GetGameLeagueFixturesQuery(
     Guid UserId,

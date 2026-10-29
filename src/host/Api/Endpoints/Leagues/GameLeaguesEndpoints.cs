@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
-using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueByVersionId;
-using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
-using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
-using System.Security.Claims;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
-using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByCountry;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
+using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Leagues;
 
@@ -70,41 +68,22 @@ internal static class GameLeaguesEndpoints
             [FromRoute] Guid gameId,
             [FromRoute] Guid seasonId,
             [FromRoute] int leagueVersionId,
-            GetGameLeagueFixturesQueryHandler getGameLeagueFixturesQueryHandler,
-            IGetTeamsByCountryQueryHandler teamsByCountryQueryHandler,
-            GetLeagueByVersionIdQueryHandler getLeagueByVersionIdQueryHandler,
+            IGetGameLeagueFixturesQueryHandler getGameLeagueFixturesQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var leagueDto = await getLeagueByVersionIdQueryHandler.HandleAsync(leagueVersionId, cancellationToken).ConfigureAwait(false);
-            if (leagueDto is null)
-                throw new InvalidOperationException($"League with version ID {leagueVersionId} not found.");
-
-            var teamDtos = await teamsByCountryQueryHandler.HandleAsync(leagueDto.CountryId, cancellationToken).ConfigureAwait(false);
-
             var query = new GetGameLeagueFixturesQuery(
                 UserId: userId,
                 GameId: gameId,
                 SeasonId: seasonId,
                 LeagueVersionId: leagueVersionId);
-            var matchesDtos = await getGameLeagueFixturesQueryHandler
+            IReadOnlyList<LeagueMatchDto> matches = await getGameLeagueFixturesQueryHandler
                 .HandleAsync(query, cancellationToken).ConfigureAwait(false);
 
-            return Results.Ok(
-                matchesDtos
-                    .Select(s => new MatchItemResponse(
-                        Id: s.Id,
-                        Date: s.Date,
-                        HomeTeamId: s.HomeTeamId,
-                        AwayTeamId: s.AwayTeamId,
-                        HomeTeamScore: s.HomeTeamScore,
-                        AwayTeamScore: s.AwayTeamScore,
-                        Round: s.Round,
-                        HomeTeamName: teamDtos[s.HomeTeamId].Name, //TODO: Optimize this by creating a dictionary of teamDtos by Id to avoid multiple enumerations
-                        AwayTeamName: teamDtos[s.AwayTeamId].Name)));
+            return Results.Ok(matches);
         }).RequireAuthorization();
     }
 }

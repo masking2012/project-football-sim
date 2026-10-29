@@ -1,29 +1,33 @@
-using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
-using ProjectFootballSim.Leagues.Domain.GameState.Entities;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueFixtures;
+using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 
-public sealed class GetGameLeagueFixturesQueryHandler(IGameLeaguesRepository repository)
+public sealed class GetGameLeagueFixturesQueryHandler(
+    IGetGameLeagueMatchesRepository repository,
+    IGetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler) : IGetGameLeagueFixturesQueryHandler
 {
-    public async Task<IReadOnlyList<GameLeagueMatchDto>> HandleAsync(
+    public async Task<IReadOnlyList<LeagueMatchDto>> HandleAsync(
         GetGameLeagueFixturesQuery query,
         CancellationToken cancellationToken)
     {
-        GameLeague? league = await repository
+        IReadOnlyList<GameLeagueMatchDto> gameLeagueMatches = await repository
             .GetAsync(query.UserId, query.GameId, query.SeasonId, query.LeagueVersionId, cancellationToken)
             .ConfigureAwait(false);
 
-        if (league is null)
-            throw new InvalidOperationException("League not found");
+        var teamsIds = gameLeagueMatches.SelectMany(t => new[] { t.HomeTeamId, t.AwayTeamId }).Distinct().ToList();
+        IReadOnlyDictionary<int, TeamByIdsDto> teams = await getTeamsByIdsQueryHandler.HandleAsync(teamsIds, cancellationToken).ConfigureAwait(false);
 
-        return league.GameLeagueMatches
-            .Select(f => new GameLeagueMatchDto(
+        return gameLeagueMatches
+            .Select(f => new LeagueMatchDto(
                 Id: f.Id,
                 Date: f.Date,
                 HomeTeamId: f.HomeTeamId,
                 AwayTeamId: f.AwayTeamId,
-                HomeTeamScore: f.HomeTeamScore,
-                AwayTeamScore: f.AwayTeamScore,
+                HomeTeamName: teams[f.HomeTeamId].Name,
+                AwayTeamName: teams[f.AwayTeamId].Name,
+                HomeTeamScore: f.HomeTeamGoals,
+                AwayTeamScore: f.AwayTeamGoals,
                 Round: f.Round))
             .ToList();
     }
