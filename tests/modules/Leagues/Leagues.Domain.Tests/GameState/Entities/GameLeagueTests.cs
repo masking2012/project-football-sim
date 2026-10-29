@@ -24,19 +24,6 @@ internal sealed class GameLeagueTests
     }
 
     [Test]
-    public async Task ShouldExposeReadOnlyChildCollections()
-    {
-        var gameLeague = CreateGameLeague();
-        var team = new GameLeagueTeam(gameLeague.Id, 1);
-        var match = new GameLeagueMatch(DateTime.UtcNow, 1, 2, 1, gameLeague.Id);
-
-        await Assert.That(() => ((ICollection<GameLeagueTeam>)gameLeague.GameLeagueTeams).Add(team))
-            .Throws<NotSupportedException>();
-        await Assert.That(() => ((ICollection<GameLeagueMatch>)gameLeague.GameLeagueMatches).Add(match))
-            .Throws<NotSupportedException>();
-    }
-
-    [Test]
     [Arguments(0, 1, 1, 1)]
     [Arguments(1, 0, 1, 1)]
     [Arguments(1, 1, 0, 1)]

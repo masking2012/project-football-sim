@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
-using ProjectFootballSim.Leagues.Application.Catalog.Features.GetActiveLeagues;
-using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Seasons;
@@ -16,8 +14,6 @@ internal static class GameSeasonsEndpoints
             [FromRoute] Guid gameId,
             [FromRoute] Guid seasonId,
             CompleteGameSeasonCommandHandler completeGameSeasonCommandHandler,
-            GetActiveLeaguesQueryHandler getActiveLeaguesQueryHandler,
-            CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -29,20 +25,6 @@ internal static class GameSeasonsEndpoints
                 GameId: gameId,
                 SeasonId: seasonId);
             var completeGameSeasonResult = await completeGameSeasonCommandHandler.HandleAsync(completeGameSeasonCommand, cancellationToken).ConfigureAwait(false);
-
-            //TODO: fetch leagues with versions only for the current game
-            var leaguesDtos = await getActiveLeaguesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
-            foreach (var leagueDto in leaguesDtos.Values)
-            {
-                var createGameLeagueCommand = new CreateGameLeagueCommand(
-                    LeagueVersionId: leagueDto.Id,
-                    GameId: gameId,
-                    UserId: userId,
-                    SeasonId: completeGameSeasonResult.Id,
-                    SeasonStartDate: completeGameSeasonResult.StartDate,
-                    PreviousSeasonId: seasonId);
-                await createGameLeagueCommandHandler.HandleAsync(createGameLeagueCommand, cancellationToken).ConfigureAwait(false);
-            }
 
             return Results.Created($"/api/games/{gameId}/seasons/{completeGameSeasonResult.Id}", new CreateGameSeasonResponse(completeGameSeasonResult.Id));
         }).RequireAuthorization();

@@ -3,7 +3,7 @@ using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
-using ProjectFootballSim.Locations.Application.Features.GetCountries;
+using ProjectFootballSim.Locations.Contracts.Features.GetCountries;
 using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
 using System.Security.Claims;
 
@@ -16,7 +16,7 @@ internal static class CalendarEndpoints
         app.MapGet("/api/games/{gameId}/calendar/day", async (
             [FromRoute] Guid gameId,
             GetCalendarDayQueryHandler getCalendarDayQueryHandler,
-            GetCountriesQueryHandler getCountriesQueryHandler,
+            IGetCountriesQueryHandler getCountriesQueryHandler,
             IGetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>

@@ -19,6 +19,7 @@
   <Folder Name="/src/modules/" />
   <Folder Name="/src/modules/Calendar/">
     <Project Path="src/modules/Calendar/Calendar.Application/Calendar.Application.csproj" />
+    <Project Path="src/modules/Calendar/Calendar.Contracts/Calendar.Contracts.csproj" />
     <Project Path="src/modules/Calendar/Calendar.Domain/Calendar.Domain.csproj" />
     <Project Path="src/modules/Calendar/Calendar.Infrastructure/Calendar.Infrastructure.csproj" />
   </Folder>
@@ -34,11 +35,13 @@
   </Folder>
   <Folder Name="/src/modules/Leagues/">
     <Project Path="src/modules/Leagues/Leagues.Application/Leagues.Application.csproj" Id="94e411cc-201b-448a-a1d7-06cca5693a74" />
+    <Project Path="src/modules/Leagues/Leagues.Contracts/Leagues.Contracts.csproj" />
     <Project Path="src/modules/Leagues/Leagues.Domain/Leagues.Domain.csproj" Id="9573d25b-70fb-4d1b-b9b6-b59c66f6792c" />
     <Project Path="src/modules/Leagues/Leagues.Infrastructure/Leagues.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/src/modules/Locations/">
     <Project Path="src/modules/Locations/Locations.Application/Locations.Application.csproj" Id="9847d5f4-89df-4c14-8d0f-969251145f30" />
+    <Project Path="src/modules/Locations/Locations.Contracts/Locations.Contracts.csproj" />
     <Project Path="src/modules/Locations/Locations.Domain/Locations.Domain.csproj" Id="6b56c5e3-1a69-4b6f-ba20-e7321a4a135f" />
     <Project Path="src/modules/Locations/Locations.Infrastructure/Locations.Infrastructure.csproj" Id="23bc63f2-9c04-458c-9c82-731bc1f18bfd" />
   </Folder>

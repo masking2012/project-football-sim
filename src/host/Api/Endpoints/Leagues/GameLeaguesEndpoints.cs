@@ -4,7 +4,6 @@ using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueByVersion
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
-using ProjectFootballSim.Teams.Application.Features.GetTeamsByCountry;
 using System.Security.Claims;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByCountry;
