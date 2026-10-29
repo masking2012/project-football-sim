@@ -42,7 +42,7 @@ internal sealed class SimulateExtraTimeCommandHandlerTests
     }
 
     [Test]
-    public async Task ShouldApplyHomeAdvantageToExtraTimeChancesAsync()
+    public void ShouldApplyHomeAdvantageToExtraTimeChances()
     {
         var possessionCalculator = new Mock<IPossessionCalculator>();
         possessionCalculator

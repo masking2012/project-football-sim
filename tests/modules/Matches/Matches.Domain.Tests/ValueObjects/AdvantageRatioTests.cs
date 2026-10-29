@@ -5,7 +5,7 @@ namespace ProjectFootballSim.Matches.Domain.Tests.ValueObjects;
 internal sealed class AdvantageRatioTests
 {
     [Test]
-    public async Task NeutralShouldHaveValueOfOneAsync()
+    public async Task NeutralShouldHaveValueOfOne()
     {
         await Assert.That(AdvantageRatio.Neutral.Value).IsEqualTo(1.00);
     }
@@ -14,7 +14,7 @@ internal sealed class AdvantageRatioTests
     [Arguments(1.00)]
     [Arguments(1.50)]
     [Arguments(2.00)]
-    public async Task ShouldCreateAdvantageRatioForValueWithinRangeAsync(double value)
+    public async Task ShouldCreateAdvantageRatioForValueWithinRange(double value)
     {
         var ratio = new AdvantageRatio(value);
 
@@ -27,13 +27,13 @@ internal sealed class AdvantageRatioTests
     [Arguments(double.NaN)]
     [Arguments(double.PositiveInfinity)]
     [Arguments(double.NegativeInfinity)]
-    public async Task ShouldThrowWhenValueIsOutOfRangeOrNotFiniteAsync(double value)
+    public async Task ShouldThrowWhenValueIsOutOfRangeOrNotFinite(double value)
     {
         await Assert.That(() => new AdvantageRatio(value)).Throws<ArgumentOutOfRangeException>();
     }
 
     [Test]
-    public async Task ShouldBeEqualWhenValuesAreEqualAsync()
+    public async Task ShouldBeEqualWhenValuesAreEqual()
     {
         var first = new AdvantageRatio(1.5);
         var second = new AdvantageRatio(1.5);
@@ -49,7 +49,7 @@ internal sealed class AdvantageRatioTests
     }
 
     [Test]
-    public async Task ShouldNotBeEqualWhenValuesDifferAsync()
+    public async Task ShouldNotBeEqualWhenValuesDiffer()
     {
         var first = new AdvantageRatio(1.5);
         var second = new AdvantageRatio(1.8);
@@ -63,7 +63,7 @@ internal sealed class AdvantageRatioTests
     }
 
     [Test]
-    public async Task ShouldNotBeEqualToNonAdvantageRatioObjectAsync()
+    public async Task ShouldNotBeEqualToNonAdvantageRatioObject()
     {
         var ratio = new AdvantageRatio(1.5);
         await Assert.That(ratio.Equals((object)1.5)).IsFalse();

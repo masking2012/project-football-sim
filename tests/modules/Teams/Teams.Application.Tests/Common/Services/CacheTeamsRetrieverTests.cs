@@ -34,7 +34,7 @@ internal sealed class CacheTeamsRetrieverTests
     }
 
     [Test]
-    public async Task ShouldReturnNullForUnknownTeamId()
+    public async Task ShouldReturnEmptyForUnknownTeamId()
     {
         var repository = new Mock<IGetTeamsRepository>();
         repository

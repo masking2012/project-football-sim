@@ -5,7 +5,7 @@ namespace ProjectFootballSim.Matches.Domain.Tests.ValueObjects;
 internal sealed class GoalChancesSettingsTests
 {
     [Test]
-    public async Task RegularTimeShouldHaveExpectedValuesAsync()
+    public async Task RegularTimeShouldHaveExpectedValues()
     {
         var settings = GoalChancesSettings.RegularTime;
 
@@ -18,7 +18,7 @@ internal sealed class GoalChancesSettingsTests
     }
 
     [Test]
-    public async Task ExtraTimeShouldHaveExpectedValuesAsync()
+    public async Task ExtraTimeShouldHaveExpectedValues()
     {
         var settings = GoalChancesSettings.ExtraTime;
 
@@ -31,7 +31,7 @@ internal sealed class GoalChancesSettingsTests
     }
 
     [Test]
-    public async Task ShouldBeEqualWhenPresetsAreTheSameAsync()
+    public async Task ShouldBeEqualWhenPresetsAreTheSame()
     {
         var first = GoalChancesSettings.RegularTime;
         var second = GoalChancesSettings.RegularTime;
@@ -47,7 +47,7 @@ internal sealed class GoalChancesSettingsTests
     }
 
     [Test]
-    public async Task ShouldNotBeEqualWhenPresetsDifferAsync()
+    public async Task ShouldNotBeEqualWhenPresetsDiffer()
     {
         var regular = GoalChancesSettings.RegularTime;
         var extra = GoalChancesSettings.ExtraTime;
@@ -61,7 +61,7 @@ internal sealed class GoalChancesSettingsTests
     }
 
     [Test]
-    public async Task ShouldNotBeEqualToNonGoalChancesSettingsObjectAsync()
+    public async Task ShouldNotBeEqualToNonGoalChancesSettingsObject()
     {
         var settings = GoalChancesSettings.RegularTime;
 

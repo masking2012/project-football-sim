@@ -25,7 +25,7 @@ internal sealed class SimulateRegularTimeCommandHandlerTests
     }
 
     [Test]
-    public async Task ShouldPlayGameAsync()
+    public async Task ShouldPlayGame()
     {
         var home = new MatchTeamDto(1, 80, 70, 75);
         var away = new MatchTeamDto(2, 75, 65, 70);
@@ -67,7 +67,7 @@ internal sealed class SimulateRegularTimeCommandHandlerTests
     }
 
     [Test]
-    public async Task ShouldRejectNullCommandAsync()
+    public async Task ShouldRejectNullCommand()
     {
         var exception = Assert.Throws<ArgumentNullException>(() => _sut.Handle(null!));
 
@@ -76,7 +76,7 @@ internal sealed class SimulateRegularTimeCommandHandlerTests
     }
 
     [Test]
-    public async Task ShouldApplyHomeAdvantageToHomeChancesAsync()
+    public void ShouldApplyHomeAdvantageToHomeChances()
     {
         var possessionCalculator = new Mock<IPossessionCalculator>();
         possessionCalculator

@@ -17,7 +17,7 @@ internal sealed class SimulatePenaltyShootoutCommandHandlerTests
     }
 
     [Test]
-    public async Task ShouldPlayPenaltyAsync()
+    public async Task ShouldPlayPenalty()
     {
         var home = new MatchTeamDto(1, 80, 70, 75);
         var away = new MatchTeamDto(2, 75, 65, 70);
@@ -34,7 +34,7 @@ internal sealed class SimulatePenaltyShootoutCommandHandlerTests
     }
 
     [Test]
-    public async Task ShouldStopAfterFifthHomeKickClinchesShootoutAsync()
+    public async Task ShouldStopAfterFifthHomeKickClinchesShootout()
     {
         var home = new MatchTeamDto(1, 80, 70, 75);
         var away = new MatchTeamDto(2, 75, 65, 70);
@@ -51,7 +51,7 @@ internal sealed class SimulatePenaltyShootoutCommandHandlerTests
     }
 
     [Test]
-    public async Task ShouldStopAfterAwayTeamClinchesShootoutAsync()
+    public async Task ShouldStopAfterAwayTeamClinchesShootout()
     {
         var home = new MatchTeamDto(1, 80, 70, 75);
         var away = new MatchTeamDto(2, 75, 65, 70);
@@ -67,7 +67,7 @@ internal sealed class SimulatePenaltyShootoutCommandHandlerTests
     }
 
     [Test]
-    public async Task ShouldResolveTiedShootoutInSuddenDeathAsync()
+    public async Task ShouldResolveTiedShootoutInSuddenDeath()
     {
         var home = new MatchTeamDto(1, 80, 70, 75);
         var away = new MatchTeamDto(2, 75, 65, 70);
