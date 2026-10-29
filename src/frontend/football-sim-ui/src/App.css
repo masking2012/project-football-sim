@@ -311,7 +311,7 @@
 }
 
 .nav-link {
-  padding: 0.55rem 1.4rem;
+  padding: 0.55rem 1.2rem;
   font-size: 0.9rem;
   font-weight: 600;
   color: #7a9cc8;
@@ -1067,6 +1067,8 @@
 }
 
 .nav-leagues-toggle {
+  display: inline-flex;
+  align-items: center;
   color: #7a9cc8;
   background: transparent;
   font: inherit;
@@ -1075,9 +1077,12 @@
 
 .nav-chevron,
 .league-country-chevron {
+  display: inline-block;
   margin-left: 0.35rem;
   color: #4a9eff;
   font-size: 1rem;
+  line-height: 1;
+  vertical-align: middle;
 }
 
 .league-menu {

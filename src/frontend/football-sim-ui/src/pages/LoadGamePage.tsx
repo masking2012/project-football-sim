@@ -36,7 +36,7 @@ export function LoadGamePage() {
       return;
     }
 
-    loadSelectedGame();
+    void loadSelectedGame();
   }
 
   async function loadSelectedGame() {

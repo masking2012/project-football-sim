@@ -82,8 +82,7 @@ export function GameProvider({ children }: { children: React.ReactNode }) {
 
   const loadGame = useCallback(async (id: string) => {
     selectGame(id);
-    await refreshSeason(id);
-  }, [refreshSeason, selectGame]);
+  }, [selectGame]);
 
   const saveCurrentGame = useCallback(async (slotId: number, name: string) => {
     if (!gameId) return;

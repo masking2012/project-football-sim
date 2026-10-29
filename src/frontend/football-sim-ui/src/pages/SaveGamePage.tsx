@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 import { useGame } from '../context/GameContext';
@@ -26,11 +26,6 @@ export function SaveGamePage() {
   const savesBySlot = useMemo(() => {
     return new Map(saves.map((save) => [save.slotId, save]));
   }, [saves]);
-
-  useEffect(() => {
-    const selectedSave = savesBySlot.get(selectedSlotId);
-    setSlotName(selectedSave?.name ?? '');
-  }, [selectedSlotId, savesBySlot]);
 
   function handleSave() {
     const name = slotName.trim();
@@ -82,7 +77,7 @@ export function SaveGamePage() {
               key={slotId}
               type="button"
               className={`save-slot${selectedSlotId === slotId ? ' save-slot--selected' : ''}`}
-              onClick={() => { setSaveSuccess(null); setSelectedSlotId(slotId); }}
+              onClick={() => { setSaveSuccess(null); setSelectedSlotId(slotId); setSlotName(save?.name ?? ''); }}
             >
               <span className="save-slot-title">Slot {slotId}</span>
               {save ? (

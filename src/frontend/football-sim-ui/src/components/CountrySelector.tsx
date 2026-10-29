@@ -16,7 +16,7 @@ export function CountrySelector({ label, countries, selectedId, onChange }: Prop
       <select
         id={selectId}
         className="selector-select"
-        value={selectedId ?? ''}
+        value={selectedId}
         onChange={(e) => onChange(e.target.value)}
       >
         <option value="">— Pick a country —</option>

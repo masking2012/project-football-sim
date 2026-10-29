@@ -87,12 +87,12 @@ export function NavBar() {
                   aria-expanded={isLeaguesOpen}
                   onClick={() => setIsLeaguesOpen((isOpen) => !isOpen)}
                 >
-                  🏆 Leagues <span className="nav-chevron">⌄</span>
+                  🏆 Leagues <span className="nav-chevron">▾</span>
                 </button>
                 {isLeaguesOpen && (
                   <div className="league-menu" role="menu">
                     {leaguesError && <p className="league-menu-message">{leaguesError}</p>}
-                    {!leaguesError && countries.length === 0 && <p className="league-menu-message">No leagues available.</p>}
+                    {!leaguesError && leaguesByCountry.size === 0 && <p className="league-menu-message">No leagues available.</p>}
                     {countries.map((country) => {
                       const countryId = String(country.id);
                       const countryLeagues = leaguesByCountry.get(countryId) ?? [];

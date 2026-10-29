@@ -118,13 +118,6 @@ export interface CompleteSeasonResponse {
   id: string;
 }
 
-export interface GameSave {
-  gameId: string;
-  slotId: number;
-  name: string;
-  createdAtUtc: string;
-}
-
 const BASE = '/api';
 let countriesRequest: Promise<CountryDto[]> | null = null;
 let countriesCache: CountryDto[] | null = null;
@@ -171,12 +164,15 @@ export async function fetchLeagues(gameId: string): Promise<LeagueDto[]> {
     const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/leagues`, { headers: authHeaders() });
     return handleResponse<LeagueDto[]>(res);
   })();
+  const generation = cacheGeneration;
   leaguesRequest = request;
   leaguesRequestGameId = gameId;
   request.then(
     (leagues) => {
-      leaguesCache = leagues;
-      leaguesCacheGameId = gameId;
+      if (generation === cacheGeneration) {
+        leaguesCache = leagues;
+        leaguesCacheGameId = gameId;
+      }
       clearLeaguesRequest(request);
     },
     () => clearLeaguesRequest(request),
