@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Locations.Infrastructure\Locations.Infrastructure.csproj" />
+    <ProjectReference Include="..\Locations.Contracts\Locations.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

@@ -18,9 +18,9 @@
     {
         "id": 10003,
         "name": "LNZ Cherkasy",
-        "attack": 57,
-        "midfield": 62,
-        "defence": 64,
+        "attack": 56,
+        "midfield": 61,
+        "defence": 63,
         "countryId": 1
     },
     {
@@ -50,9 +50,9 @@
     {
         "id": 10007,
         "name": "Kryvbas",
-        "attack": 58,
-        "midfield": 53,
-        "defence": 58,
+        "attack": 57,
+        "midfield": 52,
+        "defence": 57,
         "countryId": 1
     },
     {
