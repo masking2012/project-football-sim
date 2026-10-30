@@ -36,7 +36,7 @@ internal sealed class AdvanceCalendarDayCommandHandler(
                 cancellationToken)
             .ConfigureAwait(false);
 
-        if (queryResult.MatchesExists)
+        if (!queryResult.MatchesExists)
             gameCalendar.UpdateDayStatus(CalendarDayStatus.Completed);
 
         await repository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
