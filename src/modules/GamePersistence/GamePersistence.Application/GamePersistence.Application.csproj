@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\shared\Shared.Features\Shared.Features.csproj" />
+    <ProjectReference Include="..\GamePersistence.Contracts\GamePersistence.Contracts.csproj" />
     <ProjectReference Include="..\GamePersistence.Infrastructure\GamePersistence.Infrastructure.csproj" />
   </ItemGroup>
 

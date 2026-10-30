@@ -1,13 +1,24 @@
 using Microsoft.Extensions.Logging;
+using ProjectFootballSim.GamePersistence.Contracts.Events;
+using ProjectFootballSim.GamePersistence.Contracts.Features.CreateGame;
+using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.GamePersistence.Application.Features.CreateGame;
 
-public sealed class CreateGameCommandHandler(ILogger<CreateGameCommandHandler> logger)
+internal sealed class CreateGameCommandHandler(
+    ILogger<CreateGameCommandHandler> logger,
+    IEventPublisher eventPublisher)
+    : ICreateGameCommandHandler
 {
-    public Guid Handle(CreateGameCommand command)
+    public async Task<Guid> HandleAsync(CreateGameCommand command, CancellationToken cancellationToken)
     {
         var gameId = Guid.NewGuid();
-        Log.NewGameCreated(logger, command.UserId, gameId);
+        CreateGameLogs.NewGameCreated(logger, command.UserId, gameId);
+
+        await eventPublisher.PublishAsync(new GameCreatedEvent(
+            UserId: command.UserId,
+            GameId: gameId), cancellationToken).ConfigureAwait(false);
+
         return gameId;
     }
 }

@@ -25,6 +25,7 @@
   </Folder>
   <Folder Name="/src/modules/GamePersistence/">
     <Project Path="src/modules/GamePersistence/GamePersistence.Application/GamePersistence.Application.csproj" />
+    <Project Path="src/modules/GamePersistence/GamePersistence.Contracts/GamePersistence.Contracts.csproj" />
     <Project Path="src/modules/GamePersistence/GamePersistence.Domain/GamePersistence.Domain.csproj" />
     <Project Path="src/modules/GamePersistence/GamePersistence.Infrastructure/GamePersistence.Infrastructure.csproj" />
   </Folder>
