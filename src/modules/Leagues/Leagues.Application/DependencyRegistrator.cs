@@ -1,23 +1,25 @@
 using Microsoft.Extensions.DependencyInjection;
+using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
 using ProjectFootballSim.Leagues.Application.Catalog.Features.GetActiveLeagues;
 using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueByVersionId;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
+using ProjectFootballSim.Leagues.Application.GameState.EventListeners;
+using ProjectFootballSim.Leagues.Application.GameState.Features.CheckGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
-using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
 using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
-using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
-using ProjectFootballSim.Shared.Features.Events;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Contracts.CatalogFeatures.GetActiveLeagues;
-using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CheckGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueFixtures;
-using ProjectFootballSim.Leagues.Application.GameState.EventListeners;
-using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
+using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.Leagues.Application;
 
@@ -29,6 +31,7 @@ public static class DependencyRegistrator
         services.AddScoped<IGameLeaguesService, GameLeagueService>();
 
         services.AddScoped<IGetActiveLeaguesQueryHandler, GetActiveLeaguesQueryHandler>();
+        services.AddScoped<ICheckGameLeagueMatchesByDateQueryHandler, CheckGameLeagueMatchesByDateQueryHandler>();
         services.AddScoped<GetLeagueByVersionIdQueryHandler>();
 
         services.AddScoped<IGetGameLeagueStandingsQueryHandler, GetGameLeagueStandingsQueryHandler>();

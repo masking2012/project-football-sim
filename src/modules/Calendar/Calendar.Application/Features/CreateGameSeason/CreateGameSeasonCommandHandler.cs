@@ -8,9 +8,9 @@ using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 
-public sealed class CreateGameSeasonCommandHandler(
+internal sealed class CreateGameSeasonCommandHandler(
     ILogger<CreateGameSeasonCommandHandler> logger,
-    IGetGameCalendarRepository getGameCalendarRepository,
+    IGameCalendarRepository getGameCalendarRepository,
     ICreateGameSeasonRepository createGameSeasonRepository,
     IEventPublisher eventPublisher) : ICreateGameSeasonCommandHandler
 {
@@ -79,7 +79,7 @@ public sealed class CreateGameSeasonCommandHandler(
     private async Task ValidateStartDateAsync(CreateGameSeasonCommand command, DateTime startDate, CancellationToken cancellationToken)
     {
         GameCalendarDto? gameCalendar = await getGameCalendarRepository
-            .GetAsync(userId: command.UserId, gameId: command.GameId, cancellationToken)
+            .GetCurrentCalendarAsync(userId: command.UserId, gameId: command.GameId, cancellationToken)
             .ConfigureAwait(false);
 
         if (gameCalendar is null)

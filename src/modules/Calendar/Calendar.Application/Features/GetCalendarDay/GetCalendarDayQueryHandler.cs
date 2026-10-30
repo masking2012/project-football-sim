@@ -6,14 +6,14 @@ using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatche
 namespace ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
 
 internal sealed class GetCalendarDayQueryHandler(
-    IGetGameCalendarRepository gameCalendarRepository,
+    IGameCalendarRepository gameCalendarRepository,
     IGetGameLeagueMatchesByDateQueryHandler getGameLeagueMatchesByDateQueryHandler)
     : IGetCalendarDayQueryHandler
 {
     public async Task<GetCalendarDayQueryResult> HandleAsync(GetCalendarDayQuery query, CancellationToken cancellationToken)
     {
         GameCalendarDto? gameCalendar = await gameCalendarRepository
-            .GetAsync(query.UserId, query.GameId, cancellationToken)
+            .GetCurrentCalendarAsync(query.UserId, query.GameId, cancellationToken)
             .ConfigureAwait(false);
         if (gameCalendar is null)
             throw new InvalidOperationException(

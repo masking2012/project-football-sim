@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
-using ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
-using ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
+using ProjectFootballSim.Calendar.Contracts.Features.AdvanceCalendarDay;
 using ProjectFootballSim.Calendar.Contracts.Features.GetCalendarDay;
+using ProjectFootballSim.Calendar.Contracts.Features.SimulateCalendarDay;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Calendar;
@@ -48,7 +48,7 @@ internal static class CalendarEndpoints
 
         app.MapPost("/api/games/{gameId}/calendar/simulate", async (
             [FromRoute] Guid gameId,
-            SimulateCalendarDayCommandHandler simulateCalendarDayCommandHandler,
+            ISimulateCalendarDayCommandHandler simulateCalendarDayCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -63,7 +63,7 @@ internal static class CalendarEndpoints
 
         app.MapPost("/api/games/{gameId}/calendar/proceed", async (
             [FromRoute] Guid gameId,
-            AdvanceCalendarDayCommandHandler advanceCalendarDayCommandHandler,
+            IAdvanceCalendarDayCommandHandler advanceCalendarDayCommandHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {

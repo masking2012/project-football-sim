@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
+using ProjectFootballSim.Leagues.Application.GameState.Features.CheckGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
@@ -43,6 +44,7 @@ public static class DependencyRegistrator
         services.AddScoped<IGetGameLeagueStandingsRepository, GetGameLeagueStandingsRepository>();
         services.AddScoped<IGetGameLeagueMatchesRepository, GetGameLeagueMatchesRepository>();
         services.AddScoped<IGetGameLeagueMatchesByDateRepository, GetGameLeagueMatchesByDateRepository>();
+        services.AddScoped<ICheckGameLeagueMatchesRepository, CheckGameLeagueMatchesRepository>();
 
         return services;
     }

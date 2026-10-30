@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Logging;
-using ProjectFootballSim.GamePersistence.Contracts.Events;
 using ProjectFootballSim.GamePersistence.Contracts.Features.CreateGame;
 using ProjectFootballSim.Shared.Features.Events;
 

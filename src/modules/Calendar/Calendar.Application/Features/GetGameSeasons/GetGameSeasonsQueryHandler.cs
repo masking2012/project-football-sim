@@ -12,12 +12,13 @@ internal sealed class GetGameSeasonsQueryHandler(IGetGameSeasonsRepository repos
         if (gameSeasons.Count == 0)
             throw new InvalidOperationException($"No game seasons found for UserId: {query.UserId}, GameId: {query.GameId}");
 
-        return gameSeasons.Select(s => new GetGameSeasonDto(
-            Id: s.Id,
-            StartDate: s.StartDate,
-            EndDate: s.EndDate,
-            Order: s.Order,
-            IsCurrent: s.IsCurrent))
+        return gameSeasons
+            .Select(s => new GetGameSeasonDto(
+                Id: s.Id,
+                StartDate: s.StartDate,
+                EndDate: s.EndDate,
+                Order: s.Order,
+                IsCurrent: s.IsCurrent))
             .ToList();
     }
 }

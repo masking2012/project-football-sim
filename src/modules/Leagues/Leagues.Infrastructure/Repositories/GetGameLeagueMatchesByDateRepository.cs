@@ -4,7 +4,8 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 
 namespace ProjectFootballSim.Leagues.Infrastructure.Repositories;
 
-internal sealed class GetGameLeagueMatchesByDateRepository(LeaguesDbContext dbContext) : IGetGameLeagueMatchesByDateRepository
+internal sealed class GetGameLeagueMatchesByDateRepository(LeaguesDbContext dbContext)
+    : IGetGameLeagueMatchesByDateRepository
 {
     //TODO: do we need to accept "SeasonId" as a parameter here?
     public async Task<IReadOnlyList<LeagueMatchDto>> GetAsync(Guid userId, Guid gameId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
@@ -12,7 +13,9 @@ internal sealed class GetGameLeagueMatchesByDateRepository(LeaguesDbContext dbCo
         var matches = await dbContext.GameLeagues
             .AsNoTracking()
             .Where(gl => gl.UserId == userId && gl.GameId == gameId)
-            .Join(dbContext.GameLeagueMatches.AsNoTracking(),
+            .Join(
+                dbContext.GameLeagueMatches.AsNoTracking()
+                    .Where(m => m.Date < endDate && m.Date >= startDate),
                 league => league.Id,
                 match => match.GameLeagueId,
                 (league, match) => new { match, league.LeagueVersionId })

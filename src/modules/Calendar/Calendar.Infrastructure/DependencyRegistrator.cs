@@ -28,7 +28,8 @@ public static class DependencyRegistrator
         services.AddScoped<ICreateGameCalendarRepository, CreateGameCalendarRepository>();
         services.AddScoped<ICreateGameSeasonRepository, CreateGameSeasonRepository>();
         services.AddScoped<IGetGameSeasonsRepository, GetGameSeasonsRepository>();
-        services.AddScoped<IGetGameCalendarRepository, GetGameCalendarRepository>();
+        services.AddScoped<IGameCalendarRepository, GameCalendarRepository>();
+        services.AddScoped<IGameCalendarWriteRepository, GameCalendarWriteRepository>();
 
         return services;
     }
