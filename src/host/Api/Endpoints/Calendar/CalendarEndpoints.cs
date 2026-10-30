@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
-using ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
-using ProjectFootballSim.Locations.Contracts.Features.GetCountries;
-using ProjectFootballSim.Teams.Contracts.Features.GetTeamsByIds;
+using ProjectFootballSim.Calendar.Contracts.Features.GetCalendarDay;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Calendar;
@@ -15,9 +13,7 @@ internal static class CalendarEndpoints
     {
         app.MapGet("/api/games/{gameId}/calendar/day", async (
             [FromRoute] Guid gameId,
-            GetCalendarDayQueryHandler getCalendarDayQueryHandler,
-            IGetCountriesQueryHandler getCountriesQueryHandler,
-            IGetTeamsByIdsQueryHandler getTeamsByIdsQueryHandler,
+            IGetCalendarDayQueryHandler getCalendarDayQueryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -27,36 +23,25 @@ internal static class CalendarEndpoints
             var result = await getCalendarDayQueryHandler
                 .HandleAsync(new GetCalendarDayQuery(UserId: userId, GameId: gameId, Date: null), cancellationToken)
                 .ConfigureAwait(false);
-            var countries = await getCountriesQueryHandler.HandleAsync(cancellationToken).ConfigureAwait(false);
 
-            if (!result.LeagueMatches.Any())
-                return Results.Ok(new CalendarDayResponse(
-                    Date: result.Date,
-                    DayStatus: result.DayStatus,
-                    LeagueMatches: Array.Empty<LeagueMatchResponse>()
-                ));
-
-            var teams = await getTeamsByIdsQueryHandler
-                .HandleAsync(result.LeagueMatches.SelectMany(x => new[] { x.HomeTeamId, x.AwayTeamId }).Distinct().ToList(), cancellationToken)
-                .ConfigureAwait(false);
-
+            //TODO: change LeagueMatchResponse to Dto (?)
             return Results.Ok(new CalendarDayResponse(
                 Date: result.Date,
                 DayStatus: result.DayStatus,
-                LeagueMatches: result.LeagueMatches.Select(x => new LeagueMatchResponse(
-                    Id: x.Id,
-                    HomeTeamId: x.HomeTeamId,
-                    HomeTeamName: teams[x.HomeTeamId].Name,
-                    AwayTeamId: x.AwayTeamId,
-                    AwayTeamName: teams[x.AwayTeamId].Name,
-                    HomeTeamScore: x.HomeTeamScore,
-                    AwayTeamScore: x.AwayTeamScore,
-                    Round: x.Round,
-                    LeagueName: x.LeagueName,
-                    LeagueId: x.LeagueId,
-                    CountryId: x.CountryId,
-                    CountryName: countries.Single(c => c.Id == x.CountryId).Name,
-                    Order: x.Order
+                LeagueMatches: result.LeagueMatches.Select(m => new LeagueMatchResponse(
+                    Id: m.Id,
+                    HomeTeamId: m.HomeTeamId,
+                    HomeTeamName: m.HomeTeamName,
+                    AwayTeamId: m.AwayTeamId,
+                    AwayTeamName: m.AwayTeamName,
+                    HomeTeamScore: m.HomeTeamScore,
+                    AwayTeamScore: m.AwayTeamScore,
+                    Round: m.LeagueRound,
+                    LeagueName: m.LeagueName,
+                    LeagueId: m.LeagueVersionId,
+                    CountryId: m.CountryId,
+                    CountryName: m.CountryName,
+                    Order: m.LeagueOrder
                 ))
             ));
         }).RequireAuthorization();

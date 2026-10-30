@@ -10,6 +10,7 @@ using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
 using ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
 using ProjectFootballSim.Calendar.Contracts.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
+using ProjectFootballSim.Calendar.Contracts.Features.GetCalendarDay;
 using ProjectFootballSim.Calendar.Contracts.Features.GetGameSeasons;
 using ProjectFootballSim.GamePersistence.Contracts.Features.CreateGame;
 using ProjectFootballSim.Shared.Features.Events;
@@ -27,7 +28,7 @@ public static class DependencyRegistrator
         services.AddScoped<SimulateCalendarDayCommandHandler>();
 
         services.AddScoped<ICreateGameCalendarCommandHandler, CreateGameCalendarCommandHandler>();
-        services.AddScoped<GetCalendarDayQueryHandler>();
+        services.AddScoped<IGetCalendarDayQueryHandler, GetCalendarDayQueryHandler>();
 
         services.AddScoped<ICreateGameSeasonCommandHandler, CreateGameSeasonCommandHandler>();
         services.AddScoped<CompleteGameSeasonCommandHandler>();

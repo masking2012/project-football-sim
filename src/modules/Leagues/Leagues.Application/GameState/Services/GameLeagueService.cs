@@ -4,11 +4,11 @@ using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Services;
 
-internal sealed class GameLeagueCatalog(
+internal sealed class GameLeagueService(
     IGameLeaguesRepository repository,
-    ICachedLeaguesRetriever leaguesRetriever) : IGameLeaguesRetriever
+    ICachedLeaguesRetriever leaguesRetriever) : IGameLeaguesService
 {
-    public async Task<IReadOnlyList<LeagueDto>> GetLeaguesAsync(
+    public async Task<IReadOnlyList<LeagueDto>> GetGameLeaguesAsync(
         Guid userId,
         Guid gameId,
         CancellationToken cancellationToken)

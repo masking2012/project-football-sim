@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
+namespace ProjectFootballSim.Calendar.Contracts.Features.GetCalendarDay;
 
 public sealed record GetCalendarDayQuery(
     Guid UserId,

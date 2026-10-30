@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
+namespace ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatchesByDate;
 
 public sealed record GetGameLeagueMatchesByDateQuery(
     Guid UserId,

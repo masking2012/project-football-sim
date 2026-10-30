@@ -1,19 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ProjectFootballSim.Shared.Data.Entities.Leagues;
-using ProjectFootballSim.Shared.Data.Entities.Locations;
+using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
+using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
+using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 using ProjectFootballSim.Leagues.Infrastructure.Repositories;
+using ProjectFootballSim.Shared.Data.Entities.Leagues;
+using ProjectFootballSim.Shared.Data.Entities.Locations;
 using DataLeagueFormatType = ProjectFootballSim.Shared.Data.Entities.Leagues.LeagueFormatType;
 using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.Enums.LeagueStageType;
-using ProjectFootballSim.Leagues.Application.GameState.Services;
-using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
-using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
-using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
-using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -41,6 +42,7 @@ public static class DependencyRegistrator
 
         services.AddScoped<IGetGameLeagueStandingsRepository, GetGameLeagueStandingsRepository>();
         services.AddScoped<IGetGameLeagueMatchesRepository, GetGameLeagueMatchesRepository>();
+        services.AddScoped<IGetGameLeagueMatchesByDateRepository, GetGameLeagueMatchesByDateRepository>();
 
         return services;
     }

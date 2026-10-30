@@ -4,11 +4,11 @@ using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 
 public sealed class GetGameLeaguesQueryHandler(
-    IGameLeaguesRetriever gameLeagueCatalog)
+    IGameLeaguesService gameLeagueCatalog)
 {
     public async Task<IReadOnlyList<LeagueDto>> HandleAsync(
         GetGameLeaguesQuery query,
         CancellationToken cancellationToken) => await gameLeagueCatalog
-            .GetLeaguesAsync(query.UserId, query.GameId, cancellationToken)
+            .GetGameLeaguesAsync(query.UserId, query.GameId, cancellationToken)
             .ConfigureAwait(false);
 }
