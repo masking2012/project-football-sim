@@ -1,11 +1,12 @@
-using ProjectFootballSim.Calendar.Contracts;
+using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
+using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Contracts.CatalogFeatures.GetActiveLeagues;
 using ProjectFootballSim.Shared.Features.Events;
 
-namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
+namespace ProjectFootballSim.Leagues.Application.GameState.EventListeners;
 
-public sealed class GameSeasonStartedListener(
+internal sealed class GameSeasonStartedEventListener(
     IGetActiveLeaguesQueryHandler getActiveLeaguesQueryHandler,
     CreateGameLeagueCommandHandler createGameLeagueCommandHandler,
     IGameLeagueWriteRepository writeRepository) : IEventListener<GameSeasonStartedEvent>

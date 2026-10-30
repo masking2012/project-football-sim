@@ -7,7 +7,7 @@ public sealed class GameCalendar
     public Guid UserId { get; }
     public Guid GameId { get; }
     public DateTime CurrentDate { get; private set; }
-    public CalendarDayStatus DayStatus { get; private set; } 
+    public CalendarDayStatus DayStatus { get; private set; }
 
     public GameCalendar(Guid userId, Guid gameId, DateTime currentDate)
     {

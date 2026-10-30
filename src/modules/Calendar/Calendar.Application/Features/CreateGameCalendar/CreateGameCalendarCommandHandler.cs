@@ -1,15 +1,12 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProjectFootballSim.Calendar.Domain.Entities;
-using ProjectFootballSim.Calendar.Infrastructure.Database;
+using ProjectFootballSim.Calendar.Contracts.Features.CreateGameCalendar;
 using ProjectFootballSim.Shared.Data.Entities.Seasons;
-using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 
-public sealed class CreateGameCalendarCommandHandler(
+internal sealed class CreateGameCalendarCommandHandler(
     ILogger<CreateGameCalendarCommandHandler> logger,
-    CalendarDbContext dbContext)
+    ICreateGameCalendarRepository repository) : ICreateGameCalendarCommandHandler
 {
     public async Task HandleAsync(
         CreateGameCalendarCommand command,
@@ -20,14 +17,12 @@ public sealed class CreateGameCalendarCommandHandler(
 
         try
         {
-            var gameCalendar = new GameCalendar(command.UserId, command.GameId, initialDate);
-            dbContext.GameCalendars.Add(gameCalendar);
-            await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            Log.GameCalendarCreated(logger, command.UserId, command.GameId);
+            await repository.CreateAndSaveAsync(command.UserId, command.GameId, initialDate, cancellationToken).ConfigureAwait(false);
+            CreateGameCalendarLogs.Created(logger, command.UserId, command.GameId);
         }
-        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+        catch (GameCalendarExistsException ex)
         {
-            Log.GameCalendarExists(logger, command.UserId, command.GameId, ex);
+            CreateGameCalendarLogs.Exists(logger, command.UserId, command.GameId, ex.InnerException);
             throw;
         }
     }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.GamePersistence.Application.Features.LoadGames;
 using ProjectFootballSim.GamePersistence.Application.Features.SaveGame;
+using ProjectFootballSim.GamePersistence.Contracts.Features.CreateGame;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.GamePersistence;
@@ -12,13 +13,14 @@ internal static class GamePersistenceEndpoints
     {
         app.MapPost("/api/games", async (
             ClaimsPrincipal user,
-            GameInitializationService service,
+            ICreateGameCommandHandler commandHandler,
             CancellationToken cancellationToken) =>
         {
             if (!user.TryGetUserId(out var userId))
                 return Results.Unauthorized();
 
-            var response = await service.InitAsync(userId, cancellationToken).ConfigureAwait(false);
+            var gameId = await commandHandler.HandleAsync(new CreateGameCommand(userId), cancellationToken).ConfigureAwait(false);
+            var response = new CreateGameResponse(gameId);
 
             var createdUri = new Uri($"/api/games/{response.GameId}", UriKind.Relative);
             return Results.Created(createdUri, response);

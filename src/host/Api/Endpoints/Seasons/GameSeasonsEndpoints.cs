@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
 using ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
+using ProjectFootballSim.Calendar.Contracts.Features.GetGameSeasons;
 using System.Security.Claims;
 
 namespace ProjectFootballSim.Api.Endpoints.Seasons;
@@ -31,7 +32,7 @@ internal static class GameSeasonsEndpoints
 
         app.MapGet("/api/games/{gameId}/seasons", async (
             [FromRoute] Guid gameId,
-            GetGameSeasonsQueryHandler queryHandler,
+            IGetGameSeasonsQueryHandler queryHandler,
             ClaimsPrincipal user,
             CancellationToken cancellationToken) =>
         {
@@ -41,6 +42,7 @@ internal static class GameSeasonsEndpoints
             var query = new GetGameSeasonsQuery(GameId: gameId, UserId: userId);
             var gameSeasons = await queryHandler.HandleAsync(query, cancellationToken).ConfigureAwait(false);
 
+            //TODO: remove GameSeasonItemResponse once we have a proper mapping layer in place
             return Results.Ok(
                 gameSeasons
                     .Select(s => new GameSeasonItemResponse(Id: s.Id, StartDate: s.StartDate, EndDate: s.EndDate, IsCurrent: s.IsCurrent)));

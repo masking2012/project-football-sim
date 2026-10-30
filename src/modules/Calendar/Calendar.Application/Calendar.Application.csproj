@@ -1,11 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\shared\Shared.Data\Shared.Data.csproj" />
     <ProjectReference Include="..\..\..\shared\Shared.Features\Shared.Features.csproj" />
+    <ProjectReference Include="..\..\GamePersistence\GamePersistence.Contracts\GamePersistence.Contracts.csproj" />
     <ProjectReference Include="..\..\Leagues\Leagues.Application\Leagues.Application.csproj" />
     <ProjectReference Include="..\Calendar.Contracts\Calendar.Contracts.csproj" />
-    <ProjectReference Include="..\Calendar.Infrastructure\Calendar.Infrastructure.csproj" />
+    <ProjectReference Include="..\Calendar.Domain\Calendar.Domain.csproj" />
   </ItemGroup>
 
 </Project>
