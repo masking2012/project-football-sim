@@ -43,7 +43,7 @@ internal sealed class CompleteGameSeasonCommandHandler(
         if (currentSeason.Id != command.SeasonId)
             throw new InvalidOperationException("Current game season doesn't match the requested season");
 
-        if (gameCalendar.CurrentDate < currentSeason.EndDate)
-            throw new InvalidOperationException("Game calendar day haven't reach the end of the season");
+        if (gameCalendar.CurrentDate != currentSeason.EndDate)
+            throw new InvalidOperationException("Cannot complete the season unless the current calendar date equals the season end date.");
     }
 }

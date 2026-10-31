@@ -32,7 +32,6 @@ export function HomePage() {
   const [day, setDay] = useState<CalendarDayResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActing, setIsActing] = useState(false);
-  const [isSeasonCompleted, setIsSeasonCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const matchesByLeague = useMemo(() => {
@@ -94,6 +93,9 @@ export function HomePage() {
   const isSeasonEnd = day !== null && currentSeason !== null
     && day.date.slice(0, 10) === currentSeason.endDate.slice(0, 10);
 
+  const isSeasonCompleted = day !== null && currentSeason !== null
+    && day.date.slice(0, 10) > currentSeason.endDate.slice(0, 10);
+
   async function handleDayAction() {
     if (!gameId || !day || isActing) return;
 
@@ -105,7 +107,6 @@ export function HomePage() {
       } else if (day.dayStatus === 'Completed' && isSeasonEnd && currentSeason) {
         await completeSeason(gameId, currentSeason.id);
         resetGameSessionCache();
-        setIsSeasonCompleted(true);
         await refreshSeason(gameId);
       } else if (day.dayStatus === 'Completed') {
         await advanceCalendarDay(gameId);
@@ -127,7 +128,6 @@ export function HomePage() {
       await startNewSeason(gameId);
       resetGameSessionCache();
       await refreshSeason(gameId);
-      setIsSeasonCompleted(false);
       await loadDay();
     } catch (err) {
       handleError(err);
