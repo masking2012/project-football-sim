@@ -1,33 +1,33 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using ProjectFootballSim.Calendar.Contracts;
+using ProjectFootballSim.Calendar.Application.Common.Interfaces;
+using ProjectFootballSim.Calendar.Application.Common.Models;
+using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Domain.Entities;
-using ProjectFootballSim.Calendar.Infrastructure.Database;
 using ProjectFootballSim.Shared.Data.Entities.Seasons;
-using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
 using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 
-public sealed class CreateGameSeasonCommandHandler(
+internal sealed class CreateGameSeasonCommandHandler(
     ILogger<CreateGameSeasonCommandHandler> logger,
-    CalendarDbContext dbContext,
-    IEventPublisher eventPublisher)
+    IGameCalendarRepository getGameCalendarRepository,
+    ICreateGameSeasonRepository createGameSeasonRepository,
+    IEventPublisher eventPublisher) : ICreateGameSeasonCommandHandler
 {
     public async Task<CreateGameSeasonCommandResult> HandleAsync(
         CreateGameSeasonCommand command,
         CancellationToken cancellationToken)
     {
-        GameSeason? lastSeason = await dbContext.GameSeasons
-            .Where(s => s.UserId == command.UserId && s.GameId == command.GameId && s.IsCurrent)
-            .SingleOrDefaultAsync(cancellationToken).ConfigureAwait(false);
+        GameSeason? currentSeason = await createGameSeasonRepository.GetCurrentSeasonAsync(command.UserId, command.GameId, cancellationToken).ConfigureAwait(false);
         GameSeason newSeason;
 
-        if (lastSeason is null)
+        if (currentSeason is null)
         {
             var seasonDefinition = SeasonsDataProvider.GetSeasonDefinition();
             DateTime startDate = new DateTime(seasonDefinition.FirstSeasonYear, seasonDefinition.StartSeasonMonth, seasonDefinition.StartSeasonDay);
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
+
+            await ValidateStartDateAsync(command, startDate, cancellationToken).ConfigureAwait(false);
 
             newSeason = new GameSeason(
                 userId: command.UserId,
@@ -35,32 +35,34 @@ public sealed class CreateGameSeasonCommandHandler(
                 startDate: startDate,
                 endDate: endDate,
                 order: 1);
-            dbContext.GameSeasons.Add(newSeason);
+            createGameSeasonRepository.Add(newSeason);
         }
         else
         {
-            lastSeason.CloseSeason();
+            currentSeason.CloseSeason();
 
-            DateTime startDate = lastSeason.EndDate.AddDays(1);
+            DateTime startDate = currentSeason.EndDate.AddDays(1);
             DateTime endDate = startDate.AddYears(1).AddDays(-1);
+
+            await ValidateStartDateAsync(command, startDate, cancellationToken).ConfigureAwait(false);
 
             newSeason = new GameSeason(
                 userId: command.UserId,
                 gameId: command.GameId,
                 startDate: startDate,
                 endDate: endDate,
-                order: lastSeason.Order + 1);
-            dbContext.GameSeasons.Add(newSeason);
+                order: currentSeason.Order + 1);
+            createGameSeasonRepository.Add(newSeason);
         }
 
         try
         {
-            await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
-            Log.GameSeasonCreated(logger, newSeason.Id, newSeason.UserId, newSeason.GameId);
+            await createGameSeasonRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+            CreateGameSeasonLogs.Created(logger, newSeason.Id, newSeason.UserId, newSeason.GameId);
         }
-        catch (DbUpdateException ex) when (ex.IsUniqueViolation())
+        catch (GameSeasonExistsException ex)
         {
-            Log.GameSeasonExists(logger, newSeason.UserId, newSeason.GameId, newSeason.Order, ex);
+            CreateGameSeasonLogs.Exists(logger, newSeason.UserId, newSeason.GameId, newSeason.Order, ex.InnerException);
             throw;
         }
 
@@ -69,8 +71,26 @@ public sealed class CreateGameSeasonCommandHandler(
             GameId: newSeason.GameId,
             SeasonId: newSeason.Id,
             StartDate: newSeason.StartDate,
-            PreviousSeasonId: lastSeason?.Id), cancellationToken).ConfigureAwait(false);
+            PreviousSeasonId: currentSeason?.Id), cancellationToken).ConfigureAwait(false);
 
         return new CreateGameSeasonCommandResult(newSeason.Id, newSeason.StartDate, newSeason.EndDate);
+    }
+
+    private async Task ValidateStartDateAsync(CreateGameSeasonCommand command, DateTime startDate, CancellationToken cancellationToken)
+    {
+        GameCalendarDto? gameCalendar = await getGameCalendarRepository
+            .GetCurrentCalendarAsync(userId: command.UserId, gameId: command.GameId, cancellationToken)
+            .ConfigureAwait(false);
+
+        if (gameCalendar is null)
+            throw new InvalidOperationException(
+                $"Game calendar not found for user ID '{command.UserId}' and game ID '{command.GameId}'.");
+
+        if (gameCalendar.CurrentDate != startDate)
+            throw new InvalidOperationException(
+                $"Cannot start the season because the current game date '{gameCalendar.CurrentDate}' does not match the season start date '{startDate}'.");
+
+        if (gameCalendar.DayStatus != GameDayStatus.NotStarted)
+            throw new InvalidOperationException("Cannot start the season because the current game day has already started");
     }
 }

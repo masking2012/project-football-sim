@@ -81,7 +81,74 @@ internal sealed class LeagueFixtureGeneratorTests
             CancellationToken.None).ConfigureAwait(false)).Throws<InvalidOperationException>();
     }
 
-    private static LeagueFixtureGenerator CreateGenerator(int legs, int rounds)
+    [Test]
+    public async Task ShouldMirrorFirstLapRoundsWithSwappedVenuesInSecondLap()
+    {
+        var generator = CreateGenerator(legs: 2, rounds: 6);
+
+        var fixtures = await generator.GenerateAsync(
+            leagueVersionId: 101001,
+            gameLeagueId: Guid.NewGuid(),
+            teamIds: [1, 2, 3, 4],
+            seasonStartDate: new DateTime(2026, 1, 1),
+            CancellationToken.None).ConfigureAwait(false);
+
+        var pairingsByRound = fixtures
+            .GroupBy(match => match.Round)
+            .ToDictionary(round => round.Key, round => round.Select(match => (match.HomeTeamId, match.AwayTeamId)).ToHashSet());
+
+        for (var round = 1; round <= 3; round++)
+        {
+            var mirroredPairings = pairingsByRound[round].Select(pairing => (pairing.AwayTeamId, pairing.HomeTeamId)).ToHashSet();
+
+            await Assert.That(pairingsByRound[round + 3].SetEquals(mirroredPairings)).IsTrue();
+        }
+    }
+
+    [Test]
+    public async Task ShouldKeepVenueStreaksAtMostThreeAcrossAllLapsAndLegs()
+    {
+        var generator = CreateGenerator(legs: 2, rounds: 10, teamsCount: 6);
+
+        var fixtures = await generator.GenerateAsync(
+            leagueVersionId: 101001,
+            gameLeagueId: Guid.NewGuid(),
+            teamIds: [1, 2, 3, 4, 5, 6],
+            seasonStartDate: new DateTime(2026, 1, 1),
+            CancellationToken.None).ConfigureAwait(false);
+
+        var longestStreaks = fixtures
+            .SelectMany(match => new[]
+            {
+                (TeamId: match.HomeTeamId, match.Round, Venue: 1),
+                (TeamId: match.AwayTeamId, match.Round, Venue: -1)
+            })
+            .GroupBy(entry => entry.TeamId)
+            .ToDictionary(
+                team => team.Key,
+                team => LongestVenueStreak(team.OrderBy(entry => entry.Round).Select(entry => entry.Venue)));
+
+        await Assert.That(longestStreaks.Count).IsEqualTo(6);
+        await Assert.That(longestStreaks.Values.Max()).IsLessThanOrEqualTo(3);
+    }
+
+    private static int LongestVenueStreak(IEnumerable<int> venues)
+    {
+        var longest = 0;
+        var current = 0;
+        int? previous = null;
+
+        foreach (var venue in venues)
+        {
+            current = venue == previous ? current + 1 : 1;
+            previous = venue;
+            longest = Math.Max(longest, current);
+        }
+
+        return longest;
+    }
+
+    private static LeagueFixtureGenerator CreateGenerator(int legs, int rounds, int teamsCount = 4)
     {
         var league = new LeagueDto(
             Id: 1,
@@ -91,7 +158,7 @@ internal sealed class LeagueFixtureGeneratorTests
             Name: "Test League",
             Order: 1,
             CountryId: 1,
-            TeamsCount: 4,
+            TeamsCount: teamsCount,
             Format: [new LeagueFormatDto(1, LeagueStageTypeDto.RoundRobin, legs)],
             PromotionPositions: null,
             PromotionPlayOffPositions: null,

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { advanceCalendarDay, completeSeason, fetchCalendarDay, resetGameSessionCache, simulateCalendarDay } from '../api/footballApi';
+import { advanceCalendarDay, completeSeason, fetchCalendarDay, resetGameSessionCache, simulateCalendarDay, startNewSeason } from '../api/footballApi';
 import type { CalendarDayResponse, LeagueMatchDto } from '../api/footballApi';
 import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
@@ -93,6 +93,9 @@ export function HomePage() {
   const isSeasonEnd = day !== null && currentSeason !== null
     && day.date.slice(0, 10) === currentSeason.endDate.slice(0, 10);
 
+  const isSeasonCompleted = day !== null && currentSeason !== null
+    && day.date.slice(0, 10) > currentSeason.endDate.slice(0, 10);
+
   async function handleDayAction() {
     if (!gameId || !day || isActing) return;
 
@@ -116,6 +119,23 @@ export function HomePage() {
     }
   }
 
+  async function handleStartNewSeason() {
+    if (!gameId || isActing) return;
+
+    setIsActing(true);
+    setError(null);
+    try {
+      await startNewSeason(gameId);
+      resetGameSessionCache();
+      await refreshSeason(gameId);
+      await loadDay();
+    } catch (err) {
+      handleError(err);
+    } finally {
+      setIsActing(false);
+    }
+  }
+
   if (!gameId) {
     return (
       <main className="app-main">
@@ -130,7 +150,21 @@ export function HomePage() {
   return (
     <main className="app-main">
       {isLoading && <Loader size="large" text="Loading today&apos;s events..." />}
-      {!isLoading && day && (
+      {isSeasonCompleted && (
+        <div className="home-welcome">
+          <h2 className="home-title">Season completed</h2>
+          <p className="home-message">The season has ended. Start a new season to continue.</p>
+          <button
+            type="button"
+            className="start-btn"
+            onClick={handleStartNewSeason}
+            disabled={isActing}
+          >
+            {isActing ? '⏳ Starting season...' : '▶ Start new season'}
+          </button>
+        </div>
+      )}
+      {!isLoading && day && !isSeasonCompleted && (
         <div className="home-calendar">
           {day.leagueMatches.length > 0 ? (
             <div className="today-fixtures fixtures-section">

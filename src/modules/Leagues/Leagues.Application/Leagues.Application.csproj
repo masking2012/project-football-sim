@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\..\..\shared\Shared.Features\Shared.Features.csproj" />
         <ProjectReference Include="..\..\Calendar\Calendar.Contracts\Calendar.Contracts.csproj" />
+        <ProjectReference Include="..\..\Locations\Locations.Contracts\Locations.Contracts.csproj" />
         <ProjectReference Include="..\..\Teams\Teams.Contracts\Teams.Contracts.csproj" />
         <ProjectReference Include="..\Leagues.Contracts\Leagues.Contracts.csproj" />
         <ProjectReference Include="..\Leagues.Domain\Leagues.Domain.csproj" />

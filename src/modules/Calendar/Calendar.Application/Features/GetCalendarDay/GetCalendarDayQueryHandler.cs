@@ -1,30 +1,35 @@
-using ProjectFootballSim.Calendar.Application.Common.Services;
-using ProjectFootballSim.Calendar.Domain.Enums;
-using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Calendar.Application.Common.Interfaces;
+using ProjectFootballSim.Calendar.Application.Common.Models;
+using ProjectFootballSim.Calendar.Contracts.Features.GetCalendarDay;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatchesByDate;
 
 namespace ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
 
-public sealed class GetCalendarDayQueryHandler(
-    IGameCalendarRetriever gameCalendarRetriever,
-    GetGameLeagueMatchesByDateQueryHandler getGameLeagueMatchesByDateQueryHandler)
+internal sealed class GetCalendarDayQueryHandler(
+    IGameCalendarRepository gameCalendarRepository,
+    IGetGameLeagueMatchesByDateQueryHandler getGameLeagueMatchesByDateQueryHandler)
+    : IGetCalendarDayQueryHandler
 {
-    public async Task<CalendarDayDto> HandleAsync(GetCalendarDayQuery query, CancellationToken cancellationToken)
+    public async Task<GetCalendarDayQueryResult> HandleAsync(GetCalendarDayQuery query, CancellationToken cancellationToken)
     {
-        var gameCalendar = await gameCalendarRetriever
-            .GetCurrentGameDateAsync(query.UserId, query.GameId, cancellationToken)
+        GameCalendarDto? gameCalendar = await gameCalendarRepository
+            .GetCurrentCalendarAsync(query.UserId, query.GameId, cancellationToken)
             .ConfigureAwait(false);
+        if (gameCalendar is null)
+            throw new InvalidOperationException(
+                $"Game calendar not found for user ID '{query.UserId}' and game ID '{query.GameId}'.");
 
         DateTime currentDate = gameCalendar.CurrentDate;
         DateTime date = query.Date ?? currentDate;
-        CalendarDayStatus dayStatus = date switch
+        GameDayStatus dayStatus = date switch
         {
             var value when value == currentDate => gameCalendar.DayStatus,
-            var value when value < currentDate => CalendarDayStatus.Completed,
-            var value when value > currentDate => CalendarDayStatus.NotStarted,
+            var value when value < currentDate => GameDayStatus.Completed,
+            var value when value > currentDate => GameDayStatus.NotStarted,
             _ => throw new InvalidOperationException("Invalid date comparison.")
         };
 
-        var matches = await getGameLeagueMatchesByDateQueryHandler
+        IReadOnlyList<GetGameLeagueMatchDto> matches = await getGameLeagueMatchesByDateQueryHandler
             .HandleAsync(
                 new GetGameLeagueMatchesByDateQuery(
                     UserId: query.UserId,
@@ -33,20 +38,23 @@ public sealed class GetCalendarDayQueryHandler(
                 cancellationToken)
             .ConfigureAwait(false);
 
-        return new CalendarDayDto(
+        return new GetCalendarDayQueryResult(
             Date: date,
             DayStatus: dayStatus.ToString(),
-            LeagueMatches: matches.Select(x => new LeagueMatchDto(
-                Id: x.Id,
-                HomeTeamId: x.HomeTeamId,
-                AwayTeamId: x.AwayTeamId,
-                HomeTeamScore: x.HomeTeamScore,
-                AwayTeamScore: x.AwayTeamScore,
-                Round: x.Round,
-                LeagueName: x.LeagueName,
-                LeagueId: x.LeagueId,
-                CountryId: x.CountryId,
-                Order: x.Order))
+            LeagueMatches: matches.Select(m => new LeagueMatchDto(
+                Id: m.Id,
+                HomeTeamId: m.HomeTeamId,
+                AwayTeamId: m.AwayTeamId,
+                HomeTeamName: m.HomeTeamName,
+                AwayTeamName: m.AwayTeamName,
+                HomeTeamScore: m.HomeTeamScore,
+                AwayTeamScore: m.AwayTeamScore,
+                LeagueVersionId: m.LeagueVersionId,
+                LeagueName: m.LeagueName,
+                LeagueRound: m.LeagueRound,
+                LeagueOrder: m.LeagueOrder,
+                CountryId: m.CountryId,
+                CountryName: m.CountryName)).ToList()
         );
     }
 }

@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\shared\Shared.Data\Shared.Data.csproj" />
+    <ProjectReference Include="..\Calendar.Application\Calendar.Application.csproj" />
     <ProjectReference Include="..\Calendar.Domain\Calendar.Domain.csproj" />
   </ItemGroup>
 

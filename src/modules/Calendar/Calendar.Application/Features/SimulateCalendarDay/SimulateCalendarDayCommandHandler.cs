@@ -1,36 +1,34 @@
-using ProjectFootballSim.Calendar.Application.Common.Services;
+using ProjectFootballSim.Calendar.Application.Common.Interfaces;
+using ProjectFootballSim.Calendar.Contracts.Features.SimulateCalendarDay;
+using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Domain.Enums;
-using ProjectFootballSim.Calendar.Infrastructure.Database;
-using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
+using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
 
-public sealed class SimulateCalendarDayCommandHandler(
-    IGameCalendarRetriever gameCalendarRetriever,
-    CalendarDbContext dbContext,
-    SimulateLeagueGameDayCommandHandler simulateLeagueGameDayCommandHandler)
+internal sealed class SimulateCalendarDayCommandHandler(
+    IGameCalendarWriteRepository repository,
+    IEventPublisher eventPublisher)
+    : ISimulateCalendarDayCommandHandler
 {
     public async Task HandleAsync(SimulateCalendarDayCommand command, CancellationToken cancellationToken)
     {
-        var gameCalendar = await gameCalendarRetriever
-            .GetCurrentGameDateAsync(command.UserId, command.GameId, cancellationToken)
+        GameCalendar? gameCalendar = await repository
+            .GetCurrentCalendarAsync(command.UserId, command.GameId, cancellationToken)
             .ConfigureAwait(false);
+        if (gameCalendar is null)
+            throw new InvalidOperationException($"Game calendar not found for user '{command.UserId}' and game '{command.GameId}'");
 
         if (gameCalendar.DayStatus == CalendarDayStatus.Completed)
             throw new InvalidOperationException("Cannot simulate a game day that is already completed.");
 
-        DateTime currentDate = gameCalendar.CurrentDate;
-        await simulateLeagueGameDayCommandHandler
-            .HandleAsync(
-                new SimulateLeagueGameDayCommand(
-                    command.UserId,
-                    command.GameId,
-                    currentDate),
-                cancellationToken)
-            .ConfigureAwait(false);
+        await eventPublisher.PublishAsync(new SimulateCalendarDayEvent(
+            UserId: command.UserId,
+            GameId: command.GameId,
+            Date: gameCalendar.CurrentDate), cancellationToken).ConfigureAwait(false);
 
+        //TODO: once fully asynchronous, this should be done once all events have been processed
         gameCalendar.UpdateDayStatus(CalendarDayStatus.Completed);
-
-        await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+        await repository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
 }

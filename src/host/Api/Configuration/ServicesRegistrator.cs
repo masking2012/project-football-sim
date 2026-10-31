@@ -46,8 +46,6 @@ internal static class ServicesRegistrator
 
     public static void AddApiServices(this WebApplicationBuilder builder)
     {
-        builder.Services.AddScoped<GameInitializationService>();
-
         var jwtSecret = builder.Configuration["Jwt:Secret"]
             ?? throw new InvalidOperationException("JWT secret is not configured.");
 
