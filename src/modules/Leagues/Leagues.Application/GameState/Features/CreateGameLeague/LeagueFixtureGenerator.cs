@@ -133,35 +133,33 @@ public sealed class LeagueFixtureGenerator(
     // FIXTURE GENERATION WITH VENUE STREAK CONSTRAINTS
     // ------------------------------------------------------------
 
-    private static List<List<(int Home, int Away)>> CreateFirstHalfFixtures(
-        List<List<(int First, int Second)>> pairings,
-        IEnumerable<int> teamIds)
-    {
-        var streaks = teamIds.ToDictionary(id => id, _ => new VenueStreak());
-        var fixtures = new List<List<(int Home, int Away)>>();
-
-        if (!TryAssignFixtures(pairings, 0, streaks, fixtures))
-            throw new InvalidOperationException("Unable to create fixtures with at most three consecutive home or away games.");
-
-        return fixtures;
-    }
-
     private static bool TryAssignFixtures(
         List<List<(int First, int Second)>> pairings,
+        int legs,
         int round,
         Dictionary<int, VenueStreak> streaks,
         List<List<(int Home, int Away)>> fixtures)
     {
-        if (round == pairings.Count)
+        if (round == pairings.Count * legs)
             return true;
 
-        foreach (var option in CreateRoundOptions(pairings[round], streaks))
+        var lap = round / pairings.Count;
+        var index = round % pairings.Count;
+
+        IEnumerable<List<(int Home, int Away)>> options = lap == 0
+            ? CreateRoundOptions(pairings[index], streaks)
+            : [MirrorRound(fixtures[index], lap)];
+
+        foreach (var option in options)
         {
             var nextStreaks = ApplyStreaks(streaks, option);
 
+            if (option.Any(f => nextStreaks[f.Home].Length > MaxVenueStreak || nextStreaks[f.Away].Length > MaxVenueStreak))
+                continue;
+
             fixtures.Add(option);
 
-            if (TryAssignFixtures(pairings, round + 1, nextStreaks, fixtures))
+            if (TryAssignFixtures(pairings, legs, round + 1, nextStreaks, fixtures))
                 return true;
 
             fixtures.RemoveAt(fixtures.Count - 1);
@@ -169,6 +167,11 @@ public sealed class LeagueFixtureGenerator(
 
         return false;
     }
+
+    private static List<(int Home, int Away)> MirrorRound(List<(int Home, int Away)> round, int lap) =>
+        lap % 2 == 1
+            ? round.Select(fixture => (fixture.Away, fixture.Home)).ToList()
+            : round.ToList();
 
     private static Dictionary<int, VenueStreak> ApplyStreaks(
         Dictionary<int, VenueStreak> streaks,
@@ -239,23 +242,13 @@ public sealed class LeagueFixtureGenerator(
         IEnumerable<int> teamIds,
         int legs)
     {
-        var firstHalf = CreateFirstHalfFixtures(pairings, teamIds);
-        var result = new List<List<(int Home, int Away)>>(pairings.Count * legs);
+        var streaks = teamIds.ToDictionary(id => id, _ => new VenueStreak());
+        var fixtures = new List<List<(int Home, int Away)>>();
 
-        for (var leg = 0; leg < legs; leg++)
-        {
-            var reverse = leg % 2 == 1;
-            var rounds = reverse ? firstHalf.AsEnumerable().Reverse() : firstHalf;
+        if (!TryAssignFixtures(pairings, legs, 0, streaks, fixtures))
+            throw new InvalidOperationException("Unable to create fixtures with at most three consecutive home or away games.");
 
-            foreach (var stageRound in rounds)
-            {
-                result.Add(reverse
-                    ? stageRound.Select(fixture => (fixture.Away, fixture.Home)).ToList()
-                    : stageRound.ToList());
-            }
-        }
-
-        return result;
+        return fixtures;
     }
 
     // ------------------------------------------------------------

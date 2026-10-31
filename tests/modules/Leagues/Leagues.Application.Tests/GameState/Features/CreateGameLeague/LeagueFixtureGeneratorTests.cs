@@ -81,6 +81,30 @@ internal sealed class LeagueFixtureGeneratorTests
             CancellationToken.None).ConfigureAwait(false)).Throws<InvalidOperationException>();
     }
 
+    [Test]
+    public async Task ShouldMirrorFirstLapRoundsWithSwappedVenuesInSecondLap()
+    {
+        var generator = CreateGenerator(legs: 2, rounds: 6);
+
+        var fixtures = await generator.GenerateAsync(
+            leagueVersionId: 101001,
+            gameLeagueId: Guid.NewGuid(),
+            teamIds: [1, 2, 3, 4],
+            seasonStartDate: new DateTime(2026, 1, 1),
+            CancellationToken.None).ConfigureAwait(false);
+
+        var pairingsByRound = fixtures
+            .GroupBy(match => match.Round)
+            .ToDictionary(round => round.Key, round => round.Select(match => (match.HomeTeamId, match.AwayTeamId)).ToHashSet());
+
+        for (var round = 1; round <= 3; round++)
+        {
+            var mirroredPairings = pairingsByRound[round].Select(pairing => (pairing.AwayTeamId, pairing.HomeTeamId)).ToHashSet();
+
+            await Assert.That(pairingsByRound[round + 3].SetEquals(mirroredPairings)).IsTrue();
+        }
+    }
+
     private static LeagueFixtureGenerator CreateGenerator(int legs, int rounds)
     {
         var league = new LeagueDto(

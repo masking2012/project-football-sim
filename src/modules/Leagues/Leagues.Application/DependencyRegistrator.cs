@@ -2,7 +2,6 @@ using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Contracts.Features.SimulateCalendarDay;
 using ProjectFootballSim.Leagues.Application.Catalog.Features.GetActiveLeagues;
-using ProjectFootballSim.Leagues.Application.Catalog.Features.GetLeagueByVersionId;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Services;
 using ProjectFootballSim.Leagues.Application.GameState.EventListeners;
@@ -34,7 +33,6 @@ public static class DependencyRegistrator
 
         services.AddScoped<IGetActiveLeaguesQueryHandler, GetActiveLeaguesQueryHandler>();
         services.AddScoped<ICheckGameLeagueMatchesByDateQueryHandler, CheckGameLeagueMatchesByDateQueryHandler>();
-        services.AddScoped<GetLeagueByVersionIdQueryHandler>();
 
         services.AddScoped<IGetGameLeagueStandingsQueryHandler, GetGameLeagueStandingsQueryHandler>();
         services.AddScoped<IGetGameLeagueFixturesQueryHandler, GetGameLeagueFixturesQueryHandler>();
