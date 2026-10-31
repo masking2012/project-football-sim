@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
+namespace ProjectFootballSim.Calendar.Contracts.Features.CompleteGameSeason;
 
 public sealed record CompleteGameSeasonCommand(
     Guid UserId,

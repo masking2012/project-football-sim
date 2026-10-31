@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { advanceCalendarDay, completeSeason, fetchCalendarDay, resetGameSessionCache, simulateCalendarDay } from '../api/footballApi';
+import { advanceCalendarDay, completeSeason, fetchCalendarDay, resetGameSessionCache, simulateCalendarDay, startNewSeason } from '../api/footballApi';
 import type { CalendarDayResponse, LeagueMatchDto } from '../api/footballApi';
 import { Loader } from '../components/Loader';
 import { useAuth } from '../context/AuthContext';
@@ -32,6 +32,7 @@ export function HomePage() {
   const [day, setDay] = useState<CalendarDayResponse | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isActing, setIsActing] = useState(false);
+  const [isSeasonCompleted, setIsSeasonCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const matchesByLeague = useMemo(() => {
@@ -104,10 +105,29 @@ export function HomePage() {
       } else if (day.dayStatus === 'Completed' && isSeasonEnd && currentSeason) {
         await completeSeason(gameId, currentSeason.id);
         resetGameSessionCache();
+        setIsSeasonCompleted(true);
         await refreshSeason(gameId);
       } else if (day.dayStatus === 'Completed') {
         await advanceCalendarDay(gameId);
       }
+      await loadDay();
+    } catch (err) {
+      handleError(err);
+    } finally {
+      setIsActing(false);
+    }
+  }
+
+  async function handleStartNewSeason() {
+    if (!gameId || isActing) return;
+
+    setIsActing(true);
+    setError(null);
+    try {
+      await startNewSeason(gameId);
+      resetGameSessionCache();
+      await refreshSeason(gameId);
+      setIsSeasonCompleted(false);
       await loadDay();
     } catch (err) {
       handleError(err);
@@ -130,7 +150,21 @@ export function HomePage() {
   return (
     <main className="app-main">
       {isLoading && <Loader size="large" text="Loading today&apos;s events..." />}
-      {!isLoading && day && (
+      {isSeasonCompleted && (
+        <div className="home-welcome">
+          <h2 className="home-title">Season completed</h2>
+          <p className="home-message">The season has ended. Start a new season to continue.</p>
+          <button
+            type="button"
+            className="start-btn"
+            onClick={handleStartNewSeason}
+            disabled={isActing}
+          >
+            {isActing ? '⏳ Starting season...' : '▶ Start new season'}
+          </button>
+        </div>
+      )}
+      {!isLoading && day && !isSeasonCompleted && (
         <div className="home-calendar">
           {day.leagueMatches.length > 0 ? (
             <div className="today-fixtures fixtures-section">

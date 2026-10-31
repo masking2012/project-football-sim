@@ -113,7 +113,7 @@ export interface CurrentSeasonResponse {
   isCurrent: boolean;
 }
 
-export interface CompleteSeasonResponse {
+export interface StartNewSeasonResponse {
   id: string;
 }
 
@@ -226,14 +226,23 @@ export async function advanceCalendarDay(gameId: string): Promise<void> {
   await ensureSuccess(res);
 }
 
-export async function completeSeason(gameId: string, seasonId: string): Promise<CompleteSeasonResponse> {  const res = await fetch(
+export async function completeSeason(gameId: string, seasonId: string): Promise<void> {
+  const res = await fetch(
     `${BASE}/games/${encodeURIComponent(gameId)}/seasons/${encodeURIComponent(seasonId)}/complete`,
     {
       method: 'POST',
       headers: authHeaders(),
     },
   );
-  return handleResponse<CompleteSeasonResponse>(res);
+  await ensureSuccess(res);
+}
+
+export async function startNewSeason(gameId: string): Promise<StartNewSeasonResponse> {
+  const res = await fetch(`${BASE}/games/${encodeURIComponent(gameId)}/seasons`, {
+    method: 'POST',
+    headers: authHeaders(),
+  });
+  return handleResponse<StartNewSeasonResponse>(res);
 }
 
 export async function fetchLeagueStandings(gameId: string, seasonId: string, leagueId: number): Promise<TeamStandingDto[]> {  const requestKey = `${gameId}:${seasonId}:${leagueId}`;
