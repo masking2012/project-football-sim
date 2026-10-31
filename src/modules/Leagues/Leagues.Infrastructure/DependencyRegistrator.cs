@@ -6,6 +6,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Features.CheckGameLeagueM
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
+using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
 using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
@@ -45,6 +46,7 @@ public static class DependencyRegistrator
         services.AddScoped<IGetGameLeagueMatchesRepository, GetGameLeagueMatchesRepository>();
         services.AddScoped<IGetGameLeagueMatchesByDateRepository, GetGameLeagueMatchesByDateRepository>();
         services.AddScoped<ICheckGameLeagueMatchesRepository, CheckGameLeagueMatchesRepository>();
+        services.AddScoped<ISimulateLeagueDayRepository, SimulateLeagueDayRepository>();
 
         return services;
     }

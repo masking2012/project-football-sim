@@ -2,13 +2,13 @@ using ProjectFootballSim.Calendar.Application.Common.Interfaces;
 using ProjectFootballSim.Calendar.Contracts.Features.SimulateCalendarDay;
 using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Domain.Enums;
-using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
+using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
 
-public sealed class SimulateCalendarDayCommandHandler(
+internal sealed class SimulateCalendarDayCommandHandler(
     IGameCalendarWriteRepository repository,
-    SimulateLeagueGameDayCommandHandler simulateLeagueGameDayCommandHandler)
+    IEventPublisher eventPublisher)
     : ISimulateCalendarDayCommandHandler
 {
     public async Task HandleAsync(SimulateCalendarDayCommand command, CancellationToken cancellationToken)
@@ -22,17 +22,12 @@ public sealed class SimulateCalendarDayCommandHandler(
         if (gameCalendar.DayStatus == CalendarDayStatus.Completed)
             throw new InvalidOperationException("Cannot simulate a game day that is already completed.");
 
-        //TODO: raise event for simulating a game day (e.g., SimulateGameDateEvent)
-        DateTime currentDate = gameCalendar.CurrentDate;
-        await simulateLeagueGameDayCommandHandler
-            .HandleAsync(
-                new SimulateLeagueGameDayCommand(
-                    command.UserId,
-                    command.GameId,
-                    currentDate),
-                cancellationToken)
-            .ConfigureAwait(false);
+        await eventPublisher.PublishAsync(new SimulateCalendarDayEvent(
+            UserId: command.UserId,
+            GameId: command.GameId,
+            Date: gameCalendar.CurrentDate), cancellationToken).ConfigureAwait(false);
 
+        //TODO: once fully asynchronous, this should be done once all events have been processed
         gameCalendar.UpdateDayStatus(CalendarDayStatus.Completed);
         await repository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
