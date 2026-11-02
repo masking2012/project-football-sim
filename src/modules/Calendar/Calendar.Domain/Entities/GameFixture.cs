@@ -4,7 +4,9 @@ namespace ProjectFootballSim.Calendar.Domain.Entities;
 
 public sealed class GameFixture
 {
-    public Guid CompetitionId { get; }
+    public Guid MatchId { get; }
+    public Guid GameCompetitionId { get; }
+    public int CompetitionVersionId { get; }
     public CompetitionType CompetitionType { get; }
     public int HomeTeamId { get; }
     public int AwayTeamId { get; }
@@ -15,7 +17,9 @@ public sealed class GameFixture
     public Guid GameId { get; }
 
     public GameFixture(
+        Guid matchId,
         Guid competitionId,
+        int competitionVersionId,
         CompetitionType competitionType,
         int homeTeamId,
         int awayTeamId,
@@ -25,8 +29,12 @@ public sealed class GameFixture
         Guid userId,
         Guid gameId)
     {
+        if (matchId == Guid.Empty)
+            throw new ArgumentException("Match ID cannot be empty.", nameof(matchId));
         if (competitionId == Guid.Empty)
             throw new ArgumentException("Competition ID cannot be empty.", nameof(competitionId));
+        if (competitionVersionId <= 0)
+            throw new ArgumentOutOfRangeException(nameof(competitionVersionId), competitionVersionId, "Competition version ID must be positive.");
         if (!Enum.IsDefined(competitionType))
             throw new ArgumentException("Unsupported competition type.", nameof(competitionType));
         if (homeTeamId <= 0)
@@ -46,7 +54,8 @@ public sealed class GameFixture
         if (gameId == Guid.Empty)
             throw new ArgumentException("Game ID cannot be empty.", nameof(gameId));
 
-        CompetitionId = competitionId;
+        GameCompetitionId = competitionId;
+        CompetitionVersionId = competitionVersionId;
         CompetitionType = competitionType;
         HomeTeamId = homeTeamId;
         AwayTeamId = awayTeamId;

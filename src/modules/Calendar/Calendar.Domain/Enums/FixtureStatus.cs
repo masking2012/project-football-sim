@@ -2,7 +2,7 @@ namespace ProjectFootballSim.Calendar.Domain.Enums;
 
 public enum FixtureStatus
 {
-    Provisioned = 0,
-    Scheduled = 1,
+    Provisional = 0,
+    Confirmed = 1,
     Completed = 2
 }

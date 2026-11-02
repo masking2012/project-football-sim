@@ -1,4 +1,4 @@
-namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
+namespace ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CreateGameLeague;
 
 public sealed record CreateGameLeagueCommand(
     Guid UserId,

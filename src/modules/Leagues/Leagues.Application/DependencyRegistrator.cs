@@ -16,6 +16,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Contracts.CatalogFeatures.GetActiveLeagues;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CheckGameLeagueMatchesByDate;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CreateGameLeague;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
@@ -40,7 +41,7 @@ public static class DependencyRegistrator
         services.AddScoped<GetGameLeaguesQueryHandler>();
 
         services.AddScoped<LeagueFixtureGenerator>();
-        services.AddScoped<CreateGameLeagueCommandHandler>();
+        services.AddScoped<ICreateGameLeagueCommandHandler, CreateGameLeagueCommandHandler>();
         services.AddScoped<ISimulateLeagueGameDayCommandHandler, SimulateLeagueGameDayCommandHandler>();
 
         services.AddScoped<IEventListener<GameSeasonStartedEvent>, GameSeasonStartedEventListener>();

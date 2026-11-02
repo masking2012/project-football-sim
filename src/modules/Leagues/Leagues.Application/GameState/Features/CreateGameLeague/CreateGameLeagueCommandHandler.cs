@@ -1,15 +1,19 @@
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
 using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CreateGameLeague;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.Events;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
+using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
-public sealed class CreateGameLeagueCommandHandler(
+internal sealed class CreateGameLeagueCommandHandler(
     ICachedLeaguesRetriever leaguesRetriever,
     ILeaguesTeamsRepository leaguesTeamsRepository,
     IGameLeagueWriteRepository writeRepository,
-    LeagueFixtureGenerator leagueFixtureGenerator)
+    LeagueFixtureGenerator leagueFixtureGenerator,
+    IEventPublisher eventPublisher) : ICreateGameLeagueCommandHandler
 {
     public async Task HandleAsync(CreateGameLeagueCommand command, CancellationToken cancellationToken)
     {
@@ -45,12 +49,29 @@ public sealed class CreateGameLeagueCommandHandler(
         var leagueMatches = await leagueFixtureGenerator
             .GenerateAsync(command.LeagueVersionId, gameLeague.Id, teamIds, command.SeasonStartDate, cancellationToken)
             .ConfigureAwait(false);
+        List<EventLeagueMatch> eventLeagueMatches = [];
+
         foreach (GameLeagueMatch match in leagueMatches)
         {
             gameLeague.AddGameLeagueMatch(match);
-        }
 
+            eventLeagueMatches.Add(new EventLeagueMatch(
+                MatchId: match.Id,
+                HomeTeamId: match.HomeTeamId,
+                AwayTeamId: match.AwayTeamId,
+                ScheduledAt: match.Date,
+                Round: match.Round
+            ));
+        }
+            
         await writeRepository.AddAsync(gameLeague, cancellationToken).ConfigureAwait(false);
         await writeRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+        await eventPublisher.PublishAsync(new GameLeagueMatchesProvisionalEvent(
+            UserId: command.UserId,
+            GameId: command.GameId,
+            LeagueVersionId: league.LeagueVersionId,
+            GameLeagueId: gameLeague.Id,
+            Matches: eventLeagueMatches), cancellationToken).ConfigureAwait(false);
     }
 }
