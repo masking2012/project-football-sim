@@ -1,5 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
+using System.Text.Json;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
@@ -85,6 +88,16 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.Round).IsRequired();
             entity.Property(x => x.Week).IsRequired();
             entity.Property(x => x.IsMidweek).IsRequired();
+            entity.Property(x => x.AvailableDaysOfWeek)
+                .IsRequired()
+                .HasConversion(
+                    new ValueConverter<HashSet<DayOfWeek>, string>(
+                        v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                        v => new HashSet<DayOfWeek>(JsonSerializer.Deserialize<List<DayOfWeek>>(v, (JsonSerializerOptions?)null)!)),
+                    new ValueComparer<HashSet<DayOfWeek>>(
+                        (a, b) => a!.SetEquals(b!),
+                        a => a.Aggregate(0, (h, v) => HashCode.Combine(h, v)),
+                        a => new HashSet<DayOfWeek>(a)));
             entity.HasOne<LeagueVersion>()
                 .WithMany()
                 .HasForeignKey(x => x.LeagueVersionId)

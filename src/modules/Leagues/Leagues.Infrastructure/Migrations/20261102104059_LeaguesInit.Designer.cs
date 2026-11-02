@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20261026212353_LeaguesInit")]
+    [Migration("20261102104059_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
@@ -114,6 +114,10 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.Property<int>("Round")
                         .HasColumnType("int");
+
+                    b.Property<string>("AvailableDaysOfWeek")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsMidweek")
                         .HasColumnType("bit");

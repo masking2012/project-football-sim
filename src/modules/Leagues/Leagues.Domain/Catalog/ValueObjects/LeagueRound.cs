@@ -6,8 +6,9 @@ public sealed record LeagueRound
     public int Round { get; }
     public int Week { get; }
     public bool IsMidweek { get; }
+    public HashSet<DayOfWeek> AvailableDaysOfWeek { get; }
 
-    public LeagueRound(int leagueVersionId, int round, int week, bool isMidweek)
+    public LeagueRound(int leagueVersionId, int round, int week, bool isMidweek, HashSet<DayOfWeek> availableDaysOfWeek)
     {
         if (leagueVersionId <= 0)
             throw new ArgumentException("League version ID must be positive value");
@@ -15,10 +16,12 @@ public sealed record LeagueRound
             throw new ArgumentException("Round must be positive value");
         if (week <= 0)
             throw new ArgumentException("Week must be positive value");
+        ArgumentNullException.ThrowIfNull(availableDaysOfWeek);
 
         LeagueVersionId = leagueVersionId;
         Round = round;
         Week = week;
         IsMidweek = isMidweek;
+        AvailableDaysOfWeek = availableDaysOfWeek;
     }
 }

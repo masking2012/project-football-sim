@@ -17,6 +17,7 @@ using ProjectFootballSim.Shared.Data.Entities.Leagues;
 using ProjectFootballSim.Shared.Data.Entities.Locations;
 using DataLeagueFormatType = ProjectFootballSim.Shared.Data.Entities.Leagues.LeagueFormatType;
 using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.Enums.LeagueStageType;
+using DataDayOfWeek = ProjectFootballSim.Shared.Data.Entities.Leagues.DayOfWeek;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -107,7 +108,7 @@ public static class DependencyRegistrator
                     .SingleOrDefault(x => x.LeagueVersionId == leagueRoundData.LeagueVersionId && x.Round == leagueRoundData.Round);
                 if (leagueRound is null)
                     context.Set<LeagueRound>()
-                        .Add(new LeagueRound(leagueVersionId: leagueRoundData.LeagueVersionId, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek));
+                        .Add(new LeagueRound(leagueVersionId: leagueRoundData.LeagueVersionId, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek, availableDaysOfWeek: MapDaysOfWeek(leagueRoundData.AvailableDaysOfWeek)));
             }
 
             foreach (var activationData in LeaguesDataProvider.GetLeagueActivationsByCountryId(countryData.Id))
@@ -136,4 +137,25 @@ public static class DependencyRegistrator
                 },
                 legs: stage.Legs))
             .ToList();
+
+    private static HashSet<System.DayOfWeek> MapDaysOfWeek(IEnumerable<DataDayOfWeek> daysOfWeek)
+    {
+        if (daysOfWeek is null)
+            return [];
+
+        return daysOfWeek
+            .Select(day => day switch
+            {
+                DataDayOfWeek.Su => System.DayOfWeek.Sunday,
+                DataDayOfWeek.Mo => System.DayOfWeek.Monday,
+                DataDayOfWeek.Tu => System.DayOfWeek.Tuesday,
+                DataDayOfWeek.We => System.DayOfWeek.Wednesday,
+                DataDayOfWeek.Th => System.DayOfWeek.Thursday,
+                DataDayOfWeek.Fr => System.DayOfWeek.Friday,
+                DataDayOfWeek.Sa => System.DayOfWeek.Saturday,
+                _ => throw new InvalidDataException($"Unsupported day of week '{day}'.")
+            })
+            .ToHashSet();
+    }
+        
 }

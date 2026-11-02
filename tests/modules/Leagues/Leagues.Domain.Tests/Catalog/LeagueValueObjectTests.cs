@@ -139,7 +139,7 @@ internal sealed class LeagueValueObjectTests
         var league = new League(1, "Premier", 3, 4);
         var first = new LeagueTeam(101001, 3);
         var second = new LeagueTeam(101001, 3);
-        var round = new LeagueRound(101001, 3, 4, true);
+        var round = new LeagueRound(101001, 3, 4, true, []);
 
         using (Assert.Multiple())
         {
@@ -147,7 +147,7 @@ internal sealed class LeagueValueObjectTests
             await Assert.That(first).IsEqualTo(second);
             await Assert.That(first.GetHashCode()).IsEqualTo(second.GetHashCode());
             await Assert.That(round.IsMidweek).IsTrue();
-            await Assert.That(new LeagueRound(101001, 3, 4, true))
+            await Assert.That(new LeagueRound(101001, 3, 4, true, []))
                 .IsEqualTo(round);
             await Assert.That(new LeagueStage(1, LeagueStageType.RoundRobin, 2))
                 .IsEqualTo(new LeagueStage(1, LeagueStageType.RoundRobin, 2));
@@ -200,7 +200,7 @@ internal sealed class LeagueValueObjectTests
     [Arguments(1, 1, 0)]
     public async Task ShouldRejectInvalidRoundValues(int leagueVersionId, int round, int week)
     {
-        await Assert.That(() => new LeagueRound(leagueVersionId, round, week, false))
+        await Assert.That(() => new LeagueRound(leagueVersionId, round, week, false, []))
             .Throws<ArgumentException>();
     }
 

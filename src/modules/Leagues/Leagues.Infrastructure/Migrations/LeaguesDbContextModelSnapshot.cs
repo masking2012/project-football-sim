@@ -112,6 +112,10 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Property<int>("Round")
                         .HasColumnType("int");
 
+                    b.Property<string>("AvailableDaysOfWeek")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsMidweek")
                         .HasColumnType("bit");
 

@@ -99,7 +99,8 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     LeagueVersionId = table.Column<int>(type: "int", nullable: false),
                     Round = table.Column<int>(type: "int", nullable: false),
                     Week = table.Column<int>(type: "int", nullable: false),
-                    IsMidweek = table.Column<bool>(type: "bit", nullable: false)
+                    IsMidweek = table.Column<bool>(type: "bit", nullable: false),
+                    AvailableDaysOfWeek = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
