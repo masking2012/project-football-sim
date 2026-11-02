@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20261102163355_LeaguesInit")]
+    [Migration("20261102165501_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
@@ -209,6 +209,22 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.ToTable("GameLeagueMatches");
                 });
 
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueRound", b =>
+                {
+                    b.Property<Guid>("GameLeagueId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Round")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("BaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("GameLeagueId", "Round");
+
+                    b.ToTable("GameLeagueRounds");
+                });
+
             modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueTeam", b =>
                 {
                     b.Property<Guid>("GameLeagueId")
@@ -306,6 +322,15 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueRound", b =>
+                {
+                    b.HasOne("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", null)
+                        .WithMany("GameLeagueRounds")
+                        .HasForeignKey("GameLeagueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueTeam", b =>
                 {
                     b.HasOne("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", null)
@@ -318,6 +343,8 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
             modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", b =>
                 {
                     b.Navigation("GameLeagueMatches");
+
+                    b.Navigation("GameLeagueRounds");
 
                     b.Navigation("GameLeagueTeams");
                 });

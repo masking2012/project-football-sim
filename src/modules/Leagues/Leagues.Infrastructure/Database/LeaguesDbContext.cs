@@ -20,6 +20,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
     public DbSet<GameLeague> GameLeagues => Set<GameLeague>();
     public DbSet<GameLeagueTeam> GameLeagueTeams => Set<GameLeagueTeam>();
     public DbSet<GameLeagueMatch> GameLeagueMatches => Set<GameLeagueMatch>();
+    public DbSet<GameLeagueRound> GameLeagueRounds => Set<GameLeagueRound>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -106,6 +107,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.HasIndex(x => new { x.LeagueVersionId, x.Week, x.IsMidweek }).IsUnique();
         });
 
+
         modelBuilder.Entity<GameLeague>(entity =>
         {
             entity.HasKey(x => x.Id);
@@ -158,6 +160,18 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
 
             entity.HasOne<GameLeague>()
                 .WithMany(x => x.GameLeagueMatches)
+                .HasForeignKey(x => x.GameLeagueId)
+                .IsRequired();
+        });
+
+        modelBuilder.Entity<GameLeagueRound>(entity =>
+        {
+            entity.HasKey(x => new { x.GameLeagueId, x.Round });
+            entity.Property(x => x.GameLeagueId).IsRequired();
+            entity.Property(x => x.Round).IsRequired();
+            entity.Property(x => x.BaseDate).IsRequired();
+            entity.HasOne<GameLeague>()
+                .WithMany(x => x.GameLeagueRounds)
                 .HasForeignKey(x => x.GameLeagueId)
                 .IsRequired();
         });

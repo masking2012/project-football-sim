@@ -157,6 +157,25 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GameLeagueRounds",
+                columns: table => new
+                {
+                    GameLeagueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Round = table.Column<int>(type: "int", nullable: false),
+                    BaseDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameLeagueRounds", x => new { x.GameLeagueId, x.Round });
+                    table.ForeignKey(
+                        name: "FK_GameLeagueRounds_GameLeagues_GameLeagueId",
+                        column: x => x.GameLeagueId,
+                        principalTable: "GameLeagues",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GameLeagueTeams",
                 columns: table => new
                 {
@@ -219,6 +238,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "GameLeagueMatches");
+
+            migrationBuilder.DropTable(
+                name: "GameLeagueRounds");
 
             migrationBuilder.DropTable(
                 name: "GameLeagueTeams");
