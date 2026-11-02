@@ -3,73 +3,85 @@
         "round":  1,
         "week":  5,
         "isMidweek":  false,
-        "leagueVersionId":  101001
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su", "Mo" ]
     },
     {
-        "round":  2,
-        "week":  6,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 2,
+        "week": 6,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Sa", "Su", "Mo" ]
     },
     {
-        "round":  3,
-        "week":  7,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 3,
+        "week": 7,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su", "Mo" ]
     },
     {
-        "round":  4,
-        "week":  9,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 4,
+        "week": 9,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su", "Mo" ]
     },
     {
-        "round":  5,
-        "week":  10,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 5,
+        "week": 10,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su" ]
     },
     {
-        "round":  6,
-        "week":  11,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 6,
+        "week": 11,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su", "Mo" ]
     },
     {
-        "round":  7,
-        "week":  12,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 7,
+        "week": 12,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su" ]
     },
     {
-        "round":  8,
-        "week":  15,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 8,
+        "week": 15,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su", "Mo" ]
     },
     {
-        "round":  9,
-        "week":  16,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 9,
+        "week": 16,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su", "Mo" ]
     },
     {
-        "round":  10,
-        "week":  17,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 10,
+        "week": 17,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su" ]
     },
     {
-        "round":  11,
-        "week":  18,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 11,
+        "week": 18,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Sa", "Su", "Mo" ]
     },
     {
-        "round":  12,
-        "week":  19,
-        "isMidweek":  false,
-        "leagueVersionId":  101001
+        "round": 12,
+        "week": 19,
+        "isMidweek": false,
+        "leagueVersionId": 101001,
+        "availableDaysOfWeek": [ "Sa", "Su" ]
     },
     {
         "round":  13,
