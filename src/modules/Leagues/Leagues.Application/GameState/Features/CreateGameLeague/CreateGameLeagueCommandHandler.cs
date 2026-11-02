@@ -49,24 +49,18 @@ internal sealed class CreateGameLeagueCommandHandler(
         var leagueMatches = await leagueFixtureGenerator
             .GenerateAsync(command.LeagueVersionId, gameLeague.Id, teamIds, command.SeasonStartDate, cancellationToken)
             .ConfigureAwait(false);
-        List<EventLeagueMatch> eventLeagueMatches = [];
-
         foreach (GameLeagueMatch match in leagueMatches)
-        {
             gameLeague.AddGameLeagueMatch(match);
-
-            eventLeagueMatches.Add(new EventLeagueMatch(
-                MatchId: match.Id,
-                HomeTeamId: match.HomeTeamId,
-                AwayTeamId: match.AwayTeamId,
-                ScheduledAt: match.Date,
-                Round: match.Round
-            ));
-        }
             
         await writeRepository.AddAsync(gameLeague, cancellationToken).ConfigureAwait(false);
         await writeRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
+        var eventLeagueMatches = leagueMatches.Select(match => new EventLeagueMatch(
+            MatchId: match.Id,
+            HomeTeamId: match.HomeTeamId,
+            AwayTeamId: match.AwayTeamId,
+            ScheduledAt: match.Date,
+            Round: match.Round)).ToList();
         await eventPublisher.PublishAsync(new GameLeagueMatchesProvisionalEvent(
             UserId: command.UserId,
             GameId: command.GameId,

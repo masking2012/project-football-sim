@@ -17,7 +17,7 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,6 +39,46 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
                     b.HasKey("UserId", "GameId");
 
                     b.ToTable("GameCalendars");
+                });
+
+            modelBuilder.Entity("ProjectFootballSim.Calendar.Domain.Entities.GameFixture", b =>
+                {
+                    b.Property<Guid>("MatchId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("AwayTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompetitionType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CompetitionVersionId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("GameCompetitionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GameId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("HomeTeamId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoundId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ScheduledAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MatchId");
+
+                    b.ToTable("GameFixtures");
                 });
 
             modelBuilder.Entity("ProjectFootballSim.Calendar.Domain.Entities.GameSeason", b =>

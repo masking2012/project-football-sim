@@ -26,6 +26,27 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GameFixtures",
+                columns: table => new
+                {
+                    MatchId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GameCompetitionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CompetitionVersionId = table.Column<int>(type: "int", nullable: false),
+                    CompetitionType = table.Column<int>(type: "int", nullable: false),
+                    HomeTeamId = table.Column<int>(type: "int", nullable: false),
+                    AwayTeamId = table.Column<int>(type: "int", nullable: false),
+                    ScheduledAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    RoundId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    GameId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GameFixtures", x => x.MatchId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "GameSeasons",
                 columns: table => new
                 {
@@ -54,6 +75,9 @@ namespace ProjectFootballSim.Calendar.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "GameCalendars");
+
+            migrationBuilder.DropTable(
+                name: "GameFixtures");
 
             migrationBuilder.DropTable(
                 name: "GameSeasons");

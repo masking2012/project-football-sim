@@ -18,7 +18,7 @@ public sealed class GameFixture
 
     public GameFixture(
         Guid matchId,
-        Guid competitionId,
+        Guid gameCompetitionId,
         int competitionVersionId,
         CompetitionType competitionType,
         int homeTeamId,
@@ -31,8 +31,8 @@ public sealed class GameFixture
     {
         if (matchId == Guid.Empty)
             throw new ArgumentException("Match ID cannot be empty.", nameof(matchId));
-        if (competitionId == Guid.Empty)
-            throw new ArgumentException("Competition ID cannot be empty.", nameof(competitionId));
+        if (gameCompetitionId == Guid.Empty)
+            throw new ArgumentException("Competition ID cannot be empty.", nameof(gameCompetitionId));
         if (competitionVersionId <= 0)
             throw new ArgumentOutOfRangeException(nameof(competitionVersionId), competitionVersionId, "Competition version ID must be positive.");
         if (!Enum.IsDefined(competitionType))
@@ -54,7 +54,8 @@ public sealed class GameFixture
         if (gameId == Guid.Empty)
             throw new ArgumentException("Game ID cannot be empty.", nameof(gameId));
 
-        GameCompetitionId = competitionId;
+        MatchId = matchId;
+        GameCompetitionId = gameCompetitionId;
         CompetitionVersionId = competitionVersionId;
         CompetitionType = competitionType;
         HomeTeamId = homeTeamId;

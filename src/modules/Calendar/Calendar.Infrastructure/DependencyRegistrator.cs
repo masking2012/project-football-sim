@@ -5,6 +5,7 @@ using ProjectFootballSim.Calendar.Application.Common.Interfaces;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
+using ProjectFootballSim.Calendar.Application.Features.ProvisionGameFixtures;
 using ProjectFootballSim.Calendar.Infrastructure.Database;
 using ProjectFootballSim.Calendar.Infrastructure.Repositories;
 
@@ -30,6 +31,7 @@ public static class DependencyRegistrator
         services.AddScoped<IGetGameSeasonsRepository, GetGameSeasonsRepository>();
         services.AddScoped<IGameCalendarRepository, GameCalendarRepository>();
         services.AddScoped<IGameCalendarWriteRepository, GameCalendarWriteRepository>();
+        services.AddScoped<IProvisionGameFixturesRepository, ProvisionGameFixturesRepository>();
 
         return services;
     }
