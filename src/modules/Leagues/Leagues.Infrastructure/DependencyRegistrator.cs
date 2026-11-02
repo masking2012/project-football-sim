@@ -81,6 +81,7 @@ public static class DependencyRegistrator
                             leagueId: versionData.LeagueId,
                             version: versionData.Version,
                             teamsCount: versionData.TeamsCount,
+                            matchdaySchedulingLeadDays: versionData.MatchdaySchedulingLeadDays,
                             format: MapFormat(versionData.Format),
                             promotionPositions: versionData.PromotionPositions,
                             promotionPlayOffPositions: versionData.PromotionPlayOffPositions,

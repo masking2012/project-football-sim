@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20261102104059_LeaguesInit")]
+    [Migration("20261102163355_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
@@ -50,6 +50,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("LeagueId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MatchdaySchedulingLeadDays")
                         .HasColumnType("int");
 
                     b.Property<string>("PromotionPlayOffPositions")

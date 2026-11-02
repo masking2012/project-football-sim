@@ -5,6 +5,7 @@ public sealed record LeagueVersionData(
     int LeagueId,
     int Version,
     int TeamsCount,
+    int MatchdaySchedulingLeadDays,
     ICollection<int>? PromotionPositions,
     ICollection<int>? PromotionPlayOffPositions,
     ICollection<int>? RelegationPositions,

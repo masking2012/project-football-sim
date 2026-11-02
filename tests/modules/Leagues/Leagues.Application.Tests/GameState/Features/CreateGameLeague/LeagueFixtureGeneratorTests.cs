@@ -159,6 +159,7 @@ internal sealed class LeagueFixtureGeneratorTests
             Order: 1,
             CountryId: 1,
             TeamsCount: teamsCount,
+            MatchdaySchedulingLeadDays: 17,
             Format: [new LeagueFormatDto(1, LeagueStageTypeDto.RoundRobin, legs)],
             PromotionPositions: null,
             PromotionPlayOffPositions: null,

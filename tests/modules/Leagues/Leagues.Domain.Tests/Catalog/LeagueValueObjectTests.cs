@@ -98,6 +98,7 @@ internal sealed class LeagueValueObjectTests
             leagueId,
             version,
             teamsCount,
+            17,
             [new LeagueStage(1, LeagueStageType.RoundRobin, 1)],
             null,
             null,
@@ -209,5 +210,5 @@ internal sealed class LeagueValueObjectTests
         ICollection<int>? promotionPositions = null,
         ICollection<int>? promotionPlayOffPositions = null,
         ICollection<int>? relegationPositions = null) =>
-        new(101001, 1, 1, 4, format, promotionPositions, promotionPlayOffPositions, relegationPositions, null, null, null, null);
+        new(101001, 1, 1, 4, 17, format, promotionPositions, promotionPlayOffPositions, relegationPositions, null, null, null, null);
 }

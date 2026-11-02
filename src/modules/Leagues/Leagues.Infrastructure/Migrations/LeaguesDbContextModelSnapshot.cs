@@ -49,6 +49,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Property<int>("LeagueId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MatchdaySchedulingLeadDays")
+                        .HasColumnType("int");
+
                     b.Property<string>("PromotionPlayOffPositions")
                         .HasColumnType("nvarchar(max)");
 

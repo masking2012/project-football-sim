@@ -33,6 +33,7 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     LeagueId = table.Column<int>(type: "int", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     TeamsCount = table.Column<int>(type: "int", nullable: false),
+                    MatchdaySchedulingLeadDays = table.Column<int>(type: "int", nullable: false),
                     Format = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PromotionPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PromotionPlayOffPositions = table.Column<string>(type: "nvarchar(max)", nullable: true),

@@ -81,7 +81,7 @@
         "week": 19,
         "isMidweek": false,
         "leagueVersionId": 101001,
-        "availableDaysOfWeek": [ "Sa", "Su" ]
+        "availableDaysOfWeek": [ "Fr", "Sa", "Su" ]
     },
     {
         "round":  13,

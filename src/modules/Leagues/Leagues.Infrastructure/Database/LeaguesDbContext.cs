@@ -43,6 +43,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.LeagueId).IsRequired();
             entity.Property(x => x.Version).IsRequired();
             entity.Property(x => x.TeamsCount).IsRequired();
+            entity.Property(x => x.MatchdaySchedulingLeadDays).IsRequired();
             entity.Property<ICollection<LeagueStage>?>(nameof(LeagueVersion.Format)).IsRequired().UseJsonCollection();
 
             entity.Property(x => x.PromotionPositions).UseJsonCollection();
