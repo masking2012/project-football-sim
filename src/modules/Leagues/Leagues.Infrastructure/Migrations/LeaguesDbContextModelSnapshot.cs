@@ -217,6 +217,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Property<DateTime>("BaseDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("RoundStatus")
+                        .HasColumnType("int");
+
                     b.HasKey("GameLeagueId", "Round");
 
                     b.ToTable("GameLeagueRounds");

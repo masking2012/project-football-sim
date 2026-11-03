@@ -162,7 +162,8 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                 {
                     GameLeagueId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Round = table.Column<int>(type: "int", nullable: false),
-                    BaseDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    BaseDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RoundStatus = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

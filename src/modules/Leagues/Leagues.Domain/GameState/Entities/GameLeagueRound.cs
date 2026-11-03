@@ -1,3 +1,5 @@
+using ProjectFootballSim.Leagues.Domain.GameState.Enums;
+
 namespace ProjectFootballSim.Leagues.Domain.GameState.Entities;
 
 public sealed class GameLeagueRound
@@ -5,6 +7,7 @@ public sealed class GameLeagueRound
     public Guid GameLeagueId { get; }
     public int Round { get; }
     public DateTime BaseDate { get; }
+    public GameLeagueRoundStatus RoundStatus { get; }
 
     public GameLeagueRound(Guid gameLeagueId, int round, DateTime baseDate)
     {
@@ -18,5 +21,6 @@ public sealed class GameLeagueRound
         GameLeagueId = gameLeagueId;
         Round = round;
         BaseDate = baseDate;
+        RoundStatus = GameLeagueRoundStatus.Provisional;
     }
 }

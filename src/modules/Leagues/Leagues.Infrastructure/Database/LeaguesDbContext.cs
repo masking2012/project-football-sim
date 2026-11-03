@@ -170,6 +170,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.GameLeagueId).IsRequired();
             entity.Property(x => x.Round).IsRequired();
             entity.Property(x => x.BaseDate).IsRequired();
+            entity.Property(x => x.RoundStatus).IsRequired();
             entity.HasOne<GameLeague>()
                 .WithMany(x => x.GameLeagueRounds)
                 .HasForeignKey(x => x.GameLeagueId)

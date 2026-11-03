@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20261102165501_LeaguesInit")]
+    [Migration("20261103110044_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
@@ -219,6 +219,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.Property<DateTime>("BaseDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("RoundStatus")
+                        .HasColumnType("int");
 
                     b.HasKey("GameLeagueId", "Round");
 
