@@ -12,7 +12,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 {
     [DbContext(typeof(LeaguesDbContext))]
-    [Migration("20261103110044_LeaguesInit")]
+    [Migration("20261103165036_LeaguesInit")]
     partial class LeaguesInit
     {
         /// <inheritdoc />
