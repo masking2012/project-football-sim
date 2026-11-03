@@ -176,7 +176,7 @@ internal sealed class LeagueFixtureGeneratorTests
             .ReturnsAsync(league);
 
         var leagueRounds = Enumerable.Range(1, rounds)
-            .Select(round => new LeagueRoundDto(1, 101001, round, round, false))
+            .Select(round => new LeagueRoundDto(1, 101001, round, round, false, [DayOfWeek.Saturday]))
             .ToList();
         leaguesCatalog.Setup(catalog => catalog.GetLeagueRoundsAsync(
                 101001,

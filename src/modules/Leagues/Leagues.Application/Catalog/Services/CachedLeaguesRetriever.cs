@@ -100,6 +100,26 @@ internal sealed class CachedLeaguesRetriever(
         return roundsDto;
     }
 
+    public async ValueTask<IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>>> GetLeagueRoundsAsync(
+        IReadOnlyCollection<int> leagueVersionIds,
+        CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(leagueVersionIds);
+        if (leagueVersionIds.Count != leagueVersionIds.Distinct().Count())
+            throw new ArgumentException(
+                "League version IDs must not contain duplicates.",
+                nameof(leagueVersionIds));
+
+        var leaguesRounds = new Dictionary<int, IReadOnlyList<LeagueRoundDto>>(leagueVersionIds.Count);
+        foreach (var leagueVersionId in leagueVersionIds)
+        {
+            leaguesRounds[leagueVersionId] = await GetLeagueRoundsAsync(leagueVersionId, cancellationToken)
+                .ConfigureAwait(false);
+        }
+
+        return leaguesRounds;
+    }
+
     private ValueTask<Dictionary<int, LeagueSnapshot>> GetCachedLeaguesAsync(
         CancellationToken cancellationToken) =>
         cache.GetOrCreateAsync(
