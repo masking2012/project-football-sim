@@ -46,12 +46,17 @@ internal sealed class CreateGameLeagueCommandHandler(
             ));
         }
 
-        var leagueMatches = await leagueFixtureGenerator
+        var leagueRounds = await leagueFixtureGenerator
             .GenerateAsync(command.LeagueVersionId, gameLeague.Id, teamIds, command.SeasonStartDate, cancellationToken)
             .ConfigureAwait(false);
-        foreach (GameLeagueMatch match in leagueMatches)
-            gameLeague.AddGameLeagueMatch(match);
-            
+        foreach (var (gameLeagueRound, roundMatches) in leagueRounds)
+        {
+            gameLeague.AddGameLeagueRound(gameLeagueRound);
+            foreach (GameLeagueMatch match in roundMatches)
+                gameLeague.AddGameLeagueMatch(match);
+        }
+
+        var leagueMatches = leagueRounds.Values.SelectMany(roundMatches => roundMatches).ToList();
         await writeRepository.AddAsync(gameLeague, cancellationToken).ConfigureAwait(false);
         await writeRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
