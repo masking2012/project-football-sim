@@ -35,7 +35,12 @@ internal sealed class SimulateCalendarDayEventListener(
                     @event.UserId,
                     @event.GameId,
                     @event.Date,
-                    provisionalRounds),
+                    Rounds: provisionalRounds.Select(r => new EventGameLeagueProvisionalRound(
+                        r.GameLeagueId,
+                        r.LeagueVersionId,
+                        r.Round,
+                        r.BaseDate,
+                        r.MatchDays)).ToList()),
                 cancellationToken)
                 .ConfigureAwait(false);
         }

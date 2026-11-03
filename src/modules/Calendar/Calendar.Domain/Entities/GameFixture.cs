@@ -10,8 +10,8 @@ public sealed class GameFixture
     public CompetitionType CompetitionType { get; }
     public int HomeTeamId { get; }
     public int AwayTeamId { get; }
-    public DateTime ScheduledAt { get; }
-    public FixtureStatus Status { get; }
+    public DateTime ScheduledAt { get; private set; }
+    public FixtureStatus Status { get; private set; }
     public int RoundId { get; }
     public Guid UserId { get; }
     public Guid GameId { get; }
@@ -65,5 +65,14 @@ public sealed class GameFixture
         RoundId = roundId;
         UserId = userId;
         GameId = gameId;
+    }
+
+    public void Schedule(DateTime scheduledAt)
+    {
+        if (scheduledAt == default)
+            throw new ArgumentException("Scheduled date must be specified.", nameof(scheduledAt));
+
+        ScheduledAt = scheduledAt;
+        Status = FixtureStatus.Scheduled;
     }
 }

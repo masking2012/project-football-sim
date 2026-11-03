@@ -6,4 +6,11 @@ public sealed record GameLeagueRoundsReadyToScheduleEvent(
     Guid UserId,
     Guid GameId,
     DateTime CurrentDate,
-    IReadOnlyList<GameLeagueRoundDto> Rounds);
+    IReadOnlyList<EventGameLeagueProvisionalRound> Rounds);
+
+public sealed record EventGameLeagueProvisionalRound(
+    Guid GameLeagueId,
+    int LeagueVersionId,
+    int Round,
+    DateTime BaseDate,
+    HashSet<DayOfWeek> MatchDays);
