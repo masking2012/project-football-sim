@@ -40,6 +40,7 @@ public static class DependencyRegistrator
 
         services.AddScoped<IEventListener<GameCreatedEvent>, GameCreatedEventListener>();
         services.AddScoped<IEventListener<GameLeagueMatchesProvisionalEvent>, GameLeagueMatchesProvisionalEventListener>();
+        services.AddScoped<IEventListener<GameLeagueRoundsReadyToScheduleEvent>, GameLeagueRoundsReadyToScheduleEventListener>();
 
         return services;
     }
