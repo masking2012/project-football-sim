@@ -9,6 +9,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Features.CheckGameLeagueM
 using ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByIds;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueRoundsToSchedule;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
@@ -20,6 +21,7 @@ using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CheckGameLeagueMatc
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CreateGameLeague;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatchesByIds;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueRoundsToSchedule;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.SimulateLeagueGameDay;
@@ -40,6 +42,7 @@ public static class DependencyRegistrator
         services.AddScoped<IGetGameLeagueStandingsQueryHandler, GetGameLeagueStandingsQueryHandler>();
         services.AddScoped<IGetGameLeagueFixturesQueryHandler, GetGameLeagueFixturesQueryHandler>();
         services.AddScoped<IGetGameLeagueMatchesByDateQueryHandler, GetGameLeagueMatchesByDateQueryHandler>();
+        services.AddScoped<IGetGameLeagueMatchesByIdsQueryHandler, GetGameLeagueMatchesByIdsQueryHandler>();
         services.AddScoped<IGetGameLeagueRoundsToScheduleQueryHandler, GetGameLeagueRoundsToScheduleQueryHandler>();
         services.AddScoped<GetGameLeaguesQueryHandler>();
 
