@@ -1,6 +1,7 @@
 using ProjectFootballSim.Calendar.Application.Common.Interfaces;
 using ProjectFootballSim.Calendar.Application.Common.Models;
 using ProjectFootballSim.Calendar.Contracts.Features.AdvanceCalendarDay;
+using ProjectFootballSim.Calendar.Contracts.Features.SimulateCalendarDay;
 using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Domain.Enums;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CheckGameLeagueMatchesByDate;
@@ -10,7 +11,8 @@ namespace ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 internal sealed class AdvanceCalendarDayCommandHandler(
     IGameCalendarWriteRepository repository,
     IGameCalendarRepository gameCalendarRepository,
-    ICheckGameLeagueMatchesByDateQueryHandler checkGameLeagueMatchesByDateQueryHandler)
+    ICheckGameLeagueMatchesByDateQueryHandler checkGameLeagueMatchesByDateQueryHandler,
+    ISimulateCalendarDayCommandHandler simulateCalendarDayCommandHandler)
     : IAdvanceCalendarDayCommandHandler
 {
     public async Task HandleAsync(AdvanceCalendarDayCommand command, CancellationToken cancellationToken)
@@ -36,8 +38,14 @@ internal sealed class AdvanceCalendarDayCommandHandler(
                 cancellationToken)
             .ConfigureAwait(false);
 
-        //if (!queryResult.MatchesExists)
-        //    gameCalendar.UpdateDayStatus(CalendarDayStatus.Completed);
+        if (!queryResult.MatchesExists)
+        {
+            await simulateCalendarDayCommandHandler
+                .HandleAsync(new SimulateCalendarDayCommand(UserId: command.UserId, GameId: command.GameId), cancellationToken)
+                .ConfigureAwait(false);
+
+            gameCalendar.UpdateDayStatus(CalendarDayStatus.Completed);
+        }
 
         await repository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }
