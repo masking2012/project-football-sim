@@ -30,8 +30,9 @@ internal sealed class GetGameLeagueRoundsToScheduleQueryHandler(
                 round.BaseDate <= query.CurrentDate.AddDays(leagues[round.LeagueVersionId].MatchdaySchedulingLeadDays))
             .ToList();
 
+        var uniqueLeagueVersionIds = readyToBeScheduledRounds.Select(r => r.LeagueVersionId).Distinct().ToList();
         IReadOnlyDictionary<int, IReadOnlyList<LeagueRoundDto>> leagueRounds = await cachedLeaguesRetriever
-            .GetLeagueRoundsAsync(readyToBeScheduledRounds.Select(round => round.LeagueVersionId).ToList(), cancellationToken)
+            .GetLeagueRoundsAsync(uniqueLeagueVersionIds, cancellationToken)
             .ConfigureAwait(false);
 
         return provisionalRounds
