@@ -1,13 +1,15 @@
 using ProjectFootballSim.Calendar.Application.Common.Interfaces;
 using ProjectFootballSim.Calendar.Application.Common.Models;
 using ProjectFootballSim.Calendar.Contracts.Features.GetCalendarDay;
-using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Calendar.Domain.Entities;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatchesByIds;
 
 namespace ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
 
 internal sealed class GetCalendarDayQueryHandler(
     IGameCalendarRepository gameCalendarRepository,
-    IGetGameLeagueMatchesByDateQueryHandler getGameLeagueMatchesByDateQueryHandler)
+    IGetCalendarDayFixturesRepository gameFixturesRepository,
+    IGetGameLeagueMatchesByIdsQueryHandler getGameLeagueMatchesByIdsQueryHandler)
     : IGetCalendarDayQueryHandler
 {
     public async Task<GetCalendarDayQueryResult> HandleAsync(GetCalendarDayQuery query, CancellationToken cancellationToken)
@@ -29,12 +31,17 @@ internal sealed class GetCalendarDayQueryHandler(
             _ => throw new InvalidOperationException("Invalid date comparison.")
         };
 
-        IReadOnlyList<GetGameLeagueMatchDto> matches = await getGameLeagueMatchesByDateQueryHandler
+        DateTime startDate = date.Date;
+        IReadOnlyList<GameFixture> fixtures = await gameFixturesRepository
+            .GetFixturesAsync(query.UserId, query.GameId, startDate, startDate.AddDays(1), cancellationToken)
+            .ConfigureAwait(false);
+
+        IReadOnlyList<GetGameLeagueMatchDto> matches = await getGameLeagueMatchesByIdsQueryHandler
             .HandleAsync(
-                new GetGameLeagueMatchesByDateQuery(
+                new GetGameLeagueMatchesByIdsQuery(
                     UserId: query.UserId,
                     GameId: query.GameId,
-                    Date: date),
+                    Ids: fixtures.Select(fixture => fixture.MatchId).ToList()),
                 cancellationToken)
             .ConfigureAwait(false);
 
