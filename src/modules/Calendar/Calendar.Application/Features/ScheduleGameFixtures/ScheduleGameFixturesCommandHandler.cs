@@ -1,11 +1,13 @@
 using ProjectFootballSim.Calendar.Contracts.Features.ScheduleGameFixtures;
 using ProjectFootballSim.Calendar.Domain.Entities;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.UpdateGameLeagueRoundStatus;
 using DomainCompetitionType = ProjectFootballSim.Calendar.Domain.Enums.CompetitionType;
 
 namespace ProjectFootballSim.Calendar.Application.Features.ScheduleGameFixtures;
 
 internal sealed class ScheduleGameFixturesCommandHandler(
-    IScheduleGameFixturesRepository scheduleGameFixturesRepository) : IScheduleGameFixturesCommandHandler
+    IScheduleGameFixturesRepository scheduleGameFixturesRepository,
+    IUpdateGameLeagueRoundStatusCommandHandler updateGameLeagueRoundStatusCommandHandler) : IScheduleGameFixturesCommandHandler
 {
     public async Task HandleAsync(ScheduleGameFixturesCommand command, CancellationToken cancellationToken)
     {
@@ -40,6 +42,17 @@ internal sealed class ScheduleGameFixturesCommandHandler(
         }
 
         await scheduleGameFixturesRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+
+
+        //TODO: async
+        await updateGameLeagueRoundStatusCommandHandler.HandleAsync(new UpdateGameLeagueRoundStatusCommand(
+                UserId: command.UserId,
+                GameId: command.GameId,
+                Rounds: command.Rounds.Select(round => new GameLeagueRoundReference(
+                    GameLeagueId: round.GameCompetitionId,
+                    Round: round.RoundId)).ToList(),
+                Status: GameLeagueRoundStatusContract.Scheduled),
+            cancellationToken).ConfigureAwait(false);
     }
 
     private static DomainCompetitionType MapCompetitionType(CompetitionType competitionType)

@@ -1,5 +1,3 @@
-using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueRoundsToSchedule;
-
 namespace ProjectFootballSim.Leagues.Contracts.GameStateFeatures.Events;
 
 public sealed record GameLeagueRoundsReadyToScheduleEvent(

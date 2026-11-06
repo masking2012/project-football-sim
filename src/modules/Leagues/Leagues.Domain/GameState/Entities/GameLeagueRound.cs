@@ -7,7 +7,7 @@ public sealed class GameLeagueRound
     public Guid GameLeagueId { get; }
     public int Round { get; }
     public DateTime BaseDate { get; }
-    public GameLeagueRoundStatus RoundStatus { get; }
+    public GameLeagueRoundStatus RoundStatus { get; private set; }
 
     public GameLeagueRound(Guid gameLeagueId, int round, DateTime baseDate)
     {
@@ -22,5 +22,13 @@ public sealed class GameLeagueRound
         Round = round;
         BaseDate = baseDate;
         RoundStatus = GameLeagueRoundStatus.Provisional;
+    }
+
+    public void UpdateStatus(GameLeagueRoundStatus status)
+    {
+        if (!Enum.IsDefined(status))
+            throw new ArgumentOutOfRangeException(nameof(status), status, "Round status is not defined.");
+
+        RoundStatus = status;
     }
 }
