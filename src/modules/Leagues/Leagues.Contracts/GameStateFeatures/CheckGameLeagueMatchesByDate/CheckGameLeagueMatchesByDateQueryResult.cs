@@ -1,3 +1,0 @@
-namespace ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CheckGameLeagueMatchesByDate;
-
-public sealed record CheckGameLeagueMatchesByDateQueryResult(bool MatchesExists);

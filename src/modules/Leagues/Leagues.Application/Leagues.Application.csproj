@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" />
     </ItemGroup>
@@ -10,5 +10,8 @@
         <ProjectReference Include="..\Leagues.Contracts\Leagues.Contracts.csproj" />
         <ProjectReference Include="..\Leagues.Domain\Leagues.Domain.csproj" />
         <ProjectReference Include="..\..\Matches\Matches.Application\Matches.Application.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="GameState\Features\CheckGameLeagueMatchesByDate\" />
     </ItemGroup>
 </Project>

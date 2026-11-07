@@ -11,22 +11,21 @@ internal static class GameFixtureDateCalculator
             //TODO: provide logic for the rest of base dates
             throw new ArgumentException("Base date must be a Sunday.", nameof(baseDate));
 
-        IReadOnlyList<int> dayOffsets = availableDaysOfWeek
+        if (availableDaysOfWeek.Count == 0)
+            throw new ArgumentException("At least one available day of week is required.", nameof(availableDaysOfWeek));
+
+        List<int> dayOffsets = availableDaysOfWeek
             .Select(GetOffsetFromSunday)
             .Order()
             .ToList();
 
-        List<DateTime> dates = [];
-        DateTime weekBaseDate = baseDate.Date;
-        while (dates.Count < fixtureCount)
-        {
-            dates.AddRange(dayOffsets
-                .Select(offset => weekBaseDate.AddDays(offset))
-                .Take(fixtureCount - dates.Count));
-            weekBaseDate = weekBaseDate.AddDays(7);
-        }
+        int fixturesPerDate = fixtureCount / dayOffsets.Count;
+        int remainder = fixtureCount % dayOffsets.Count;
 
-        return dates;
+        return dayOffsets
+            .Select((offset, index) => (Date: baseDate.Date.AddDays(offset), Count: fixturesPerDate + (index < remainder ? 1 : 0)))
+            .SelectMany(item => Enumerable.Repeat(item.Date, item.Count))
+            .ToList();
     }
 
     private static int GetOffsetFromSunday(DayOfWeek dayOfWeek)

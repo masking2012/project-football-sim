@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Calendar.Application.Common.Interfaces;
+using ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
@@ -36,6 +37,7 @@ public static class DependencyRegistrator
         services.AddScoped<IProvisionGameFixturesRepository, ProvisionGameFixturesRepository>();
         services.AddScoped<IScheduleGameFixturesRepository, ScheduleGameFixturesRepository>();
         services.AddScoped<IGetCalendarDayFixturesRepository, GetCalendarDayFixturesRepository>();
+        services.AddScoped<IAdvanceCalendarDayRepository, AdvanceCalendarDayRepository>();
 
         return services;
     }

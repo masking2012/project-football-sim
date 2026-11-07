@@ -64,6 +64,9 @@
     <File Path="tests/Directory.Build.props" />
   </Folder>
   <Folder Name="/tests/modules/" />
+  <Folder Name="/tests/modules/Calendar/">
+    <Project Path="tests/modules/Calendar/Calendar.Application.Tests/Calendar.Application.Tests.csproj" />
+  </Folder>
   <Folder Name="/tests/modules/Leagues/">
     <Project Path="tests/modules/Leagues/Leagues.Application.Tests/Leagues.Application.Tests.csproj" />
     <Project Path="tests/modules/Leagues/Leagues.Domain.Tests/Leagues.Domain.Tests.csproj" />
