@@ -13,6 +13,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueRou
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagues;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
+using ProjectFootballSim.Leagues.Application.GameState.Features.UpdateGameLeagueMatches;
 using ProjectFootballSim.Leagues.Application.GameState.Features.UpdateGameLeagueRoundStatus;
 using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
@@ -24,6 +25,7 @@ using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueMatche
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueRoundsToSchedule;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueStandings;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.SimulateLeagueGameDay;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.UpdateGameLeagueMatches;
 using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.UpdateGameLeagueRoundStatus;
 using ProjectFootballSim.Shared.Features.Events;
 
@@ -49,6 +51,7 @@ public static class DependencyRegistrator
         services.AddScoped<ICreateGameLeagueCommandHandler, CreateGameLeagueCommandHandler>();
         services.AddScoped<ISimulateLeagueGameDayCommandHandler, SimulateLeagueGameDayCommandHandler>();
         services.AddScoped<IUpdateGameLeagueRoundStatusCommandHandler, UpdateGameLeagueRoundStatusCommandHandler>();
+        services.AddScoped<IUpdateGameLeagueMatchesCommandHandler, UpdateGameLeagueMatchesCommandHandler>();
 
         services.AddScoped<IEventListener<GameSeasonStartedEvent>, GameSeasonStartedEventListener>();
         services.AddScoped<IEventListener<SimulateCalendarDayEvent>, SimulateCalendarDayEventListener>();

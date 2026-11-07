@@ -8,6 +8,7 @@ using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMat
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueRoundsToSchedule;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
+using ProjectFootballSim.Leagues.Application.GameState.Features.UpdateGameLeagueMatches;
 using ProjectFootballSim.Leagues.Application.GameState.Features.UpdateGameLeagueRoundStatus;
 using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
@@ -52,6 +53,7 @@ public static class DependencyRegistrator
         services.AddScoped<IGetGameLeagueRoundsToScheduleRepository, GetGameLeagueRoundsToScheduleRepository>();
         services.AddScoped<ISimulateLeagueDayRepository, SimulateLeagueDayRepository>();
         services.AddScoped<IUpdateGameLeagueRoundStatusRepository, UpdateGameLeagueRoundStatusRepository>();
+        services.AddScoped<IUpdateGameLeagueMatchesRepository, UpdateGameLeagueMatchesRepository>();
 
         return services;
     }
