@@ -1,6 +1,5 @@
 using ProjectFootballSim.Calendar.Contracts.Features.ScheduleGameFixtures;
 using ProjectFootballSim.Calendar.Domain.Entities;
-using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.UpdateGameLeagueRoundStatus;
 using ProjectFootballSim.Shared.Features.Events;
 using DomainCompetitionType = ProjectFootballSim.Calendar.Domain.Enums.CompetitionType;
 
@@ -8,7 +7,6 @@ namespace ProjectFootballSim.Calendar.Application.Features.ScheduleGameFixtures;
 
 internal sealed class ScheduleGameFixturesCommandHandler(
     IScheduleGameFixturesRepository scheduleGameFixturesRepository,
-    IUpdateGameLeagueRoundStatusCommandHandler updateGameLeagueRoundStatusCommandHandler,
     IEventPublisher eventPublisher) : IScheduleGameFixturesCommandHandler
 {
     public async Task HandleAsync(ScheduleGameFixturesCommand command, CancellationToken cancellationToken)
@@ -45,6 +43,7 @@ internal sealed class ScheduleGameFixturesCommandHandler(
                 roundFixtures[i].Schedule(dates[i]);
 
             scheduledVersionEventItems.Add(new ScheduledVersionEventItem(
+                round.GameCompetitionId,
                 roundFixtures[0].CompetitionVersionId,
                 round.CompetitionType,
                 round.RoundId,
@@ -59,17 +58,6 @@ internal sealed class ScheduleGameFixturesCommandHandler(
                     GameId: command.GameId,
                     Versions: scheduledVersionEventItems),
                 cancellationToken).ConfigureAwait(false);
-
-
-        //TODO: async
-        await updateGameLeagueRoundStatusCommandHandler.HandleAsync(new UpdateGameLeagueRoundStatusCommand(
-                UserId: command.UserId,
-                GameId: command.GameId,
-                Rounds: command.Rounds.Select(round => new GameLeagueRoundReference(
-                    GameLeagueId: round.GameCompetitionId,
-                    Round: round.RoundId)).ToList(),
-                Status: GameLeagueRoundStatusContract.Scheduled),
-            cancellationToken).ConfigureAwait(false);
     }
 
     private static DomainCompetitionType MapCompetitionType(CompetitionType competitionType)

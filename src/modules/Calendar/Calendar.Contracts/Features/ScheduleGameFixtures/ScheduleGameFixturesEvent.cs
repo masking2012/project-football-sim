@@ -6,6 +6,7 @@ public sealed record ScheduleGameFixturesEvent(
     IReadOnlyList<ScheduledVersionEventItem> Versions);
 
 public sealed record ScheduledVersionEventItem(
+    Guid GameCompetitionId,
     int CompetitionVersionId,
     CompetitionType CompetitionType,
     int Round,

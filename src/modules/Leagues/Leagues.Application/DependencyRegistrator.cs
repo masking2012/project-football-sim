@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
+using ProjectFootballSim.Calendar.Contracts.Features.ScheduleGameFixtures;
 using ProjectFootballSim.Calendar.Contracts.Features.SimulateCalendarDay;
 using ProjectFootballSim.Leagues.Application.Catalog.Features.GetActiveLeagues;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
@@ -55,6 +56,7 @@ public static class DependencyRegistrator
 
         services.AddScoped<IEventListener<GameSeasonStartedEvent>, GameSeasonStartedEventListener>();
         services.AddScoped<IEventListener<SimulateCalendarDayEvent>, SimulateCalendarDayEventListener>();
+        services.AddScoped<IEventListener<ScheduleGameFixturesEvent>, ScheduleGameFixturesEventListener>();
 
         return services;
     }
