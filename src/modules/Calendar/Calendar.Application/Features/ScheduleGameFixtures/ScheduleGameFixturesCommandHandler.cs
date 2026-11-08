@@ -16,7 +16,7 @@ internal sealed class ScheduleGameFixturesCommandHandler(
         if (command.Rounds.Count == 0)
             throw new ArgumentException("At least one round must be provided.");
 
-        List<ScheduledLeagueVersion> scheduledLeagueVersions = [];
+        List<ScheduledVersionEventItem> scheduledVersionEventItems = [];
 
         foreach (ScheduleGameFixturesRoundItem round in command.Rounds)
         {
@@ -44,20 +44,20 @@ internal sealed class ScheduleGameFixturesCommandHandler(
             for (int i = 0; i < roundFixtures.Count; i++)
                 roundFixtures[i].Schedule(dates[i]);
 
-            if (round.CompetitionType == CompetitionType.League)
-                scheduledLeagueVersions.Add(new ScheduledLeagueVersion(
-                    roundFixtures[0].CompetitionVersionId,
-                    round.RoundId,
-                    roundFixtures.Select(fixture => new ScheduledLeagueMatch(fixture.MatchId, fixture.ScheduledAt)).ToList()));
+            scheduledVersionEventItems.Add(new ScheduledVersionEventItem(
+                roundFixtures[0].CompetitionVersionId,
+                round.CompetitionType,
+                round.RoundId,
+                roundFixtures.Select(fixture => new ScheduledMatchEventItem(fixture.MatchId, fixture.ScheduledAt)).ToList()));
         }
 
         await scheduleGameFixturesRepository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
-        if (scheduledLeagueVersions.Count > 0)
-            await eventPublisher.PublishAsync(new ScheduleGameLeagueFixturesEvent(
+        if (scheduledVersionEventItems.Count > 0)
+            await eventPublisher.PublishAsync(new ScheduleGameFixturesEvent(
                     UserId: command.UserId,
                     GameId: command.GameId,
-                    LeagueVersions: scheduledLeagueVersions),
+                    Versions: scheduledVersionEventItems),
                 cancellationToken).ConfigureAwait(false);
 
 
