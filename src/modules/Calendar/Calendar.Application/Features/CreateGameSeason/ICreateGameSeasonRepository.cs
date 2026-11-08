@@ -1,7 +1,4 @@
 using ProjectFootballSim.Calendar.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 

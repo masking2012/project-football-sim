@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
-using System.Text.Json;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
+using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace ProjectFootballSim.Leagues.Infrastructure.Database;
 
@@ -128,7 +128,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
                 .IsRequired();
 
             entity.HasIndex(x => new { x.GameId, x.UserId, x.SeasonId, x.LeagueVersionId }).IsUnique();
-        });            
+        });
 
         modelBuilder.Entity<GameLeagueTeam>(entity =>
         {

@@ -1,5 +1,3 @@
-using ProjectFootballSim.Locations.Contracts.Features.GetCountries;
-
 namespace ProjectFootballSim.Locations.Application.Features.GetCountries;
 
 public interface IGetCountriesRepository

@@ -63,7 +63,7 @@ internal static class GameLeaguesEndpoints
 
             return Results.Ok(gameLeagueStandings);
         }).RequireAuthorization();
-        
+
         app.MapGet("/api/games/{gameId}/seasons/{seasonId}/leagues/{leagueVersionId}/fixtures", async (
             [FromRoute] Guid gameId,
             [FromRoute] Guid seasonId,

@@ -28,7 +28,7 @@ internal sealed class SimulateLeagueGameDayCommandHandler(
 
         foreach (GameLeague gameLeague in gameLeaguesWithMatches)
         {
-            foreach(GameLeagueMatch match in gameLeague.GameLeagueMatches.Where(match => !match.HomeTeamScore.HasValue && !match.AwayTeamScore.HasValue))
+            foreach (GameLeagueMatch match in gameLeague.GameLeagueMatches.Where(match => !match.HomeTeamScore.HasValue && !match.AwayTeamScore.HasValue))
                 SimulateMatch(match, gameLeague, teams);
         }
 

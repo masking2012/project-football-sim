@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueRoundsToSchedule;
-using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.GetGameLeagueRoundsToSchedule;
 using ProjectFootballSim.Leagues.Domain.GameState.Enums;
 using ProjectFootballSim.Leagues.Infrastructure.Database;
 

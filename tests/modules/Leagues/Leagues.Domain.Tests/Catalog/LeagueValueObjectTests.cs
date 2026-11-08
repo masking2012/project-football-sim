@@ -1,5 +1,5 @@
-using ProjectFootballSim.Leagues.Domain.Catalog.Enums;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
+using ProjectFootballSim.Leagues.Domain.Catalog.Enums;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 
 namespace ProjectFootballSim.Leagues.Domain.Tests.Catalog;

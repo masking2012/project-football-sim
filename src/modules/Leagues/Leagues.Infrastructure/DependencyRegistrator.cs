@@ -18,9 +18,9 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 using ProjectFootballSim.Leagues.Infrastructure.Repositories;
 using ProjectFootballSim.Shared.Data.Entities.Leagues;
 using ProjectFootballSim.Shared.Data.Entities.Locations;
+using DataDayOfWeek = ProjectFootballSim.Shared.Data.Entities.Leagues.DayOfWeek;
 using DataLeagueFormatType = ProjectFootballSim.Shared.Data.Entities.Leagues.LeagueFormatType;
 using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.Enums.LeagueStageType;
-using DataDayOfWeek = ProjectFootballSim.Shared.Data.Entities.Leagues.DayOfWeek;
 
 namespace ProjectFootballSim.Leagues.Infrastructure;
 
@@ -164,5 +164,5 @@ public static class DependencyRegistrator
             })
             .ToHashSet();
     }
-        
+
 }

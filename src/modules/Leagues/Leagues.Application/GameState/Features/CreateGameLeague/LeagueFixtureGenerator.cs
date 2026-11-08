@@ -1,7 +1,7 @@
-using ProjectFootballSim.Shared.Features;
-using ProjectFootballSim.Leagues.Domain.GameState.Entities;
-using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
+using ProjectFootballSim.Leagues.Application.Catalog.Models;
+using ProjectFootballSim.Leagues.Domain.GameState.Entities;
+using ProjectFootballSim.Shared.Features;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
