@@ -38,17 +38,29 @@ internal sealed class GameFixtureDateCalculatorTests
     }
 
     [Test]
-    public async Task ShouldGiveRemainingFixturesToEarliestDates()
+    public async Task ShouldGiveRemainingFixturesToSundayThenSaturdayThenFriday()
     {
         var dates = GameFixtureDateCalculator.CalculateDates(BaseDate, AvailableDays, 6);
 
         await Assert.That(dates).IsEquivalentTo(
         [
-            new DateTime(2026, 11, 6), new DateTime(2026, 11, 6),
+            new DateTime(2026, 11, 6),
             new DateTime(2026, 11, 7), new DateTime(2026, 11, 7),
-            new DateTime(2026, 11, 8),
+            new DateTime(2026, 11, 8), new DateTime(2026, 11, 8),
             new DateTime(2026, 11, 9)
         ]);
+    }
+
+    [Test]
+    public async Task ShouldPrioritizeSundayThenSaturdayThenFridayForUnevenFixtures()
+    {
+        var availableDays = new HashSet<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday };
+
+        var dates = GameFixtureDateCalculator.CalculateDates(BaseDate, availableDays, 8);
+
+        await Assert.That(dates.Count(date => date == new DateTime(2026, 11, 6))).IsEqualTo(2);
+        await Assert.That(dates.Count(date => date == new DateTime(2026, 11, 7))).IsEqualTo(3);
+        await Assert.That(dates.Count(date => date == new DateTime(2026, 11, 8))).IsEqualTo(3);
     }
 
     [Test]

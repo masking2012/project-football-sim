@@ -2,6 +2,17 @@ namespace ProjectFootballSim.Calendar.Application.Features.ScheduleGameFixtures;
 
 internal static class GameFixtureDateCalculator
 {
+    private static readonly DayOfWeek[] DayPriority =
+    [
+        DayOfWeek.Sunday,
+        DayOfWeek.Saturday,
+        DayOfWeek.Friday,
+        DayOfWeek.Thursday,
+        DayOfWeek.Wednesday,
+        DayOfWeek.Tuesday,
+        DayOfWeek.Monday
+    ];
+
     public static IReadOnlyList<DateTime> CalculateDates(
         DateTime baseDate,
         IReadOnlySet<DayOfWeek> availableDaysOfWeek,
@@ -14,17 +25,17 @@ internal static class GameFixtureDateCalculator
         if (availableDaysOfWeek.Count == 0)
             throw new ArgumentException("At least one available day of week is required.", nameof(availableDaysOfWeek));
 
-        List<int> dayOffsets = availableDaysOfWeek
-            .Select(GetOffsetFromSunday)
-            .Order()
+        List<DayOfWeek> prioritizedDays = DayPriority
+            .Where(availableDaysOfWeek.Contains)
             .ToList();
 
-        int fixturesPerDate = fixtureCount / dayOffsets.Count;
-        int remainder = fixtureCount % dayOffsets.Count;
+        int fixturesPerDate = fixtureCount / prioritizedDays.Count;
+        int remainder = fixtureCount % prioritizedDays.Count;
 
-        return dayOffsets
-            .Select((offset, index) => (Date: baseDate.Date.AddDays(offset), Count: fixturesPerDate + (index < remainder ? 1 : 0)))
-            .SelectMany(item => Enumerable.Repeat(item.Date, item.Count))
+        return prioritizedDays
+            .Select((dayOfWeek, index) => (Offset: GetOffsetFromSunday(dayOfWeek), Count: fixturesPerDate + (index < remainder ? 1 : 0)))
+            .OrderBy(item => item.Offset)
+            .SelectMany(item => Enumerable.Repeat(baseDate.Date.AddDays(item.Offset), item.Count))
             .ToList();
     }
 
