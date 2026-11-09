@@ -2,6 +2,9 @@ namespace ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 
 public sealed record LeagueRound
 {
+    private static readonly IEqualityComparer<HashSet<DayOfWeek>> AvailableDaysComparer =
+        HashSet<DayOfWeek>.CreateSetComparer();
+
     public int LeagueVersionId { get; }
     public int Round { get; }
     public int Week { get; }
@@ -24,4 +27,20 @@ public sealed record LeagueRound
         IsMidweek = isMidweek;
         AvailableDaysOfWeek = availableDaysOfWeek;
     }
+
+    public bool Equals(LeagueRound? other) =>
+        other is not null
+        && LeagueVersionId == other.LeagueVersionId
+        && Round == other.Round
+        && Week == other.Week
+        && IsMidweek == other.IsMidweek
+        && AvailableDaysComparer.Equals(AvailableDaysOfWeek, other.AvailableDaysOfWeek);
+
+    public override int GetHashCode() =>
+        HashCode.Combine(
+            LeagueVersionId,
+            Round,
+            Week,
+            IsMidweek,
+            AvailableDaysComparer.GetHashCode(AvailableDaysOfWeek));
 }
