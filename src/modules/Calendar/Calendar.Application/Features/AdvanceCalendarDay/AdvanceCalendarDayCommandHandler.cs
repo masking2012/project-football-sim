@@ -1,16 +1,17 @@
 using ProjectFootballSim.Calendar.Application.Common.Interfaces;
 using ProjectFootballSim.Calendar.Application.Common.Models;
 using ProjectFootballSim.Calendar.Contracts.Features.AdvanceCalendarDay;
+using ProjectFootballSim.Calendar.Contracts.Features.SimulateCalendarDay;
 using ProjectFootballSim.Calendar.Domain.Entities;
 using ProjectFootballSim.Calendar.Domain.Enums;
-using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.CheckGameLeagueMatchesByDate;
 
 namespace ProjectFootballSim.Calendar.Application.Features.AdvanceCalendarDay;
 
 internal sealed class AdvanceCalendarDayCommandHandler(
     IGameCalendarWriteRepository repository,
     IGameCalendarRepository gameCalendarRepository,
-    ICheckGameLeagueMatchesByDateQueryHandler checkGameLeagueMatchesByDateQueryHandler)
+    IAdvanceCalendarDayRepository advanceCalendarDayRepository,
+    ISimulateCalendarDayCommandHandler simulateCalendarDayCommandHandler)
     : IAdvanceCalendarDayCommandHandler
 {
     public async Task HandleAsync(AdvanceCalendarDayCommand command, CancellationToken cancellationToken)
@@ -27,17 +28,18 @@ internal sealed class AdvanceCalendarDayCommandHandler(
         DateTime nextDay = gameCalendar.CurrentDate.AddDays(1);
         gameCalendar.UpdateDate(nextDay);
 
-        var queryResult = await checkGameLeagueMatchesByDateQueryHandler
-            .HandleAsync(
-                new CheckGameLeagueMatchesByDateQuery(
-                    UserId: command.UserId,
-                    GameId: command.GameId,
-                    Date: nextDay),
-                cancellationToken)
+        bool matchesExist = await advanceCalendarDayRepository
+            .MatchesExistAsync(command.UserId, command.GameId, nextDay, cancellationToken)
             .ConfigureAwait(false);
 
-        if (!queryResult.MatchesExists)
+        if (!matchesExist)
+        {
+            await simulateCalendarDayCommandHandler
+                .HandleAsync(new SimulateCalendarDayCommand(UserId: command.UserId, GameId: command.GameId), cancellationToken)
+                .ConfigureAwait(false);
+
             gameCalendar.UpdateDayStatus(CalendarDayStatus.Completed);
+        }
 
         await repository.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
     }

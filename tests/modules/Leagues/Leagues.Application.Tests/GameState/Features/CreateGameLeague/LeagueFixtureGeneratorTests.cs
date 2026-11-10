@@ -12,12 +12,12 @@ internal sealed class LeagueFixtureGeneratorTests
     {
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
-        var fixtures = await generator.GenerateAsync(
+        var fixtures = (await generator.GenerateAsync(
             leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None).ConfigureAwait(false)).Values.SelectMany(roundMatches => roundMatches).ToList();
 
         await Assert.That(fixtures).Count().IsEqualTo(6);
         await Assert.That(fixtures.Select(match => match.Round).Distinct()).Count().IsEqualTo(3);
@@ -28,12 +28,12 @@ internal sealed class LeagueFixtureGeneratorTests
     {
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
-        var fixtures = await generator.GenerateAsync(
+        var fixtures = (await generator.GenerateAsync(
             leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None).ConfigureAwait(false)).Values.SelectMany(roundMatches => roundMatches).ToList();
 
         foreach (var round in fixtures.GroupBy(match => match.Round))
         {
@@ -51,12 +51,12 @@ internal sealed class LeagueFixtureGeneratorTests
     {
         var generator = CreateGenerator(legs: 1, rounds: 3);
 
-        var fixtures = await generator.GenerateAsync(
+        var fixtures = (await generator.GenerateAsync(
             leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None).ConfigureAwait(false)).Values.SelectMany(roundMatches => roundMatches).ToList();
 
         var datesByRound = fixtures
             .GroupBy(match => match.Round)
@@ -86,12 +86,12 @@ internal sealed class LeagueFixtureGeneratorTests
     {
         var generator = CreateGenerator(legs: 2, rounds: 6);
 
-        var fixtures = await generator.GenerateAsync(
+        var fixtures = (await generator.GenerateAsync(
             leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4],
             seasonStartDate: new DateTime(2026, 1, 1),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None).ConfigureAwait(false)).Values.SelectMany(roundMatches => roundMatches).ToList();
 
         var pairingsByRound = fixtures
             .GroupBy(match => match.Round)
@@ -110,12 +110,12 @@ internal sealed class LeagueFixtureGeneratorTests
     {
         var generator = CreateGenerator(legs: 2, rounds: 10, teamsCount: 6);
 
-        var fixtures = await generator.GenerateAsync(
+        var fixtures = (await generator.GenerateAsync(
             leagueVersionId: 101001,
             gameLeagueId: Guid.NewGuid(),
             teamIds: [1, 2, 3, 4, 5, 6],
             seasonStartDate: new DateTime(2026, 1, 1),
-            CancellationToken.None).ConfigureAwait(false);
+            CancellationToken.None).ConfigureAwait(false)).Values.SelectMany(roundMatches => roundMatches).ToList();
 
         var longestStreaks = fixtures
             .SelectMany(match => new[]
@@ -159,6 +159,7 @@ internal sealed class LeagueFixtureGeneratorTests
             Order: 1,
             CountryId: 1,
             TeamsCount: teamsCount,
+            MatchdaySchedulingLeadDays: 17,
             Format: [new LeagueFormatDto(1, LeagueStageTypeDto.RoundRobin, legs)],
             PromotionPositions: null,
             PromotionPlayOffPositions: null,
@@ -175,7 +176,7 @@ internal sealed class LeagueFixtureGeneratorTests
             .ReturnsAsync(league);
 
         var leagueRounds = Enumerable.Range(1, rounds)
-            .Select(round => new LeagueRoundDto(1, 101001, round, round, false))
+            .Select(round => new LeagueRoundDto(1, 101001, round, round, false, [DayOfWeek.Saturday]))
             .ToList();
         leaguesCatalog.Setup(catalog => catalog.GetLeagueRoundsAsync(
                 101001,

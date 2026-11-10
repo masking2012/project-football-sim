@@ -10,9 +10,9 @@
     {
         "id": 10002,
         "name": "Shakhtar Donetsk",
-        "attack": 67,
-        "midfield": 69,
-        "defence": 69,
+        "attack": 71,
+        "midfield": 71,
+        "defence": 71,
         "countryId": 1
     },
     {
@@ -26,25 +26,25 @@
     {
         "id": 10004,
         "name": "Polissya Zhytomyr",
+        "attack": 66,
+        "midfield": 67,
+        "defence": 66,
+        "countryId": 1
+    },
+    {
+        "id": 10005,
+        "name": "FC Kharkiv",
         "attack": 64,
         "midfield": 65,
         "defence": 64,
         "countryId": 1
     },
     {
-        "id": 10005,
-        "name": "FC Kharkiv",
-        "attack": 62,
-        "midfield": 63,
-        "defence": 62,
-        "countryId": 1
-    },
-    {
         "id": 10006,
         "name": "Kolos Kovalivka",
-        "attack": 57,
-        "midfield": 57,
-        "defence": 59,
+        "attack": 56,
+        "midfield": 56,
+        "defence": 58,
         "countryId": 1
     },
     {
@@ -74,9 +74,9 @@
     {
         "id": 10010,
         "name": "Epitsentr",
-        "attack": 55,
-        "midfield": 55,
-        "defence": 55,
+        "attack": 53,
+        "midfield": 53,
+        "defence": 53,
         "countryId": 1
     },
     {
@@ -114,9 +114,9 @@
     {
         "id": 10015,
         "name": "Bukovyna Chernivtsi",
-        "attack": 57,
-        "midfield": 57,
-        "defence": 57,
+        "attack": 55,
+        "midfield": 55,
+        "defence": 55,
         "countryId": 1
     },
     {

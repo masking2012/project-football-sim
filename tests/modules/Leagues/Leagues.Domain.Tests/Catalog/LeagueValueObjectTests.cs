@@ -1,5 +1,5 @@
-using ProjectFootballSim.Leagues.Domain.Catalog.Enums;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
+using ProjectFootballSim.Leagues.Domain.Catalog.Enums;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 
 namespace ProjectFootballSim.Leagues.Domain.Tests.Catalog;
@@ -98,6 +98,7 @@ internal sealed class LeagueValueObjectTests
             leagueId,
             version,
             teamsCount,
+            17,
             [new LeagueStage(1, LeagueStageType.RoundRobin, 1)],
             null,
             null,
@@ -139,7 +140,7 @@ internal sealed class LeagueValueObjectTests
         var league = new League(1, "Premier", 3, 4);
         var first = new LeagueTeam(101001, 3);
         var second = new LeagueTeam(101001, 3);
-        var round = new LeagueRound(101001, 3, 4, true);
+        var round = new LeagueRound(101001, 3, 4, true, []);
 
         using (Assert.Multiple())
         {
@@ -147,7 +148,7 @@ internal sealed class LeagueValueObjectTests
             await Assert.That(first).IsEqualTo(second);
             await Assert.That(first.GetHashCode()).IsEqualTo(second.GetHashCode());
             await Assert.That(round.IsMidweek).IsTrue();
-            await Assert.That(new LeagueRound(101001, 3, 4, true))
+            await Assert.That(new LeagueRound(101001, 3, 4, true, []))
                 .IsEqualTo(round);
             await Assert.That(new LeagueStage(1, LeagueStageType.RoundRobin, 2))
                 .IsEqualTo(new LeagueStage(1, LeagueStageType.RoundRobin, 2));
@@ -200,7 +201,7 @@ internal sealed class LeagueValueObjectTests
     [Arguments(1, 1, 0)]
     public async Task ShouldRejectInvalidRoundValues(int leagueVersionId, int round, int week)
     {
-        await Assert.That(() => new LeagueRound(leagueVersionId, round, week, false))
+        await Assert.That(() => new LeagueRound(leagueVersionId, round, week, false, []))
             .Throws<ArgumentException>();
     }
 
@@ -209,5 +210,5 @@ internal sealed class LeagueValueObjectTests
         ICollection<int>? promotionPositions = null,
         ICollection<int>? promotionPlayOffPositions = null,
         ICollection<int>? relegationPositions = null) =>
-        new(101001, 1, 1, 4, format, promotionPositions, promotionPlayOffPositions, relegationPositions, null, null, null, null);
+        new(101001, 1, 1, 4, 17, format, promotionPositions, promotionPlayOffPositions, relegationPositions, null, null, null, null);
 }

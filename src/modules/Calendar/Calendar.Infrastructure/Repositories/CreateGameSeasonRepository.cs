@@ -30,6 +30,6 @@ internal sealed class CreateGameSeasonRepository(CalendarDbContext dbContext) : 
         catch (DbUpdateException ex) when (ex.IsUniqueViolation())
         {
             throw new GameSeasonExistsException("A game season already exists.", ex);
-        }        
+        }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 namespace ProjectFootballSim.Calendar.Contracts.Features.GetCalendarDay;
 
 public sealed record LeagueMatchDto(

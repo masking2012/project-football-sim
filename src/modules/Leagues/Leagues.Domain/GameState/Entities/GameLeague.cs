@@ -4,6 +4,7 @@ public sealed class GameLeague
 {
     private readonly List<GameLeagueTeam> _teams = [];
     private readonly List<GameLeagueMatch> _matches = [];
+    private readonly List<GameLeagueRound> _rounds = [];
 
     public Guid Id { get; }
     public Guid UserId { get; }
@@ -13,6 +14,7 @@ public sealed class GameLeague
 
     public IReadOnlyCollection<GameLeagueTeam> GameLeagueTeams => _teams;
     public IReadOnlyCollection<GameLeagueMatch> GameLeagueMatches => _matches;
+    public IReadOnlyCollection<GameLeagueRound> GameLeagueRounds => _rounds;
 
     public GameLeague(Guid userId, Guid gameId, Guid seasonId, int leagueVersionId)
     {
@@ -42,6 +44,26 @@ public sealed class GameLeague
             throw new InvalidOperationException("Team is already part of the league.");
 
         _teams.Add(gameLeagueTeam);
+    }
+
+    public void AddGameLeagueRound(GameLeagueRound gameLeagueRound)
+    {
+        ArgumentNullException.ThrowIfNull(gameLeagueRound);
+
+        if (gameLeagueRound.GameLeagueId != Id)
+            throw new ArgumentException("Round belongs to a different game league.", nameof(gameLeagueRound));
+        if (_rounds.Any(round => round.Round == gameLeagueRound.Round))
+            throw new InvalidOperationException("Round is already part of the league.");
+
+        var previousRound = _rounds.SingleOrDefault(round => round.Round == gameLeagueRound.Round - 1);
+        if (previousRound is not null && gameLeagueRound.BaseDate <= previousRound.BaseDate)
+            throw new ArgumentException("Round base date must be greater than the base date of the previous round.", nameof(gameLeagueRound));
+
+        var nextRound = _rounds.SingleOrDefault(round => round.Round == gameLeagueRound.Round + 1);
+        if (nextRound is not null && gameLeagueRound.BaseDate >= nextRound.BaseDate)
+            throw new ArgumentException("Round base date must be less than the base date of the next round.", nameof(gameLeagueRound));
+
+        _rounds.Add(gameLeagueRound);
     }
 
     public void AddGameLeagueMatch(GameLeagueMatch gameLeagueMatch)

@@ -1,7 +1,7 @@
-using ProjectFootballSim.Shared.Features;
-using ProjectFootballSim.Leagues.Domain.GameState.Entities;
-using ProjectFootballSim.Leagues.Application.Catalog.Models;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
+using ProjectFootballSim.Leagues.Application.Catalog.Models;
+using ProjectFootballSim.Leagues.Domain.GameState.Entities;
+using ProjectFootballSim.Shared.Features;
 
 namespace ProjectFootballSim.Leagues.Application.GameState.Features.CreateGameLeague;
 
@@ -11,7 +11,7 @@ public sealed class LeagueFixtureGenerator(
     private const int StubTeamId = -1;
     private const int MaxVenueStreak = 3;
 
-    public async Task<IReadOnlyList<GameLeagueMatch>> GenerateAsync(
+    public async Task<Dictionary<GameLeagueRound, List<GameLeagueMatch>>> GenerateAsync(
         int leagueVersionId,
         Guid gameLeagueId,
         IEnumerable<int> teamIds,
@@ -25,7 +25,7 @@ public sealed class LeagueFixtureGenerator(
         var roundDates = await LoadRoundDatesAsync(leagueVersionId, seasonStartDate, cancellationToken).ConfigureAwait(false);
         var teams = PrepareTeams(teamIds);
         var pairings = GenerateRoundRobinPairings(teams);
-        var allFixtures = new List<GameLeagueMatch>();
+        var roundFixtures = new Dictionary<GameLeagueRound, List<GameLeagueMatch>>();
         var round = 1;
 
         foreach (var formatStage in league.Format.OrderBy(stage => stage.Order))
@@ -38,10 +38,13 @@ public sealed class LeagueFixtureGenerator(
                 if (!roundDates.TryGetValue(round, out var date))
                     throw new InvalidOperationException($"League with version ID '{leagueVersionId}' has no calendar date for generated round {round}.");
 
+                var matches = new List<GameLeagueMatch>();
                 foreach (var (home, away) in stageRound)
                 {
-                    allFixtures.Add(new GameLeagueMatch(date, home, away, round, gameLeagueId));
+                    matches.Add(new GameLeagueMatch(date, home, away, round, gameLeagueId));
                 }
+
+                roundFixtures.Add(new GameLeagueRound(gameLeagueId, round, date), matches);
 
                 round++;
             }
@@ -50,7 +53,7 @@ public sealed class LeagueFixtureGenerator(
         if (round - 1 != roundDates.Count)
             throw new InvalidOperationException($"League with ID '{leagueVersionId}' format generates {round - 1} rounds, but its calendar contains {roundDates.Count} rounds.");
 
-        return allFixtures;
+        return roundFixtures;
     }
 
     // ------------------------------------------------------------

@@ -73,6 +73,7 @@ internal sealed class LeaguesRepository(LeaguesDbContext dbContext) : ILeaguesRe
             league.Order,
             league.CountryId,
             version.TeamsCount,
+            version.MatchdaySchedulingLeadDays,
             version.Format
                 .OrderBy(stage => stage.Order)
                 .Select(stage => new LeagueFormatDto(stage.Order, (LeagueStageTypeDto)stage.Type, stage.Legs))

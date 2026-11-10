@@ -3,7 +3,7 @@ namespace ProjectFootballSim.Leagues.Domain.GameState.Entities;
 public sealed class GameLeagueMatch
 {
     public Guid Id { get; }
-    public DateTime Date { get; }
+    public DateTime Date { get; private set; }
     public int HomeTeamId { get; }
     public int AwayTeamId { get; }
     public int? HomeTeamScore { get; private set; }
@@ -32,6 +32,14 @@ public sealed class GameLeagueMatch
         AwayTeamId = awayTeamId;
         Round = round;
         GameLeagueId = gameLeagueId;
+    }
+
+    public void UpdateDate(DateTime date)
+    {
+        if (date == default)
+            throw new ArgumentException("Match date must be specified.", nameof(date));
+
+        Date = date;
     }
 
     internal void SetScore(int homeTeamScore, int awayTeamScore)

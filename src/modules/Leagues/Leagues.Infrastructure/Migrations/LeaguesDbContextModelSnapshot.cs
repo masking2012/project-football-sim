@@ -49,6 +49,9 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.Property<int>("LeagueId")
                         .HasColumnType("int");
 
+                    b.Property<int>("MatchdaySchedulingLeadDays")
+                        .HasColumnType("int");
+
                     b.Property<string>("PromotionPlayOffPositions")
                         .HasColumnType("nvarchar(max)");
 
@@ -111,6 +114,10 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
 
                     b.Property<int>("Round")
                         .HasColumnType("int");
+
+                    b.Property<string>("AvailableDaysOfWeek")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsMidweek")
                         .HasColumnType("bit");
@@ -197,6 +204,25 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                     b.HasIndex("GameLeagueId");
 
                     b.ToTable("GameLeagueMatches");
+                });
+
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueRound", b =>
+                {
+                    b.Property<Guid>("GameLeagueId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Round")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("BaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("RoundStatus")
+                        .HasColumnType("int");
+
+                    b.HasKey("GameLeagueId", "Round");
+
+                    b.ToTable("GameLeagueRounds");
                 });
 
             modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueTeam", b =>
@@ -296,6 +322,15 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueRound", b =>
+                {
+                    b.HasOne("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", null)
+                        .WithMany("GameLeagueRounds")
+                        .HasForeignKey("GameLeagueId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeagueTeam", b =>
                 {
                     b.HasOne("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", null)
@@ -308,6 +343,8 @@ namespace ProjectFootballSim.Leagues.Infrastructure.Migrations
             modelBuilder.Entity("ProjectFootballSim.Leagues.Domain.GameState.Entities.GameLeague", b =>
                 {
                     b.Navigation("GameLeagueMatches");
+
+                    b.Navigation("GameLeagueRounds");
 
                     b.Navigation("GameLeagueTeams");
                 });

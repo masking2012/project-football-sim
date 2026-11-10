@@ -6,6 +6,8 @@ using ProjectFootballSim.Calendar.Application.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Application.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Application.Features.GetCalendarDay;
 using ProjectFootballSim.Calendar.Application.Features.GetGameSeasons;
+using ProjectFootballSim.Calendar.Application.Features.ProvisionGameFixtures;
+using ProjectFootballSim.Calendar.Application.Features.ScheduleGameFixtures;
 using ProjectFootballSim.Calendar.Application.Features.SimulateCalendarDay;
 using ProjectFootballSim.Calendar.Contracts.Features.AdvanceCalendarDay;
 using ProjectFootballSim.Calendar.Contracts.Features.CompleteGameSeason;
@@ -13,8 +15,11 @@ using ProjectFootballSim.Calendar.Contracts.Features.CreateGameCalendar;
 using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Contracts.Features.GetCalendarDay;
 using ProjectFootballSim.Calendar.Contracts.Features.GetGameSeasons;
+using ProjectFootballSim.Calendar.Contracts.Features.ProvisionGameFixtures;
+using ProjectFootballSim.Calendar.Contracts.Features.ScheduleGameFixtures;
 using ProjectFootballSim.Calendar.Contracts.Features.SimulateCalendarDay;
 using ProjectFootballSim.GamePersistence.Contracts.Features.CreateGame;
+using ProjectFootballSim.Leagues.Contracts.GameStateFeatures.Events;
 using ProjectFootballSim.Shared.Features.Events;
 
 namespace ProjectFootballSim.Calendar.Application;
@@ -33,7 +38,12 @@ public static class DependencyRegistrator
         services.AddScoped<ICompleteGameSeasonCommandHandler, CompleteGameSeasonCommandHandler>();
         services.AddScoped<IGetGameSeasonsQueryHandler, GetGameSeasonsQueryHandler>();
 
+        services.AddScoped<IProvisionGameFixturesCommandHandler, ProvisionGameFixturesCommandHandler>();
+        services.AddScoped<IScheduleGameFixturesCommandHandler, ScheduleGameFixturesCommandHandler>();
+
         services.AddScoped<IEventListener<GameCreatedEvent>, GameCreatedEventListener>();
+        services.AddScoped<IEventListener<GameLeagueMatchesProvisionalEvent>, GameLeagueMatchesProvisionalEventListener>();
+        services.AddScoped<IEventListener<GameLeagueRoundsReadyToScheduleEvent>, GameLeagueRoundsReadyToScheduleEventListener>();
 
         return services;
     }

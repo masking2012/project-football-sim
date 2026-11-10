@@ -65,6 +65,15 @@ public static class LeaguesDataProvider
                 throw new InvalidDataException($"GetLeagueRoundsByCountryId. Duplicate entry found for LeagueVersionId: {item.LeagueVersionId}, Week: {item.Week}, IsMidweek: {item.IsMidweek}");
             if (!uniqueLeagueRounds.Add(Tuple.Create(item.LeagueVersionId, item.Round)))
                 throw new InvalidDataException($"GetLeagueRoundsByCountryId. Duplicate entry found for LeagueVersionId: {item.LeagueVersionId}, Round: {item.Round}");
+
+            var uniqueDaysOfWeek = new HashSet<DayOfWeek>();
+            foreach (var dayOfWeek in item.AvailableDaysOfWeek ?? [])
+            {
+                if (!Enum.IsDefined(dayOfWeek))
+                    throw new InvalidDataException($"GetLeagueRoundsByCountryId. Undefined DayOfWeek value: {(int)dayOfWeek} found for LeagueVersionId: {item.LeagueVersionId}, Round: {item.Round}");
+                if (!uniqueDaysOfWeek.Add(dayOfWeek))
+                    throw new InvalidDataException($"GetLeagueRoundsByCountryId. Duplicate DayOfWeek: {dayOfWeek} found for LeagueVersionId: {item.LeagueVersionId}, Round: {item.Round}");
+            }
         }
 
         foreach (var leagueRounds in items.GroupBy(item => item.LeagueVersionId))

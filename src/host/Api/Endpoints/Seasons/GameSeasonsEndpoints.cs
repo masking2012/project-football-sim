@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectFootballSim.Api.Extensions;
-using ProjectFootballSim.Calendar.Application.Features.CompleteGameSeason;
 using ProjectFootballSim.Calendar.Contracts.Features.CompleteGameSeason;
 using ProjectFootballSim.Calendar.Contracts.Features.CreateGameSeason;
 using ProjectFootballSim.Calendar.Contracts.Features.GetGameSeasons;

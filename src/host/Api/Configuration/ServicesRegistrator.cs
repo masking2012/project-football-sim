@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.IdentityModel.Tokens;
-using ProjectFootballSim.Api.Endpoints.GamePersistence;
 using ProjectFootballSim.Calendar.Application;
 using ProjectFootballSim.Calendar.Infrastructure;
 using ProjectFootballSim.GamePersistence.Application;

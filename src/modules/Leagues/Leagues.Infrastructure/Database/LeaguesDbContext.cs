@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
 using ProjectFootballSim.Leagues.Domain.Catalog.ValueObjects;
 using ProjectFootballSim.Leagues.Domain.GameState.Entities;
+using ProjectFootballSim.Shared.Features.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace ProjectFootballSim.Leagues.Infrastructure.Database;
 
@@ -17,6 +20,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
     public DbSet<GameLeague> GameLeagues => Set<GameLeague>();
     public DbSet<GameLeagueTeam> GameLeagueTeams => Set<GameLeagueTeam>();
     public DbSet<GameLeagueMatch> GameLeagueMatches => Set<GameLeagueMatch>();
+    public DbSet<GameLeagueRound> GameLeagueRounds => Set<GameLeagueRound>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -40,6 +44,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.LeagueId).IsRequired();
             entity.Property(x => x.Version).IsRequired();
             entity.Property(x => x.TeamsCount).IsRequired();
+            entity.Property(x => x.MatchdaySchedulingLeadDays).IsRequired();
             entity.Property<ICollection<LeagueStage>?>(nameof(LeagueVersion.Format)).IsRequired().UseJsonCollection();
 
             entity.Property(x => x.PromotionPositions).UseJsonCollection();
@@ -85,12 +90,23 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
             entity.Property(x => x.Round).IsRequired();
             entity.Property(x => x.Week).IsRequired();
             entity.Property(x => x.IsMidweek).IsRequired();
+            entity.Property(x => x.AvailableDaysOfWeek)
+                .IsRequired()
+                .HasConversion(
+                    new ValueConverter<HashSet<DayOfWeek>, string>(
+                        v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                        v => new HashSet<DayOfWeek>(JsonSerializer.Deserialize<List<DayOfWeek>>(v, (JsonSerializerOptions?)null)!)),
+                    new ValueComparer<HashSet<DayOfWeek>>(
+                        (a, b) => a!.SetEquals(b!),
+                        a => a.Aggregate(0, (h, v) => HashCode.Combine(h, v)),
+                        a => new HashSet<DayOfWeek>(a)));
             entity.HasOne<LeagueVersion>()
                 .WithMany()
                 .HasForeignKey(x => x.LeagueVersionId)
                 .IsRequired();
             entity.HasIndex(x => new { x.LeagueVersionId, x.Week, x.IsMidweek }).IsUnique();
         });
+
 
         modelBuilder.Entity<GameLeague>(entity =>
         {
@@ -112,7 +128,7 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
                 .IsRequired();
 
             entity.HasIndex(x => new { x.GameId, x.UserId, x.SeasonId, x.LeagueVersionId }).IsUnique();
-        });            
+        });
 
         modelBuilder.Entity<GameLeagueTeam>(entity =>
         {
@@ -144,6 +160,19 @@ public class LeaguesDbContext(DbContextOptions<LeaguesDbContext> options) : DbCo
 
             entity.HasOne<GameLeague>()
                 .WithMany(x => x.GameLeagueMatches)
+                .HasForeignKey(x => x.GameLeagueId)
+                .IsRequired();
+        });
+
+        modelBuilder.Entity<GameLeagueRound>(entity =>
+        {
+            entity.HasKey(x => new { x.GameLeagueId, x.Round });
+            entity.Property(x => x.GameLeagueId).IsRequired();
+            entity.Property(x => x.Round).IsRequired();
+            entity.Property(x => x.BaseDate).IsRequired();
+            entity.Property(x => x.RoundStatus).IsRequired();
+            entity.HasOne<GameLeague>()
+                .WithMany(x => x.GameLeagueRounds)
                 .HasForeignKey(x => x.GameLeagueId)
                 .IsRequired();
         });

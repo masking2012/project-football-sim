@@ -57,5 +57,5 @@ internal sealed class LeaguesRoundsRepository(LeaguesDbContext dbContext) : ILea
 
     private static LeagueRoundDto CreateRoundDto(int leagueId, LeagueRoundDomain round) =>
         new(LeagueId: leagueId,
-            LeagueVersionId: round.LeagueVersionId, Round: round.Round, Week: round.Week, IsMidweek: round.IsMidweek);
+            LeagueVersionId: round.LeagueVersionId, Round: round.Round, Week: round.Week, IsMidweek: round.IsMidweek, AvailableDaysOfWeek: round.AvailableDaysOfWeek);
 }

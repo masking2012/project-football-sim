@@ -2,11 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectFootballSim.Leagues.Application.Catalog.Interfaces;
-using ProjectFootballSim.Leagues.Application.GameState.Features.CheckGameLeagueMatchesByDate;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueFixtures;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByDate;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueMatchesByIds;
+using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueRoundsToSchedule;
 using ProjectFootballSim.Leagues.Application.GameState.Features.GetGameLeagueStandings;
 using ProjectFootballSim.Leagues.Application.GameState.Features.SimulateLeagueGameDay;
+using ProjectFootballSim.Leagues.Application.GameState.Features.UpdateGameLeagueMatches;
+using ProjectFootballSim.Leagues.Application.GameState.Features.UpdateGameLeagueRoundStatus;
 using ProjectFootballSim.Leagues.Application.GameState.Interfaces;
 using ProjectFootballSim.Leagues.Application.GameState.Services;
 using ProjectFootballSim.Leagues.Domain.Catalog.Entities;
@@ -15,6 +18,7 @@ using ProjectFootballSim.Leagues.Infrastructure.Database;
 using ProjectFootballSim.Leagues.Infrastructure.Repositories;
 using ProjectFootballSim.Shared.Data.Entities.Leagues;
 using ProjectFootballSim.Shared.Data.Entities.Locations;
+using DataDayOfWeek = ProjectFootballSim.Shared.Data.Entities.Leagues.DayOfWeek;
 using DataLeagueFormatType = ProjectFootballSim.Shared.Data.Entities.Leagues.LeagueFormatType;
 using DomainLeagueFormatType = ProjectFootballSim.Leagues.Domain.Catalog.Enums.LeagueStageType;
 
@@ -45,8 +49,11 @@ public static class DependencyRegistrator
         services.AddScoped<IGetGameLeagueStandingsRepository, GetGameLeagueStandingsRepository>();
         services.AddScoped<IGetGameLeagueMatchesRepository, GetGameLeagueMatchesRepository>();
         services.AddScoped<IGetGameLeagueMatchesByDateRepository, GetGameLeagueMatchesByDateRepository>();
-        services.AddScoped<ICheckGameLeagueMatchesRepository, CheckGameLeagueMatchesRepository>();
+        services.AddScoped<IGetGameLeagueMatchesByIdsRepository, GetGameLeagueMatchesByIdsRepository>();
+        services.AddScoped<IGetGameLeagueRoundsToScheduleRepository, GetGameLeagueRoundsToScheduleRepository>();
         services.AddScoped<ISimulateLeagueDayRepository, SimulateLeagueDayRepository>();
+        services.AddScoped<IUpdateGameLeagueRoundStatusRepository, UpdateGameLeagueRoundStatusRepository>();
+        services.AddScoped<IUpdateGameLeagueMatchesRepository, UpdateGameLeagueMatchesRepository>();
 
         return services;
     }
@@ -80,6 +87,7 @@ public static class DependencyRegistrator
                             leagueId: versionData.LeagueId,
                             version: versionData.Version,
                             teamsCount: versionData.TeamsCount,
+                            matchdaySchedulingLeadDays: versionData.MatchdaySchedulingLeadDays,
                             format: MapFormat(versionData.Format),
                             promotionPositions: versionData.PromotionPositions,
                             promotionPlayOffPositions: versionData.PromotionPlayOffPositions,
@@ -107,7 +115,7 @@ public static class DependencyRegistrator
                     .SingleOrDefault(x => x.LeagueVersionId == leagueRoundData.LeagueVersionId && x.Round == leagueRoundData.Round);
                 if (leagueRound is null)
                     context.Set<LeagueRound>()
-                        .Add(new LeagueRound(leagueVersionId: leagueRoundData.LeagueVersionId, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek));
+                        .Add(new LeagueRound(leagueVersionId: leagueRoundData.LeagueVersionId, round: leagueRoundData.Round, week: leagueRoundData.Week, isMidweek: leagueRoundData.IsMidweek, availableDaysOfWeek: MapDaysOfWeek(leagueRoundData.AvailableDaysOfWeek)));
             }
 
             foreach (var activationData in LeaguesDataProvider.GetLeagueActivationsByCountryId(countryData.Id))
@@ -136,4 +144,25 @@ public static class DependencyRegistrator
                 },
                 legs: stage.Legs))
             .ToList();
+
+    private static HashSet<System.DayOfWeek> MapDaysOfWeek(IEnumerable<DataDayOfWeek> daysOfWeek)
+    {
+        if (daysOfWeek is null)
+            return [];
+
+        return daysOfWeek
+            .Select(day => day switch
+            {
+                DataDayOfWeek.Su => System.DayOfWeek.Sunday,
+                DataDayOfWeek.Mo => System.DayOfWeek.Monday,
+                DataDayOfWeek.Tu => System.DayOfWeek.Tuesday,
+                DataDayOfWeek.We => System.DayOfWeek.Wednesday,
+                DataDayOfWeek.Th => System.DayOfWeek.Thursday,
+                DataDayOfWeek.Fr => System.DayOfWeek.Friday,
+                DataDayOfWeek.Sa => System.DayOfWeek.Saturday,
+                _ => throw new InvalidDataException($"Unsupported day of week '{day}'.")
+            })
+            .ToHashSet();
+    }
+
 }

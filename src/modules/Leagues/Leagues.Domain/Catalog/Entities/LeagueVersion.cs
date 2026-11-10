@@ -8,6 +8,7 @@ public sealed class LeagueVersion
     public int LeagueId { get; }
     public int Version { get; }
     public int TeamsCount { get; }
+    public int MatchdaySchedulingLeadDays { get; }
     public ICollection<LeagueStage> Format { get; }
     public ICollection<int>? PromotionPositions { get; }
     public ICollection<int>? PromotionPlayOffPositions { get; }
@@ -22,6 +23,7 @@ public sealed class LeagueVersion
         int leagueId,
         int version,
         int teamsCount,
+        int matchdaySchedulingLeadDays,
         ICollection<LeagueStage> format,
         ICollection<int>? promotionPositions,
         ICollection<int>? promotionPlayOffPositions,
@@ -39,6 +41,8 @@ public sealed class LeagueVersion
             throw new ArgumentException("League version must be positive.");
         if (teamsCount < 2)
             throw new ArgumentException("Teams count in league shouldn't be less than 2");
+        if (matchdaySchedulingLeadDays < 7)
+            throw new ArgumentException("Matchday scheduling lead days must be at least 7.");
 
         ValidateFormat(format);
         ValidatePositions(
@@ -55,6 +59,7 @@ public sealed class LeagueVersion
         LeagueId = leagueId;
         Version = version;
         TeamsCount = teamsCount;
+        MatchdaySchedulingLeadDays = matchdaySchedulingLeadDays;
         Format = format.ToList().AsReadOnly();
         PromotionPositions = CopyPositions(promotionPositions);
         PromotionPlayOffPositions = CopyPositions(promotionPlayOffPositions);
