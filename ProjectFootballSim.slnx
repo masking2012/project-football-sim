@@ -64,7 +64,7 @@
     <File Path="tests/Directory.Build.props" />
   </Folder>
   <Folder Name="/tests/modules/" />
-  <Folder Name="/tests/modules/Calendar/">
+  <Folder Name="/tests/modules/Calendar/" Id="eb1bbdca-62be-ec32-e932-40441d2fcbd6">
     <Project Path="tests/modules/Calendar/Calendar.Application.Tests/Calendar.Application.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/modules/Leagues/">

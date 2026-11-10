@@ -15,7 +15,7 @@ internal sealed class ScheduleGameFixturesCommandHandlerTests
     private static readonly Guid GameId = Guid.NewGuid();
     private static readonly Guid GameCompetitionId = Guid.NewGuid();
     private static readonly DateTime BaseDate = new(2026, 11, 8);
-    private static readonly IReadOnlySet<DayOfWeek> AvailableDays =
+    private static readonly HashSet<DayOfWeek> AvailableDays =
         new HashSet<DayOfWeek> { DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday, DayOfWeek.Monday };
 
     private readonly Mock<IScheduleGameFixturesRepository> _repository = new();
@@ -56,7 +56,7 @@ internal sealed class ScheduleGameFixturesCommandHandlerTests
         using (Assert.Multiple())
         {
             await Assert.That(fixtures).All(fixture => fixture.Status == FixtureStatus.Scheduled);
-            await Assert.That(fixtures).All(fixture => fixture.ScheduledAt >= BaseDate);
+            await Assert.That(fixtures).All(fixture => AvailableDays.Contains(fixture.ScheduledAt.DayOfWeek));
         }
 
         _repository.Verify(value => value.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
